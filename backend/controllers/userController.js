@@ -83,11 +83,9 @@ export async function loginUser(req, res) {
 
     // Check if user is blocked
     if (user.isBlocked) {
-      return res
-        .status(403)
-        .json({
-          message: "Your account has been blocked. Please contact support.",
-        });
+      return res.status(403).json({
+        message: "Your account has been blocked. Please contact support.",
+      });
     }
 
     // Compare password with hashed password
@@ -99,7 +97,7 @@ export async function loginUser(req, res) {
     // Generate JWT token
     const token = jwt.sign(
       {
-        userId: user._id,
+        id: user._id,
         role: user.role,
       },
       process.env.JWT_SECRET,
@@ -124,7 +122,7 @@ export async function loginUser(req, res) {
 export async function getUserProfile(req, res) {
   try {
     // req.user is set by the JWT middleware
-    const user = await User.findById(req.user.userId).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
@@ -177,7 +175,7 @@ export async function updateUser(req, res) {
 
     // Check if user is updating their own profile or is an admin
     const isAdmin = req.user.role === "admin";
-    const isOwnProfile = req.user.userId === id;
+    const isOwnProfile = req.user.id === id;
 
     if (!isAdmin && !isOwnProfile) {
       return res.status(403).json({
