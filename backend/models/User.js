@@ -29,6 +29,17 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    membershipType: {
+      type: String,
+      default: "monthly",
+    },
+    membershipExpiry: {
+      type: Date,
+      default: function () {
+        // Set expiry to 30 days from registration
+        return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+      },
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

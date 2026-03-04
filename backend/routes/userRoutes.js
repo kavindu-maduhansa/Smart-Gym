@@ -11,6 +11,7 @@ import { deleteUser } from "../controllers/userController.js";
 import { getAllUsers } from "../controllers/userController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/roleMiddleware.js";
+import { checkMembershipStatus } from "../middleware/membershipMiddleware.js";
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router.get("/", authenticateJWT, isAdmin, getAllUsers);
 // @route   GET /api/users/profile
 // @desc    Get current user's profile
 // @access  Private (requires JWT)
-router.get("/profile", authenticateJWT, getUserProfile);
+router.get("/profile", authenticateJWT, checkMembershipStatus, getUserProfile);
 
 // @route   GET /api/users/admin-test
 // @desc    Admin-only test endpoint
