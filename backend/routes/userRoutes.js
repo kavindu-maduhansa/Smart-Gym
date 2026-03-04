@@ -9,6 +9,7 @@ import { toggleBlockUser } from "../controllers/userController.js";
 import { updateUser } from "../controllers/userController.js";
 import { deleteUser } from "../controllers/userController.js";
 import { getAllUsers } from "../controllers/userController.js";
+import { renewMembership } from "../controllers/userController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/roleMiddleware.js";
 import { checkMembershipStatus } from "../middleware/membershipMiddleware.js";
@@ -46,6 +47,11 @@ router.get("/admin-test", authenticateJWT, isAdmin, (req, res) => {
 // @desc    Block/Unblock a user
 // @access  Private/Admin
 router.put("/block/:id", authenticateJWT, isAdmin, toggleBlockUser);
+
+// @route   PUT /api/users/renew/:id
+// @desc    Renew user's membership
+// @access  Private/Admin
+router.put("/renew/:id", authenticateJWT, isAdmin, renewMembership);
 
 // @route   PUT /api/users/:id
 // @desc    Update user details
