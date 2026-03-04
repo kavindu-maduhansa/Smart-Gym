@@ -260,3 +260,36 @@ export async function deleteUser(req, res) {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 }
+
+// @desc    Renew user's membership
+// @route   PUT /api/users/renew/:id
+// @access  Private/Admin
+export async function renewMembership(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Find user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Extend membershipExpiry by 30 days from current expiry
+    const currentExpiry = user.membershipExpiry || new Date();
+    const newExpiry = new Date(
+      currentExpiry.getTime() + 30 * 24 * 60 * 60 * 1000,
+    );
+    user.membershipExpiry = newExpiry;
+
+    // Save updated user
+    await user.save();
+
+    res.status(200).json({
+      message: "Membership renewed successfully.",
+      membershipExpiry: user.membershipExpiry,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+}
