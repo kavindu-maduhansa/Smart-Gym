@@ -5,6 +5,11 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "../utils/validation.js";
 dotenv.config();
 
 // @desc    Register a new user
@@ -19,6 +24,24 @@ export async function registerUser(req, res) {
       return res
         .status(400)
         .json({ message: "Please provide name, email, and password." });
+    }
+
+    // Validate name
+    const nameValidation = validateName(name);
+    if (!nameValidation.valid) {
+      return res.status(400).json({ message: nameValidation.message });
+    }
+
+    // Validate email
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
+      return res.status(400).json({ message: emailValidation.message });
+    }
+
+    // Validate password
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({ message: passwordValidation.message });
     }
 
     // Check if user already exists
@@ -189,8 +212,22 @@ export async function updateUser(req, res) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Check if email is being changed and if it's already taken
+    // Validate and update name if provided
+    if (name) {
+      const nameValidation = validateName(name);
+      if (!nameValidation.valid) {
+        return res.status(400).json({ message: nameValidation.message });
+      }
+      user.name = name;
+    }
+
+    // Validate and update email if provided
     if (email && email !== user.email) {
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.valid) {
+        return res.status(400).json({ message: emailValidation.message });
+      }
+
       const existingUser = await User.findOne({ email });
       if (existingUser) {
         return res.status(400).json({
@@ -198,11 +235,6 @@ export async function updateUser(req, res) {
         });
       }
       user.email = email;
-    }
-
-    // Update name if provided
-    if (name) {
-      user.name = name;
     }
 
     // Save updated user
@@ -288,6 +320,60 @@ export async function renewMembership(req, res) {
       message: "Membership renewed successfully.",
       membershipExpiry: user.membershipExpiry,
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+}
+
+// @desc    Change user password
+// @route   PUT /api/users/change-password
+// @access  Private
+export async function changePassword(req, res) {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    // Check if both passwords are provided
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        message: "Please provide current password and new password.",
+      });
+    }
+
+    // Validate new password
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({ message: passwordValidation.message });
+    }
+
+    // Find user by ID from JWT token
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Current password is incorrect." });
+    }
+
+    // Check if new password is same as current password
+    if (currentPassword === newPassword) {
+      return res.status(400).json({
+        message: "New password must be different from current password.",
+      });
+    }
+
+    // Hash new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    user.password = hashedPassword;
+
+    // Save updated user
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error. Please try again later." });
