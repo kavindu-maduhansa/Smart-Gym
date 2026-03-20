@@ -237,9 +237,13 @@ const AdminUsers = () => {
                               setUsers((prev) =>
                                 prev.map((u) =>
                                   u._id === user._id
-                                    ? { ...u, membershipExpiry: res.data.membershipExpiry }
-                                    : u
-                                )
+                                    ? {
+                                        ...u,
+                                        membershipExpiry:
+                                          res.data.membershipExpiry,
+                                      }
+                                    : u,
+                                ),
                               );
                               setNotification(
                                 `Membership for '${user.name}' renewed successfully.`,
