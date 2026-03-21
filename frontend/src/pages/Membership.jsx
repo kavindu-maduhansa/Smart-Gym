@@ -24,14 +24,14 @@ const Membership = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         setUser(response.data);
       } catch (err) {
         setError(
           err.response && err.response.data && err.response.data.message
             ? err.response.data.message
-            : "Failed to load membership details."
+            : "Failed to load membership details.",
         );
       } finally {
         setLoading(false);
@@ -85,7 +85,7 @@ const Membership = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setSuccessMessage(response.data.message);
@@ -95,7 +95,7 @@ const Membership = () => {
       setError(
         err.response && err.response.data && err.response.data.message
           ? err.response.data.message
-          : "Failed to submit renewal request."
+          : "Failed to submit renewal request.",
       );
     } finally {
       setRequestLoading(false);
@@ -122,7 +122,9 @@ const Membership = () => {
             {loading ? (
               <div className="text-center">
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-                <p className="text-gray-300 mt-4">Loading membership details...</p>
+                <p className="text-gray-300 mt-4">
+                  Loading membership details...
+                </p>
               </div>
             ) : error ? (
               <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-4 rounded-lg text-center">
@@ -185,8 +187,9 @@ const Membership = () => {
                           Your membership is expiring soon!
                         </h3>
                         <p>
-                          Only {daysRemaining} day{daysRemaining !== 1 ? "s" : ""}{" "}
-                          remaining. Renew now to avoid interruption.
+                          Only {daysRemaining} day
+                          {daysRemaining !== 1 ? "s" : ""} remaining. Renew now
+                          to avoid interruption.
                         </p>
                       </div>
                     </div>

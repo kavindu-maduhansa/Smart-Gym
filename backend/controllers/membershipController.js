@@ -12,9 +12,13 @@ export async function requestRenewal(req, res) {
     const { packageType } = req.body;
 
     // Validate packageType
-    if (!packageType || !["monthly", "quarterly", "annual"].includes(packageType)) {
+    if (
+      !packageType ||
+      !["monthly", "quarterly", "annual"].includes(packageType)
+    ) {
       return res.status(400).json({
-        message: "Please provide a valid package type (monthly, quarterly, or annual).",
+        message:
+          "Please provide a valid package type (monthly, quarterly, or annual).",
       });
     }
 
@@ -124,7 +128,9 @@ export async function approveRequest(req, res) {
         daysToAdd = 30;
     }
 
-    const newExpiry = new Date(baseDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+    const newExpiry = new Date(
+      baseDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000,
+    );
     user.membershipExpiry = newExpiry;
     user.membershipType = request.packageType;
     await user.save();

@@ -22,14 +22,14 @@ const AdminRenewRequests = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       setRequests(response.data.requests);
     } catch (err) {
       setError(
         err.response && err.response.data && err.response.data.message
           ? err.response.data.message
-          : "Failed to load renewal requests."
+          : "Failed to load renewal requests.",
       );
     } finally {
       setLoading(false);
@@ -37,7 +37,9 @@ const AdminRenewRequests = () => {
   };
 
   const handleApprove = async (requestId) => {
-    if (!window.confirm("Are you sure you want to approve this renewal request?")) {
+    if (
+      !window.confirm("Are you sure you want to approve this renewal request?")
+    ) {
       return;
     }
 
@@ -51,7 +53,7 @@ const AdminRenewRequests = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       // Refresh the requests list
       fetchRequests();
@@ -59,7 +61,7 @@ const AdminRenewRequests = () => {
       alert(
         err.response && err.response.data && err.response.data.message
           ? err.response.data.message
-          : "Failed to approve request."
+          : "Failed to approve request.",
       );
     } finally {
       setProcessingId(null);
@@ -67,7 +69,9 @@ const AdminRenewRequests = () => {
   };
 
   const handleReject = async (requestId) => {
-    if (!window.confirm("Are you sure you want to reject this renewal request?")) {
+    if (
+      !window.confirm("Are you sure you want to reject this renewal request?")
+    ) {
       return;
     }
 
@@ -81,7 +85,7 @@ const AdminRenewRequests = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       // Refresh the requests list
       fetchRequests();
@@ -89,7 +93,7 @@ const AdminRenewRequests = () => {
       alert(
         err.response && err.response.data && err.response.data.message
           ? err.response.data.message
-          : "Failed to reject request."
+          : "Failed to reject request.",
       );
     } finally {
       setProcessingId(null);
@@ -270,18 +274,14 @@ const AdminRenewRequests = () => {
                               disabled={processingId === request._id}
                               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {processingId === request._id
-                                ? "..."
-                                : "Approve"}
+                              {processingId === request._id ? "..." : "Approve"}
                             </button>
                             <button
                               onClick={() => handleReject(request._id)}
                               disabled={processingId === request._id}
                               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {processingId === request._id
-                                ? "..."
-                                : "Reject"}
+                              {processingId === request._id ? "..." : "Reject"}
                             </button>
                           </div>
                         ) : (
