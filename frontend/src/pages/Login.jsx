@@ -31,20 +31,26 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow">
-        <h2 className="text-2xl font-bold text-center">Login</h2>
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+      style={{ backgroundImage: "url('/dumbbells-bg.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-60 -z-10"></div>
+      <div className="relative z-10 w-full max-w-md p-8 bg-orange-500 bg-opacity-60 backdrop-blur-lg rounded-xl shadow-2xl border-2 border-orange-400 text-white">
+        <h2 className="text-2xl font-bold text-center mb-6 text-white">
+          Login
+        </h2>
         {error && (
-          <div className="p-2 mb-4 text-sm text-red-700 bg-red-100 rounded">
+          <div className="p-2 mb-4 text-sm text-red-400 bg-red-100 bg-opacity-20 rounded">
             {error}
           </div>
         )}
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-1 text-sm font-medium">Email</label>
+            <label className="block mb-1 font-medium text-white">Email</label>
             <input
               type="email"
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400"
+              className="w-full border border-orange-300 rounded-lg px-4 py-2 bg-white bg-opacity-40 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -52,10 +58,12 @@ const Login = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium">Password</label>
+            <label className="block mb-1 font-medium text-white">
+              Password
+            </label>
             <input
               type="password"
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400"
+              className="w-full border border-orange-300 rounded-lg px-4 py-2 bg-white bg-opacity-40 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -64,16 +72,16 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full py-2 font-semibold text-white bg-blue-600 rounded hover:bg-blue-700"
+            className="w-full bg-orange-900 text-white font-bold py-2 rounded-lg shadow hover:bg-orange-500 transition"
           >
             Login
           </button>
         </form>
         <div className="mt-4 text-center">
-          <span className="text-gray-600">Don't have an account? </span>
+          <span className="text-white">Don't have an account? </span>
           <Link
             to="/register"
-            className="text-blue-600 hover:underline font-medium"
+            className="text-orange-400 hover:underline font-medium"
           >
             Register
           </Link>
