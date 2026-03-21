@@ -36,7 +36,7 @@ const Login = () => {
       style={{ backgroundImage: "url('/dumbbells-bg.jpg')" }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-60 -z-10"></div>
-      <div className="relative z-10 w-full max-w-md p-8 bg-orange-500 bg-opacity-60 backdrop-blur-lg rounded-xl shadow-2xl border-2 border-orange-400 text-white">
+      <div className="relative z-10 w-full max-w-md p-8 bg-orange-300 bg-opacity-60 backdrop-blur-lg rounded-xl shadow-2xl border-2 border-orange-400 text-white">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Login
         </h2>

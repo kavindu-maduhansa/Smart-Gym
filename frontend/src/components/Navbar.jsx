@@ -1,32 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-function parseJwt(token) {
-  try {
-    return JSON.parse(atob(token.split(".")[1]));
-  } catch {
-    return null;
-  }
-}
-
 const Navbar = () => {
-  const [role, setRole] = useState(null);
   const navigate = useNavigate();
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
+    // Function to check and set role from token
     const checkRole = () => {
       const token = localStorage.getItem("token");
       if (token) {
-        const payload = parseJwt(token);
-        setRole(payload?.role || null);
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          setRole(payload.role || null);
+        } catch {
+          setRole(null);
+        }
       } else {
         setRole(null);
       }
     };
     checkRole();
+    // Listen for storage changes (other tabs) and custom tokenChanged event (same tab)
     window.addEventListener("storage", checkRole);
-    return () => window.removeEventListener("storage", checkRole);
-  });
+    window.addEventListener("tokenChanged", checkRole);
+    return () => {
+      window.removeEventListener("storage", checkRole);
+      window.removeEventListener("tokenChanged", checkRole);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -46,18 +48,45 @@ const Navbar = () => {
         </div>
         {/* Menu */}
         <div className="flex space-x-8 text-lg font-medium items-center">
-          {/* No Home button */}
+          {/* Main navigation links */}
+          <Link
+            to="/"
+            className="text-white hover:text-orange transition-colors duration-200"
+          >
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="text-white hover:text-orange transition-colors duration-200"
+          >
+            About
+          </Link>
+          <Link
+            to="/schedules"
+            className="text-white hover:text-orange transition-colors duration-200"
+          >
+            Schedules
+          </Link>
+          <Link
+            to="/contact"
+            className="text-white hover:text-orange transition-colors duration-200"
+          >
+            Contact
+          </Link>
+          {/* Auth/User links */}
           {!role && (
             <>
               <Link
                 to="/login"
-                className="text-white hover:text-orange transition-colors duration-200"
+                className="bg-orange bg-opacity-70 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-orange hover:bg-orange-dark hover:text-white transition-all duration-200 backdrop-blur-md"
+                style={{ boxShadow: "0 4px 16px 0 rgba(255,127,17,0.15)" }}
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="text-white hover:text-orange transition-colors duration-200"
+                className="bg-orange bg-opacity-70 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-orange hover:bg-orange-dark hover:text-white transition-all duration-200 backdrop-blur-md"
+                style={{ boxShadow: "0 4px 16px 0 rgba(255,127,17,0.15)" }}
               >
                 Register
               </Link>

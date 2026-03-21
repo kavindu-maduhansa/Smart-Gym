@@ -22,14 +22,7 @@ const Home = () => {
             <p className="text-xl md:text-2xl text-blue mb-8 drop-shadow-md">
               Your intelligent fitness companion for a healthier lifestyle
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/register"
-                className="bg-orange hover:bg-orange-dark text-white font-bold py-4 px-8 rounded-lg transition duration-300 transform hover:scale-105 shadow-xl border-2 border-orange"
-              >
-                Get Started
-              </Link>
-            </div>
+            {/* Removed Get Started button */}
           </div>
 
           {/* Features Section */}

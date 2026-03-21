@@ -141,7 +141,7 @@ const AdminUsers = () => {
                 <label className="text-orange-100 font-semibold">
                   Role
                   <select
-                    className="mt-1 w-full rounded px-3 py-2 bg-orange-50 bg-opacity-10 text-orange-100 border border-orange focus:outline-none"
+                    className="mt-1 w-full rounded px-3 py-2 bg-orange-50 bg-opacity-10 text-white border border-orange focus:outline-none"
                     value={updateForm.role}
                     onChange={(e) =>
                       setUpdateForm((f) => ({ ...f, role: e.target.value }))

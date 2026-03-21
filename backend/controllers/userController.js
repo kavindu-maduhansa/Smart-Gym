@@ -67,7 +67,14 @@ export async function registerUser(req, res) {
     // Save user to database
     await user.save();
 
-    // Return success message and created user (excluding password)
+    // Generate JWT token (same as login)
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" },
+    );
+
+    // Return success message, user info, and token
     const userResponse = {
       _id: user._id,
       name: user.name,
@@ -75,9 +82,11 @@ export async function registerUser(req, res) {
       role: user.role,
     };
 
-    res
-      .status(201)
-      .json({ message: "User registered successfully!", user: userResponse });
+    res.status(201).json({
+      message: "User registered successfully!",
+      user: userResponse,
+      token,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error. Please try again later." });
@@ -355,7 +364,9 @@ export async function changePassword(req, res) {
     // Verify current password
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Current password is incorrect." });
+      return res
+        .status(401)
+        .json({ message: "Current password is incorrect." });
     }
 
     // Check if new password is same as current password
