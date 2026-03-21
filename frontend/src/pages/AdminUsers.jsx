@@ -276,6 +276,46 @@ const AdminUsers = () => {
                 {/* Action buttons in modal */}
                 <div className="flex gap-3 mt-6 justify-center">
                   <button
+                    className={
+                      profileUser.isBlocked
+                        ? "bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
+                        : "bg-yellow-600 hover:bg-yellow-800 text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
+                    }
+                    onClick={async () => {
+                      try {
+                        const token = localStorage.getItem("token");
+                        const res = await axios.put(
+                          `http://localhost:5000/api/users/block/${profileUser._id}`,
+                          {},
+                          { headers: { Authorization: `Bearer ${token}` } },
+                        );
+                        setUsers((prev) =>
+                          prev.map((u) =>
+                            u._id === profileUser._id
+                              ? { ...u, isBlocked: res.data.user.isBlocked }
+                              : u,
+                          ),
+                        );
+                        setProfileUser((u) =>
+                          u ? { ...u, isBlocked: res.data.user.isBlocked } : u,
+                        );
+                        setNotification(
+                          `User '${profileUser.name}' ${res.data.user.isBlocked ? "blocked" : "unblocked"} successfully.`,
+                        );
+                      } catch (err) {
+                        setNotification(
+                          err.response &&
+                            err.response.data &&
+                            err.response.data.message
+                            ? err.response.data.message
+                            : `Failed to ${profileUser.isBlocked ? "unblock" : "block"} user '${profileUser.name}'.`,
+                        );
+                      }
+                    }}
+                  >
+                    {profileUser.isBlocked ? "Unblock" : "Block"}
+                  </button>
+                  <button
                     className="bg-orange hover:bg-orange-dark text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
                     onClick={() => {
                       setUpdateUser(profileUser);
