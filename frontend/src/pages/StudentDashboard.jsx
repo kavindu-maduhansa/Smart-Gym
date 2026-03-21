@@ -20,14 +20,14 @@ const StudentDashboard = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         setUser(response.data);
       } catch (err) {
         setError(
           err.response && err.response.data && err.response.data.message
             ? err.response.data.message
-            : "Failed to load profile."
+            : "Failed to load profile.",
         );
       } finally {
         setLoading(false);
