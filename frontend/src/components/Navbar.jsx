@@ -92,45 +92,57 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          {role === "admin" &&
-            window.location.pathname !== "/admin-dashboard" && (
-              <>
-                <button
-                  onClick={() => navigate("/admin-dashboard")}
-                  className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
-                >
-                  Oversight
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="text-white hover:text-orange transition-colors duration-200"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-          {role === "admin" &&
-            window.location.pathname === "/admin-dashboard" && (
-              <>
-                <button
-                  onClick={handleLogout}
-                  className="text-white hover:text-orange transition-colors duration-200"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-          {role === "student" && (
+          {role === "admin" && (
             <>
-              <button
-                onClick={() => navigate("/student-dashboard")}
-                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+              <Link
+                to="/admin-dashboard"
+                className="text-white hover:text-orange transition-colors duration-200"
               >
-                Profile
-              </button>
+                Dashboard
+              </Link>
+              <Link
+                to="/admin/users"
+                className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Users
+              </Link>
+              <Link
+                to="/admin/memberships"
+                className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Memberships
+              </Link>
               <button
                 onClick={handleLogout}
+                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {role === "student" && (
+            <>
+              <Link
+                to="/student-dashboard"
                 className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/profile"
+                className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Profile
+              </Link>
+              <Link
+                to="/membership"
+                className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Membership
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
               >
                 Logout
               </button>

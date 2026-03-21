@@ -1,43 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Profile = () => {
+const ViewUser = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchUser = async () => {
       setLoading(true);
       setError("");
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:5000/api/users/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await axios.get("http://localhost:5000/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
-        setUser(response.data);
+        });
+        const found = (response.data.users || []).find((u) => u._id === id);
+        if (!found) {
+          setError("User not found");
+        } else {
+          setUser(found);
+        }
       } catch (err) {
         setError(
           err.response && err.response.data && err.response.data.message
             ? err.response.data.message
-            : "Failed to load profile.",
+            : "Failed to load user details.",
         );
       } finally {
         setLoading(false);
       }
     };
-    fetchProfile();
-  }, []);
+    fetchUser();
+  }, [id]);
 
   const getMembershipStatus = () => {
-    if (!user || !user.membershipExpiry) return "Unknown";
+    if (!user || !user.membershipExpiry) return "None";
     const expiryDate = new Date(user.membershipExpiry);
     const today = new Date();
     return expiryDate > today ? "Active" : "Expired";
@@ -63,7 +66,7 @@ const Profile = () => {
           {/* Header */}
           <div className="bg-gradient-to-r from-orange-600 to-orange-500 p-6">
             <h2 className="text-3xl font-bold text-white text-center">
-              My Profile
+              User Details
             </h2>
           </div>
 
@@ -72,7 +75,7 @@ const Profile = () => {
             {loading ? (
               <div className="text-center">
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-                <p className="text-gray-300 mt-4">Loading profile...</p>
+                <p className="text-gray-300 mt-4">Loading user details...</p>
               </div>
             ) : error ? (
               <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-4 rounded-lg text-center">
@@ -114,15 +117,15 @@ const Profile = () => {
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-sm mb-1">Account Type</p>
+                      <p className="text-gray-400 text-sm mb-1">Role</p>
                       <p className="text-white text-lg font-semibold capitalize">
                         {user.role}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-sm mb-1">Member Since</p>
-                      <p className="text-white text-lg font-semibold">
-                        {formatDate(user.createdAt)}
+                      <p className="text-gray-400 text-sm mb-1">User ID</p>
+                      <p className="text-white text-lg font-semibold font-mono">
+                        {user._id?.slice(-12)}
                       </p>
                     </div>
                   </div>
@@ -173,11 +176,10 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  {isExpired && (
+                  {isExpired && membershipStatus !== "None" && (
                     <div className="mt-4 bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-3 rounded-lg text-sm">
                       <p className="font-semibold">
-                        ⚠ Your membership has expired. Please renew to continue
-                        enjoying our services.
+                        ⚠ This user's membership has expired.
                       </p>
                     </div>
                   )}
@@ -186,7 +188,7 @@ const Profile = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <button
-                    onClick={() => navigate("/edit-profile")}
+                    onClick={() => navigate(`/admin/users/edit/${user._id}`)}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
                   >
                     <svg
@@ -202,10 +204,10 @@ const Profile = () => {
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                       />
                     </svg>
-                    Edit Profile
+                    Edit User
                   </button>
                   <button
-                    onClick={() => navigate("/student-dashboard")}
+                    onClick={() => navigate("/admin/users")}
                     className="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
                   >
                     <svg
@@ -221,7 +223,7 @@ const Profile = () => {
                         d="M10 19l-7-7m0 0l7-7m-7 7h18"
                       />
                     </svg>
-                    Back to Dashboard
+                    Back to Users
                   </button>
                 </div>
               </div>
@@ -233,4 +235,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ViewUser;
