@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 // Import user routes
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
+import membershipRoutes from "./routes/membershipRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 // User registration and related routes
 app.use("/api/users", userRoutes);
 app.use("/api/trainers", trainerRoutes);
+app.use("/api/membership", membershipRoutes);
 
 // Test route
 app.get("/", (req, res) => {

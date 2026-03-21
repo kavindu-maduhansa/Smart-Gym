@@ -101,16 +101,10 @@ const Navbar = () => {
                 Dashboard
               </Link>
               <Link
-                to="/admin/users"
+                to="/admin/store"
                 className="text-white hover:text-orange transition-colors duration-200"
               >
-                Users
-              </Link>
-              <Link
-                to="/admin/memberships"
-                className="text-white hover:text-orange transition-colors duration-200"
-              >
-                Memberships
+                Supplement Store
               </Link>
               <button
                 onClick={handleLogout}
@@ -129,16 +123,10 @@ const Navbar = () => {
                 Dashboard
               </Link>
               <Link
-                to="/profile"
+                to="/supplement-store"
                 className="text-white hover:text-orange transition-colors duration-200"
               >
-                Profile
-              </Link>
-              <Link
-                to="/membership"
-                className="text-white hover:text-orange transition-colors duration-200"
-              >
-                Membership
+                Supplement Store
               </Link>
               <button
                 onClick={handleLogout}

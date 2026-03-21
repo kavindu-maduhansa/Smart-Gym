@@ -6,6 +6,10 @@ const Membership = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState("");
+  const [requestLoading, setRequestLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,6 +66,42 @@ const Membership = () => {
     });
   };
 
+  const handleRequestRenewal = async () => {
+    if (!selectedPackage) {
+      setError("Please select a package type.");
+      return;
+    }
+
+    setRequestLoading(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/api/membership/request-renewal",
+        { packageType: selectedPackage },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSuccessMessage(response.data.message);
+      setShowModal(false);
+      setSelectedPackage("");
+    } catch (err) {
+      setError(
+        err.response && err.response.data && err.response.data.message
+          ? err.response.data.message
+          : "Failed to submit renewal request."
+      );
+    } finally {
+      setRequestLoading(false);
+    }
+  };
+
   const membershipStatus = getMembershipStatus();
   const isExpired = membershipStatus === "Expired";
   const daysRemaining = getDaysRemaining();
@@ -90,6 +130,13 @@ const Membership = () => {
               </div>
             ) : user ? (
               <div className="space-y-6">
+                {/* Success Message */}
+                {successMessage && (
+                  <div className="bg-green-500 bg-opacity-20 border border-green-500 text-green-200 p-4 rounded-lg text-center">
+                    {successMessage}
+                  </div>
+                )}
+
                 {/* Expired Warning */}
                 {isExpired && (
                   <div className="bg-red-500 bg-opacity-90 border-l-4 border-red-700 text-white p-6 rounded-lg">
@@ -295,7 +342,7 @@ const Membership = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <button
-                    onClick={() => navigate("/renew-membership")}
+                    onClick={() => setShowModal(true)}
                     className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
                   >
                     <svg
@@ -311,7 +358,7 @@ const Membership = () => {
                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                       />
                     </svg>
-                    Renew Membership
+                    Request Membership Renewal
                   </button>
                   <button
                     onClick={() => navigate("/student-dashboard")}
@@ -337,6 +384,122 @@ const Membership = () => {
             ) : null}
           </div>
         </div>
+
+        {/* Package Selection Modal */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden">
+              {/* Modal Header */}
+              <div className="bg-gradient-to-r from-orange-600 to-orange-500 p-6">
+                <h3 className="text-2xl font-bold text-white text-center">
+                  Select Membership Package
+                </h3>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-6">
+                {error && (
+                  <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-3 rounded-lg mb-4 text-sm">
+                    {error}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {/* Monthly Package */}
+                  <button
+                    onClick={() => setSelectedPackage("monthly")}
+                    className={`p-6 rounded-xl border-2 transition-all ${
+                      selectedPackage === "monthly"
+                        ? "border-orange-500 bg-orange-500 bg-opacity-20"
+                        : "border-gray-600 bg-gray-700 hover:border-gray-500"
+                    }`}
+                  >
+                    <div className="text-center">
+                      <h4 className="text-xl font-bold text-white mb-2">
+                        Monthly
+                      </h4>
+                      <p className="text-3xl font-bold text-orange-400 mb-2">
+                        30 Days
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        Perfect for short-term goals
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* Quarterly Package */}
+                  <button
+                    onClick={() => setSelectedPackage("quarterly")}
+                    className={`p-6 rounded-xl border-2 transition-all ${
+                      selectedPackage === "quarterly"
+                        ? "border-orange-500 bg-orange-500 bg-opacity-20"
+                        : "border-gray-600 bg-gray-700 hover:border-gray-500"
+                    }`}
+                  >
+                    <div className="text-center">
+                      <h4 className="text-xl font-bold text-white mb-2">
+                        Quarterly
+                      </h4>
+                      <p className="text-3xl font-bold text-orange-400 mb-2">
+                        90 Days
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        Great for consistent training
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* Annual Package */}
+                  <button
+                    onClick={() => setSelectedPackage("annual")}
+                    className={`p-6 rounded-xl border-2 transition-all ${
+                      selectedPackage === "annual"
+                        ? "border-orange-500 bg-orange-500 bg-opacity-20"
+                        : "border-gray-600 bg-gray-700 hover:border-gray-500"
+                    }`}
+                  >
+                    <div className="text-center">
+                      <h4 className="text-xl font-bold text-white mb-2">
+                        Annual
+                      </h4>
+                      <p className="text-3xl font-bold text-orange-400 mb-2">
+                        365 Days
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        Best value for committed members
+                      </p>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Modal Actions */}
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => {
+                      setShowModal(false);
+                      setSelectedPackage("");
+                      setError("");
+                    }}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleRequestRenewal}
+                    disabled={!selectedPackage || requestLoading}
+                    className={`flex-1 font-semibold px-6 py-3 rounded-lg transition-colors duration-200 ${
+                      !selectedPackage || requestLoading
+                        ? "bg-gray-500 cursor-not-allowed text-gray-300"
+                        : "bg-orange-500 hover:bg-orange-600 text-white"
+                    }`}
+                  >
+                    {requestLoading ? "Submitting..." : "Submit Request"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

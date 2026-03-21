@@ -308,6 +308,7 @@ export async function deleteUser(req, res) {
 export async function renewMembership(req, res) {
   try {
     const { id } = req.params;
+    const { membershipType } = req.body;
 
     // Find user by ID
     const user = await User.findById(id);
@@ -315,12 +316,31 @@ export async function renewMembership(req, res) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Extend membershipExpiry by 30 days from current expiry
+    // Calculate days based on membership type
+    let daysToAdd = 30; // default to monthly
+    switch (membershipType) {
+      case "Monthly":
+        daysToAdd = 30;
+        break;
+      case "Quarterly":
+        daysToAdd = 90;
+        break;
+      case "Annual":
+        daysToAdd = 365;
+        break;
+      default:
+        daysToAdd = 30;
+    }
+
+    // Extend membershipExpiry from current expiry (or from today if expired)
     const currentExpiry = user.membershipExpiry || new Date();
+    const now = new Date();
+    const baseDate = currentExpiry > now ? currentExpiry : now;
     const newExpiry = new Date(
-      currentExpiry.getTime() + 30 * 24 * 60 * 60 * 1000,
+      baseDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000,
     );
     user.membershipExpiry = newExpiry;
+    user.membershipType = membershipType;
 
     // Save updated user
     await user.save();
@@ -328,6 +348,7 @@ export async function renewMembership(req, res) {
     res.status(200).json({
       message: "Membership renewed successfully.",
       membershipExpiry: user.membershipExpiry,
+      membershipType: user.membershipType,
     });
   } catch (error) {
     console.error(error);

@@ -1,80 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    activeMemberships: 0,
-    expiredMemberships: 0,
-  });
-  const [adminName, setAdminName] = useState("");
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("token");
-
-        // Fetch admin profile
-        const profileResponse = await axios.get(
-          "http://localhost:5000/api/users/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        setAdminName(profileResponse.data.name);
-
-        // Fetch all users to calculate stats
-        const usersResponse = await axios.get(
-          "http://localhost:5000/api/users",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const users = usersResponse.data.users || [];
-        const totalUsers = users.length;
-
-        const today = new Date();
-        let activeMemberships = 0;
-        let expiredMemberships = 0;
-
-        users.forEach((user) => {
-          if (user.membershipExpiry) {
-            const expiryDate = new Date(user.membershipExpiry);
-            if (expiryDate > today) {
-              activeMemberships++;
-            } else {
-              expiredMemberships++;
-            }
-          }
-        });
-
-        setStats({
-          totalUsers,
-          activeMemberships,
-          expiredMemberships,
-        });
-      } catch (err) {
-        console.error("Failed to fetch dashboard data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
 
   const dashboardCards = [
     {
-      label: "Manage Users",
-      description: "View, edit and delete system users",
+      label: "User Management",
+      description: "View, edit and manage system users",
       route: "/admin/users",
       color: "from-blue-500 to-blue-600",
       icon: (
@@ -94,8 +27,8 @@ const AdminDashboard = () => {
       ),
     },
     {
-      label: "Manage Memberships",
-      description: "Renew or update user memberships",
+      label: "Membership Management",
+      description: "Renew and manage user memberships",
       route: "/admin/memberships",
       color: "from-orange-500 to-orange-600",
       icon: (
@@ -114,6 +47,69 @@ const AdminDashboard = () => {
         </svg>
       ),
     },
+    {
+      label: "Schedule Management",
+      description: "Manage gym class schedules and sessions",
+      route: "/admin/schedules",
+      color: "from-purple-500 to-purple-600",
+      icon: (
+        <svg
+          className="w-12 h-12 text-white"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+    },
+    {
+      label: "Inventory Management",
+      description: "Track gym equipment and stock levels",
+      route: "/admin/inventory",
+      color: "from-green-500 to-green-600",
+      icon: (
+        <svg
+          className="w-12 h-12 text-white"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          />
+        </svg>
+      ),
+    },
+    {
+      label: "Supplement Store",
+      description: "Manage supplements and product listings",
+      route: "/admin/store",
+      color: "from-pink-500 to-pink-600",
+      icon: (
+        <svg
+          className="w-12 h-12 text-white"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+      ),
+    },
   ];
 
   return (
@@ -121,105 +117,16 @@ const AdminDashboard = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Welcome Section */}
         <div className="bg-gradient-to-r from-orange-600 to-orange-500 rounded-2xl shadow-2xl p-8 mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Welcome, {loading ? "Loading..." : adminName}
-          </h1>
+          <h1 className="text-4xl font-bold text-white mb-2">Welcome Admin</h1>
           <p className="text-white text-opacity-90 text-lg">
-            Manage your gym's users and memberships efficiently
+            Manage your gym's operations efficiently from this dashboard
           </p>
-        </div>
-
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white text-opacity-80 text-sm font-semibold mb-1">
-                  Total Users
-                </p>
-                <p className="text-white text-4xl font-bold">
-                  {loading ? "..." : stats.totalUsers}
-                </p>
-              </div>
-              <div className="bg-white bg-opacity-20 rounded-full p-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white text-opacity-80 text-sm font-semibold mb-1">
-                  Active Memberships
-                </p>
-                <p className="text-white text-4xl font-bold">
-                  {loading ? "..." : stats.activeMemberships}
-                </p>
-              </div>
-              <div className="bg-white bg-opacity-20 rounded-full p-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white text-opacity-80 text-sm font-semibold mb-1">
-                  Expired Memberships
-                </p>
-                <p className="text-white text-4xl font-bold">
-                  {loading ? "..." : stats.expiredMemberships}
-                </p>
-              </div>
-              <div className="bg-white bg-opacity-20 rounded-full p-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Action Cards */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {dashboardCards.map((card) => (
               <div
                 key={card.label}
@@ -244,23 +151,6 @@ const AdminDashboard = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* System Info */}
-        <div className="mt-12 bg-gray-800 bg-opacity-50 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-4">System Overview</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
-            <div>
-              <p className="text-sm mb-1">System Status</p>
-              <p className="font-semibold text-green-400">
-                ● All Systems Operational
-              </p>
-            </div>
-            <div>
-              <p className="text-sm mb-1">Last Updated</p>
-              <p className="font-semibold">{new Date().toLocaleString()}</p>
-            </div>
           </div>
         </div>
       </div>

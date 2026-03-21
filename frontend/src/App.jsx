@@ -21,6 +21,11 @@ import ViewUser from "./pages/ViewUser";
 import EditUser from "./pages/EditUser";
 import MembershipManagement from "./pages/MembershipManagement";
 import AdminRenewMembership from "./pages/AdminRenewMembership";
+import AdminRenewRequests from "./pages/AdminRenewRequests";
+import ScheduleManagement from "./pages/ScheduleManagement";
+import InventoryManagement from "./pages/InventoryManagement";
+import AdminSupplementStore from "./pages/AdminSupplementStore";
+import StudentSupplementStore from "./pages/StudentSupplementStore";
 
 function App() {
   return (
@@ -96,6 +101,14 @@ function App() {
           }
         />
         <Route
+          path="/supplement-store"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <StudentSupplementStore />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/users"
           element={
             <ProtectedRoute requiredRole="admin">
@@ -132,6 +145,38 @@ function App() {
           element={
             <ProtectedRoute requiredRole="admin">
               <AdminRenewMembership />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/renew-requests"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminRenewRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/schedules"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <ScheduleManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/inventory"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <InventoryManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/store"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminSupplementStore />
             </ProtectedRoute>
           }
         />
