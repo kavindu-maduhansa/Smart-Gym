@@ -199,9 +199,9 @@ const StudentDashboard = () => {
             </div>
           </div>
 
-          {/* Card 3: Renew Membership */}
+          {/* Card 3: Schedules Only */}
           <div
-            onClick={() => navigate("/renew-membership")}
+            onClick={() => navigate("/schedule-management")}
             className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
             <div className="flex flex-col items-center text-center">
@@ -216,18 +216,18 @@ const StudentDashboard = () => {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    d="M8 7V3m8 4V3m-9 8h10m-9 4h6m-7 4h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">
-                Renew Membership
+                Schedules Only
               </h3>
               <p className="text-white text-sm opacity-90 mb-4">
-                Extend your membership period
+                View your schedules
               </p>
               <button className="bg-white text-orange-600 font-semibold px-4 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200">
-                Renew Now
+                View Schedules
               </button>
             </div>
           </div>
