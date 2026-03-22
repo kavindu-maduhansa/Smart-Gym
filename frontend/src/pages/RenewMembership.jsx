@@ -95,9 +95,9 @@ const RenewMembership = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/users/renew/${user._id}`,
-        { membershipType: planType },
+      await axios.post(
+        `http://localhost:5000/api/membership/request-renewal`,
+        { packageType: planType.toLowerCase() },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -106,16 +106,16 @@ const RenewMembership = () => {
         },
       );
       setSuccess(
-        `Membership renewed successfully with ${planType} plan! Redirecting to dashboard...`,
+        `Renewal request submitted successfully! Your ${planType} plan request has been sent to the admin for approval. You will be notified once it's approved.`,
       );
       setTimeout(() => {
         navigate("/student-dashboard");
-      }, 2500);
+      }, 3000);
     } catch (err) {
       setError(
         err.response && err.response.data && err.response.data.message
           ? err.response.data.message
-          : "Failed to renew membership.",
+          : "Failed to submit renewal request.",
       );
       setSelectedPlan("");
     } finally {

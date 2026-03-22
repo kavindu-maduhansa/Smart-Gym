@@ -19,14 +19,35 @@ const Login = () => {
           password,
         },
       );
+
+      if (!response.data || !response.data.token) {
+        setError("Invalid response from server. Please try again.");
+        return;
+      }
+
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem("userId", response.data.userId);
       navigate("/");
     } catch (err) {
-      setError(
-        err.response && err.response.data && err.response.data.message
-          ? err.response.data.message
-          : "Login failed. Please try again.",
-      );
+      let errorMessage = "Login failed. Please try again.";
+
+      if (err.response) {
+        // Server responded with error
+        errorMessage =
+          err.response.data && err.response.data.message
+            ? err.response.data.message
+            : `Server error: ${err.response.status}`;
+      } else if (err.request) {
+        // Request was made but no response
+        errorMessage =
+          "Cannot connect to server. Make sure the backend is running on port 5000.";
+      } else {
+        // Error in request setup
+        errorMessage = err.message || "An unexpected error occurred.";
+      }
+
+      setError(errorMessage);
     }
   };
 

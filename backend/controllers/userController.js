@@ -4,13 +4,11 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import {
   validateEmail,
   validateName,
   validatePassword,
 } from "../utils/validation.js";
-dotenv.config();
 
 // @desc    Register a new user
 // @route   POST /api/users/register
@@ -126,6 +124,12 @@ export async function loginUser(req, res) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
+    // Check that JWT_SECRET is available
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not configured");
+      return res.status(500).json({ message: "Server configuration error." });
+    }
+
     // Generate JWT token
     const token = jwt.sign(
       {
@@ -143,7 +147,7 @@ export async function loginUser(req, res) {
       userId: user._id,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 }
@@ -316,6 +320,15 @@ export async function renewMembership(req, res) {
       return res.status(404).json({ message: "User not found." });
     }
 
+    // Check if membership has expired (admin should only renew expired memberships)
+    const now = new Date();
+    if (!user.membershipExpiry || user.membershipExpiry > now) {
+      return res.status(400).json({
+        message:
+          "This user's membership is still active. Can only renew expired memberships.",
+      });
+    }
+
     // Calculate days based on membership type
     let daysToAdd = 30; // default to monthly
     switch (membershipType) {
@@ -334,7 +347,6 @@ export async function renewMembership(req, res) {
 
     // Extend membershipExpiry from current expiry (or from today if expired)
     const currentExpiry = user.membershipExpiry || new Date();
-    const now = new Date();
     const baseDate = currentExpiry > now ? currentExpiry : now;
     const newExpiry = new Date(
       baseDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000,

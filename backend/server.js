@@ -1,14 +1,16 @@
+import dotenv from "dotenv";
+
+// Load environment variables FIRST before any other imports
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import connectDB from "./db.js";
-import dotenv from "dotenv";
 
 // Import user routes
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import membershipRoutes from "./routes/membershipRoutes.js";
-
-dotenv.config();
 
 const app = express();
 

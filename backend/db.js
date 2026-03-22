@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv"; // Load .env variables
 
 // avoid EventEmitter listener warnings when retrying connections
 mongoose.connection.setMaxListeners(50);
-
-dotenv.config();
 
 const connectDB = async () => {
   console.log(

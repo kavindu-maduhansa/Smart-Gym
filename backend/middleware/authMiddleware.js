@@ -2,9 +2,6 @@
 // Middleware to protect routes using JWT authentication
 
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // JWT authentication middleware
 export function authenticateJWT(req, res, next) {

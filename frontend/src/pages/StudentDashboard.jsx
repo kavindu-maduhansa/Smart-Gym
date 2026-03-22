@@ -112,23 +112,34 @@ const StudentDashboard = () => {
 
         {/* Alert for Expired Membership */}
         {isExpired && (
-          <div className="bg-red-500 bg-opacity-90 border-l-4 border-red-700 text-white p-4 rounded-lg mb-8">
-            <div className="flex items-center">
-              <svg
-                className="w-6 h-6 mr-3"
-                fill="currentColor"
-                viewBox="0 0 20 20"
+          <div className="bg-red-600 border-4 border-red-800 text-white p-8 rounded-xl mb-8 shadow-2xl">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center gap-4">
+                <svg
+                  className="w-10 h-10 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <p className="font-bold text-2xl">Membership Expired!</p>
+                  <p className="text-lg mt-2">
+                    Please renew your membership to continue enjoying our
+                    services.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => navigate("/membership")}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xl px-8 py-4 rounded-lg transition-colors duration-200 shadow-lg cursor-pointer"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <p className="font-semibold">
-                Your membership has expired! Please renew to continue enjoying
-                our services.
-              </p>
+                ➜ REQUEST RENEWAL NOW
+              </button>
             </div>
           </div>
         )}

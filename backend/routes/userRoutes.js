@@ -35,7 +35,7 @@ router.get("/", authenticateJWT, isAdmin, getAllUsers);
 // @route   GET /api/users/profile
 // @desc    Get current user's profile
 // @access  Private (requires JWT)
-router.get("/profile", authenticateJWT, checkMembershipStatus, getUserProfile);
+router.get("/profile", authenticateJWT, getUserProfile);
 
 // @route   GET /api/users/admin-test
 // @desc    Admin-only test endpoint
