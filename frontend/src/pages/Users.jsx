@@ -9,9 +9,31 @@ const Users = () => {
   const [notification, setNotification] = useState("");
   const navigate = useNavigate();
 
+  // State for Add User Modal
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "student",
+  });
+  const [addingUser, setAddingUser] = useState(false);
+
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showAddModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showAddModal]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -87,17 +109,140 @@ const Users = () => {
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
+      {/* Add User Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-all"></div>
+          <div className="relative z-10 flex items-center justify-center w-full h-full">
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-md w-full p-8 overflow-hidden">
+              {/* Header */}
+              <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white">Add New User</h3>
+                <button
+                  className="text-white/60 hover:text-white text-2xl font-bold transition"
+                  onClick={() => {
+                    setShowAddModal(false);
+                    setAddForm({ name: "", email: "", password: "", role: "student" });
+                  }}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  try {
+                    setAddingUser(true);
+                    const token = localStorage.getItem("token");
+                    const response = await axios.post(
+                      "http://localhost:5000/api/users/admin/create",
+                      addForm,
+                      { headers: { Authorization: `Bearer ${token}` } },
+                    );
+                    setUsers((prev) => [...prev, response.data.user]);
+                    setNotification("User added successfully.");
+                    setShowAddModal(false);
+                    setAddForm({ name: "", email: "", password: "", role: "student" });
+                  } catch (err) {
+                    setNotification(
+                      err.response &&
+                        err.response.data &&
+                        err.response.data.message
+                        ? err.response.data.message
+                        : "Failed to add user.",
+                    );
+                  } finally {
+                    setAddingUser(false);
+                  }
+                }}
+                className="flex flex-col gap-4 w-full"
+              >
+                <label className="text-gray-300 font-semibold text-sm">
+                  Name
+                  <input
+                    type="text"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    value={addForm.name}
+                    onChange={(e) =>
+                      setAddForm((f) => ({ ...f, name: e.target.value }))
+                    }
+                    required
+                  />
+                </label>
+                <label className="text-gray-300 font-semibold text-sm">
+                  Email
+                  <input
+                    type="email"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    value={addForm.email}
+                    onChange={(e) =>
+                      setAddForm((f) => ({ ...f, email: e.target.value }))
+                    }
+                    required
+                  />
+                </label>
+                <label className="text-gray-300 font-semibold text-sm">
+                  Password
+                  <input
+                    type="password"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    value={addForm.password}
+                    onChange={(e) =>
+                      setAddForm((f) => ({ ...f, password: e.target.value }))
+                    }
+                    placeholder="Minimum 8 characters"
+                    required
+                  />
+                </label>
+                <label className="text-gray-300 font-semibold text-sm">
+                  Role
+                  <select
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    value={addForm.role}
+                    onChange={(e) =>
+                      setAddForm((f) => ({ ...f, role: e.target.value }))
+                    }
+                    required
+                  >
+                    <option value="admin">Admin</option>
+                    <option value="student">Student</option>
+                    <option value="trainer">Trainer</option>
+                  </select>
+                </label>
+                <button
+                  type="submit"
+                  disabled={addingUser}
+                  className="mt-4 bg-orange hover:bg-orange/90 disabled:bg-orange/50 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
+                >
+                  {addingUser ? "Creating..." : "Create User"}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
-              User Management
-            </h1>
-            <p className="text-gray-400 text-base sm:text-lg">
-              View, edit, and manage all system users
-            </p>
+          <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
+                User Management
+              </h1>
+              <p className="text-gray-400 text-base sm:text-lg">
+                View, edit, and manage all system users
+              </p>
+            </div>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="bg-orange hover:bg-orange/90 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
+            >
+              + Add User
+            </button>
           </div>
 
           {/* Notification */}

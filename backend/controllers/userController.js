@@ -207,7 +207,7 @@ export async function toggleBlockUser(req, res) {
 export async function updateUser(req, res) {
   try {
     const { id } = req.params;
-    const { name, email } = req.body;
+    const { name, email, role } = req.body;
 
     // Check if user is updating their own profile or is an admin
     const isAdmin = req.user.role === "admin";
@@ -248,6 +248,17 @@ export async function updateUser(req, res) {
         });
       }
       user.email = email;
+    }
+
+    // Admin-only: Allow role update
+    if (role && isAdmin) {
+      const validRoles = ["admin", "student", "trainer"];
+      if (!validRoles.includes(role)) {
+        return res.status(400).json({
+          message: "Invalid role. Must be 'admin', 'student', or 'trainer'.",
+        });
+      }
+      user.role = role;
     }
 
     // Save updated user
@@ -418,6 +429,87 @@ export async function changePassword(req, res) {
     await user.save();
 
     res.status(200).json({ message: "Password changed successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+}
+
+// @desc    Create a new user (Admin only)
+// @route   POST /api/users/admin/create
+// @access  Private/Admin
+export async function createUserByAdmin(req, res) {
+  try {
+    const { name, email, password, role } = req.body;
+
+    // Check if all fields are provided
+    if (!name || !email || !password || !role) {
+      return res
+        .status(400)
+        .json({ message: "Please provide name, email, password, and role." });
+    }
+
+    // Validate name
+    const nameValidation = validateName(name);
+    if (!nameValidation.valid) {
+      return res.status(400).json({ message: nameValidation.message });
+    }
+
+    // Validate email
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
+      return res.status(400).json({ message: emailValidation.message });
+    }
+
+    // Validate password
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({ message: passwordValidation.message });
+    }
+
+    // Validate role
+    const validRoles = ["admin", "student", "trainer"];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        message: "Invalid role. Must be 'admin', 'student', or 'trainer'.",
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "User already exists with this email." });
+    }
+
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create new user with specified role
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    // Save user to database
+    await user.save();
+
+    // Return success message and user info
+    const userResponse = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    res.status(201).json({
+      message: "User created successfully!",
+      user: userResponse,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error. Please try again later." });

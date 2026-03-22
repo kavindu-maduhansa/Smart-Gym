@@ -11,6 +11,7 @@ import { deleteUser } from "../controllers/userController.js";
 import { getAllUsers } from "../controllers/userController.js";
 import { renewMembership } from "../controllers/userController.js";
 import { changePassword } from "../controllers/userController.js";
+import { createUserByAdmin } from "../controllers/userController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/roleMiddleware.js";
 import { checkMembershipStatus } from "../middleware/membershipMiddleware.js";
@@ -26,6 +27,11 @@ router.post("/register", registerUser);
 // @desc    Login user
 // @access  Public
 router.post("/login", loginUser);
+
+// @route   POST /api/users/admin/create
+// @desc    Create a new user (Admin only)
+// @access  Private/Admin
+router.post("/admin/create", authenticateJWT, isAdmin, createUserByAdmin);
 
 // @route   GET /api/users
 // @desc    Get all users
