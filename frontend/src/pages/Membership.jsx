@@ -354,68 +354,44 @@ const Membership = () => {
 
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-                    {isExpired ? (
-                      <>
-                        <button
-                          onClick={() => setShowModal(true)}
-                          className="flex-1 bg-orange hover:bg-orange/90 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
-                        >
-                          <svg
-                            className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                            />
-                          </svg>
-                          Request Membership Renewal
-                        </button>
-                        <button
-                          onClick={() => navigate("/student-dashboard")}
-                          className="flex-1 backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
-                        >
-                          <svg
-                            className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                            />
-                          </svg>
-                          Back to Dashboard
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        onClick={() => navigate("/student-dashboard")}
-                        className="w-full backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex-1 bg-orange hover:bg-orange/90 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                    >
+                      <svg
+                        className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
                       >
-                        <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                          />
-                        </svg>
-                        Back to Dashboard
-                      </button>
-                    )}
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                      Request Membership Renewal
+                    </button>
+                    <button
+                      onClick={() => navigate("/student-dashboard")}
+                      className="flex-1 backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                    >
+                      <svg
+                        className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                        />
+                      </svg>
+                      Back to Dashboard
+                    </button>
                   </div>
                 </div>
               ) : null}

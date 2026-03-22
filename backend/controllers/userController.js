@@ -331,14 +331,7 @@ export async function renewMembership(req, res) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Check if membership has expired (admin should only renew expired memberships)
     const now = new Date();
-    if (!user.membershipExpiry || user.membershipExpiry > now) {
-      return res.status(400).json({
-        message:
-          "This user's membership is still active. Can only renew expired memberships.",
-      });
-    }
 
     // Calculate days based on membership type
     let daysToAdd = 30; // default to monthly

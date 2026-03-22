@@ -28,15 +28,6 @@ export async function requestRenewal(req, res) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Check if membership has expired
-    const now = new Date();
-    if (!user.membershipExpiry || user.membershipExpiry > now) {
-      return res.status(400).json({
-        message:
-          "Your membership is still active. You can only request renewal after your membership expires.",
-      });
-    }
-
     // Check if there's already a pending request
     const existingRequest = await MembershipRequest.findOne({
       userId: user._id,

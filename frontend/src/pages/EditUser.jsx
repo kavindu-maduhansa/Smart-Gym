@@ -9,7 +9,6 @@ const EditUser = () => {
     name: "",
     email: "",
     role: "student",
-    membershipType: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -35,7 +34,6 @@ const EditUser = () => {
             name: found.name || "",
             email: found.email || "",
             role: found.role || "student",
-            membershipType: found.membershipType || "",
           });
         }
       } catch (err) {
@@ -216,27 +214,7 @@ const EditUser = () => {
                   </select>
                 </div>
 
-                {/* Membership Type Field */}
-                <div>
-                  <label
-                    htmlFor="membershipType"
-                    className="block text-sm font-semibold text-gray-300 mb-2"
-                  >
-                    Membership Type
-                  </label>
-                  <select
-                    id="membershipType"
-                    name="membershipType"
-                    value={formData.membershipType}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
-                  >
-                    <option value="">None</option>
-                    <option value="Monthly">Monthly</option>
-                    <option value="Quarterly">Quarterly</option>
-                    <option value="Annual">Annual</option>
-                  </select>
-                </div>
+
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
