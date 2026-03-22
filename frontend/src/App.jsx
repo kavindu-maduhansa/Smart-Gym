@@ -180,6 +180,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* Public pages */}
+        <Route path="/about" element={<Home />} />
+        <Route path="/schedules" element={<Home />} />
+        <Route path="/contact" element={<Home />} />
         {/* Add more routes here as needed */}
       </Routes>
     </>
