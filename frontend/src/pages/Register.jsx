@@ -49,12 +49,19 @@ const Register = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/dumbbells-bg.jpg')" }}
-    >
-      <div className="absolute inset-0 bg-black bg-opacity-60 -z-10"></div>
-      <div className="relative z-10 w-full max-w-md p-8 bg-orange-300 bg-opacity-60 backdrop-blur-lg rounded-xl shadow-2xl border-2 border-orange-400 text-white">
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 pt-24 pb-12 flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-md mx-auto px-4">
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl shadow-orange/20 p-8">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Register
         </h2>
@@ -67,7 +74,7 @@ const Register = () => {
             <label className="block mb-1 font-medium text-white">Name</label>
             <input
               type="text"
-              className="w-full border border-orange-300 rounded-lg px-4 py-2 bg-white bg-opacity-40 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
+              className="w-full border border-white/20 rounded-lg px-4 py-2 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoComplete="name"
@@ -78,7 +85,7 @@ const Register = () => {
             <label className="block mb-1 font-medium text-white">Email</label>
             <input
               type="email"
-              className="w-full border border-orange-300 rounded-lg px-4 py-2 bg-white bg-opacity-40 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
+              className="w-full border border-white/20 rounded-lg px-4 py-2 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -91,7 +98,7 @@ const Register = () => {
             </label>
             <input
               type="password"
-              className="w-full border border-orange-300 rounded-lg px-4 py-2 bg-white bg-opacity-40 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
+              className="w-full border border-white/20 rounded-lg px-4 py-2 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
@@ -100,7 +107,7 @@ const Register = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-orange-900 text-white font-bold py-2 rounded-lg shadow hover:bg-orange-600 transition disabled:opacity-60"
+            className="w-full bg-orange hover:bg-orange/90 text-white font-bold py-2 rounded-lg shadow-lg shadow-orange/20 transition disabled:opacity-60"
             disabled={loading}
           >
             {loading ? "Registering..." : "Register"}
@@ -114,8 +121,10 @@ const Register = () => {
           >
             Login
           </Link>
+          </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

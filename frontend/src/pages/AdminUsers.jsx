@@ -64,27 +64,33 @@ const AdminUsers = () => {
   }, [showUpdateModal, showProfileModal]);
 
   return (
-    <div
-      className="min-h-screen pt-24 relative bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/src/assets/gym-bg.jpg')" }}
-    >
-      <div className="absolute inset-0 bg-black bg-opacity-80 -z-10"></div>
-      {/* Update Modal (only once at root) */}
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+      </div>
+
+      {/* Update Modal */}
       {showUpdateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 backdrop-blur-[8px] transition-all"></div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-all"></div>
           <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <div className="relative bg-orange bg-opacity-10 border border-orange rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 backdrop-blur-lg flex flex-col items-center">
-              <button
-                className="absolute top-4 right-6 text-orange text-2xl font-bold hover:text-orange-dark"
-                onClick={() => setShowUpdateModal(false)}
-                aria-label="Close"
-              >
-                &times;
-              </button>
-              <h3 className="text-2xl font-bold text-orange mb-6 text-center">
-                Update User
-              </h3>
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-md w-full p-8 overflow-hidden">
+              {/* Header */}
+              <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white">Update User</h3>
+                <button
+                  className="text-white/60 hover:text-white text-2xl font-bold transition"
+                  onClick={() => setShowUpdateModal(false)}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+
               <form
                 onSubmit={async (e) => {
                   e.preventDefault();
@@ -114,11 +120,11 @@ const AdminUsers = () => {
                 }}
                 className="flex flex-col gap-4 w-full"
               >
-                <label className="text-orange-100 font-semibold">
+                <label className="text-gray-300 font-semibold text-sm">
                   Name
                   <input
                     type="text"
-                    className="mt-1 w-full rounded px-3 py-2 bg-orange-50 bg-opacity-10 text-orange-100 border border-orange focus:outline-none"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
                     value={updateForm.name}
                     onChange={(e) =>
                       setUpdateForm((f) => ({ ...f, name: e.target.value }))
@@ -126,11 +132,11 @@ const AdminUsers = () => {
                     required
                   />
                 </label>
-                <label className="text-orange-100 font-semibold">
+                <label className="text-gray-300 font-semibold text-sm">
                   Email
                   <input
                     type="email"
-                    className="mt-1 w-full rounded px-3 py-2 bg-orange-50 bg-opacity-10 text-orange-100 border border-orange focus:outline-none"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
                     value={updateForm.email}
                     onChange={(e) =>
                       setUpdateForm((f) => ({ ...f, email: e.target.value }))
@@ -138,10 +144,10 @@ const AdminUsers = () => {
                     required
                   />
                 </label>
-                <label className="text-orange-100 font-semibold">
+                <label className="text-gray-300 font-semibold text-sm">
                   Role
                   <select
-                    className="mt-1 w-full rounded px-3 py-2 bg-orange-50 bg-opacity-10 text-white border border-orange focus:outline-none"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
                     value={updateForm.role}
                     onChange={(e) =>
                       setUpdateForm((f) => ({ ...f, role: e.target.value }))
@@ -155,277 +161,292 @@ const AdminUsers = () => {
                 </label>
                 <button
                   type="submit"
-                  className="mt-4 bg-orange hover:bg-orange-dark text-white font-bold py-2 px-6 rounded-lg transition border border-orange shadow"
+                  className="mt-4 bg-orange hover:bg-orange/90 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
                 >
-                  Save
+                  Save Changes
                 </button>
               </form>
             </div>
           </div>
         </div>
       )}
-      <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center justify-center flex-1">
-        <div
-          className="w-full max-w-7xl rounded-2xl p-12 border-2 border-orange/60"
-          style={{ background: "transparent", boxShadow: "none" }}
-        >
-          <h2 className="text-4xl font-bold mb-10 text-center text-orange drop-shadow-lg">
-            All Users
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-white mt-4">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-center font-bold text-lg">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-center font-bold text-lg">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-center font-bold text-lg">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-center font-bold text-lg">
-                    Membership Expiry
-                  </th>
-                  <th className="px-6 py-3 text-center font-bold text-lg">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr
-                    key={user._id}
-                    className="border-b border-orange/30 align-middle"
-                  >
-                    <td className="px-6 py-3 text-center align-middle whitespace-nowrap">
-                      {user.name}
-                    </td>
-                    <td className="px-6 py-3 text-center align-middle whitespace-nowrap">
-                      {user.email}
-                    </td>
-                    <td className="px-6 py-3 text-center align-middle capitalize whitespace-nowrap">
-                      {user.role}
-                    </td>
-                    <td className="px-6 py-3 text-center align-middle whitespace-nowrap">
-                      {user.membershipExpiry ? (
-                        new Date(user.membershipExpiry).toLocaleDateString()
-                      ) : (
-                        <span className="italic text-gray-300">N/A</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-3 text-center align-middle">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          className="bg-orange hover:bg-orange-dark text-white px-3 py-1 rounded text-xs font-semibold transition border border-orange shadow"
-                          onClick={() => {
-                            setProfileUser(user);
-                            setShowProfileModal(true);
-                          }}
-                        >
-                          View
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      {/* User Profile Modal (modern blue blur overlay) - only once at root */}
+
+      {/* User Profile Modal */}
       {showProfileModal && profileUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Only blur overlay, no blue */}
-          <div className="absolute inset-0 backdrop-blur-[8px] transition-all"></div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-all"></div>
           <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <div className="relative bg-orange bg-opacity-10 border border-orange rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 backdrop-blur-lg flex flex-col items-center">
-              <button
-                className="absolute top-4 right-6 text-orange text-2xl font-bold hover:text-orange-dark"
-                onClick={() => setShowProfileModal(false)}
-                aria-label="Close"
-              >
-                &times;
-              </button>
-              <h3 className="text-2xl font-bold text-orange mb-6 text-center">
-                User Profile
-              </h3>
-              <div className="flex flex-col gap-4 text-orange-100 w-full">
-                <div>
-                  <span className="font-semibold">Name:</span>{" "}
-                  {profileUser.name}
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-md w-full p-8 overflow-hidden">
+              {/* Header */}
+              <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white">User Profile</h3>
+                <button
+                  className="text-white/60 hover:text-white text-2xl font-bold transition"
+                  onClick={() => setShowProfileModal(false)}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-4 text-white w-full mb-6">
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-gray-400 text-xs mb-1">Name</p>
+                  <p className="font-semibold">{profileUser.name}</p>
                 </div>
-                <div>
-                  <span className="font-semibold">Email:</span>{" "}
-                  {profileUser.email}
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-gray-400 text-xs mb-1">Email</p>
+                  <p className="font-semibold">{profileUser.email}</p>
                 </div>
-                <div>
-                  <span className="font-semibold">Role:</span>{" "}
-                  {profileUser.role}
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-gray-400 text-xs mb-1">Role</p>
+                  <p className="font-semibold capitalize">{profileUser.role}</p>
                 </div>
-                <div>
-                  <span className="font-semibold">Membership Expiry:</span>{" "}
-                  {profileUser.membershipExpiry ? (
-                    new Date(profileUser.membershipExpiry).toLocaleDateString()
-                  ) : (
-                    <span className="italic text-orange-200">N/A</span>
-                  )}
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-gray-400 text-xs mb-1">Membership Expiry</p>
+                  <p className="font-semibold">
+                    {profileUser.membershipExpiry ? (
+                      new Date(profileUser.membershipExpiry).toLocaleDateString()
+                    ) : (
+                      <span className="italic text-gray-400">N/A</span>
+                    )}
+                  </p>
                 </div>
-                {/* Action buttons in modal */}
-                <div className="flex gap-3 mt-6 justify-center">
-                  <button
-                    className={
-                      profileUser.isBlocked
-                        ? "bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
-                        : "bg-yellow-600 hover:bg-yellow-800 text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex flex-col gap-2">
+                <button
+                  className={`w-full px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                    profileUser.isBlocked
+                      ? "bg-green-600/20 border border-green-500/50 text-green-200 hover:bg-green-600/30"
+                      : "bg-yellow-600/20 border border-yellow-500/50 text-yellow-200 hover:bg-yellow-600/30"
+                  }`}
+                  onClick={async () => {
+                    try {
+                      const token = localStorage.getItem("token");
+                      const res = await axios.put(
+                        `http://localhost:5000/api/users/block/${profileUser._id}`,
+                        {},
+                        { headers: { Authorization: `Bearer ${token}` } },
+                      );
+                      setUsers((prev) =>
+                        prev.map((u) =>
+                          u._id === profileUser._id
+                            ? { ...u, isBlocked: res.data.user.isBlocked }
+                            : u,
+                        ),
+                      );
+                      setProfileUser((u) =>
+                        u ? { ...u, isBlocked: res.data.user.isBlocked } : u,
+                      );
+                      setNotification(
+                        `User '${profileUser.name}' ${res.data.user.isBlocked ? "blocked" : "unblocked"} successfully.`,
+                      );
+                    } catch (err) {
+                      setNotification(
+                        err.response &&
+                          err.response.data &&
+                          err.response.data.message
+                          ? err.response.data.message
+                          : `Failed to ${profileUser.isBlocked ? "unblock" : "block"} user '${profileUser.name}'.`,
+                      );
                     }
-                    onClick={async () => {
-                      try {
-                        const token = localStorage.getItem("token");
-                        const res = await axios.put(
-                          `http://localhost:5000/api/users/block/${profileUser._id}`,
-                          {},
-                          { headers: { Authorization: `Bearer ${token}` } },
-                        );
-                        setUsers((prev) =>
-                          prev.map((u) =>
-                            u._id === profileUser._id
-                              ? { ...u, isBlocked: res.data.user.isBlocked }
-                              : u,
-                          ),
-                        );
-                        setProfileUser((u) =>
-                          u ? { ...u, isBlocked: res.data.user.isBlocked } : u,
-                        );
-                        setNotification(
-                          `User '${profileUser.name}' ${res.data.user.isBlocked ? "blocked" : "unblocked"} successfully.`,
-                        );
-                      } catch (err) {
-                        setNotification(
-                          err.response &&
-                            err.response.data &&
-                            err.response.data.message
-                            ? err.response.data.message
-                            : `Failed to ${profileUser.isBlocked ? "unblock" : "block"} user '${profileUser.name}'.`,
-                        );
-                      }
-                    }}
-                  >
-                    {profileUser.isBlocked ? "Unblock" : "Block"}
-                  </button>
-                  <button
-                    className="bg-orange hover:bg-orange-dark text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
-                    onClick={() => {
-                      setUpdateUser(profileUser);
-                      setUpdateForm({
-                        name: profileUser.name,
-                        email: profileUser.email,
-                        role: profileUser.role,
-                      });
-                      setShowUpdateModal(true);
+                  }}
+                >
+                  {profileUser.isBlocked ? "Unblock" : "Block"}
+                </button>
+                <button
+                  className="w-full bg-orange hover:bg-orange/90 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-300"
+                  onClick={() => {
+                    setUpdateUser(profileUser);
+                    setUpdateForm({
+                      name: profileUser.name,
+                      email: profileUser.email,
+                      role: profileUser.role,
+                    });
+                    setShowUpdateModal(true);
+                    setShowProfileModal(false);
+                  }}
+                >
+                  Edit User
+                </button>
+                <button
+                  className="w-full bg-blue-600/20 border border-blue-500/50 text-blue-200 hover:bg-blue-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
+                  onClick={async () => {
+                    try {
+                      const token = localStorage.getItem("token");
+                      const res = await axios.put(
+                        `http://localhost:5000/api/users/renew/${profileUser._id}`,
+                        {},
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        },
+                      );
+                      setUsers((prev) =>
+                        prev.map((u) =>
+                          u._id === profileUser._id
+                            ? {
+                                ...u,
+                                membershipExpiry: res.data.membershipExpiry,
+                              }
+                            : u,
+                        ),
+                      );
+                      setNotification(
+                        `Membership for '${profileUser.name}' renewed successfully.`,
+                      );
                       setShowProfileModal(false);
-                    }}
-                  >
-                    Update
-                  </button>
-                  <button
-                    className="bg-orange-600 hover:bg-orange-800 text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
-                    onClick={async () => {
-                      try {
-                        const token = localStorage.getItem("token");
-                        const res = await axios.put(
-                          `http://localhost:5000/api/users/renew/${profileUser._id}`,
-                          {},
-                          {
-                            headers: { Authorization: `Bearer ${token}` },
-                          },
-                        );
-                        setUsers((prev) =>
-                          prev.map((u) =>
-                            u._id === profileUser._id
-                              ? {
-                                  ...u,
-                                  membershipExpiry: res.data.membershipExpiry,
-                                }
-                              : u,
-                          ),
-                        );
-                        setNotification(
-                          `Membership for '${profileUser.name}' renewed successfully.`,
-                        );
-                        setShowProfileModal(false);
-                      } catch (err) {
-                        setNotification(
-                          err.response &&
-                            err.response.data &&
-                            err.response.data.message
-                            ? err.response.data.message
-                            : `Failed to renew membership for '${profileUser.name}'.`,
-                        );
-                      }
-                    }}
-                  >
-                    Renew
-                  </button>
-                  <button
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold transition border border-orange shadow"
-                    onClick={async () => {
-                      if (
-                        !window.confirm(
-                          `Are you sure you want to delete ${profileUser.name}?`,
-                        )
+                    } catch (err) {
+                      setNotification(
+                        err.response &&
+                          err.response.data &&
+                          err.response.data.message
+                          ? err.response.data.message
+                          : `Failed to renew membership for '${profileUser.name}'.`,
+                      );
+                    }
+                  }}
+                >
+                  Renew Membership
+                </button>
+                <button
+                  className="w-full bg-red-600/20 border border-red-500/50 text-red-200 hover:bg-red-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
+                  onClick={async () => {
+                    if (
+                      !window.confirm(
+                        `Are you sure you want to delete ${profileUser.name}?`,
                       )
-                        return;
-                      try {
-                        const token = localStorage.getItem("token");
-                        await axios.delete(
-                          `http://localhost:5000/api/users/${profileUser._id}`,
-                          {
-                            headers: { Authorization: `Bearer ${token}` },
-                          },
-                        );
-                        setUsers((prev) =>
-                          prev.filter((u) => u._id !== profileUser._id),
-                        );
-                        setNotification(
-                          `User '${profileUser.name}' deleted successfully.`,
-                        );
-                        setShowProfileModal(false);
-                      } catch (err) {
-                        setNotification(
-                          err.response &&
-                            err.response.data &&
-                            err.response.data.message
-                            ? err.response.data.message
-                            : `Failed to delete user '${profileUser.name}'.`,
-                        );
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
+                    )
+                      return;
+                    try {
+                      const token = localStorage.getItem("token");
+                      await axios.delete(
+                        `http://localhost:5000/api/users/${profileUser._id}`,
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        },
+                      );
+                      setUsers((prev) =>
+                        prev.filter((u) => u._id !== profileUser._id),
+                      );
+                      setNotification(
+                        `User '${profileUser.name}' deleted successfully.`,
+                      );
+                      setShowProfileModal(false);
+                    } catch (err) {
+                      setNotification(
+                        err.response &&
+                          err.response.data &&
+                          err.response.data.message
+                          ? err.response.data.message
+                          : `Failed to delete user '${profileUser.name}'.`,
+                      );
+                    }
+                  }}
+                >
+                  Delete User
+                </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Content */}
+      <div className="relative z-10 pt-32 pb-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col items-center justify-center">
+          <div className="w-full max-w-7xl">
+            {/* Header */}
+            <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border border-orange/30 rounded-2xl p-8 mb-8">
+              <h2 className="text-4xl sm:text-5xl font-bold text-center text-white">
+                All Users
+              </h2>
+            </div>
+
+            {/* Loading/Error States */}
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
+                <p className="text-gray-300 mt-4">Loading users...</p>
+              </div>
+            ) : error ? (
+              <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center mb-8">
+                {error}
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-white">
+                  <thead>
+                    <tr className="backdrop-blur-md bg-white/10 border-b border-white/20">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                        Name
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                        Role
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                        Membership Expiry
+                      </th>
+                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/10">
+                    {users.map((user) => (
+                      <tr
+                        key={user._id}
+                        className="hover:bg-white/5 transition-colors"
+                      >
+                        <td className="px-6 py-4 text-sm whitespace-nowrap">
+                          {user.name}
+                        </td>
+                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+                          {user.email}
+                        </td>
+                        <td className="px-6 py-4 text-sm whitespace-nowrap capitalize">
+                          <span className="bg-orange/20 text-orange px-3 py-1 rounded-full text-xs font-semibold">
+                            {user.role}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm whitespace-nowrap">
+                          {user.membershipExpiry ? (
+                            new Date(user.membershipExpiry).toLocaleDateString()
+                          ) : (
+                            <span className="italic text-gray-400">N/A</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <button
+                            className="bg-orange hover:bg-orange/90 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                            onClick={() => {
+                              setProfileUser(user);
+                              setShowProfileModal(true);
+                            }}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Notification */}
       {notification && (
-        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-orange text-white px-6 py-3 rounded shadow-lg z-50 text-lg font-semibold animate-fade-in">
+        <div className="fixed top-28 left-1/2 transform -translate-x-1/2 bg-orange/90 text-white px-6 py-3 rounded-lg shadow-2xl z-50 text-sm sm:text-base font-semibold animate-fade-in">
           {notification}
         </div>
       )}
-      {/* Footer (Home page style) */}
-      <footer className="bg-black border-t-2 border-orange py-8 mt-8">
-        <div className="container mx-auto px-4 text-center text-white">
-          <p>
-            <span className="text-orange">&copy; 2026 Smart Gym.</span> All
-            rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

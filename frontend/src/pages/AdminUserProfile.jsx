@@ -37,37 +37,64 @@ const AdminUserProfile = () => {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-black pt-24 relative flex items-center justify-center">
-      <div className="absolute inset-0 bg-black bg-opacity-80 -z-10"></div>
-      <div className="relative z-10 w-full max-w-md p-8 bg-blue-dark bg-opacity-40 backdrop-blur-lg rounded-xl shadow-2xl border-2 border-orange text-white">
-        <h2 className="text-2xl font-bold text-center mb-6 text-orange">
-          User Profile
-        </h2>
-        {loading ? (
-          <p className="text-center text-gray-300">Loading...</p>
-        ) : error ? (
-          <p className="text-center text-red-400">{error}</p>
-        ) : user ? (
-          <div className="space-y-4">
-            <div>
-              <span className="font-semibold">Name:</span> {user.name}
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 pt-32 pb-20 flex items-center justify-center">
+        <div className="w-full max-w-md mx-auto px-4">
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 p-6 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+                User Profile
+              </h2>
             </div>
-            <div>
-              <span className="font-semibold">Email:</span> {user.email}
-            </div>
-            <div>
-              <span className="font-semibold">Role:</span> {user.role}
-            </div>
-            <div>
-              <span className="font-semibold">Membership Type:</span>{" "}
-              {user.membershipType}
-            </div>
-            <div>
-              <span className="font-semibold">Membership Expiry:</span>{" "}
-              {user.membershipExpiry}
+
+            {/* Content */}
+            <div className="p-6 sm:p-8">
+              {loading ? (
+                <div className="text-center">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
+                  <p className="text-gray-300 mt-4">Loading...</p>
+                </div>
+              ) : error ? (
+                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm">
+                  {error}
+                </div>
+              ) : user ? (
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-gray-400 text-xs mb-1">Full Name</p>
+                    <p className="text-white text-base font-semibold">{user.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs mb-1">Email Address</p>
+                    <p className="text-white text-base font-semibold">{user.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs mb-1">Account Type</p>
+                    <p className="text-white text-base font-semibold capitalize">{user.role}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs mb-1">Membership Type</p>
+                    <p className="text-white text-base font-semibold">{user.membershipType || "None"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs mb-1">Membership Expiry</p>
+                    <p className="text-white text-base font-semibold">{user.membershipExpiry || "N/A"}</p>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
-        ) : null}
+        </div>
       </div>
     </div>
   );

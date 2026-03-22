@@ -89,15 +89,25 @@ const EditUser = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-24 pb-12 flex items-center justify-center">
-      <div className="w-full max-w-2xl mx-auto px-4">
-        <div className="bg-gray-800 bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-orange-600 to-orange-500 p-6">
-            <h2 className="text-3xl font-bold text-white text-center">
-              Edit User
-            </h2>
-          </div>
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 pt-32 pb-20 flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-2xl mx-auto px-4">
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 p-6">
+              <h2 className="text-3xl font-bold text-white text-center">
+                Edit User
+              </h2>
+            </div>
 
           {/* Content */}
           <div className="p-8">
@@ -159,7 +169,7 @@ const EditUser = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 placeholder-white/50"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -179,7 +189,7 @@ const EditUser = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 placeholder-white/50"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -198,7 +208,7 @@ const EditUser = () => {
                     value={formData.role}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
                   >
                     <option value="student">Student</option>
                     <option value="admin">Admin</option>
@@ -219,7 +229,7 @@ const EditUser = () => {
                     name="membershipType"
                     value={formData.membershipType}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
                   >
                     <option value="">None</option>
                     <option value="Monthly">Monthly</option>
@@ -233,7 +243,7 @@ const EditUser = () => {
                   <button
                     type="submit"
                     disabled={updating}
-                    className={`flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center ${
+                    className={`flex-1 bg-orange hover:bg-orange/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center ${
                       updating ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
@@ -265,7 +275,7 @@ const EditUser = () => {
                     type="button"
                     onClick={() => navigate("/admin/users")}
                     disabled={updating}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                    className="flex-1 bg-white/10 border border-white/20 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
                   >
                     <svg
                       className="w-5 h-5 mr-2"
@@ -296,6 +306,7 @@ const EditUser = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

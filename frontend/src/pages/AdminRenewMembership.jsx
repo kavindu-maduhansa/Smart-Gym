@@ -141,218 +141,229 @@ const AdminRenewMembership = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-24 pb-12">
-      <div className="container mx-auto px-4 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Renew User Membership
-          </h1>
-          <p className="text-gray-300">Select a membership plan to renew</p>
-        </div>
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+      </div>
 
-        {loading ? (
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-            <p className="text-gray-300 mt-4">Loading user details...</p>
+      {/* Content */}
+      <div className="relative z-10 pt-32 pb-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          {/* Header */}
+          <div className="mb-12 text-center">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-3">
+              Renew User Membership
+            </h1>
+            <p className="text-gray-300 text-base sm:text-lg">Select a membership plan to renew</p>
           </div>
-        ) : error && !success ? (
-          <div className="max-w-2xl mx-auto bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-4 rounded-lg text-center">
-            {error}
-          </div>
-        ) : user ? (
-          <>
-            {/* Success Message */}
-            {success && (
-              <div className="max-w-2xl mx-auto mb-8 bg-green-500 bg-opacity-90 border border-green-600 text-white p-6 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 mr-3"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="font-semibold">{success}</span>
-              </div>
-            )}
 
-            {/* User Information */}
-            {!success && (
-              <div className="max-w-3xl mx-auto mb-8 bg-gray-800 bg-opacity-90 rounded-xl p-6 shadow-lg">
-                <h3 className="text-xl font-bold text-white mb-4">
-                  User Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">Name</p>
-                    <p className="text-white font-semibold">{user.name}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">Email</p>
-                    <p className="text-white font-semibold">{user.email}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">Current Plan</p>
-                    <p className="text-white font-semibold">
-                      {user.membershipType || "None"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">Current Expiry</p>
-                    <p className="text-white font-semibold">
-                      {formatDate(user.membershipExpiry)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">Status</p>
-                    <p
-                      className={`font-semibold ${
-                        getMembershipStatus() === "Active"
-                          ? "text-green-400"
-                          : "text-red-400"
-                      }`}
-                    >
-                      {getMembershipStatus()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Membership Plans */}
-            {!success && (
-              <>
-                <h2 className="text-2xl font-bold text-white text-center mb-6">
-                  Select Membership Plan
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                  {membershipPlans.map((plan) => (
-                    <div
-                      key={plan.id}
-                      className="bg-gray-800 bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105"
-                    >
-                      {/* Plan Header */}
-                      <div
-                        className={`bg-gradient-to-r ${plan.color} p-6 text-center`}
-                      >
-                        <h3 className="text-2xl font-bold text-white mb-2">
-                          {plan.name}
-                        </h3>
-                        <div className="text-4xl font-bold text-white mb-1">
-                          {plan.price}
-                        </div>
-                        <p className="text-white text-opacity-90 text-sm">
-                          {plan.duration}
-                        </p>
-                        {plan.savings && (
-                          <div className="mt-2 inline-block bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">
-                            {plan.savings}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Features */}
-                      <div className="p-6">
-                        <ul className="space-y-3 mb-6">
-                          {plan.features.map((feature, index) => (
-                            <li
-                              key={index}
-                              className="flex items-start text-gray-300"
-                            >
-                              <svg
-                                className="w-5 h-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-sm">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-
-                        {/* Select Button */}
-                        <button
-                          onClick={() => handleRenew(plan.id)}
-                          disabled={renewing}
-                          className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-                            renewing && selectedPlan === plan.id
-                              ? "bg-gray-600 cursor-not-allowed"
-                              : "bg-orange-500 hover:bg-orange-600 text-white"
-                          }`}
-                        >
-                          {renewing && selectedPlan === plan.id ? (
-                            <div className="flex items-center justify-center">
-                              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></div>
-                              Processing...
-                            </div>
-                          ) : (
-                            "Renew with this Plan"
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {/* Back Button */}
-            {!success && (
-              <div className="text-center">
-                <button
-                  onClick={() => navigate("/admin/memberships")}
-                  disabled={renewing}
-                  className="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center"
-                >
+          {loading ? (
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
+              <p className="text-gray-300 mt-4">Loading user details...</p>
+            </div>
+          ) : error && !success ? (
+            <div className="max-w-2xl mx-auto bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm sm:text-base">
+              {error}
+            </div>
+          ) : user ? (
+            <>
+              {/* Success Message */}
+              {success && (
+                <div className="max-w-2xl mx-auto mb-8 bg-green-600/20 border border-green-500/50 text-green-200 p-6 rounded-lg flex items-center justify-center text-sm sm:text-base">
                   <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
+                    className="w-5 h-5 sm:w-6 sm:h-6 mr-3 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
                     />
                   </svg>
-                  Back to Memberships
-                </button>
-              </div>
-            )}
+                  <span className="font-semibold">{success}</span>
+                </div>
+              )}
 
-            {/* Info Section */}
-            {!success && (
-              <div className="max-w-4xl mx-auto mt-12 bg-blue-500 bg-opacity-20 border border-blue-500 text-blue-200 p-6 rounded-lg">
-                <h4 className="font-bold text-lg mb-2">📋 Admin Notes</h4>
-                <ul className="space-y-2 text-sm">
-                  <li>
-                    • The new membership period will be calculated from today's
-                    date
-                  </li>
-                  <li>
-                    • If the user has an active membership, consider the current
-                    expiry date before renewing
-                  </li>
-                  <li>• The user will be notified of the membership renewal</li>
-                  <li>
-                    • All changes are logged in the system for audit purposes
-                  </li>
-                </ul>
-              </div>
-            )}
-          </>
-        ) : null}
+              {/* User Information */}
+              {!success && (
+                <div className="max-w-3xl mx-auto mb-12 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-6 sm:p-8">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-6">
+                    User Information
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Name</p>
+                      <p className="text-white text-base sm:text-lg font-semibold">{user.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Email</p>
+                      <p className="text-white text-base sm:text-lg font-semibold">{user.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Current Plan</p>
+                      <p className="text-white text-base sm:text-lg font-semibold">
+                        {user.membershipType || "None"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Current Expiry</p>
+                      <p className="text-white text-base sm:text-lg font-semibold">
+                        {formatDate(user.membershipExpiry)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Status</p>
+                      <p
+                        className={`text-base sm:text-lg font-semibold ${
+                          getMembershipStatus() === "Active"
+                            ? "text-orange"
+                            : "text-red-400"
+                        }`}
+                      >
+                        {getMembershipStatus()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Membership Plans */}
+              {!success && (
+                <>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
+                    Select Membership Plan
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-12">
+                    {membershipPlans.map((plan) => (
+                      <div
+                        key={plan.id}
+                        className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:border-orange/50 flex flex-col"
+                      >
+                        {/* Plan Header */}
+                        <div
+                          className={`bg-gradient-to-r ${plan.color} p-6 text-center`}
+                        >
+                          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                            {plan.name}
+                          </h3>
+                          <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
+                            {plan.price}
+                          </div>
+                          <p className="text-white text-opacity-90 text-xs sm:text-sm">
+                            {plan.duration}
+                          </p>
+                          {plan.savings && (
+                            <div className="mt-2 inline-block bg-white/20 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
+                              {plan.savings}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Features */}
+                        <div className="p-6 flex flex-col flex-grow">
+                          <ul className="space-y-2 sm:space-y-3 mb-6 flex-grow">
+                            {plan.features.map((feature, index) => (
+                              <li
+                                key={index}
+                                className="flex items-start text-gray-300 text-xs sm:text-sm"
+                              >
+                                <svg
+                                  className="w-4 h-4 sm:w-5 sm:h-5 text-orange mr-2 mt-0.5 flex-shrink-0"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+
+                          {/* Select Button */}
+                          <button
+                            onClick={() => handleRenew(plan.id)}
+                            disabled={renewing}
+                            className={`w-full py-3 px-4 rounded-lg font-bold transition-all duration-200 text-sm sm:text-base ${
+                              renewing && selectedPlan === plan.id
+                                ? "bg-gray-600 cursor-not-allowed"
+                                : "bg-orange hover:bg-orange/90 text-white"
+                            }`}
+                          >
+                            {renewing && selectedPlan === plan.id ? (
+                              <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                                Processing...
+                              </div>
+                            ) : (
+                              "Renew with this Plan"
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Back Button */}
+              {!success && (
+                <div className="text-center mb-12">
+                  <button
+                    onClick={() => navigate("/admin/memberships")}
+                    disabled={renewing}
+                    className="backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 inline-flex items-center text-sm sm:text-base"
+                  >
+                    <svg
+                      className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      />
+                    </svg>
+                    Back to Memberships
+                  </button>
+                </div>
+              )}
+
+              {/* Info Section */}
+              {!success && (
+                <div className="max-w-4xl mx-auto backdrop-blur-md bg-blue-600/20 border border-blue-500/50 text-blue-200 p-6 rounded-lg text-xs sm:text-sm">
+                  <h4 className="font-bold text-base sm:text-lg mb-3">📋 Admin Notes</h4>
+                  <ul className="space-y-2">
+                    <li>
+                      • The new membership period will be calculated from today's
+                      date
+                    </li>
+                    <li>
+                      • If the user has an active membership, consider the current
+                      expiry date before renewing
+                    </li>
+                    <li>• The user will be notified of the membership renewal</li>
+                    <li>
+                      • All changes are logged in the system for audit purposes
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : null}
+        </div>
       </div>
     </div>
   );
