@@ -11,8 +11,9 @@ const connectDB = async () => {
 
   const mongoUri = process.env.MONGODB_URI;
   if (!mongoUri) {
-    console.error("No MONGODB_URI found in environment variables.");
-    return;
+    throw new Error(
+      "CRITICAL: MONGODB_URI is not configured. Please set it in .env file.",
+    );
   }
 
   // only attempt connection when currently disconnected
@@ -24,8 +25,12 @@ const connectDB = async () => {
   try {
     await mongoose.connect(mongoUri);
     console.log(`MongoDB connected ✅ (${mongoUri})`);
+    return true;
   } catch (error) {
     console.error("MongoDB connection error ❌", error.message);
+    throw new Error(
+      `Failed to connect to MongoDB: ${error.message}. Server cannot start without database connection.`,
+    );
   }
 };
 
