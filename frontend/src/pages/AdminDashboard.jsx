@@ -1,8 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeMembers: 0,
+    scheduledClasses: 0,
+    equipmentItems: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:5000/api/dashboard/stats", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard stats");
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          setStats(data.stats);
+        }
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   const dashboardCards = [
     { label: "User Management", description: "View, edit and manage system users", route: "/admin/users", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
@@ -71,12 +112,17 @@ const AdminDashboard = () => {
           {/* Stats Section */}
           <div className="mt-12 sm:mt-16">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Dashboard Stats</h2>
+            {error && (
+              <div className="mb-6 p-4 bg-red/20 border border-red/50 rounded-lg text-red-300">
+                {error}
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {[
-                { label: "Total Users", value: "1,245", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
-                { label: "Active Members", value: "892", icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" },
-                { label: "Scheduled Classes", value: "45", icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
-                { label: "Equipment Items", value: "234", icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
+                { label: "Total Users", value: stats.totalUsers, icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
+                { label: "Active Members", value: stats.activeMembers, icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" },
+                { label: "Scheduled Classes", value: stats.scheduledClasses, icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
+                { label: "Equipment Items", value: stats.equipmentItems, icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
               ].map((stat, idx) => (
                 <div key={idx} className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-4 sm:p-6 hover:bg-white/15 transition-all">
                   <div className="flex items-center gap-3 sm:gap-4 mb-4">
@@ -87,7 +133,9 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <p className="text-gray-400 text-xs sm:text-sm mb-1">{stat.label}</p>
-                  <p className="text-2xl sm:text-3xl font-bold text-orange">{stat.value}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-orange">
+                    {loading ? "..." : stat.value}
+                  </p>
                 </div>
               ))}
             </div>

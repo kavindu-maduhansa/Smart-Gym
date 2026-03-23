@@ -11,6 +11,7 @@ import connectDB from "./db.js";
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import membershipRoutes from "./routes/membershipRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/trainers", trainerRoutes);
 app.use("/api/membership", membershipRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Test route
 app.get("/", (req, res) => {
