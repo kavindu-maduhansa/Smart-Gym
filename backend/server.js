@@ -12,6 +12,8 @@ import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import membershipRoutes from "./routes/membershipRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import supplementRoutes from "./routes/supplementRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/trainers", trainerRoutes);
 app.use("/api/membership", membershipRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/supplements", supplementRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Test route
 app.get("/", (req, res) => {
