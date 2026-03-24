@@ -142,6 +142,22 @@ const Navbar = () => {
               </button>
             </>
           )}
+          {role === "trainer" && (
+            <>
+              <Link
+                to="/trainer-dashboard"
+                className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       </div>
     </nav>

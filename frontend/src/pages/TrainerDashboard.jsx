@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaCalendarAlt, FaUsers, FaClipboardList } from "react-icons/fa";
+import { FaCalendarAlt, FaUsers, FaClipboardList, FaStar } from "react-icons/fa";
 
 const TrainerDashboard = () => {
   // Added 'path' to each feature to enable navigation
@@ -25,6 +25,13 @@ const TrainerDashboard = () => {
       title: "Workout Plans", 
       desc: "Create and assign custom routines.",
       path: "/trainer/plans" 
+    },
+    { 
+      id: 4, 
+      icon: FaStar, 
+      title: "My Feedbacks", 
+      desc: "View student reviews and ratings.",
+      path: "/trainer/feedbacks" 
     },
   ];
 

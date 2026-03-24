@@ -1,5 +1,5 @@
 import express from "express";
-import { submitFeedback, getTrainerFeedback } from "../controllers/feedbackController.js";
+import { submitFeedback, getTrainerFeedback, getMyFeedbacks } from "../controllers/feedbackController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -9,5 +9,8 @@ router.post("/", authenticateJWT, submitFeedback);
 
 // Get all feedback for a trainer
 router.get("/trainer/:trainerId", getTrainerFeedback);
+
+// Get personal feedbacks for a logged-in trainer
+router.get("/my-feedbacks", authenticateJWT, getMyFeedbacks);
 
 export default router;

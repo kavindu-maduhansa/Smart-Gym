@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 const TrainerAvailability = () => {
   const [schedules, setSchedules] = useState([]);
@@ -30,7 +33,7 @@ const TrainerAvailability = () => {
   const [bookingId, setBookingId] = useState(null);
   const [filterTitle, setFilterTitle] = useState("");
   const [filterTrainer, setFilterTrainer] = useState("");
-  const [filterDate, setFilterDate] = useState("");
+  const [filterDate, setFilterDate] = useState(null);
 
   const handleBook = async (id) => {
     if (!window.confirm("Do you want to book this session?")) return;
@@ -57,7 +60,7 @@ const TrainerAvailability = () => {
   const filteredSchedules = schedules.filter((s) => {
     const matchesTitle = s.title?.toLowerCase().includes(filterTitle.toLowerCase());
     const matchesTrainer = s.trainer?.name?.toLowerCase().includes(filterTrainer.toLowerCase());
-    const matchesDate = filterDate ? s.date === filterDate : true;
+    const matchesDate = filterDate ? s.date === format(filterDate, "yyyy-MM-dd") : true;
     return matchesTitle && matchesTrainer && matchesDate;
   });
 
@@ -79,15 +82,19 @@ const TrainerAvailability = () => {
           onChange={e => setFilterTrainer(e.target.value)}
           className="bg-black border border-white/20 p-2 rounded text-white"
         />
-        <input
-          type="date"
-          value={filterDate}
-          onChange={e => setFilterDate(e.target.value)}
-          className="bg-black border border-white/20 p-2 rounded text-white"
-        />
+        <div className="relative">
+          <DatePicker
+            selected={filterDate}
+            onChange={(date) => setFilterDate(date)}
+            className="bg-black border border-white/20 p-2 rounded text-white"
+            placeholderText="Filter by date"
+            dateFormat="yyyy-MM-dd"
+            isClearable
+          />
+        </div>
         {(filterTitle || filterTrainer || filterDate) && (
           <button
-            onClick={() => { setFilterTitle(""); setFilterTrainer(""); setFilterDate(""); }}
+            onClick={() => { setFilterTitle(""); setFilterTrainer(""); setFilterDate(null); }}
             className="bg-orange text-white px-4 py-2 rounded font-bold"
           >
             Clear Filters

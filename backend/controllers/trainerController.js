@@ -71,3 +71,28 @@ export const deleteSchedule = async (req, res) => {
         res.status(500).json({ message: "Error deleting", error });
     }
 };
+
+// 6. Update Attendance for a booked schedule
+export const updateAttendance = async (req, res) => {
+    try {
+        const { attendanceStatus } = req.body;
+        const schedule = await TrainerSchedule.findById(req.params.id);
+        
+        if (!schedule) return res.status(404).json({ message: "Schedule not found" });
+        
+        if (schedule.trainer.toString() !== req.user.id) {
+            return res.status(401).json({ message: "Not authorized" });
+        }
+
+        if (!schedule.bookedBy) {
+            return res.status(400).json({ message: "Cannot mark attendance for an unbooked session" });
+        }
+
+        schedule.attendanceStatus = attendanceStatus;
+        await schedule.save();
+
+        res.status(200).json(schedule);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating attendance", error });
+    }
+};

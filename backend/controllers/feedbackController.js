@@ -15,7 +15,11 @@ export const submitFeedback = async (req, res) => {
     // Optionally update trainer's avgRating
     const feedbacks = await Feedback.find({ trainerId });
     const avgRating = feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length;
-    await Trainer.findByIdAndUpdate(trainerId, { 'metrics.avgRating': avgRating });
+    await Trainer.findOneAndUpdate(
+      { userId: trainerId }, 
+      { 'metrics.avgRating': avgRating },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
     res.status(201).json(feedback);
   } catch (error) {
     res.status(500).json({ message: "Error submitting feedback", error });
@@ -30,5 +34,18 @@ export const getTrainerFeedback = async (req, res) => {
     res.status(200).json(feedbacks);
   } catch (error) {
     res.status(500).json({ message: "Error fetching feedback", error });
+  }
+};
+
+// Get personal feedbacks for the logged-in trainer
+export const getMyFeedbacks = async (req, res) => {
+  try {
+    // trainerId in Feedback stores the User._id, not Trainer._id
+    const feedbacks = await Feedback.find({ trainerId: req.user.id })
+      .populate('studentId', 'name')
+      .sort({ createdAt: -1 });
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching feedbacks", error });
   }
 };

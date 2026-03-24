@@ -30,8 +30,8 @@ import StudentSupplementStore from "./pages/StudentSupplementStore";
 
 import TrainerDashboard from "./pages/TrainerDashboard";
 import TrainerSchedules from "./pages/TrainerSchedules";
-// Removed AvailableSchedules import for cleanup
-import MyBookings from "./pages/MyBookings";
+import TrainerFeedbacks from "./pages/TrainerFeedbacks";
+import TrainerBooking from "./pages/TrainerBooking";
 import Leaderboard from "./pages/Leaderboard";
 import Schedules from "./pages/Schedules";
 
@@ -206,8 +206,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/trainer/feedbacks"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerFeedbacks />
+            </ProtectedRoute>
+          }
+        />
         {/* Removed /student/available route for cleanup */}
-      <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><MyBookings /></ProtectedRoute>} />
+      <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><TrainerBooking /></ProtectedRoute>} />
       <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Home />} />
