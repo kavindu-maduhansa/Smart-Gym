@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
+import AboutUs from "./pages/AboutUs";
 
 // Student Pages
 import Profile from "./pages/Profile";
@@ -181,7 +182,7 @@ function App() {
           }
         />
         {/* Public pages */}
-        <Route path="/about" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/schedules" element={<Home />} />
         <Route path="/contact" element={<Home />} />
         {/* Add more routes here as needed */}
