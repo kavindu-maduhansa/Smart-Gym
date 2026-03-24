@@ -12,6 +12,7 @@ import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import membershipRoutes from "./routes/membershipRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/trainers", trainerRoutes);
 app.use("/api/membership", membershipRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Test route
 app.get("/", (req, res) => {
