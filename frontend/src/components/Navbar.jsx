@@ -68,6 +68,12 @@ const Navbar = () => {
             Schedules
           </Link>
           <Link
+            to="/leaderboard"
+            className="text-white hover:text-orange transition-colors duration-200"
+          >
+            Leaderboard
+          </Link>
+          <Link
             to="/contact"
             className="text-white hover:text-orange transition-colors duration-200"
           >

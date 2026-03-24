@@ -28,12 +28,20 @@ import InventoryManagement from "./pages/InventoryManagement";
 import AdminSupplementStore from "./pages/AdminSupplementStore";
 import StudentSupplementStore from "./pages/StudentSupplementStore";
 
+import TrainerDashboard from "./pages/TrainerDashboard";
+import TrainerSchedules from "./pages/TrainerSchedules";
+// Removed AvailableSchedules import for cleanup
+import MyBookings from "./pages/MyBookings";
+import Leaderboard from "./pages/Leaderboard";
+import Schedules from "./pages/Schedules";
+
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/schedules" element={<Schedules />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -181,9 +189,27 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Public pages */}
+
+        <Route
+          path="/trainer-dashboard"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trainer/schedules"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerSchedules />
+            </ProtectedRoute>
+          }
+        />
+        {/* Removed /student/available route for cleanup */}
+      <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><MyBookings /></ProtectedRoute>} />
+      <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/about" element={<About />} />
-        <Route path="/schedules" element={<Home />} />
         <Route path="/contact" element={<Home />} />
         {/* Add more routes here as needed */}
       </Routes>

@@ -12,6 +12,8 @@ import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import membershipRoutes from "./routes/membershipRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import studentRoutes from './routes/studentRoutes.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
 
 const app = express();
 
@@ -42,7 +44,23 @@ startServer();
 // Middleware
 // Configure CORS with allowed origins
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost:5173 with or without trailing slash
+    if (origin === 'http://localhost:5173' || origin === 'http://localhost:5173/') {
+      return callback(null, true);
+    }
+    
+    // Allow custom frontend URL from env
+    const allowedOrigin = process.env.FRONTEND_URL;
+    if (allowedOrigin && (origin === allowedOrigin || origin === allowedOrigin + '/')) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -51,9 +69,11 @@ app.use(express.json());
 
 // User registration and related routes
 app.use("/api/users", userRoutes);
-app.use("/api/trainers", trainerRoutes);
+app.use("/api/trainer", trainerRoutes);
 app.use("/api/membership", membershipRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use('/api/student', studentRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Test route
 app.get("/", (req, res) => {

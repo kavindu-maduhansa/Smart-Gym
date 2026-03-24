@@ -35,6 +35,12 @@ export const apiClient = {
 
   // Trainer endpoints
   trainers: `${API_URL}/api/trainers`,
+
+  // Feedback endpoints
+  feedback: {
+    submit: `${API_URL}/api/feedback`,
+    getForTrainer: (trainerId) => `${API_URL}/api/feedback/trainer/${trainerId}`,
+  },
 };
 
 export default apiClient;
