@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -27,6 +28,8 @@ import ScheduleManagement from "./pages/ScheduleManagement";
 import InventoryManagement from "./pages/InventoryManagement";
 import AdminSupplementStore from "./pages/AdminSupplementStore";
 import StudentSupplementStore from "./pages/StudentSupplementStore";
+import AdminContactMessages from "./pages/AdminContactMessages";
+import AdminContactMessageView from "./pages/AdminContactMessageView";
 
 function App() {
   return (
@@ -181,10 +184,26 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/contact-messages"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminContactMessages />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/contact-messages/:id"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminContactMessageView />
+            </ProtectedRoute>
+          }
+        />
         {/* Public pages */}
         <Route path="/about" element={<About />} />
         <Route path="/schedules" element={<Home />} />
-        <Route path="/contact" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
         {/* Add more routes here as needed */}
       </Routes>
     </>
