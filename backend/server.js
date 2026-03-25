@@ -48,20 +48,20 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
+
     // Remove trailing slash for consistent comparison
     const normalizedOrigin = origin.replace(/\/$/, '');
-    
+
     // Whitelist of allowed origins
     const allowedOrigins = [
       'http://localhost:5173',
       process.env.FRONTEND_URL
     ].filter(Boolean); // Remove undefined values
-    
+
     if (allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
-    
+
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
