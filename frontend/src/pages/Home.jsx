@@ -1,25 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCalendarAlt, FaBox, FaShoppingCart } from "react-icons/fa";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const features = [
     {
       id: 1,
       icon: FaShoppingCart,
       title: "Supplements",
       description: "Browse and request gym supplements online.",
+      route: "/supplement-store",
     },
     {
       id: 2,
       icon: FaCalendarAlt,
       title: "Schedules",
       description: "Organize gym sessions and time slots seamlessly.",
+      route: "/schedules",
     },
     {
       id: 3,
       icon: FaBox,
       title: "Inventories",
       description: "Manage gym equipment and resources effectively.",
+      route: "/inventory-management",
     },
   ];
 
@@ -94,6 +99,7 @@ const Home = () => {
               return (
                 <div
                   key={feature.id}
+                  onClick={() => navigate(feature.route)}
                   className="group relative backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange/20 cursor-pointer"
                 >
                   {/* Gradient Overlay on Hover */}

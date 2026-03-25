@@ -128,7 +128,7 @@ function App() {
         <Route
           path="/supplement-store"
           element={
-            <ProtectedRoute requiredRole="student">
+            <ProtectedRoute>
               <StudentSupplementStore />
             </ProtectedRoute>
           }
@@ -136,7 +136,7 @@ function App() {
         <Route
           path="/cart"
           element={
-            <ProtectedRoute requiredRole="student">
+            <ProtectedRoute>
               <Cart />
             </ProtectedRoute>
           }

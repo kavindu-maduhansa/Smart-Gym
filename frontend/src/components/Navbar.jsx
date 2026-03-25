@@ -108,12 +108,6 @@ const Navbar = () => {
               >
                 Dashboard
               </Link>
-              <Link
-                to="/admin/store"
-                className="text-white hover:text-orange transition-colors duration-200"
-              >
-                Supplement Store
-              </Link>
               <button
                 onClick={handleLogout}
                 className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
@@ -129,12 +123,6 @@ const Navbar = () => {
                 className="text-white hover:text-orange transition-colors duration-200"
               >
                 Dashboard
-              </Link>
-              <Link
-                to="/supplement-store"
-                className="text-white hover:text-orange transition-colors duration-200"
-              >
-                Supplement Store
               </Link>
               <button
                 onClick={handleLogout}
