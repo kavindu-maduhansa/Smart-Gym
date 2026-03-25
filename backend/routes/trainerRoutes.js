@@ -8,7 +8,8 @@ import {
     deleteSchedule,
     updateAttendance,
     getAssignedStudents,
-    updateStudentNote
+    updateStudentNote,
+    updateSchedule
 } from "../controllers/trainerController.js";
 
 import { authenticateJWT } from "../middleware/authMiddleware.js";
@@ -22,6 +23,7 @@ router.get("/leaderboard", getLeaderboard);
 router.post("/profile", authenticateJWT, upsertProfile);
 router.post('/schedules', authenticateJWT, addSchedule);
 router.get('/schedules', authenticateJWT, getMySchedules);
+router.put('/schedules/:id', authenticateJWT, updateSchedule);
 router.delete('/schedules/:id', authenticateJWT, deleteSchedule);
 router.put('/schedules/:id/attendance', authenticateJWT, updateAttendance);
 router.get('/assigned-students', authenticateJWT, getAssignedStudents);

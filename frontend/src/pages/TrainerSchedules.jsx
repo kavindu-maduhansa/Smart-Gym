@@ -15,6 +15,9 @@ const TrainerSchedules = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("Upcoming");
+  const [editId, setEditId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   // BASE URL - Adjust if your backend port is different
   const API_URL = "http://localhost:5000/api/trainer/schedules";
@@ -59,28 +62,45 @@ const TrainerSchedules = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const newSchedule = { 
+      const scheduleData = { 
         title: sessionName, 
         date: sessionDate ? format(sessionDate, "yyyy-MM-dd") : "", 
         time: sessionTime 
       };
 
-      // UPDATED URL to match backend trainerRoutes.js
-      await axios.post(API_URL, newSchedule, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      if (editId) {
+        await axios.put(`${API_URL}/${editId}`, scheduleData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else {
+        await axios.post(API_URL, scheduleData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
 
       fetchSchedules();
-      setSessionName("");
-      setSessionDate(null);
-      setSessionTime("");
-      setShowForm(false);
+      closeModal();
     } catch (err) {
-      // Improved error message for debugging
       setError(err.response?.data?.message || "Server Error. Ensure you are logged in as a Trainer.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = (s) => {
+    setEditId(s._id);
+    setSessionName(s.title);
+    setSessionDate(new Date(s.date));
+    setSessionTime(s.time);
+    setShowForm(true);
+  };
+
+  const closeModal = () => {
+    setShowForm(false);
+    setEditId(null);
+    setSessionName("");
+    setSessionDate(null);
+    setSessionTime("");
   };
 
   const handleDelete = async (id) => {
@@ -132,17 +152,30 @@ const TrainerSchedules = () => {
 
     return matchesSearch && matchesStatus && matchesDate;
   });
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, dateFilter]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredSchedules.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="min-h-screen bg-black text-white pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black -z-10"></div>
       
-      <div className="max-w-6xl mx-auto backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-orange uppercase tracking-widest">My Schedules</h2>
-          <button onClick={() => setShowForm(true)} className="bg-orange px-6 py-2 rounded-lg font-bold hover:bg-orange/80 transition-all">
-            + Add Session
-          </button>
+      <div className="max-w-6xl mx-auto">
+        <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div>
+              <h2 className="text-3xl font-bold text-orange uppercase tracking-widest">My Schedules</h2>
+              <p className="text-gray-400 mt-2">Manage your training sessions and track student attendance.</p>
+            </div>
+            <button onClick={() => setShowForm(true)} className="mt-4 md:mt-0 bg-orange px-6 py-2.5 rounded-xl font-bold hover:bg-orange/80 transition-all shadow-lg shadow-orange/20">
+              + Add Session
+            </button>
+          </div>
         </div>
 
         {/* Filters Section */}
@@ -186,10 +219,10 @@ const TrainerSchedules = () => {
               <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-md w-full p-8">
                 {/* Header */}
                 <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-white">Add New Session</h3>
+                  <h3 className="text-2xl font-bold text-white">{editId ? 'Edit Session' : 'Add New Session'}</h3>
                   <button
                     className="text-white/60 hover:text-white text-2xl font-bold transition"
-                    onClick={() => setShowForm(false)}
+                    onClick={closeModal}
                     aria-label="Close"
                   >
                     &times;
@@ -217,13 +250,12 @@ const TrainerSchedules = () => {
                     Date
                     <div className="mt-2 w-full">
                       <DatePicker
-                        portalId="root"
                         selected={sessionDate}
                         onChange={(date) => setSessionDate(date)}
                         className="w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
                         placeholderText="Select a date"
                         dateFormat="yyyy-MM-dd"
-                        minDate={new Date()}
+                        minDate={editId ? null : new Date()}
                         required
                       />
                     </div>
@@ -243,7 +275,7 @@ const TrainerSchedules = () => {
                     disabled={loading}
                     className="mt-4 bg-orange hover:bg-orange/90 disabled:bg-orange/50 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
                   >
-                    {loading ? "Saving..." : "Create Session"}
+                    {loading ? "Saving..." : (editId ? "Update Session" : "Create Session")}
                   </button>
                 </form>
               </div>
@@ -251,66 +283,133 @@ const TrainerSchedules = () => {
           </div>
         )}
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="border-b border-white/10 text-orange uppercase text-xs tracking-widest">
-              <tr>
-                <th className="py-4 px-2">Session</th>
-                <th className="py-4 px-2">Date</th>
-                <th className="py-4 px-2">Time</th>
-                <th className="py-4 px-2">Booked By</th>
-                <th className="py-4 px-2">Attendance</th>
-                <th className="py-4 px-2 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredSchedules.map((s) => (
-                <tr key={s._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-2 font-medium">{s.title}</td>
-                  <td className="py-4 px-2 text-gray-400">{s.date}</td>
-                  <td className="py-4 px-2 text-gray-400">{s.time}</td>
-                  <td className="py-4 px-2">
-                    {s.bookedBy ? (
-                      <span className="text-orange font-bold text-sm">
-                        {s.bookedBy.name || "Student Assigned"}
-                      </span>
-                    ) : (
-                      <span className="text-gray-600 italic text-xs">Available</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-2">
-                    {s.bookedBy ? (
-                      <select 
-                        value={s.attendanceStatus || 'Pending'}
-                        onChange={(e) => handleAttendance(s._id, e.target.value)}
-                        className={`text-xs font-bold px-2 py-1 rounded bg-black border border-white/20 outline-none cursor-pointer hover:border-orange transition-colors ${
-                          s.attendanceStatus === 'Attended' ? 'text-green-500' : 
-                          s.attendanceStatus === 'Absent' ? 'text-red-500' : 'text-yellow-500'
+        <div className="overflow-hidden rounded-3xl border border-white/10 backdrop-blur-md bg-white/5 shadow-2xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-white/10 border-b border-orange/20">
+                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange">Session</th>
+                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Date</th>
+                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Time</th>
+                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange">Student</th>
+                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Attendance</th>
+                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {currentItems.map((s) => (
+                  <tr key={s._id} className="hover:bg-white/5 transition-all group">
+                    <td className="px-6 py-5">
+                      <div className="font-bold text-white group-hover:text-orange transition-colors">
+                        {s.title}
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      <span className="text-gray-300 text-sm font-medium">{s.date}</span>
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      <div className="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-orange font-bold text-xs">
+                        {s.time}
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      {s.bookedBy ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-orange/20 rounded-full flex items-center justify-center text-[10px] text-orange font-bold border border-orange/30">
+                            {s.bookedBy.name?.charAt(0)}
+                          </div>
+                          <span className="text-white font-bold text-sm tracking-tight">
+                            {s.bookedBy.name}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/5 text-gray-500 border border-white/10 uppercase tracking-widest">
+                          Available
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      {s.bookedBy ? (
+                        <select 
+                          value={s.attendanceStatus || 'Pending'}
+                          onChange={(e) => handleAttendance(s._id, e.target.value)}
+                          className={`text-xs font-bold px-2 py-1 rounded bg-black border border-white/20 outline-none cursor-pointer hover:border-orange transition-colors ${
+                            s.attendanceStatus === 'Attended' ? 'text-green-500' : 
+                            s.attendanceStatus === 'Absent' ? 'text-red-500' : 'text-yellow-500'
+                          }`}
+                        >
+                          <option value="Pending" className="text-yellow-500">Pending</option>
+                          <option value="Attended" className="text-green-500">Attended</option>
+                          <option value="Absent" className="text-red-500">Absent</option>
+                        </select>
+                      ) : (
+                        <span className="text-gray-700 text-xs font-black">—</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex justify-end items-center gap-4">
+                        <button 
+                          onClick={() => handleEdit(s)}
+                          className="text-orange hover:text-orange/80 text-sm font-bold transition-all"
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(s._id)}
+                          className="text-red-500 hover:text-red-400 text-sm font-bold transition-all"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Pagination Controls */}
+            {filteredSchedules.length > 0 && (
+              <div className="flex items-center justify-between px-6 py-4 border-t border-white/5 bg-white/[0.02]">
+                <div className="text-xs text-gray-500 font-medium">
+                  Showing <span className="text-orange">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-orange">{Math.min(currentPage * itemsPerPage, filteredSchedules.length)}</span> of <span className="text-orange">{filteredSchedules.length}</span> sessions
+                </div>
+                {filteredSchedules.length > itemsPerPage && (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-white hover:bg-orange/20 hover:border-orange/50 disabled:opacity-30 disabled:hover:bg-white/5 disabled:hover:border-white/10 transition-all"
+                    >
+                      Previous
+                    </button>
+                    {Array.from({ length: Math.ceil(filteredSchedules.length / itemsPerPage) }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
+                          currentPage === i + 1 
+                          ? 'bg-orange border-orange text-white shadow-[0_0_10px_rgba(255,127,17,0.3)]' 
+                          : 'bg-white/5 border-white/10 text-gray-400 hover:border-orange/50 hover:text-white'
                         }`}
                       >
-                        <option value="Pending" className="text-yellow-500">Pending</option>
-                        <option value="Attended" className="text-green-500">Attended</option>
-                        <option value="Absent" className="text-red-500">Absent</option>
-                      </select>
-                    ) : (
-                      <span className="text-gray-600 italic text-xs">-</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-2 text-right">
-                    <button 
-                      onClick={() => handleDelete(s._id)}
-                      className="text-red-500 hover:text-red-400 text-sm font-bold"
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(filteredSchedules.length / itemsPerPage)))}
+                      disabled={currentPage === Math.ceil(filteredSchedules.length / itemsPerPage)}
+                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-white hover:bg-orange/20 hover:border-orange/50 disabled:opacity-30 disabled:hover:bg-white/5 disabled:hover:border-white/10 transition-all"
                     >
-                      Delete
+                      Next
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                )}
+              </div>
+            )}
           {filteredSchedules.length === 0 && (
             <div className="text-center py-10 text-gray-500 italic">No matching sessions found.</div>
           )}
+          </div>
         </div>
       </div>
     </div>

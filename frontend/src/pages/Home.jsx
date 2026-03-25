@@ -99,7 +99,14 @@ const Home = () => {
               return (
                 <div
                   key={feature.id}
-                  onClick={() => navigate(feature.route)}
+                  onClick={() => {
+                    const token = localStorage.getItem("token");
+                    if (feature.title === "Schedules" && !token) {
+                      navigate("/login");
+                    } else {
+                      navigate(feature.route);
+                    }
+                  }}
                   className="group relative backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange/20 cursor-pointer"
                 >
                   {/* Gradient Overlay on Hover */}

@@ -75,6 +75,29 @@ export const deleteSchedule = async (req, res) => {
     }
 };
 
+// 5b. Update a schedule
+export const updateSchedule = async (req, res) => {
+    try {
+        const { title, date, time } = req.body;
+        const schedule = await TrainerSchedule.findById(req.params.id);
+        
+        if (!schedule) return res.status(404).json({ message: "Schedule not found" });
+        
+        if (schedule.trainer.toString() !== req.user.id) {
+            return res.status(401).json({ message: "Not authorized" });
+        }
+
+        schedule.title = title || schedule.title;
+        schedule.date = date || schedule.date;
+        schedule.time = time || schedule.time;
+
+        await schedule.save();
+        res.status(200).json(schedule);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating schedule", error: error.message });
+    }
+};
+
 // 6. Update Attendance for a booked schedule
 export const updateAttendance = async (req, res) => {
     try {

@@ -61,14 +61,6 @@ const Navbar = () => {
           >
             About
           </Link>
-          {["admin", "student", "trainer"].includes(role) && (
-            <Link
-              to="/schedules"
-              className="text-white hover:text-orange transition-colors duration-200"
-            >
-              Schedules
-            </Link>
-          )}
           <Link
             to="/leaderboard"
             className="text-white hover:text-orange transition-colors duration-200"
