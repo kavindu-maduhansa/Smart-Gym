@@ -13,6 +13,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import EditProfile from "./pages/EditProfile";
 import Membership from "./pages/Membership";
 import RenewMembership from "./pages/RenewMembership";
+import Cart from "./pages/Cart";
 
 // Admin Pages
 import AdminDashboard from "./pages/AdminDashboard";
@@ -129,6 +130,14 @@ function App() {
           element={
             <ProtectedRoute requiredRole="student">
               <StudentSupplementStore />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <Cart />
             </ProtectedRoute>
           }
         />
