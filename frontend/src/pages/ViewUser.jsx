@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import apiClient from "../services/apiClient";
 
 const ViewUser = () => {
   const { id } = useParams();
@@ -8,6 +9,7 @@ const ViewUser = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [feedbacks, setFeedbacks] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -25,6 +27,15 @@ const ViewUser = () => {
           setError("User not found");
         } else {
           setUser(found);
+          // If user is a trainer, fetch feedbacks
+          if (found.role === "trainer") {
+            try {
+              const fbRes = await axios.get(apiClient.feedback.getForTrainer(found._id), {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+              setFeedbacks(fbRes.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5));
+            } catch {}
+          }
         }
       } catch (err) {
         setError(
@@ -37,6 +48,7 @@ const ViewUser = () => {
       }
     };
     fetchUser();
+    // eslint-disable-next-line
   }, [id]);
 
   const getMembershipStatus = () => {
@@ -194,6 +206,28 @@ const ViewUser = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Recent Feedbacks for Trainers */}
+                  {user.role === "trainer" && feedbacks.length > 0 && (
+                    <div className="backdrop-blur-md bg-white/5 border border-orange/30 rounded-xl p-6 mt-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-orange mb-4 flex items-center">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-orange flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.036 6.29a1 1 0 00.95.69h6.631c.969 0 1.371 1.24.588 1.81l-5.37 3.905a1 1 0 00-.364 1.118l2.036 6.29c.3.921-.755 1.688-1.538 1.118l-5.37-3.905a1 1 0 00-1.176 0l-5.37 3.905c-.783.57-1.838-.197-1.538-1.118l2.036-6.29a1 1 0 00-.364-1.118L2.342 11.717c-.783-.57-.38-1.81.588-1.81h6.631a1 1 0 00.95-.69l2.036-6.29z" /></svg>
+                        Recent Feedbacks
+                      </h3>
+                      <ul className="space-y-4">
+                        {feedbacks.map(fb => (
+                          <li key={fb._id} className="bg-black/40 border border-white/10 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-yellow-400 text-lg font-bold">{'★'.repeat(fb.rating)}{'☆'.repeat(5 - fb.rating)}</span>
+                              <span className="text-gray-400 text-xs ml-2">{new Date(fb.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <div className="text-white font-semibold mb-1">{fb.studentId?.name || "Student"}</div>
+                            <div className="text-gray-300 text-sm">{fb.comment || <span className="italic text-gray-500">No comment</span>}</div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4">

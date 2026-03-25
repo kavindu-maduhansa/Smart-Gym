@@ -3,3 +3,87 @@
 @tailwind utilities;
 
 /* Global styles */
+
+/* React DatePicker Dark Theme Overrides */
+.react-datepicker {
+  background-color: #111827 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 127, 17, 0.3) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+  font-family: inherit !important;
+}
+
+.react-datepicker__header {
+  background-color: #1f2937 !important;
+  border-bottom: 1px solid rgba(255, 127, 17, 0.2) !important;
+  border-top-left-radius: 0.75rem !important;
+  border-top-right-radius: 0.75rem !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  color: #fff !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  color: #e5e7eb !important;
+}
+
+.react-datepicker__day:hover,
+.react-datepicker__month-text:hover,
+.react-datepicker__quarter-text:hover,
+.react-datepicker__year-text:hover {
+  background-color: rgba(255, 127, 17, 0.2) !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range,
+.react-datepicker__month-text--selected,
+.react-datepicker__month-text--in-selecting-range,
+.react-datepicker__month-text--in-range,
+.react-datepicker__quarter-text--selected,
+.react-datepicker__quarter-text--in-selecting-range,
+.react-datepicker__quarter-text--in-range,
+.react-datepicker__year-text--selected,
+.react-datepicker__year-text--in-selecting-range,
+.react-datepicker__year-text--in-range {
+  background-color: #ff7f11 !important;
+  color: #fff !important;
+}
+
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__month-text--keyboard-selected,
+.react-datepicker__quarter-text--keyboard-selected,
+.react-datepicker__year-text--keyboard-selected {
+  background-color: rgba(255, 127, 17, 0.4) !important;
+  color: #fff !important;
+}
+
+.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before,
+.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::after {
+  border-bottom-color: #111827 !important;
+}
+
+/* Fix width to fill container */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+/* Customizing the clear icon (X button) to remove the blue circle */
+.react-datepicker__close-icon::after {
+  background-color: transparent !important;
+  color: #f97316 !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.react-datepicker__close-icon:hover::after {
+  color: #fb923c !important;
+}

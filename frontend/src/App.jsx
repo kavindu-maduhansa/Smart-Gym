@@ -31,12 +31,20 @@ import StudentSupplementStore from "./pages/StudentSupplementStore";
 import AdminContactMessages from "./pages/AdminContactMessages";
 import AdminContactMessageView from "./pages/AdminContactMessageView";
 
+import TrainerDashboard from "./pages/TrainerDashboard";
+import TrainerSchedules from "./pages/TrainerSchedules";
+import TrainerFeedbacks from "./pages/TrainerFeedbacks";
+import TrainerBooking from "./pages/TrainerBooking";
+import Leaderboard from "./pages/Leaderboard";
+import Schedules from "./pages/Schedules";
+
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/schedules" element={<Schedules />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -184,6 +192,12 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/trainer-dashboard"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerDashboard />
         <Route
           path="/admin/contact-messages"
           element={
@@ -193,6 +207,26 @@ function App() {
           }
         />
         <Route
+          path="/trainer/schedules"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerSchedules />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trainer/feedbacks"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerFeedbacks />
+            </ProtectedRoute>
+          }
+        />
+        {/* Removed /student/available route for cleanup */}
+      <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><TrainerBooking /></ProtectedRoute>} />
+      <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Home />} />
           path="/admin/contact-messages/:id"
           element={
             <ProtectedRoute requiredRole="admin">
