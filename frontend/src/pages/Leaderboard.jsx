@@ -33,7 +33,7 @@ const Leaderboard = () => {
     }
 
     setExpandedTrainer(trainer._id);
-    
+
     // Fetch only if we haven't already
     if (!feedbacks[trainer._id]) {
       setFetchingFeedback(true);
@@ -50,7 +50,15 @@ const Leaderboard = () => {
     }
   };
 
-  if (loading) return <div className="text-yellow-400 p-20 text-center animate-pulse">Ranking Trainers...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-orange text-2xl animate-pulse font-bold uppercase tracking-widest">
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-950 text-white pt-24 px-4 md:px-10">
@@ -64,23 +72,22 @@ const Leaderboard = () => {
             trainers.map((trainer, index) => (
               <div
                 key={trainer._id}
-                className={`flex flex-col rounded-xl shadow-lg transition-all border bg-gradient-to-br overflow-hidden ${
-                  index === 0
-                    ? "from-yellow-700/60 to-yellow-900/80 border-yellow-400"
-                    : index === 1
+                className={`flex flex-col rounded-xl shadow-lg transition-all border bg-gradient-to-br overflow-hidden ${index === 0
+                  ? "from-yellow-700/60 to-yellow-900/80 border-yellow-400"
+                  : index === 1
                     ? "from-gray-700/60 to-gray-900/80 border-gray-400"
                     : index === 2
-                    ? "from-amber-700/60 to-amber-900/80 border-amber-600"
-                    : "from-gray-900/60 to-gray-950/80 border-gray-800"
-                }`}
+                      ? "from-amber-700/60 to-amber-900/80 border-amber-600"
+                      : "from-gray-900/60 to-gray-950/80 border-gray-800"
+                  }`}
               >
-                <div 
+                <div
                   className="flex items-center justify-between px-8 py-5 cursor-pointer hover:bg-white/5 transition-colors"
                   onClick={() => handleExpand(trainer)}
                 >
                   <div className="flex items-center gap-6">
                     <span className="text-2xl font-bold text-gray-300 w-10 text-center">
-                      {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index + 1}`}
+                      {index === 0 ? "1" : index === 1 ? "2" : index === 2 ? "3" : `#${index + 1}`}
                     </span>
                     <div>
                       <span className="text-lg font-semibold text-white tracking-wide block group-hover:text-yellow-400 transition-colors">
@@ -104,15 +111,15 @@ const Leaderboard = () => {
                       <div className="space-y-3">
                         {feedbacks[trainer._id].map(fb => (
                           <div key={fb._id} className="bg-black/30 p-3 rounded-lg border border-white/5 backdrop-blur-sm shadow-inner">
-                             <div className="flex justify-between items-start mb-1">
-                               <span className="text-xs font-bold text-orange">{fb.studentId?.name || "Student"}</span>
-                               <span className="text-xs text-yellow-500">
-                                 {[...Array(5)].map((_, i) => (
-                                   <span key={i} className={i < fb.rating ? "opacity-100" : "opacity-30"}>★</span>
-                                 ))}
-                               </span>
-                             </div>
-                             <p className="text-sm text-gray-300 italic leading-relaxed">"{fb.comment || "No comment."}"</p>
+                            <div className="flex justify-between items-start mb-1">
+                              <span className="text-xs font-bold text-orange">{fb.studentId?.name || "Student"}</span>
+                              <span className="text-xs text-yellow-500">
+                                {[...Array(5)].map((_, i) => (
+                                  <span key={i} className={i < fb.rating ? "opacity-100" : "opacity-30"}>★</span>
+                                ))}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-300 italic leading-relaxed">"{fb.comment || "No comment."}"</p>
                           </div>
                         ))}
                       </div>

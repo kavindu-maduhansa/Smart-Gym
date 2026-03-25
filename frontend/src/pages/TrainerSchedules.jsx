@@ -12,6 +12,9 @@ const TrainerSchedules = () => {
   const [sessionTime, setSessionTime] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [dateFilter, setDateFilter] = useState("Upcoming");
 
   // BASE URL - Adjust if your backend port is different
   const API_URL = "http://localhost:5000/api/trainer/schedules";
@@ -107,6 +110,29 @@ const TrainerSchedules = () => {
     }
   };
 
+  const filteredSchedules = schedules.filter(s => {
+    const studentName = s.bookedBy?.name || "";
+    const matchesSearch = s.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          studentName.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    let matchesStatus = true;
+    if (statusFilter === "Booked") matchesStatus = !!s.bookedBy;
+    else if (statusFilter === "Available") matchesStatus = !s.bookedBy;
+    else if (statusFilter !== "All") matchesStatus = s.attendanceStatus === statusFilter;
+
+    let matchesDate = true;
+    if (dateFilter !== "All") {
+      const sessionDate = new Date(s.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (dateFilter === "Today") matchesDate = sessionDate.toDateString() === today.toDateString();
+      else if (dateFilter === "Upcoming") matchesDate = sessionDate >= today;
+      else if (dateFilter === "Past") matchesDate = sessionDate < today;
+    }
+
+    return matchesSearch && matchesStatus && matchesDate;
+  });
+
   return (
     <div className="min-h-screen bg-black text-white pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black -z-10"></div>
@@ -117,6 +143,39 @@ const TrainerSchedules = () => {
           <button onClick={() => setShowForm(true)} className="bg-orange px-6 py-2 rounded-lg font-bold hover:bg-orange/80 transition-all">
             + Add Session
           </button>
+        </div>
+
+        {/* Filters Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <input 
+            type="text" 
+            placeholder="Search session or student..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all font-medium placeholder:text-gray-500"
+          />
+          <select 
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
+          >
+            <option value="All" className="bg-gray-900">All Status</option>
+            <option value="Booked" className="bg-gray-900">Booked</option>
+            <option value="Available" className="bg-gray-900">Available</option>
+            <option value="Pending" className="bg-gray-900">Pending Attendance</option>
+            <option value="Attended" className="bg-gray-900">Attended</option>
+            <option value="Absent" className="bg-gray-900">Absent</option>
+          </select>
+          <select 
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
+          >
+            <option value="All" className="bg-gray-900">All Dates</option>
+            <option value="Today" className="bg-gray-900">Today Only</option>
+            <option value="Upcoming" className="bg-gray-900">Upcoming</option>
+            <option value="Past" className="bg-gray-900">Past Sessions</option>
+          </select>
         </div>
 
         {/* Add Session Modal */}
@@ -205,7 +264,7 @@ const TrainerSchedules = () => {
               </tr>
             </thead>
             <tbody>
-              {schedules.map((s) => (
+              {filteredSchedules.map((s) => (
                 <tr key={s._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="py-4 px-2 font-medium">{s.title}</td>
                   <td className="py-4 px-2 text-gray-400">{s.date}</td>
@@ -249,8 +308,8 @@ const TrainerSchedules = () => {
               ))}
             </tbody>
           </table>
-          {schedules.length === 0 && (
-            <div className="text-center py-10 text-gray-500 italic">No sessions found.</div>
+          {filteredSchedules.length === 0 && (
+            <div className="text-center py-10 text-gray-500 italic">No matching sessions found.</div>
           )}
         </div>
       </div>

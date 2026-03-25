@@ -1,5 +1,8 @@
 import Trainer from "../models/Trainer.js";
 import TrainerSchedule from "../models/TrainerSchedule.js";
+import ChatSession from "../models/ChatSession.js";
+import User from "../models/User.js";
+import TrainerNote from "../models/TrainerNote.js";
 
 // 1. Get all trainers for the leaderboard
 export const getLeaderboard = async (req, res) => {
@@ -94,5 +97,93 @@ export const updateAttendance = async (req, res) => {
         res.status(200).json(schedule);
     } catch (error) {
         res.status(500).json({ message: "Error updating attendance", error });
+    }
+};
+
+// 7. Get assigned students for a trainer
+export const getAssignedStudents = async (req, res) => {
+    try {
+        const trainerId = req.user.id;
+
+        // Find all unique students who have booked this trainer
+        const bookings = await TrainerSchedule.find({ trainer: trainerId, bookedBy: { $ne: null } })
+            .populate('bookedBy', 'name email membershipType')
+            .lean();
+
+        const studentMap = new Map();
+
+        for (const booking of bookings) {
+            const student = booking.bookedBy;
+            if (!student) continue;
+
+            const studentIdStr = student._id.toString();
+
+            if (!studentMap.has(studentIdStr)) {
+                // Fetch the latest goal from ChatSession
+                const chatSession = await ChatSession.findOne({ userId: student._id }).sort({ updatedAt: -1 }).lean();
+                
+                // Fetch the last workout (most recent attended session)
+                const lastWorkout = await TrainerSchedule.findOne({ 
+                    bookedBy: student._id, 
+                    attendanceStatus: 'Attended' 
+                }).sort({ date: -1, time: -1 }).lean();
+
+                // Calculate progress (mock/placeholder: count of attended sessions / 12)
+                const attendedSessionsCount = await TrainerSchedule.countDocuments({ 
+                    bookedBy: student._id, 
+                    attendanceStatus: 'Attended' 
+                });
+                const progressValue = Math.min(Math.round((attendedSessionsCount / 12) * 100), 100);
+
+                // Fetch the trainer's private note and progress for this student
+                const trainerNote = await TrainerNote.findOne({ trainer: trainerId, student: student._id }).lean();
+
+                studentMap.set(studentIdStr, {
+                    id: student._id,
+                    name: student.name,
+                    email: student.email,
+                    membershipType: student.membershipType || 'Basic',
+                    goal: chatSession?.goal || 'General Fitness',
+                    lastWorkout: lastWorkout ? `${lastWorkout.date} @ ${lastWorkout.time}` : 'None yet',
+                    progress: trainerNote?.progress || 0, // Manual progress from DB
+                    status: 'Active',
+                    note: trainerNote?.note || ''
+                });
+            }
+        }
+
+        res.status(200).json(Array.from(studentMap.values()));
+    } catch (error) {
+        console.error("Error fetching assigned students:", error);
+        res.status(500).json({ message: "Error fetching assigned students", error: error.message });
+    }
+};
+
+// 8. Update private note and progress for a student
+export const updateStudentNote = async (req, res) => {
+    try {
+        const { studentId, note, progress } = req.body;
+        const trainerId = req.user.id;
+
+        if (!studentId) return res.status(400).json({ message: "Student ID is required." });
+
+        const updateFields = {};
+        if (note !== undefined) updateFields.note = note;
+        if (progress !== undefined) updateFields.progress = progress;
+
+        const updatedNote = await TrainerNote.findOneAndUpdate(
+            { trainer: trainerId, student: studentId },
+            updateFields,
+            { new: true, upsert: true }
+        );
+
+        res.status(200).json({ 
+            message: "Roster data updated successfully", 
+            note: updatedNote.note,
+            progress: updatedNote.progress 
+        });
+    } catch (error) {
+        console.error("Error updating student data:", error);
+        res.status(500).json({ message: "Error updating student data", error: error.message });
     }
 };
