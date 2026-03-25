@@ -6,7 +6,9 @@ import {
     addSchedule, 
     getMySchedules, 
     deleteSchedule,
-    updateAttendance
+    updateAttendance,
+    getAssignedStudents,
+    updateStudentNote
 } from "../controllers/trainerController.js";
 
 import { authenticateJWT } from "../middleware/authMiddleware.js";
@@ -22,5 +24,7 @@ router.post('/schedules', authenticateJWT, addSchedule);
 router.get('/schedules', authenticateJWT, getMySchedules);
 router.delete('/schedules/:id', authenticateJWT, deleteSchedule);
 router.put('/schedules/:id/attendance', authenticateJWT, updateAttendance);
+router.get('/assigned-students', authenticateJWT, getAssignedStudents);
+router.post('/student-note', authenticateJWT, updateStudentNote);
 
 export default router;

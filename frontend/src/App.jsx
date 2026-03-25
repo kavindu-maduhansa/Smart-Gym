@@ -35,6 +35,7 @@ import TrainerDashboard from "./pages/TrainerDashboard";
 import TrainerSchedules from "./pages/TrainerSchedules";
 import TrainerFeedbacks from "./pages/TrainerFeedbacks";
 import TrainerBooking from "./pages/TrainerBooking";
+import TrainerStudents from "./pages/TrainerStudents";
 import Leaderboard from "./pages/Leaderboard";
 import Schedules from "./pages/Schedules";
 import AiGymAssistant from "./pages/AiGymAssistant";
@@ -233,6 +234,14 @@ function App() {
           element={
             <ProtectedRoute requiredRole="trainer">
               <TrainerFeedbacks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trainer/students"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerStudents />
             </ProtectedRoute>
           }
         />
