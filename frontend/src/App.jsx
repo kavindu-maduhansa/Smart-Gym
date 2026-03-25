@@ -37,11 +37,14 @@ import TrainerFeedbacks from "./pages/TrainerFeedbacks";
 import TrainerBooking from "./pages/TrainerBooking";
 import Leaderboard from "./pages/Leaderboard";
 import Schedules from "./pages/Schedules";
+import AiGymAssistant from "./pages/AiGymAssistant";
+import ChatWidget from "./components/Chatbot/ChatWidget";
 
 function App() {
   return (
     <>
       <Navbar />
+      <ChatWidget />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/schedules" element={<Schedules />} />
@@ -53,6 +56,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ai-gym-assistant"
+          element={
+            <ProtectedRoute>
+              <AiGymAssistant />
             </ProtectedRoute>
           }
         />
