@@ -61,11 +61,19 @@ const Navbar = () => {
           >
             About
           </Link>
+          {["admin", "student", "trainer"].includes(role) && (
+            <Link
+              to="/schedules"
+              className="text-white hover:text-orange transition-colors duration-200"
+            >
+              Schedules
+            </Link>
+          )}
           <Link
-            to="/schedules"
+            to="/leaderboard"
             className="text-white hover:text-orange transition-colors duration-200"
           >
-            Schedules
+            Leaderboard
           </Link>
           <Link
             to="/contact"
@@ -127,6 +135,22 @@ const Navbar = () => {
                 className="text-white hover:text-orange transition-colors duration-200"
               >
                 Supplement Store
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {role === "trainer" && (
+            <>
+              <Link
+                to="/trainer-dashboard"
+                className="text-white hover:text-orange transition-colors duration-200"
+              >
+                Dashboard
               </Link>
               <button
                 onClick={handleLogout}
