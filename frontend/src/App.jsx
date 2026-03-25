@@ -198,6 +198,9 @@ function App() {
           element={
             <ProtectedRoute requiredRole="trainer">
               <TrainerDashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin/contact-messages"
           element={
@@ -224,9 +227,10 @@ function App() {
         />
         {/* Removed /student/available route for cleanup */}
       <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><TrainerBooking /></ProtectedRoute>} />
-      <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route
           path="/admin/contact-messages/:id"
           element={
             <ProtectedRoute requiredRole="admin">
@@ -234,10 +238,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Public pages */}
-        <Route path="/about" element={<About />} />
-        <Route path="/schedules" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
         {/* Add more routes here as needed */}
       </Routes>
     </>

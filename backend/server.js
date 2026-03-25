@@ -49,14 +49,16 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    // Allow localhost:5173 with or without trailing slash
-    if (origin === 'http://localhost:5173' || origin === 'http://localhost:5173/') {
-      return callback(null, true);
-    }
+    // Remove trailing slash for consistent comparison
+    const normalizedOrigin = origin.replace(/\/$/, '');
     
-    // Allow custom frontend URL from env
-    const allowedOrigin = process.env.FRONTEND_URL;
-    if (allowedOrigin && (origin === allowedOrigin || origin === allowedOrigin + '/')) {
+    // Whitelist of allowed origins
+    const allowedOrigins = [
+      'http://localhost:5173',
+      process.env.FRONTEND_URL
+    ].filter(Boolean); // Remove undefined values
+    
+    if (allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
     
@@ -95,7 +97,8 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} 🚀`);
-  console.log(`CORS enabled for: ${corsOptions.origin}`);
+  const allowedOrigins = ['http://localhost:5173', process.env.FRONTEND_URL].filter(Boolean);
+  console.log(`CORS enabled for: ${allowedOrigins.join(', ')}`);
 });
 
 // Handle server errors
