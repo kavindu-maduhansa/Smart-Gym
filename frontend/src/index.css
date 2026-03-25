@@ -14,6 +14,10 @@
   font-family: inherit !important;
 }
 
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
 .react-datepicker__header {
   background-color: #1f2937 !important;
   border-bottom: 1px solid rgba(255, 127, 17, 0.2) !important;
