@@ -37,6 +37,9 @@ import TrainerSchedules from "./pages/TrainerSchedules";
 import TrainerFeedbacks from "./pages/TrainerFeedbacks";
 import TrainerBooking from "./pages/TrainerBooking";
 import TrainerStudents from "./pages/TrainerStudents";
+import TrainerWorkoutPlans from "./pages/TrainerWorkoutPlans";
+import TrainerMealPlans from "./pages/TrainerMealPlans";
+import TrainerPlansHub from "./pages/TrainerPlansHub";
 import Leaderboard from "./pages/Leaderboard";
 import Schedules from "./pages/Schedules";
 import AiGymAssistant from "./pages/AiGymAssistant";
@@ -251,6 +254,30 @@ function App() {
           element={
             <ProtectedRoute requiredRole="trainer">
               <TrainerStudents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trainer/plans"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerWorkoutPlans />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trainer/meal-plans"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerMealPlans />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trainer/manage-plans"
+          element={
+            <ProtectedRoute requiredRole="trainer">
+              <TrainerPlansHub />
             </ProtectedRoute>
           }
         />

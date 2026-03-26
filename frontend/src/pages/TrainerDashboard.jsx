@@ -1,37 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaCalendarAlt, FaUsers, FaClipboardList, FaStar } from "react-icons/fa";
+import { FaCalendarAlt, FaUsers, FaClipboardList, FaStar, FaUtensils } from "react-icons/fa";
 
 const TrainerDashboard = () => {
   // Added 'path' to each feature to enable navigation
   const trainerFeatures = [
-    { 
-      id: 1, 
-      icon: FaCalendarAlt, 
-      title: "My Schedules", 
+    {
+      id: 1,
+      icon: FaCalendarAlt,
+      title: "My Schedules",
       desc: "View and edit your training sessions.",
-      path: "/trainer/schedules" 
+      path: "/trainer/schedules"
     },
-    { 
-      id: 2, 
-      icon: FaUsers, 
-      title: "Assigned Students", 
+    {
+      id: 2,
+      icon: FaUsers,
+      title: "Assigned Students",
       desc: "Manage students under your guidance.",
-      path: "/trainer/students" 
+      path: "/trainer/students"
     },
-    { 
-      id: 3, 
-      icon: FaClipboardList, 
-      title: "Workout Plans", 
-      desc: "Create and assign custom routines.",
-      path: "/trainer/plans" 
+    {
+      id: 3,
+      icon: FaClipboardList,
+      title: "Manage Plans",
+      desc: "Manage workout and meal plans.",
+      path: "/trainer/manage-plans"
     },
-    { 
-      id: 4, 
-      icon: FaStar, 
-      title: "My Feedbacks", 
+    {
+      id: 4,
+      icon: FaStar,
+      title: "My Feedbacks",
       desc: "View student reviews and ratings.",
-      path: "/trainer/feedbacks" 
+      path: "/trainer/feedbacks"
     },
   ];
 
@@ -60,7 +60,7 @@ const TrainerDashboard = () => {
             return (
               <Link to={f.path} key={f.id} className="block group">
                 <div className="h-full backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:-translate-y-2">
-                  
+
                   {/* Icon Container */}
                   <div className="w-16 h-16 bg-orange/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange/30 transition-colors duration-300">
                     <Icon className="text-orange text-3xl transform group-hover:scale-110 transition-transform duration-300" />
