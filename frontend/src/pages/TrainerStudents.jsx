@@ -7,7 +7,7 @@ const TrainerStudents = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [membershipFilter, setMembershipFilter] = useState("All");
+  const [weekFilter, setWeekFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -48,14 +48,26 @@ const TrainerStudents = () => {
 
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesMembership = membershipFilter === "All" || student.membershipType === membershipFilter;
-    return matchesSearch && matchesMembership;
+    
+    if (weekFilter === "All") return matchesSearch;
+
+    if (student.lastWorkout === "None yet") return false;
+
+    // Parse 'YYYY-MM-DD @ HH:mm'
+    const lastDate = new Date(student.lastWorkout.split(' @ ')[0]);
+    const now = new Date();
+    const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+
+    if (weekFilter === "This Week") return matchesSearch && diffDays <= 7;
+    if (weekFilter === "Last Week") return matchesSearch && diffDays > 7 && diffDays <= 14;
+
+    return matchesSearch;
   });
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, membershipFilter]);
+  }, [searchTerm, weekFilter]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -80,7 +92,7 @@ const TrainerStudents = () => {
         <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <div>
-              <h2 className="text-3xl font-bold text-orange uppercase tracking-widest">Assigned Students</h2>
+              <h2 className="text-3xl font-bold text-orange tracking-tight">Assigned Students</h2>
               <p className="text-gray-400 mt-2">Manage and track the progress of your assigned students.</p>
             </div>
           </div>
@@ -102,14 +114,13 @@ const TrainerStudents = () => {
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all font-medium placeholder:text-gray-500"
           />
           <select 
-            value={membershipFilter}
-            onChange={(e) => setMembershipFilter(e.target.value)}
+            value={weekFilter}
+            onChange={(e) => setWeekFilter(e.target.value)}
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
           >
-            <option value="All" className="bg-gray-900">All Memberships</option>
-            <option value="basic" className="bg-gray-900">Basic</option>
-            <option value="monthly" className="bg-gray-900">Monthly</option>
-            <option value="Premium" className="bg-gray-900">Premium</option>
+            <option value="All" className="bg-gray-900">All Activity</option>
+            <option value="This Week" className="bg-gray-900">Active This Week</option>
+            <option value="Last Week" className="bg-gray-900">Active Last Week</option>
           </select>
         </div>
 
@@ -119,10 +130,10 @@ const TrainerStudents = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-white/10 border-b border-orange/20">
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange">Student</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Last Workout</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Sessions</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange">Notes (Private)</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange">Student</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Last Workout</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Sessions</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange">Notes (Private)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -137,7 +148,7 @@ const TrainerStudents = () => {
                           <div className="text-white font-bold text-sm tracking-tight group-hover:text-orange transition-colors">
                             {student.name}
                           </div>
-                          <div className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">{student.membershipType}</div>
+                          <div className="text-gray-400 text-xs font-medium tracking-tight lowercase italic mt-0.5">{student.email}</div>
                         </div>
                       </div>
                     </td>
@@ -146,23 +157,16 @@ const TrainerStudents = () => {
                     </td>
                     <td className="px-6 py-5 text-center">
                       <div className="flex flex-col items-center gap-2">
-                        <select 
-                          value={student.progress || 0}
-                          onChange={(e) => handleSave(student.id, 'progress', parseInt(e.target.value))}
-                          className="bg-black/50 border border-white/10 rounded-lg px-2 py-1 text-xs text-orange font-bold outline-none cursor-pointer hover:border-orange transition-all appearance-none text-center min-w-[100px]"
-                        >
-                          <option value={0}>0 Sessions</option>
-                          <option value={1}>1 Session</option>
-                          <option value={2}>2 Sessions</option>
-                          <option value={3}>3 Sessions</option>
-                          <option value={4}>4 Sessions</option>
-                        </select>
-                        <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-orange/10 border border-orange/20 text-orange font-black text-xs uppercase tracking-tighter">
+                          {student.progress || 0} / 4 {student.progress === 1 ? 'Session' : 'Sessions'}
+                        </div>
+                        <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
                           <div 
-                            className="h-full bg-orange transition-all duration-500"
-                            style={{ width: `${(student.progress / 4) * 100}%` }}
+                            className="h-full bg-gradient-to-r from-orange/60 to-orange transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(255,127,17,0.4)]"
+                            style={{ width: `${Math.min(((student.progress || 0) / 4) * 100, 100)}%` }}
                           ></div>
                         </div>
+                        <span className="text-[8px] text-gray-600 font-bold uppercase tracking-widest">Monthly Target</span>
                       </div>
                     </td>
                     <td className="px-6 py-5 min-w-[200px]">

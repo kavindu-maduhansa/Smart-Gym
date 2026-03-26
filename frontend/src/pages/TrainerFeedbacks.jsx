@@ -34,11 +34,11 @@ const TrainerFeedbacks = () => {
         <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div>
-              <h2 className="text-3xl font-bold text-orange uppercase tracking-widest">My Feedbacks</h2>
+              <h2 className="text-3xl font-bold text-orange tracking-tight">My Feedbacks</h2>
               <p className="text-gray-400 mt-2">See what your students are saying about your training sessions.</p>
             </div>
             <div className="mt-4 md:mt-0 text-center bg-black/50 p-4 rounded-xl border border-orange/30 shadow-lg">
-              <p className="text-sm font-bold text-gray-300 uppercase tracking-widest mb-1">Average Rating</p>
+              <p className="text-sm font-bold text-gray-300 tracking-tight mb-1">Average Rating</p>
               <div className="text-4xl font-black text-orange">{averageRating} <span className="text-xl text-yellow-400">★</span></div>
               <p className="text-xs text-gray-500 mt-1">Based on {feedbacks.length} reviews</p>
             </div>

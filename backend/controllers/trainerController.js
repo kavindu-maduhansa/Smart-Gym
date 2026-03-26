@@ -31,15 +31,36 @@ export const upsertProfile = async (req, res) => {
     }
 };
 
+// Helper to convert HH:mm to minutes from midnight
+const timeToMinutes = (timeStr) => {
+    const [hrs, mins] = timeStr.split(':').map(Number);
+    return hrs * 60 + mins;
+};
+
 // 3. Add a new schedule slot
 export const addSchedule = async (req, res) => {
     try {
         const { title, date, time } = req.body;
+        const trainerId = req.user.id;
+
+        // Check for 1-hour overlaps
+        const newTimeMins = timeToMinutes(time);
+        const daySessions = await TrainerSchedule.find({ trainer: trainerId, date });
+
+        for (const session of daySessions) {
+            const existingTimeMins = timeToMinutes(session.time);
+            if (Math.abs(newTimeMins - existingTimeMins) < 60) {
+                return res.status(400).json({ 
+                    message: `Conflict! This overlaps with your "${session.title}" session at ${session.time}. Sessions are 1 hour long.` 
+                });
+            }
+        }
+
         const schedule = await TrainerSchedule.create({
             title,
             date,
             time,
-            trainer: req.user.id 
+            trainer: trainerId 
         });
         res.status(201).json(schedule);
     } catch (error) {
@@ -79,12 +100,35 @@ export const deleteSchedule = async (req, res) => {
 export const updateSchedule = async (req, res) => {
     try {
         const { title, date, time } = req.body;
+        const trainerId = req.user.id;
         const schedule = await TrainerSchedule.findById(req.params.id);
         
         if (!schedule) return res.status(404).json({ message: "Schedule not found" });
         
-        if (schedule.trainer.toString() !== req.user.id) {
+        if (schedule.trainer.toString() !== trainerId) {
             return res.status(401).json({ message: "Not authorized" });
+        }
+
+        // Check for 1-hour overlaps if date or time is changing
+        if (date || time) {
+            const checkDate = date || schedule.date;
+            const checkTime = time || schedule.time;
+            const newTimeMins = timeToMinutes(checkTime);
+
+            const daySessions = await TrainerSchedule.find({ 
+                trainer: trainerId, 
+                date: checkDate,
+                _id: { $ne: req.params.id }
+            });
+
+            for (const sess of daySessions) {
+                const existingTimeMins = timeToMinutes(sess.time);
+                if (Math.abs(newTimeMins - existingTimeMins) < 60) {
+                    return res.status(400).json({ 
+                        message: `Conflict! This overlaps with your "${sess.title}" session at ${sess.time}.` 
+                    });
+                }
+            }
         }
 
         schedule.title = title || schedule.title;
@@ -130,7 +174,7 @@ export const getAssignedStudents = async (req, res) => {
 
         // Find all unique students who have booked this trainer
         const bookings = await TrainerSchedule.find({ trainer: trainerId, bookedBy: { $ne: null } })
-            .populate('bookedBy', 'name email membershipType')
+            .populate('bookedBy', 'name email membershipType createdAt')
             .lean();
 
         const studentMap = new Map();
@@ -151,14 +195,25 @@ export const getAssignedStudents = async (req, res) => {
                     attendanceStatus: 'Attended' 
                 }).sort({ date: -1, time: -1 }).lean();
 
-                // Calculate progress (mock/placeholder: count of attended sessions / 12)
+                // Calculate relative monthly progress (based on membership started date)
+                const registrationDate = new Date(student.createdAt);
+                const now = new Date();
+                
+                // Determine the start of the current membership month
+                let startOfPeriod = new Date(now.getFullYear(), now.getMonth(), registrationDate.getDate());
+                if (startOfPeriod > now) {
+                    startOfPeriod.setMonth(startOfPeriod.getMonth() - 1);
+                }
+                startOfPeriod.setHours(0, 0, 0, 0);
+                const startOfPeriodStr = startOfPeriod.toISOString().split('T')[0];
+
                 const attendedSessionsCount = await TrainerSchedule.countDocuments({ 
                     bookedBy: student._id, 
-                    attendanceStatus: 'Attended' 
+                    attendanceStatus: 'Attended',
+                    date: { $gte: startOfPeriodStr }
                 });
-                const progressValue = Math.min(Math.round((attendedSessionsCount / 12) * 100), 100);
 
-                // Fetch the trainer's private note and progress for this student
+                // Fetch the trainer's private note
                 const trainerNote = await TrainerNote.findOne({ trainer: trainerId, student: student._id }).lean();
 
                 studentMap.set(studentIdStr, {
@@ -168,7 +223,7 @@ export const getAssignedStudents = async (req, res) => {
                     membershipType: student.membershipType || 'Basic',
                     goal: chatSession?.goal || 'General Fitness',
                     lastWorkout: lastWorkout ? `${lastWorkout.date} @ ${lastWorkout.time}` : 'None yet',
-                    progress: trainerNote?.progress || 0, // Manual progress from DB
+                    progress: attendedSessionsCount, // Use relative monthly count
                     status: 'Active',
                     note: trainerNote?.note || ''
                 });
