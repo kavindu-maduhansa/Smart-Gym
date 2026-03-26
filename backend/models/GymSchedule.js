@@ -14,7 +14,6 @@ const gymSlotSchema = new mongoose.Schema(
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         bookedAt: { type: Date, default: Date.now },
-        reminderSentAt: { type: Date, default: null },
       },
     ],
     waitlist: [
@@ -33,8 +32,6 @@ const gymScheduleSchema = new mongoose.Schema(
     dayLabel: { type: String, default: "" },
     openingTime: { type: String, required: true },
     closingTime: { type: String, required: true },
-    /** When true, opening/closing times were set by admin (exam week, event, etc.) instead of default weekday rules. */
-    useSpecialHours: { type: Boolean, default: false },
     slotDurationMinutes: { type: Number, required: true },
     capacityPerSlot: { type: Number, required: true },
     slots: [gymSlotSchema],

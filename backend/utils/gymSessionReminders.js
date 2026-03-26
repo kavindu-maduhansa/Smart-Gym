@@ -8,10 +8,10 @@ function combineDateAndTimeLocal(yyyyMmDd, hhmm) {
   return new Date(y, M - 1, d, h, m, 0, 0);
 }
 
-function formatLocalYmd(d) {
-  const y = d.getFullYear();
-  const mo = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+function formatUtcYmd(d) {
+  const y = d.getUTCFullYear();
+  const mo = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y}-${mo}-${day}`;
 }
 
@@ -28,7 +28,7 @@ export async function runSessionReminderSweep() {
   );
   const leadMs = hours * 3600000;
   const now = Date.now();
-  const todayYmd = formatLocalYmd(new Date());
+  const todayYmd = formatUtcYmd(new Date());
 
   const gymSchedules = await GymSchedule.find({ date: { $gte: todayYmd } }).limit(400);
   for (const sched of gymSchedules) {
