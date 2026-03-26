@@ -210,7 +210,7 @@ const TrainerWorkoutPlans = () => {
                                         {plan.difficulty}
                                     </span>
                                     <h3 className="text-2xl font-bold mb-3 tracking-tight pr-12">{plan.title}</h3>
-                                    <p className="text-gray-400 text-sm mb-6 flex-grow">{plan.desc || "Professional training protocol designed for Smart Gym members."}</p>
+                                    <p className="text-gray-400 text-sm mb-6 flex-grow">{plan.desc || "Professional training plans designed for Smart Gym members."}</p>
 
                                     <div className="space-y-3 mb-8">
                                         {plan.exercises.slice(0, 3).map((ex, idx) => (
