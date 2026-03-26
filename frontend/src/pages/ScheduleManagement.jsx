@@ -1,17 +1,548 @@
-import React from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import axios from "axios";
+
+const API = "http://localhost:5000/api/gym-schedules";
+
+/** Must match backend — only this slot length is allowed. */
+const GYM_SLOT_DURATION_MINUTES = 120;
+
+function clamp(num, min, max) {
+  return Math.min(max, Math.max(min, num));
+}
+
+function BarChart2({ peak, low }) {
+  const peakPct = peak ? clamp(peak.utilizationPct, 0, 100) : 0;
+  const lowPct = low ? clamp(low.utilizationPct, 0, 100) : 0;
+  const maxH = 140;
+  return (
+    <div className="w-full">
+      <div className="flex items-end justify-between gap-4">
+        <div className="flex-1 bg-black/30 border border-white/10 rounded-lg p-4">
+          <div className="text-sm text-gray-400 font-bold">Peak</div>
+          <div
+            className="mt-3 mx-auto rounded-md bg-red-500/20 border border-red-500/30"
+            style={{ height: `${(peakPct / 100) * maxH}px`, width: "100%", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 8 }}
+          >
+            <div className="text-orange font-bold text-sm">{peakPct}%</div>
+          </div>
+          <div className="mt-3 text-xs text-gray-400 text-center truncate">
+            {peak ? peak.key.split("-").join(" to ") : "—"}
+          </div>
+        </div>
+        <div className="flex-1 bg-black/30 border border-white/10 rounded-lg p-4">
+          <div className="text-sm text-gray-400 font-bold">Low</div>
+          <div
+            className="mt-3 mx-auto rounded-md bg-green-500/15 border border-green-500/30"
+            style={{ height: `${(lowPct / 100) * maxH}px`, width: "100%", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 8 }}
+          >
+            <div className="text-orange font-bold text-sm">{lowPct}%</div>
+          </div>
+          <div className="mt-3 text-xs text-gray-400 text-center truncate">
+            {low ? low.key.split("-").join(" to ") : "—"}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LineChart({ points }) {
+  const width = 520;
+  const height = 180;
+  const pad = 28;
+  const n = Array.isArray(points) ? points.length : 0;
+  if (n === 0) return <div className="text-gray-400 text-sm">No data</div>;
+
+  const xs = points.map((_, i) => (n === 1 ? pad : pad + (i * (width - pad * 2)) / (n - 1)));
+  const ys = points.map((p) => {
+    const pct = clamp(p.utilizationPct || 0, 0, 100);
+    return pad + (100 - pct) * ((height - pad * 2) / 100);
+  });
+
+  const d = xs
+    .map((x, i) => `${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${ys[i].toFixed(2)}`)
+    .join(" ");
+
+  return (
+    <div className="w-full overflow-auto">
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-[180px]">
+        <defs>
+          <linearGradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="#fb7185" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#f97316" stopOpacity="0.2" />
+          </linearGradient>
+        </defs>
+        <g>
+          {[0, 25, 50, 75, 100].map((v) => {
+            const y = pad + (100 - v) * ((height - pad * 2) / 100);
+            return (
+              <g key={v}>
+                <line x1={pad} x2={width - pad} y1={y} y2={y} stroke="rgba(255,255,255,0.08)" />
+                <text x={pad - 8} y={y + 4} fontSize="10" fill="rgba(255,255,255,0.45)" textAnchor="end">
+                  {v}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+        <path d={d} fill="none" stroke="url(#lineGrad)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        {xs.map((x, i) => (
+          <g key={i}>
+            <circle cx={x} cy={ys[i]} r="4.5" fill="#fb923c" stroke="rgba(0,0,0,0.4)" strokeWidth="2" />
+          </g>
+        ))}
+      </svg>
+      <div className="flex justify-between text-xs text-gray-500 px-2 -mt-2">
+        <span>{points[0].date}</span>
+        <span>{points[n - 1].date}</span>
+      </div>
+    </div>
+  );
+}
+
+function timeToMinutes(t) {
+  if (!t || typeof t !== "string") return NaN;
+  const [h, m] = t.split(":").map(Number);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return NaN;
+  return h * 60 + m;
+}
+
+/** Same weekday rules as backend (UTC calendar date). */
+function getOpeningHoursForDate(yyyyMmDd) {
+  const [Y, M, D] = yyyyMmDd.split("-").map(Number);
+  const wd = new Date(Date.UTC(Y, M - 1, D)).getUTCDay();
+  if (wd === 0) return { openingTime: "09:00", closingTime: "13:00", label: "Sunday" };
+  if (wd === 6) return { openingTime: "09:00", closingTime: "18:00", label: "Saturday" };
+  return { openingTime: "08:00", closingTime: "20:00", label: "Monday–Friday" };
+}
+
+function formatAmPm(hhmm) {
+  const [h, m] = hhmm.split(":").map(Number);
+  const pm = h >= 12;
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${pm ? "PM" : "AM"}`;
+}
+
+function validateForm(
+  values,
+  { dateResolved, allowPastDate = false, editingId = null, existingSchedules = [] } = {},
+) {
+  const err = {};
+  const dateStr = (dateResolved ?? values.date).trim();
+
+  if (!dateStr) {
+    err.date = "Choose a date for this schedule.";
+  } else if (!DATE_OK(dateStr)) {
+    err.date = "Pick a valid calendar date.";
+  } else if (!allowPastDate && isDateBeforeToday(dateStr)) {
+    err.date = "Date cannot be in the past.";
+  } else if (
+    Array.isArray(existingSchedules) &&
+    existingSchedules.some(
+      (row) => row.date === dateStr && String(row._id) !== String(editingId || ""),
+    )
+  ) {
+    err.date =
+      "This date already has a schedule. Edit or delete it first—duplicate generation is not allowed.";
+  }
+
+  if (!err.date && DATE_OK(dateStr)) {
+    const { openingTime, closingTime } = getOpeningHoursForDate(dateStr);
+    const span = timeToMinutes(closingTime) - timeToMinutes(openingTime);
+    if (span < GYM_SLOT_DURATION_MINUTES) {
+      err.slotDurationMinutes =
+        "That day’s open hours are shorter than one 120-minute slot; pick another date.";
+    }
+  }
+
+  const cap = Number(values.capacityPerSlot);
+  if (values.capacityPerSlot === "" || values.capacityPerSlot === null) {
+    err.capacityPerSlot = "Capacity is required.";
+  } else if (Number.isNaN(cap)) {
+    err.capacityPerSlot = "Capacity must be a number.";
+  } else if (!Number.isInteger(cap) || cap < 1 || cap > 10) {
+    err.capacityPerSlot = "Use 1–10 people per slot (whole numbers).";
+  }
+
+  const label = values.dayLabel != null ? String(values.dayLabel).trim() : "";
+  if (label.length > 80) {
+    err.dayLabel = "Keep the label to 80 characters or fewer.";
+  } else if (label && /[<>]/.test(label)) {
+    err.dayLabel = "Label cannot contain < or >.";
+  }
+
+  return err;
+}
+
+const emptyForm = () => ({
+  date: "",
+  dayLabel: "",
+  capacityPerSlot: "10",
+});
 
 const ScheduleManagement = () => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState(emptyForm);
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const [slotModal, setSlotModal] = useState(null); // { scheduleId, date, dayLabel, slots: [] }
+  const [slotActionKey, setSlotActionKey] = useState(null);
+  const [slotCapEdits, setSlotCapEdits] = useState({});
+  const [slotSearch, setSlotSearch] = useState("");
+  const [bulkCap, setBulkCap] = useState("10");
+  const [scheduleQuery, setScheduleQuery] = useState("");
+  const [showPastSchedules, setShowPastSchedules] = useState(false);
+
+  const [analyticsDays, setAnalyticsDays] = useState(7);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analytics, setAnalytics] = useState(null);
+  const [analyticsError, setAnalyticsError] = useState("");
+
+  const previewHours = useMemo(() => {
+    const d = form.date?.trim();
+    if (!d || !DATE_OK(d)) return null;
+    return getOpeningHoursForDate(d);
+  }, [form.date]);
+
+  const authHeader = () => ({
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setMsg("");
+    try {
+      const res = await axios.get(API, authHeader());
+      setItems(res.data || []);
+    } catch {
+      setMsg("Could not load schedules.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const fetchAnalytics = useCallback(async () => {
+    try {
+      setAnalyticsLoading(true);
+      setAnalyticsError("");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setAnalyticsError("Please login as admin to load analytics.");
+        setAnalytics(null);
+        return;
+      }
+
+      const res = await axios.get(`${API}/analytics?days=${analyticsDays}`, authHeader());
+      setAnalytics(res.data || null);
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.statusText ||
+        err?.message ||
+        "Failed to load analytics.";
+      setAnalyticsError(message);
+      setAnalytics(null);
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  }, [analyticsDays]);
+
+  useEffect(() => {
+    fetchAnalytics();
+    const t = window.setInterval(() => {
+      fetchAnalytics();
+    }, 30000);
+    return () => window.clearInterval(t);
+  }, [fetchAnalytics]);
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
+    setFieldErrors((fe) => ({ ...fe, [name]: undefined }));
+  };
+
+  const resetForm = () => {
+    setForm(emptyForm());
+    setEditId(null);
+    setFieldErrors({});
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setMsg("");
+
+    const dateVal = form.date && form.date.trim() ? form.date.trim() : "";
+
+    const payload = {
+      date: dateVal,
+      dayLabel: form.dayLabel.trim(),
+      slotDurationMinutes: GYM_SLOT_DURATION_MINUTES,
+      capacityPerSlot: Number(form.capacityPerSlot),
+    };
+
+    const fe = validateForm(
+      { ...form, date: dateVal },
+      {
+        dateResolved: dateVal,
+        allowPastDate: Boolean(editId),
+        editingId: editId,
+        existingSchedules: items,
+      },
+    );
+    if (Object.keys(fe).length) {
+      setFieldErrors(fe);
+      return;
+    }
+
+    setSaving(true);
+    try {
+      if (editId) {
+        await axios.put(`${API}/${editId}`, payload, authHeader());
+        setMsg("Schedule updated and slots regenerated.");
+      } else {
+        await axios.post(API, payload, authHeader());
+        setMsg("Schedule saved; slots were generated automatically.");
+      }
+      resetForm();
+      await load();
+      fetchAnalytics();
+    } catch (err) {
+      const m = err.response?.data?.message || "Request failed.";
+      setMsg(m);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const onEdit = (row) => {
+    setEditId(row._id);
+    setForm({
+      date: row.date,
+      dayLabel: row.dayLabel || "",
+      capacityPerSlot: String(row.capacityPerSlot),
+    });
+    setFieldErrors({});
+    setMsg("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const onDelete = async (id) => {
+    if (!window.confirm("Remove this schedule and all its slots?")) return;
+    setMsg("");
+    try {
+      await axios.delete(`${API}/${id}`, authHeader());
+      setMsg("Removed.");
+      if (editId === id) resetForm();
+      await load();
+      fetchAnalytics();
+    } catch (err) {
+      setMsg(err.response?.data?.message || "Delete failed.");
+    }
+  };
+
+  const openSlotsModal = (row) => {
+    const slots = Array.isArray(row.slots) ? row.slots : [];
+    setSlotModal({
+      scheduleId: row._id,
+      date: row.date,
+      dayLabel: row.dayLabel || "",
+      slots,
+    });
+    const edits = {};
+    for (const s of slots) {
+      edits[String(s._id)] = String(s.capacity ?? row.capacityPerSlot ?? 10);
+    }
+    setSlotCapEdits(edits);
+    setSlotActionKey(null);
+  };
+
+  const closeSlotsModal = () => {
+    setSlotModal(null);
+    setSlotCapEdits({});
+    setSlotActionKey(null);
+    setSlotSearch("");
+  };
+
+  const refreshOneScheduleIntoModal = async (scheduleId) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(API, { headers: { Authorization: `Bearer ${token}` } });
+    const list = Array.isArray(res.data) ? res.data : [];
+    setItems(list);
+    const fresh = list.find((x) => String(x._id) === String(scheduleId));
+    if (!fresh) return;
+    openSlotsModal(fresh);
+  };
+
+  const bulkApplyCapacity = async () => {
+    if (!slotModal?.scheduleId) return;
+    const scheduleId = slotModal.scheduleId;
+    const slots = slotModal.slots || [];
+    const cap = Number(bulkCap);
+    if (!Number.isFinite(cap) || !Number.isInteger(cap)) {
+      setMsg("Capacity must be a whole number.");
+      return;
+    }
+    setSlotActionKey(`bulk-cap-${scheduleId}`);
+    try {
+      for (const s of slots) {
+        const booked = Number(s.bookedCount || 0);
+        if (cap < booked) continue; // skip impossible
+        await adminSetSlotCapacity(scheduleId, s._id);
+      }
+      await refreshOneScheduleIntoModal(scheduleId);
+      fetchAnalytics();
+    } finally {
+      setSlotActionKey(null);
+    }
+  };
+
+  const bulkCloseAll = async () => {
+    if (!slotModal?.scheduleId) return;
+    const scheduleId = slotModal.scheduleId;
+    setSlotActionKey(`bulk-close-${scheduleId}`);
+    try {
+      for (const s of slotModal.slots || []) {
+        if (s.isClosed) continue;
+        await adminCloseSlot(scheduleId, s._id);
+      }
+      await refreshOneScheduleIntoModal(scheduleId);
+      fetchAnalytics();
+    } finally {
+      setSlotActionKey(null);
+    }
+  };
+
+  const bulkOpenAll = async () => {
+    if (!slotModal?.scheduleId) return;
+    const scheduleId = slotModal.scheduleId;
+    setSlotActionKey(`bulk-open-${scheduleId}`);
+    try {
+      for (const s of slotModal.slots || []) {
+        if (!s.isClosed) continue;
+        await adminOpenSlot(scheduleId, s._id);
+      }
+      await refreshOneScheduleIntoModal(scheduleId);
+      fetchAnalytics();
+    } finally {
+      setSlotActionKey(null);
+    }
+  };
+
+  const adminCloseSlot = async (scheduleId, slotId) => {
+    const key = `close-${scheduleId}-${slotId}`;
+    setSlotActionKey(key);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(`${API}/${scheduleId}/slots/${slotId}/close`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await refreshOneScheduleIntoModal(scheduleId);
+      fetchAnalytics();
+    } finally {
+      setSlotActionKey(null);
+    }
+  };
+
+  const adminOpenSlot = async (scheduleId, slotId) => {
+    const key = `open-${scheduleId}-${slotId}`;
+    setSlotActionKey(key);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(`${API}/${scheduleId}/slots/${slotId}/open`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await refreshOneScheduleIntoModal(scheduleId);
+      fetchAnalytics();
+    } finally {
+      setSlotActionKey(null);
+    }
+  };
+
+  const adminSetSlotCapacity = async (scheduleId, slotId) => {
+    const key = `cap-${scheduleId}-${slotId}`;
+    setSlotActionKey(key);
+    try {
+      const token = localStorage.getItem("token");
+      const cap = Number(slotCapEdits[String(slotId)]);
+      await axios.post(
+        `${API}/${scheduleId}/slots/${slotId}/capacity`,
+        { capacity: cap },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      await refreshOneScheduleIntoModal(scheduleId);
+      fetchAnalytics();
+    } catch (err) {
+      setMsg(err.response?.data?.message || "Could not update slot capacity.");
+    } finally {
+      setSlotActionKey(null);
+    }
+  };
+
+  const isErrorMsg =
+    /fail|Could not|not |cannot|Invalid|required|must |already|duplicate|blocked/i.test(msg) ||
+    msg.includes("403");
+
+  const filteredSchedules = useMemo(() => {
+    const q = String(scheduleQuery || "").trim().toLowerCase();
+    const list = Array.isArray(items) ? items : [];
+    return list
+      .filter((row) => {
+        if (!row?.date) return false;
+        if (!showPastSchedules && isDateBeforeToday(row.date)) return false;
+        if (!q) return true;
+        const label = String(row.dayLabel || "").toLowerCase();
+        return String(row.date).toLowerCase().includes(q) || label.includes(q);
+      })
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  }, [items, scheduleQuery, showPastSchedules]);
+
+  const summarizeScheduleSlots = (row) => {
+    const slots = Array.isArray(row?.slots) ? row.slots : [];
+    let open = 0;
+    let full = 0;
+    let closed = 0;
+    let openSpots = 0;
+    for (const s of slots) {
+      const cap = Number(s?.capacity || 0);
+      const booked = Number(s?.bookedCount || 0);
+      const isClosed = Boolean(s?.isClosed);
+      if (isClosed) {
+        closed += 1;
+        continue;
+      }
+      if (cap > 0 && booked >= cap) {
+        full += 1;
+        continue;
+      }
+      open += 1;
+      openSpots += Math.max(0, cap - booked);
+    }
+    return { open, full, closed, openSpots, total: slots.length };
+  };
+
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
+        <div
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
+        <div
+          className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="backdrop-blur-md bg-gradient-to-br from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
@@ -34,14 +565,15 @@ const ScheduleManagement = () => {
               </h1>
             </div>
             <p className="text-gray-300 text-base sm:text-lg">
-              Manage gym class schedules and sessions
+              Pick a date and capacity. Open hours follow the gym’s weekly rules; every generated slot
+              is exactly <span className="text-orange font-bold">{GYM_SLOT_DURATION_MINUTES} minutes</span>.
             </p>
           </div>
 
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6 sm:p-8">
-            <div className="text-center">
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-5 sm:p-6 mb-6">
+            <div className="flex items-center gap-2 mb-4">
               <svg
-                className="w-16 h-16 sm:w-24 sm:h-24 text-orange mx-auto mb-6"
+                className="w-7 h-7 text-orange shrink-0"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -53,44 +585,563 @@ const ScheduleManagement = () => {
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Coming Soon</h2>
-              <p className="text-gray-300 text-base sm:text-lg mb-2">
-                This module will be used to manage gym schedules and classes.
+              <h2 className="text-lg font-bold text-white">Opening hours</h2>
+            </div>
+            <div className="divide-y divide-white/10 rounded-lg bg-black/35 border border-white/10 overflow-hidden">
+              <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm">
+                <span className="text-gray-300">Monday – Friday</span>
+                <span className="text-white font-semibold">
+                  {formatAmPm("08:00")} – {formatAmPm("20:00")}
+                </span>
+              </div>
+              <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm">
+                <span className="text-gray-300">Saturday</span>
+                <span className="text-white font-semibold">
+                  {formatAmPm("09:00")} – {formatAmPm("18:00")}
+                </span>
+              </div>
+              <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm">
+                <span className="text-gray-300">Sunday</span>
+                <span className="text-white font-semibold">
+                  {formatAmPm("09:00")} – {formatAmPm("13:00")}
+                </span>
+              </div>
+            </div>
+            {previewHours && (
+              <p className="mt-3 text-sm text-orange/90">
+                Selected date uses <span className="font-bold">{previewHours.label}</span> hours:{" "}
+                {previewHours.openingTime}–{previewHours.closingTime} (slots fill this range only).
               </p>
-              <p className="text-gray-400 text-sm sm:text-base">
-                This feature will be implemented in a future update.
-              </p>
+            )}
+          </div>
+
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6 sm:p-8 mb-8">
+            {msg && (
+              <div
+                className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold ${
+                  isErrorMsg
+                    ? "bg-red-500/20 text-red-200 border border-red-500/40"
+                    : "bg-orange/20 text-orange border border-orange/40"
+                }`}
+              >
+                {msg}
+              </div>
+            )}
+
+            <form onSubmit={onSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-orange mb-1">
+                    Date <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    name="date"
+                    required
+                    value={form.date}
+                    onChange={onChange}
+                    aria-invalid={fieldErrors.date ? "true" : "false"}
+                    className={`w-full bg-black/50 border rounded-lg px-3 py-2 text-white ${
+                      fieldErrors.date ? "border-red-500/70" : "border-white/20"
+                    }`}
+                  />
+                  {fieldErrors.date && (
+                    <p className="text-red-400 text-xs mt-1">{fieldErrors.date}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-orange mb-1">
+                    Day label (optional)
+                  </label>
+                  <input
+                    type="text"
+                    name="dayLabel"
+                    value={form.dayLabel}
+                    onChange={onChange}
+                    maxLength={80}
+                    placeholder="e.g. Monday promo block"
+                    className={`w-full bg-black/50 border rounded-lg px-3 py-2 text-white placeholder-gray-500 ${
+                      fieldErrors.dayLabel ? "border-red-500/70" : "border-white/20"
+                    }`}
+                  />
+                  {fieldErrors.dayLabel && (
+                    <p className="text-red-400 text-xs mt-1">{fieldErrors.dayLabel}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-orange mb-1">
+                    Slot duration
+                  </label>
+                  <div className="w-full bg-black/40 border border-white/20 rounded-lg px-3 py-2 text-white text-sm">
+                    {GYM_SLOT_DURATION_MINUTES} minutes <span className="text-gray-500">(fixed)</span>
+                  </div>
+                  {fieldErrors.slotDurationMinutes && (
+                    <p className="text-red-400 text-xs mt-1">
+                      {fieldErrors.slotDurationMinutes}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-orange mb-1">Capacity per slot</label>
+                  <input
+                    type="number"
+                    name="capacityPerSlot"
+                    required
+                    min={1}
+                    max={10}
+                    step={1}
+                    inputMode="numeric"
+                    value={form.capacityPerSlot}
+                    onChange={onChange}
+                    aria-invalid={fieldErrors.capacityPerSlot ? "true" : "false"}
+                    className={`w-full bg-black/50 border rounded-lg px-3 py-2 text-white ${
+                      fieldErrors.capacityPerSlot ? "border-red-500/70" : "border-white/20"
+                    }`}
+                  />
+                  {fieldErrors.capacityPerSlot && (
+                    <p className="text-red-400 text-xs mt-1">{fieldErrors.capacityPerSlot}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="bg-orange text-black font-bold px-6 py-2 rounded-lg hover:bg-orange/90 disabled:opacity-50"
+                >
+                  {saving ? "Saving…" : editId ? "Update schedule" : "Generate slots"}
+                </button>
+                {editId && (
+                  <button
+                    type="button"
+                    onClick={resetForm}
+                    className="bg-white/10 border border-white/30 font-bold px-6 py-2 rounded-lg hover:bg-white/15"
+                  >
+                    Cancel edit
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+
+          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-orange">Existing schedules</h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  Search by date or label. Use “Manage slots” to close/open slots and adjust capacity.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 items-center">
+                <input
+                  value={scheduleQuery}
+                  onChange={(e) => setScheduleQuery(e.target.value)}
+                  placeholder="Search (e.g. 2026-03-26 or exam)"
+                  className="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-gray-500 w-full sm:w-[280px]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPastSchedules((v) => !v)}
+                  className={`px-3 py-2 rounded-lg font-bold text-sm border transition-colors ${
+                    showPastSchedules
+                      ? "bg-orange text-black border-orange/50"
+                      : "bg-black/30 text-gray-200 border-white/10 hover:bg-black/40"
+                  }`}
+                >
+                  {showPastSchedules ? "Showing past" : "Hide past"}
+                </button>
+              </div>
+            </div>
+            {loading ? (
+              <p className="text-gray-400">Loading…</p>
+            ) : filteredSchedules.length === 0 ? (
+              <p className="text-gray-400">Nothing here yet. Add your first block above.</p>
+            ) : (
+              <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2">
+                {filteredSchedules.map((row) => {
+                  const sum = summarizeScheduleSlots(row);
+                  return (
+                    <div
+                      key={row._id}
+                      className="border border-white/10 rounded-lg p-4 bg-black/30"
+                    >
+                      <div className="flex flex-wrap justify-between gap-3">
+                        <div>
+                          <p className="font-bold text-white">
+                            {row.date}
+                            {row.dayLabel ? ` · ${row.dayLabel}` : ""}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            {row.openingTime} – {row.closingTime} · {row.slotDurationMinutes} min slots ·
+                            cap {row.capacityPerSlot} · {row.slots?.length || 0} slots
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                            <span className="px-2 py-1 rounded bg-green-500/15 text-green-300 border border-green-500/30 font-bold">
+                              OPEN {sum.open}
+                            </span>
+                            <span className="px-2 py-1 rounded bg-red-500/15 text-red-200 border border-red-500/30 font-bold">
+                              FULL {sum.full}
+                            </span>
+                            <span className="px-2 py-1 rounded bg-gray-500/20 text-gray-200 border border-white/10 font-bold">
+                              CLOSED {sum.closed}
+                            </span>
+                            <span className="px-2 py-1 rounded bg-white/5 text-gray-200 border border-white/10 font-bold">
+                              OPEN SPOTS {sum.openSpots}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => openSlotsModal(row)}
+                            className="text-sm bg-white/10 text-white px-3 py-1 rounded border border-white/20 font-semibold hover:bg-white/15"
+                          >
+                            Manage slots
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onEdit(row)}
+                            className="text-sm bg-orange/20 text-orange px-3 py-1 rounded border border-orange/40 font-semibold"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onDelete(row._id)}
+                            className="text-sm bg-red-500/20 text-red-300 px-3 py-1 rounded border border-red-500/40 font-semibold"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 mt-8 mb-8">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-2xl font-bold text-orange">Utilization & Peak Analytics</h2>
+                <p className="text-gray-300 text-sm mt-1">
+                  Auto-updates every 30 seconds. Peak detection uses admin-open slots only.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                {[7, 14, 30].map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setAnalyticsDays(d)}
+                    className={`px-3 py-2 rounded-lg font-bold text-sm border transition-all ${
+                      analyticsDays === d
+                        ? "bg-orange text-black border-orange/50"
+                        : "bg-black/20 text-gray-300 border-white/10 hover:bg-black/30"
+                    }`}
+                  >
+                    Last {d}d
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                <h3 className="text-white font-semibold mb-2">
-                  Class Scheduling
-                </h3>
-                <p className="text-gray-400 text-xs sm:text-sm">
-                  Create and manage class schedules
-                </p>
+            {analyticsLoading && <div className="text-gray-400 text-sm mb-3">Updating charts…</div>}
+            {analyticsError && (
+              <div className="text-red-400 text-sm mb-3 font-bold border border-red-500/30 bg-red-500/10 rounded-lg p-3">
+                {analyticsError}
               </div>
-              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                <h3 className="text-white font-semibold mb-2">Session Booking</h3>
-                <p className="text-gray-400 text-xs sm:text-sm">
-                  Handle member session bookings
-                </p>
-              </div>
-              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                <h3 className="text-white font-semibold mb-2">
-                  Trainer Assignment
-                </h3>
-                <p className="text-gray-400 text-xs sm:text-sm">
-                  Assign trainers to classes
-                </p>
+            )}
+
+            {analytics && (
+              <>
+                <div className="mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-black/30 border border-white/10 rounded-lg p-4">
+                      <div className="text-sm text-gray-400 font-bold">Overall utilization</div>
+                      <div className="text-3xl font-bold text-orange mt-2">
+                        {analytics.overallUtilizationPct}%
+                      </div>
+                    </div>
+                    <div className="bg-black/30 border border-white/10 rounded-lg p-4 md:col-span-2">
+                      <div className="text-sm text-gray-400 font-bold">Least busy time</div>
+                      <div className="text-lg font-bold text-white mt-2">
+                        {analytics.low ? analytics.low.key.split("-").join(" to ") : analytics.leastBusyTime}
+                      </div>
+                      <div className="text-sm text-gray-300 mt-1">
+                        {analytics.low
+                          ? `Utilization: ${analytics.low.utilizationPct}%`
+                          : "No peak data yet."}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
+                    <div className="text-gray-400 font-bold mb-3">Bar chart (Peak vs Low)</div>
+                    <BarChart2 peak={analytics.peak} low={analytics.low} />
+                  </div>
+                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
+                    <div className="text-gray-400 font-bold mb-3">Line chart (Daily usage)</div>
+                    <LineChart points={analytics.daily || []} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
+                    <div className="text-gray-400 font-bold mb-3">Popular slots</div>
+                    {Array.isArray(analytics.popularSlots) && analytics.popularSlots.length > 0 ? (
+                      <div className="space-y-2">
+                        {analytics.popularSlots.slice(0, 5).map((s) => (
+                          <div
+                            key={s.key}
+                            className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+                          >
+                            <div className="text-white font-semibold">
+                              {String(s.key).split("-").join(" to ")}
+                            </div>
+                            <div className="text-orange font-bold text-sm">
+                              {s.utilizationPct}% <span className="text-gray-400 font-semibold">({s.bookedSeats}/{s.capacitySeats})</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-gray-400 text-sm">No usage data yet.</div>
+                    )}
+                  </div>
+
+                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
+                    <div className="text-gray-400 font-bold mb-3">Empty slots</div>
+                    {Array.isArray(analytics.emptySlots) && analytics.emptySlots.length > 0 ? (
+                      <div className="space-y-2">
+                        {analytics.emptySlots.slice(0, 5).map((s) => (
+                          <div
+                            key={s.key}
+                            className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+                          >
+                            <div className="text-white font-semibold">
+                              {String(s.key).split("-").join(" to ")}
+                            </div>
+                            <div className="text-gray-300 font-bold text-sm">
+                              0% <span className="text-gray-500 font-semibold">({s.bookedSeats}/{s.capacitySeats})</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-gray-400 text-sm">No empty slots in this range.</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-black/30 border border-white/10 rounded-xl p-4">
+                  <div className="text-gray-400 font-bold mb-2">Best approach</div>
+                  <p className="text-white/90 text-sm">{analytics.bestApproach}</p>
+                </div>
+              </>
+            )}
+          </div>
+
+          {slotModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+              <div className="w-full max-w-3xl rounded-2xl border border-white/15 bg-gray-900/95 backdrop-blur-md shadow-2xl">
+                <div className="sticky top-0 z-10 px-5 sm:px-6 pt-5 sm:pt-6 pb-4 bg-gray-900/95 border-b border-white/10">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="text-orange font-bold text-xl">Manage slots</div>
+                      <div className="text-gray-300 text-sm mt-1">
+                        {slotModal.date}
+                        {slotModal.dayLabel ? ` · ${slotModal.dayLabel}` : ""}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={closeSlotsModal}
+                      className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+
+                <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-4">
+
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                  <input
+                    type="text"
+                    value={slotSearch}
+                    onChange={(e) => setSlotSearch(e.target.value)}
+                    placeholder="Search time (e.g. 10:00)"
+                    className="w-full md:w-60 bg-black/50 border border-white/20 rounded px-3 py-2 text-white placeholder-gray-500"
+                  />
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <button
+                      type="button"
+                      disabled={slotActionKey === `bulk-close-${slotModal.scheduleId}`}
+                      onClick={bulkCloseAll}
+                      className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-200 font-bold hover:bg-red-500/20 disabled:opacity-60"
+                    >
+                      Close all
+                    </button>
+                    <button
+                      type="button"
+                      disabled={slotActionKey === `bulk-open-${slotModal.scheduleId}`}
+                      onClick={bulkOpenAll}
+                      className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15 disabled:opacity-60"
+                    >
+                      Open all
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min={1}
+                        max={10}
+                        step={1}
+                        value={bulkCap}
+                        onChange={(e) => setBulkCap(e.target.value)}
+                        className="w-28 bg-black/50 border border-white/20 rounded px-2 py-2 text-white"
+                      />
+                      <button
+                        type="button"
+                        disabled={slotActionKey === `bulk-cap-${slotModal.scheduleId}`}
+                        onClick={bulkApplyCapacity}
+                        className="px-3 py-2 rounded bg-orange text-black font-bold hover:bg-orange/90 disabled:opacity-60"
+                      >
+                        Set cap (all)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+                  {(slotModal.slots || [])
+                    .filter((s) => {
+                      const q = String(slotSearch || "").trim().toLowerCase();
+                      if (!q) return true;
+                      return (
+                        String(s.startTime || "").toLowerCase().includes(q) ||
+                        String(s.endTime || "").toLowerCase().includes(q)
+                      );
+                    })
+                    .map((s) => {
+                    const booked = Number(s.bookedCount || 0);
+                    const cap = Number(s.capacity || 0);
+                    const isClosed = Boolean(s.isClosed);
+                    return (
+                      <div
+                        key={String(s._id)}
+                        className="rounded-xl border border-white/10 bg-white/5 p-4"
+                      >
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div>
+                            <div className="text-white font-bold">
+                              {s.startTime} – {s.endTime}
+                            </div>
+                            <div className="text-sm text-gray-400 mt-1">
+                              Booked: <span className="text-white font-semibold">{booked}</span> /{" "}
+                              <span className="text-white font-semibold">{cap}</span>{" "}
+                              {isClosed ? (
+                                <span className="ml-2 text-xs px-2 py-1 rounded bg-gray-500/20 text-gray-200 border border-white/10 font-bold">
+                                  CLOSED
+                                </span>
+                              ) : (
+                                <span className="ml-2 text-xs px-2 py-1 rounded bg-green-500/15 text-green-300 border border-green-500/30 font-bold">
+                                  OPEN
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 items-center">
+                            {isClosed ? (
+                              <button
+                                type="button"
+                                disabled={slotActionKey === `open-${slotModal.scheduleId}-${s._id}`}
+                                onClick={() => adminOpenSlot(slotModal.scheduleId, s._id)}
+                                className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15 disabled:opacity-60"
+                              >
+                                Reopen
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                disabled={slotActionKey === `close-${slotModal.scheduleId}-${s._id}`}
+                                onClick={() => adminCloseSlot(slotModal.scheduleId, s._id)}
+                                className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-200 font-bold hover:bg-red-500/20 disabled:opacity-60"
+                              >
+                                Close slot
+                              </button>
+                            )}
+
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                min={booked}
+                                max={10}
+                                step={1}
+                                value={slotCapEdits[String(s._id)] ?? ""}
+                                onChange={(e) =>
+                                  setSlotCapEdits((m) => ({ ...m, [String(s._id)]: e.target.value }))
+                                }
+                                className="w-28 bg-black/50 border border-white/20 rounded px-2 py-2 text-white"
+                              />
+                              <button
+                                type="button"
+                                disabled={slotActionKey === `cap-${slotModal.scheduleId}-${s._id}`}
+                                onClick={() => adminSetSlotCapacity(slotModal.scheduleId, s._id)}
+                                className="px-3 py-2 rounded bg-orange text-black font-bold hover:bg-orange/90 disabled:opacity-60"
+                              >
+                                Set cap
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500 mt-2">
+                          Capacity can’t be reduced below current bookings.
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={closeSlotsModal}
+                    className="px-4 py-2 rounded bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15"
+                  >
+                    Close
+                  </button>
+                </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
+function DATE_OK(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const d = new Date(`${s}T12:00:00`);
+  return !Number.isNaN(d.getTime());
+}
+
+function isDateBeforeToday(yyyyMmDd) {
+  const [y, m, d] = yyyyMmDd.split("-").map(Number);
+  const picked = new Date(y, m - 1, d);
+  const startToday = new Date();
+  startToday.setHours(0, 0, 0, 0);
+  return picked < startToday;
+}
 
 export default ScheduleManagement;
