@@ -40,6 +40,9 @@ export const apiClient = {
   feedback: {
     submit: `${API_URL}/api/feedback`,
     getForTrainer: (trainerId) => `${API_URL}/api/feedback/trainer/${trainerId}`,
+    getMySubmissions: `${API_URL}/api/feedback/my-submissions`,
+    update: (id) => `${API_URL}/api/feedback/${id}`,
+    delete: (id) => `${API_URL}/api/feedback/${id}`,
   },
 
   // Contact endpoints

@@ -43,6 +43,15 @@ export const bookSession = async (req, res) => {
             return res.status(400).json({ message: "This session is already booked by someone else" });
         }
 
+        // Check if student already has a booking on this date
+        const existingDailyBooking = await TrainerSchedule.findOne({
+            bookedBy: req.user.id,
+            date: schedule.date
+        });
+        if (existingDailyBooking) {
+            return res.status(400).json({ message: "You have already booked a session for this day." });
+        }
+
         // Assign the logged-in student's ID (from the JWT) to the schedule
         schedule.bookedBy = req.user.id; 
         await schedule.save();
@@ -50,5 +59,30 @@ export const bookSession = async (req, res) => {
         res.status(200).json({ message: "Session booked successfully!", schedule });
     } catch (error) {
         res.status(500).json({ message: "Booking failed", error: error.message });
+    }
+};
+
+// @desc    Cancel a booked session
+export const cancelBooking = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const schedule = await TrainerSchedule.findById(id);
+
+        if (!schedule) {
+            return res.status(404).json({ message: "Session not found" });
+        }
+
+        // Verify that the person cancelling is the one who booked it
+        if (schedule.bookedBy && String(schedule.bookedBy) !== req.user.id) {
+            return res.status(403).json({ message: "You are not authorized to cancel this booking" });
+        }
+
+        // Reset the booking
+        schedule.bookedBy = null;
+        await schedule.save();
+
+        res.status(200).json({ message: "Booking cancelled successfully!" });
+    } catch (error) {
+        res.status(500).json({ message: "Cancellation failed", error: error.message });
     }
 };

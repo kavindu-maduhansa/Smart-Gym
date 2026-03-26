@@ -47,7 +47,7 @@ const TrainerDashboard = () => {
 
       <div className="relative z-10 pt-32 pb-20 container mx-auto px-6">
         <header className="mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange to-orange/80 uppercase tracking-tighter">
+          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange to-orange/80 tracking-tight">
             Trainer Dashboard
           </h1>
           <p className="text-gray-400 mt-4 text-lg">Welcome back. Manage your classes and students below.</p>
