@@ -59,13 +59,21 @@ const TrainerSchedules = () => {
       return;
     }
 
+    const now = new Date();
+    const selectedDateTime = new Date(`${format(sessionDate, "yyyy-MM-dd")}T${sessionTime || "00:00"}`);
+
+    if (selectedDateTime < now) {
+      setError("Session cannot be scheduled in the past. Please select a future date and time.");
+      return;
+    }
+
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const scheduleData = { 
-        title: sessionName, 
-        date: sessionDate ? format(sessionDate, "yyyy-MM-dd") : "", 
-        time: sessionTime 
+      const scheduleData = {
+        title: sessionName,
+        date: sessionDate ? format(sessionDate, "yyyy-MM-dd") : "",
+        time: sessionTime
       };
 
       if (editId) {
@@ -132,26 +140,58 @@ const TrainerSchedules = () => {
 
   const filteredSchedules = schedules.filter(s => {
     const studentName = s.bookedBy?.name || "";
-    const matchesSearch = s.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          studentName.toLowerCase().includes(searchTerm.toLowerCase());
-    
+    const matchesSearch = s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      studentName.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const sessionDateTime = new Date(`${s.date}T${s.time || "00:00"}`);
+    const now = new Date();
+    const isExpired = sessionDateTime < now;
+
     let matchesStatus = true;
-    if (statusFilter === "Booked") matchesStatus = !!s.bookedBy;
-    else if (statusFilter === "Available") matchesStatus = !s.bookedBy;
-    else if (statusFilter !== "All") matchesStatus = s.attendanceStatus === statusFilter;
+    if (statusFilter === "Booked") {
+      matchesStatus = !!s.bookedBy;
+    } else if (statusFilter === "Available") {
+      matchesStatus = !s.bookedBy && !isExpired;
+    } else if (statusFilter === "Expired") {
+      matchesStatus = !s.bookedBy && isExpired;
+    } else if (statusFilter === "Pending") {
+      matchesStatus = !!s.bookedBy && s.attendanceStatus === "Pending";
+    } else if (statusFilter !== "All") {
+      matchesStatus = s.attendanceStatus === statusFilter;
+    }
 
     let matchesDate = true;
     if (dateFilter !== "All") {
-      const sessionDate = new Date(s.date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (dateFilter === "Today") matchesDate = sessionDate.toDateString() === today.toDateString();
-      else if (dateFilter === "Upcoming") matchesDate = sessionDate >= today;
-      else if (dateFilter === "Past") matchesDate = sessionDate < today;
+      if (dateFilter === "Today") {
+        matchesDate = new Date(s.date).toDateString() === now.toDateString();
+      } else if (dateFilter === "Upcoming") {
+        matchesDate = sessionDateTime >= now;
+      } else if (dateFilter === "Past") {
+        matchesDate = sessionDateTime < now;
+      }
     }
 
     return matchesSearch && matchesStatus && matchesDate;
+  }).sort((a, b) => {
+    const dateTimeA = new Date(`${a.date}T${a.time || "00:00"}`);
+    const dateTimeB = new Date(`${b.date}T${b.time || "00:00"}`);
+    const now = new Date();
+    
+    const isPastA = dateTimeA < now;
+    const isPastB = dateTimeB < now;
+
+    // Category sorting: Future first, Past last
+    if (!isPastA && isPastB) return -1;
+    if (isPastA && !isPastB) return 1;
+
+    // Within same category:
+    if (!isPastA) {
+      return dateTimeA - dateTimeB; // Future: Earliest first
+    } else {
+      return dateTimeB - dateTimeA; // Past: Most recent first (at bottom)
+    }
   });
+
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
@@ -160,16 +200,31 @@ const TrainerSchedules = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredSchedules.slice(indexOfFirstItem, indexOfLastItem);
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  const monthlySchedules = schedules.filter(s => {
+    const d = new Date(s.date);
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+  });
+
+  const stats = {
+    total: monthlySchedules.length,
+    upcoming: monthlySchedules.filter(s => new Date(`${s.date}T${s.time || "00:00"}`) >= now).length,
+    available: monthlySchedules.filter(s => !s.bookedBy && new Date(`${s.date}T${s.time || "00:00"}`) >= now).length,
+    completed: monthlySchedules.filter(s => s.attendanceStatus === "Attended").length,
+  };
 
   return (
     <div className="min-h-screen bg-black text-white pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black -z-10"></div>
-      
+
       <div className="max-w-6xl mx-auto">
         <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <div>
-              <h2 className="text-3xl font-bold text-orange uppercase tracking-widest">My Schedules</h2>
+              <h2 className="text-3xl font-bold text-orange tracking-tight">My Schedules</h2>
               <p className="text-gray-400 mt-2">Manage your training sessions and track student attendance.</p>
             </div>
             <button onClick={() => setShowForm(true)} className="mt-4 md:mt-0 bg-orange px-6 py-2.5 rounded-xl font-bold hover:bg-orange/80 transition-all shadow-lg shadow-orange/20">
@@ -178,16 +233,83 @@ const TrainerSchedules = () => {
           </div>
         </div>
 
+        {/* Integrated Performance Hub */}
+        <div className="backdrop-blur-2xl bg-white/[0.03] border border-white/10 rounded-3xl p-1 mb-8 shadow-2xl overflow-hidden group">
+          <div className="flex flex-col lg:flex-row items-stretch">
+            {/* Hub Header */}
+            <div className="lg:w-1/4 p-6 bg-gradient-to-br from-orange/20 to-transparent border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-center relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-orange/10 blur-3xl -mr-16 -mt-16 rounded-full group-hover:bg-orange/20 transition-all duration-700"></div>
+               <h3 className="text-xl font-black text-white leading-tight relative z-10">Monthly<br /><span className="text-orange">Performance</span></h3>
+               <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
+            </div>
+            
+            {/* Stats Grid */}
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/5">
+              {[
+                { 
+                  label: "Total Sessions", 
+                  value: stats.total, 
+                  icon: (
+                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  )
+                },
+                { 
+                  label: "Upcoming", 
+                  value: stats.upcoming, 
+                  icon: (
+                    <svg className="w-5 h-5 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  )
+                },
+                { 
+                  label: "Available", 
+                  value: stats.available, 
+                  icon: (
+                    <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                    </svg>
+                  )
+                },
+                { 
+                  label: "Completed", 
+                  value: stats.completed, 
+                  icon: (
+                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )
+                },
+              ].map((item, idx) => (
+                <div key={idx} className="p-6 transition-all hover:bg-white/[0.03] relative group/stat overflow-hidden">
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-orange/0 to-transparent group-hover/stat:via-orange/40 transition-all duration-500"></div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-black/40 flex items-center justify-center transition-all group-hover/stat:scale-110 group-hover/stat:border-orange/20 border border-white/5">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <div className="text-2xl font-black text-white group-hover/stat:text-orange transition-colors tracking-tight">{item.value}</div>
+                      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5 whitespace-nowrap">{item.label}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Filters Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Search session or student..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all font-medium placeholder:text-gray-500"
           />
-          <select 
+          <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
@@ -195,11 +317,12 @@ const TrainerSchedules = () => {
             <option value="All" className="bg-gray-900">All Status</option>
             <option value="Booked" className="bg-gray-900">Booked</option>
             <option value="Available" className="bg-gray-900">Available</option>
+            <option value="Expired" className="bg-gray-900">Expired</option>
             <option value="Pending" className="bg-gray-900">Pending Attendance</option>
             <option value="Attended" className="bg-gray-900">Attended</option>
             <option value="Absent" className="bg-gray-900">Absent</option>
           </select>
-          <select 
+          <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
@@ -255,7 +378,7 @@ const TrainerSchedules = () => {
                         className="w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
                         placeholderText="Select a date"
                         dateFormat="yyyy-MM-dd"
-                        minDate={editId ? null : new Date()}
+                        minDate={new Date()}
                         required
                       />
                     </div>
@@ -288,82 +411,91 @@ const TrainerSchedules = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-white/10 border-b border-orange/20">
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange">Session</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Date</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Time</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange">Student</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-center">Attendance</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-orange text-right">Actions</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange">Session</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Date</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Time</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange">Student</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Attendance</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {currentItems.map((s) => (
-                  <tr key={s._id} className="hover:bg-white/5 transition-all group">
-                    <td className="px-6 py-5">
-                      <div className="font-bold text-white group-hover:text-orange transition-colors">
-                        {s.title}
-                      </div>
-                    </td>
-                    <td className="px-6 py-5 text-center">
-                      <span className="text-gray-300 text-sm font-medium">{s.date}</span>
-                    </td>
-                    <td className="px-6 py-5 text-center">
-                      <div className="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-orange font-bold text-xs">
-                        {s.time}
-                      </div>
-                    </td>
-                    <td className="px-6 py-5">
-                      {s.bookedBy ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 bg-orange/20 rounded-full flex items-center justify-center text-[10px] text-orange font-bold border border-orange/30">
-                            {s.bookedBy.name?.charAt(0)}
-                          </div>
-                          <span className="text-white font-bold text-sm tracking-tight">
-                            {s.bookedBy.name}
-                          </span>
+                {currentItems.map((s) => {
+                  const sessionDateTime = new Date(`${s.date}T${s.time || "00:00"}`);
+                  const isExpired = sessionDateTime < new Date();
+
+                  return (
+                    <tr key={s._id} className={`hover:bg-white/5 transition-all group ${isExpired && !s.bookedBy ? 'opacity-60' : ''}`}>
+                      <td className="px-6 py-5">
+                        <div className={`font-bold transition-colors ${isExpired && !s.bookedBy ? 'text-gray-500' : 'text-white group-hover:text-orange'}`}>
+                          {s.title}
                         </div>
-                      ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/5 text-gray-500 border border-white/10 uppercase tracking-widest">
-                          Available
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-5 text-center">
-                      {s.bookedBy ? (
-                        <select 
-                          value={s.attendanceStatus || 'Pending'}
-                          onChange={(e) => handleAttendance(s._id, e.target.value)}
-                          className={`text-xs font-bold px-2 py-1 rounded bg-black border border-white/20 outline-none cursor-pointer hover:border-orange transition-colors ${
-                            s.attendanceStatus === 'Attended' ? 'text-green-500' : 
-                            s.attendanceStatus === 'Absent' ? 'text-red-500' : 'text-yellow-500'
-                          }`}
-                        >
-                          <option value="Pending" className="text-yellow-500">Pending</option>
-                          <option value="Attended" className="text-green-500">Attended</option>
-                          <option value="Absent" className="text-red-500">Absent</option>
-                        </select>
-                      ) : (
-                        <span className="text-gray-700 text-xs font-black">—</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-5">
-                      <div className="flex justify-end items-center gap-4">
-                        <button 
-                          onClick={() => handleEdit(s)}
-                          className="text-orange hover:text-orange/80 text-sm font-bold transition-all"
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(s._id)}
-                          className="text-red-500 hover:text-red-400 text-sm font-bold transition-all"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-6 py-5 text-center">
+                        <span className={`${isExpired && !s.bookedBy ? 'text-gray-600' : 'text-gray-300'} text-sm font-medium`}>{s.date}</span>
+                      </td>
+                      <td className="px-6 py-5 text-center">
+                        <div className={`inline-block px-3 py-1 bg-white/5 rounded-lg border font-bold text-xs ${isExpired && !s.bookedBy ? 'text-gray-600 border-white/5' : 'text-orange border-white/10'}`}>
+                          {s.time}
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        {s.bookedBy ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-orange/20 rounded-full flex items-center justify-center text-[10px] text-orange font-bold border border-orange/30">
+                              {s.bookedBy.name?.charAt(0)}
+                            </div>
+                            <span className="text-white font-bold text-sm tracking-tight">
+                              {s.bookedBy.name}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-widest ${isExpired
+                              ? 'bg-red-500/10 text-red-500/70 border-red-500/20'
+                              : 'bg-white/5 text-gray-500 border border-white/10'
+                            }`}>
+                            {isExpired ? 'Expired' : 'Available'}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-5 text-center">
+                        {s.bookedBy ? (
+                          <select
+                            value={s.attendanceStatus || 'Pending'}
+                            onChange={(e) => handleAttendance(s._id, e.target.value)}
+                            className={`text-xs font-bold px-2 py-1 rounded bg-black border border-white/20 outline-none cursor-pointer hover:border-orange transition-colors ${s.attendanceStatus === 'Attended' ? 'text-green-500' :
+                                s.attendanceStatus === 'Absent' ? 'text-red-500' : 'text-yellow-500'
+                              }`}
+                          >
+                            <option value="Pending" className="text-yellow-500">Pending</option>
+                            <option value="Attended" className="text-green-500">Attended</option>
+                            <option value="Absent" className="text-red-500">Absent</option>
+                          </select>
+                        ) : (
+                          <span className="text-gray-700 text-xs font-black">—</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex justify-end items-center gap-4">
+                          {!isExpired && (
+                            <button
+                              onClick={() => handleEdit(s)}
+                              className="text-orange hover:text-orange/80 text-sm font-bold transition-all"
+                            >
+                              Edit
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleDelete(s._id)}
+                            className="text-red-500 hover:text-red-400 text-sm font-bold transition-all"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
 
@@ -386,11 +518,10 @@ const TrainerSchedules = () => {
                       <button
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
-                          currentPage === i + 1 
-                          ? 'bg-orange border-orange text-white shadow-[0_0_10px_rgba(255,127,17,0.3)]' 
-                          : 'bg-white/5 border-white/10 text-gray-400 hover:border-orange/50 hover:text-white'
-                        }`}
+                        className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${currentPage === i + 1
+                            ? 'bg-orange border-orange text-white shadow-[0_0_10px_rgba(255,127,17,0.3)]'
+                            : 'bg-white/5 border-white/10 text-gray-400 hover:border-orange/50 hover:text-white'
+                          }`}
                       >
                         {i + 1}
                       </button>
@@ -406,9 +537,9 @@ const TrainerSchedules = () => {
                 )}
               </div>
             )}
-          {filteredSchedules.length === 0 && (
-            <div className="text-center py-10 text-gray-500 italic">No matching sessions found.</div>
-          )}
+            {filteredSchedules.length === 0 && (
+              <div className="text-center py-10 text-gray-500 italic">No matching sessions found.</div>
+            )}
           </div>
         </div>
       </div>

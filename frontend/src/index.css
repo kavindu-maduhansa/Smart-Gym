@@ -1,8 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Global styles */
+body {
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  background-color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 /* React DatePicker Dark Theme Overrides */
 .react-datepicker {
@@ -76,6 +85,16 @@
 /* Fix width to fill container */
 .react-datepicker-wrapper {
   width: 100%;
+}
+
+/* Utility to hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* For IE and Edge */
+  scrollbar-width: none;  /* For Firefox */
 }
 
 /* Customizing the clear icon (X button) to remove the blue circle */

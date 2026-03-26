@@ -49,3 +49,75 @@ export const getMyFeedbacks = async (req, res) => {
     res.status(500).json({ message: "Error fetching feedbacks", error });
   }
 };
+
+// Get all feedbacks submitted by the logged-in student
+export const getStudentFeedbacks = async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find({ studentId: req.user.id })
+      .populate('trainerId', 'name')
+      .sort({ createdAt: -1 });
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching your feedbacks", error });
+  }
+};
+
+// Update feedback
+export const updateFeedback = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating, comment } = req.body;
+    const studentId = req.user.id;
+
+    const feedback = await Feedback.findOneAndUpdate(
+      { _id: id, studentId },
+      { rating, comment },
+      { new: true }
+    );
+
+    if (!feedback) {
+      return res.status(404).json({ message: "Feedback not found or unauthorized." });
+    }
+
+    // Recalculate trainer's avgRating
+    const feedbacks = await Feedback.find({ trainerId: feedback.trainerId });
+    const avgRating = feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length;
+    await Trainer.findOneAndUpdate(
+      { userId: feedback.trainerId },
+      { 'metrics.avgRating': avgRating }
+    );
+
+    res.status(200).json(feedback);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating feedback", error });
+  }
+};
+
+// Delete feedback
+export const deleteFeedback = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const studentId = req.user.id;
+
+    const feedback = await Feedback.findOneAndDelete({ _id: id, studentId });
+
+    if (!feedback) {
+      return res.status(404).json({ message: "Feedback not found or unauthorized." });
+    }
+
+    // Recalculate trainer's avgRating
+    const feedbacks = await Feedback.find({ trainerId: feedback.trainerId });
+    const avgRating = feedbacks.length > 0 
+      ? feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length 
+      : 0;
+    
+    await Trainer.findOneAndUpdate(
+      { userId: feedback.trainerId },
+      { 'metrics.avgRating': avgRating }
+    );
+
+    res.status(200).json({ message: "Feedback deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting feedback", error });
+  }
+};

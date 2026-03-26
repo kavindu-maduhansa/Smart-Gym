@@ -347,7 +347,7 @@ const Users = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-center">
-                            <div className="flex items-center justify-center gap-2 flex-wrap">
+                            <div className="flex items-center justify-center gap-2">
                               <button
                                 onClick={() =>
                                   navigate(`/admin/users/${user._id}`)
