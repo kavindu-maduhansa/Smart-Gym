@@ -11,8 +11,7 @@ import {
   getGymBookingRules,
   getGymSlotAnalytics,
   getGymSlotRecommendations,
-  getMyGymSlotPreferences,
-  updateMyGymSlotPreferences,
+  getPersonalizedGymSlotRecommendations,
   joinGymSlotWaitlist,
   cancelGymSlotWaitlist,
   listMyGymSlotWaitlists,
@@ -20,18 +19,22 @@ import {
   markMyGymNotificationRead,
   adminCloseGymSlot,
   adminOpenGymSlot,
-  adminPatchGymSlotCapacity,
+  adminSetGymSlotCapacity,
 } from "../controllers/gymScheduleController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/roleMiddleware.js";
+import { checkMembershipStatus } from "../middleware/membershipMiddleware.js";
 
 const router = express.Router();
 
 router.get("/booking-rules", getGymBookingRules);
 router.get("/analytics", authenticateJWT, isAdmin, getGymSlotAnalytics);
 router.get("/recommendations", authenticateJWT, getGymSlotRecommendations);
-router.get("/my-slot-preferences", authenticateJWT, getMyGymSlotPreferences);
-router.put("/my-slot-preferences", authenticateJWT, updateMyGymSlotPreferences);
+router.get(
+  "/recommendations/personalized",
+  authenticateJWT,
+  getPersonalizedGymSlotRecommendations,
+);
 router.get("/", authenticateJWT, listGymSchedules);
 router.get("/my-bookings", authenticateJWT, listMyGymSlotBookings);
 router.get("/my-waitlists", authenticateJWT, listMyGymSlotWaitlists);
@@ -45,6 +48,7 @@ router.put(
 router.post(
   "/:scheduleId/slots/:slotId/waitlist",
   authenticateJWT,
+  checkMembershipStatus,
   joinGymSlotWaitlist,
 );
 router.delete(
@@ -55,16 +59,19 @@ router.delete(
 router.post(
   "/:scheduleId/slots/:slotId/book",
   authenticateJWT,
+  checkMembershipStatus,
   bookGymSlot,
 );
 router.put(
   "/:scheduleId/slots/:slotId/book",
   authenticateJWT,
+  checkMembershipStatus,
   moveGymSlotBooking,
 );
 router.delete(
   "/:scheduleId/slots/:slotId/book",
   authenticateJWT,
+  checkMembershipStatus,
   cancelGymSlotBooking,
 );
 
@@ -80,11 +87,11 @@ router.post(
   isAdmin,
   adminOpenGymSlot,
 );
-router.patch(
+router.post(
   "/:scheduleId/slots/:slotId/capacity",
   authenticateJWT,
   isAdmin,
-  adminPatchGymSlotCapacity,
+  adminSetGymSlotCapacity,
 );
 router.post("/", authenticateJWT, isAdmin, createGymSchedule);
 router.put("/:id", authenticateJWT, isAdmin, updateGymSchedule);
