@@ -39,6 +39,11 @@ const TrainerAvailability = () => {
     fetchAvailableSchedules();
   }, []);
 
+  const jwt = typeof localStorage !== "undefined" ? readJwtPayload() : null;
+  const isStudent =
+    (typeof localStorage !== "undefined" && localStorage.getItem("role") === "student") ||
+    jwt?.role === "student";
+
 
   const [bookingId, setBookingId] = useState(null);
   const [filterTitle, setFilterTitle] = useState("");
@@ -231,16 +236,18 @@ const TrainerAvailability = () => {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => !isExpired && handleBook(s._id)}
-                    disabled={isExpired || bookingId === s._id}
-                    className={`w-full font-bold py-3.5 rounded-xl transition-all uppercase text-xs tracking-wider relative z-10 ${isExpired
-                      ? 'bg-white/5 text-gray-700 cursor-not-allowed border border-white/5 mt-auto'
-                      : 'bg-orange text-white hover:bg-orange/90 shadow-lg shadow-orange/20 active:scale-[0.96] mt-auto'
-                      }`}
-                  >
-                    {isExpired ? "Expired" : (bookingId === s._id ? "Processing..." : "Book Now")}
-                  </button>
+                  {isStudent && (
+                    <button
+                      onClick={() => !isExpired && handleBook(s._id)}
+                      disabled={isExpired || bookingId === s._id}
+                      className={`w-full font-bold py-3.5 rounded-xl transition-all uppercase text-xs tracking-wider relative z-10 ${isExpired
+                        ? 'bg-white/5 text-gray-700 cursor-not-allowed border border-white/5 mt-auto'
+                        : 'bg-orange text-white hover:bg-orange/90 shadow-lg shadow-orange/20 active:scale-[0.96] mt-auto'
+                        }`}
+                    >
+                      {isExpired ? "Expired" : (bookingId === s._id ? "Processing..." : "Book Now")}
+                    </button>
+                  )}
                 </div>
               );
             })}

@@ -110,3 +110,14 @@ body {
 .react-datepicker__close-icon:hover::after {
   color: #fb923c !important;
 }
+
+/* Print Overrides */
+@media print {
+  nav, .navbar, [class*="fixed"], header.print\:hidden {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
