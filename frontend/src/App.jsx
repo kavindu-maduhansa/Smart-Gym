@@ -11,9 +11,11 @@ import StudentDashboard from "./pages/StudentDashboard";
 import EditProfile from "./pages/EditProfile";
 import Membership from "./pages/Membership";
 import RenewMembership from "./pages/RenewMembership";
+import StudentSupplementStore from "./pages/StudentSupplementStore";
 
 // Admin Pages
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminInventoryDashboard from "./pages/AdminInventoryDashboard"; // NEW
 import AdminUsers from "./pages/AdminUsers";
 import AdminUserProfile from "./pages/AdminUserProfile";
 import Users from "./pages/Users";
@@ -23,48 +25,28 @@ import MembershipManagement from "./pages/MembershipManagement";
 import AdminRenewMembership from "./pages/AdminRenewMembership";
 import AdminRenewRequests from "./pages/AdminRenewRequests";
 import ScheduleManagement from "./pages/ScheduleManagement";
-import InventoryManagement from "./pages/InventoryManagement";
 import AdminSupplementStore from "./pages/AdminSupplementStore";
-import StudentSupplementStore from "./pages/StudentSupplementStore";
+import AddItem from "./pages/AddItem"; // AddItem page
 
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
+        {/* Public Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/about" element={<Home />} />
+        <Route path="/schedules" element={<Home />} />
+        <Route path="/contact" element={<Home />} />
 
+        {/* Student Pages */}
         <Route
           path="/profile"
           element={
             <ProtectedRoute>
               <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-users"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminUsers />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-users/:id"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminUserProfile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
             </ProtectedRoute>
           }
         />
@@ -105,6 +87,43 @@ function App() {
           element={
             <ProtectedRoute requiredRole="student">
               <StudentSupplementStore />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Pages */}
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* NEW: Inventory Dashboard */}
+        <Route
+          path="/admin/inventory-dashboard"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminInventoryDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-users"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-users/:id"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminUserProfile />
             </ProtectedRoute>
           }
         />
@@ -165,14 +184,6 @@ function App() {
           }
         />
         <Route
-          path="/admin/inventory"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <InventoryManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/admin/store"
           element={
             <ProtectedRoute requiredRole="admin">
@@ -180,11 +191,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Public pages */}
-        <Route path="/about" element={<Home />} />
-        <Route path="/schedules" element={<Home />} />
-        <Route path="/contact" element={<Home />} />
-        {/* Add more routes here as needed */}
+
+        {/* Admin Add Item Page */}
+        <Route
+          path="/admin/add-item"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AddItem />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
