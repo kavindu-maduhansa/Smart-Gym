@@ -384,9 +384,6 @@ const MembershipManagement = () => {
                     <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
-                      Account
-                    </th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
                       Action
                     </th>
@@ -437,17 +434,6 @@ const MembershipManagement = () => {
                             }`}
                           >
                             {status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                              user.isBlocked
-                                ? "bg-red-500 bg-opacity-20 text-red-300"
-                                : "bg-green-500 bg-opacity-20 text-green-300"
-                            }`}
-                          >
-                            {user.isBlocked ? "🔒 Blocked" : "✓ Active"}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center space-x-2 flex justify-center">
