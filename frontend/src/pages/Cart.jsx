@@ -89,8 +89,7 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    // Placeholder for checkout functionality
-    setMessage("Checkout functionality coming soon!");
+    navigate("/checkout");
   };
 
   if (loading) {

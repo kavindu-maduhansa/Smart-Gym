@@ -103,12 +103,20 @@ const StudentSupplementStore = () => {
                 </svg>
                 <h1 className="text-3xl sm:text-4xl font-bold text-white">Supplement Store</h1>
               </div>
-              <button
-                onClick={() => navigate("/cart")}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition"
-              >
-                🛒 View Cart
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => navigate("/my-orders")}
+                  className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-lg font-semibold transition border border-white/10"
+                >
+                  📋 My Orders
+                </button>
+                <button
+                  onClick={() => navigate("/cart")}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition shadow-lg shadow-orange-500/20"
+                >
+                  🛒 View Cart
+                </button>
+              </div>
             </div>
             <p className="text-gray-300 text-base sm:text-lg">
               Browse and purchase premium gym supplements
