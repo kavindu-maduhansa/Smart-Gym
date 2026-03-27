@@ -11,19 +11,16 @@ import {
 
 const router = express.Router();
 
-// Multer storage setup
+// Multer storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // make sure folder exists
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
+
 const upload = multer({ storage });
 
 // Routes
-router.post("/add", upload.single("image"), addItem); // 'image' is the field name
+router.post("/add", upload.single("image"), addItem);
 router.get("/", getAllItems);
 router.get("/:id", getItemById);
 router.put("/update/:id", upload.single("image"), updateItem);

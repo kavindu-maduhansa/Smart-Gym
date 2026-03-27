@@ -5,36 +5,14 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const dashboardCards = [
-    { 
-      label: "User Management", 
-      description: "View, edit and manage system users", 
-      route: "/admin/users", 
-      icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" 
-    },
-    { 
-      label: "Membership Management", 
-      description: "Renew and manage user memberships", 
-      route: "/admin/memberships", 
-      icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" 
-    },
-    { 
-      label: "Schedule Management", 
-      description: "Manage gym class schedules and sessions", 
-      route: "/admin/schedules", 
-      icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" 
-    },
-    { 
-      label: "Inventory Management", 
-      description: "Add and manage gym equipment", 
-      route: "/admin/inventory-dashboard", // <-- NOW GOES TO AdminInventoryDashboard
-      icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" 
-    },
-    { 
-      label: "Supplement Store", 
-      description: "Manage supplements and product listings", 
-      route: "/admin/store", 
-      icon: "M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" 
-    },
+    { label: "User Management", description: "View, edit and manage system users", route: "/admin/users", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
+    { label: "Membership Management", description: "Renew and manage user memberships", route: "/admin/memberships", icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" },
+    { label: "Schedule Management", description: "Manage gym class schedules and sessions", route: "/admin/schedules", icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
+    
+    // ✅ ONLY CHANGE IS HERE
+    { label: "Inventory Management", description: "Track gym equipment and stock levels", route: "/admin/inventory-dashboard", icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
+    
+    { label: "Supplement Store", description: "Manage supplements and product listings", route: "/admin/store", icon: "M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" },
   ];
 
   return (
@@ -50,6 +28,7 @@ const AdminDashboard = () => {
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          
           {/* Welcome Section */}
           <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-4">Welcome Admin</h1>
@@ -65,7 +44,8 @@ const AdminDashboard = () => {
               {dashboardCards.map((card) => (
                 <div
                   key={card.label}
-                  className="group relative backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange/20"
+                  onClick={() => navigate(card.route)}
+                  className="group relative backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange/20 cursor-pointer"
                 >
                   <div className="relative z-10">
                     <div className="flex items-start gap-4 sm:gap-6">
@@ -81,10 +61,7 @@ const AdminDashboard = () => {
                         <p className="text-xs sm:text-sm text-gray-300 mb-4 group-hover:text-gray-200 transition-colors">
                           {card.description}
                         </p>
-                        <button 
-                          onClick={() => navigate(card.route)} 
-                          className="bg-orange hover:bg-orange/90 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm"
-                        >
+                        <button className="bg-orange hover:bg-orange/90 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm">
                           Open
                         </button>
                       </div>
@@ -119,6 +96,7 @@ const AdminDashboard = () => {
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </div>

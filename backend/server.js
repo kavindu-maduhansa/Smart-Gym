@@ -1,46 +1,53 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import connectDB from "./db.js";
-
-// Routes
-import userRoutes from "./routes/userRoutes.js";
-import trainerRoutes from "./routes/trainerRoutes.js";
-import membershipRoutes from "./routes/membershipRoutes.js";
+import mongoose from "mongoose";
+import path from "path";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
 
-dotenv.config(); // Load environment variables FIRST
+// Load env variables
+dotenv.config();
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
-// Middleware
+// ================== MIDDLEWARE ==================
 app.use(cors());
 app.use(express.json());
 
-// Serve uploaded images statically
-app.use("/uploads", express.static("uploads"));
+// ================== STATIC FILES (IMAGES) ==================
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-// Routes
-app.use("/api/users", userRoutes);
-app.use("/api/trainers", trainerRoutes);
-app.use("/api/membership", membershipRoutes);
+// ================== ROUTES ==================
 app.use("/api/inventory", inventoryRoutes);
 
-// Test route
+// ================== TEST ROUTE ==================
 app.get("/", (req, res) => {
-  res.send("Smart Gym Backend is running 🏋️‍♂️");
+  res.send("Smart Gym Inventory API Running 🏋️‍♂️");
 });
 
-// 404 Handler
+// ================== 404 HANDLER ==================
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// Start server
+// ================== DATABASE CONNECTION ==================
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(
+      process.env.MONGO_URI || "mongodb://127.0.0.1:27017/inventory"
+    );
+
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error("❌ DB Connection Error:", err.message);
+    process.exit(1);
+  }
+};
+
+// ================== START SERVER ==================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+
+app.listen(PORT, async () => {
+  await connectDB();
+  console.log(`🚀 Server running on port ${PORT}`);
 });
