@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import path from "path";
+import connectDB from "./db.js";
 
 // Load env variables
 dotenv.config();
@@ -82,6 +83,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/trainer", trainerRoutes);
 app.use("/api/membership", membershipRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/inventory", inventoryRoutes);
 app.use("/api/supplements", supplementRoutes);
 app.use("/api/cart", cartRoutes);
 app.use('/api/student', studentRoutes);

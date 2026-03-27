@@ -27,6 +27,10 @@ import AdminRenewMembership from "./pages/AdminRenewMembership";
 import AdminRenewRequests from "./pages/AdminRenewRequests";
 import ScheduleManagement from "./pages/ScheduleManagement";
 import InventoryManagement from "./pages/InventoryManagement";
+import AdminInventoryDashboard from "./pages/AdminInventoryDashboard";
+import AddItem from "./pages/AddItem";
+import ManageInventory from "./pages/ManageInventory";
+import DisplayAllInventory from "./pages/DisplayAllInventory";
 import AdminSupplementStore from "./pages/AdminSupplementStore";
 import StudentSupplementStore from "./pages/StudentSupplementStore";
 import AdminContactMessages from "./pages/AdminContactMessages";
@@ -201,10 +205,34 @@ function App() {
           }
         />
         <Route
+          path="/admin/inventory-dashboard"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminInventoryDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/add-item"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AddItem />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manage"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <ManageInventory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/inventory"
           element={
             <ProtectedRoute requiredRole="admin">
-              <InventoryManagement />
+              <DisplayAllInventory />
             </ProtectedRoute>
           }
         />
