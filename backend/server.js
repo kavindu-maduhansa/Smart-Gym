@@ -33,10 +33,14 @@ app.use((req, res) => {
 // ================== DATABASE CONNECTION ==================
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(
-      process.env.MONGO_URI || "mongodb://127.0.0.1:27017/inventory"
-    );
-
+    const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/smart-gym";
+    
+    if (!process.env.MONGODB_URI) {
+      console.warn("⚠️ MONGODB_URI not set. Using local MongoDB fallback.");
+      console.warn("   Make sure MongoDB is running: mongod");
+    }
+    
+    const conn = await mongoose.connect(mongoUri);
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
     console.error("❌ DB Connection Error:", err.message);

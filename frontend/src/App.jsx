@@ -20,6 +20,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminInventoryDashboard from "./pages/AdminInventoryDashboard";
 import AddItem from "./pages/AddItem";
 import DisplayAllInventory from "./pages/DisplayAllInventory"; // ✅ NEW
+import ManageInventory from "./pages/ManageInventory"; // ✅ NEW - MANAGE & UPDATE/DELETE
 
 import Users from "./pages/Users";
 import ViewUser from "./pages/ViewUser";
@@ -58,6 +59,9 @@ function App() {
 
         {/* ✅ NEW: VIEW ALL INVENTORY */}
         <Route path="/admin/inventory" element={<ProtectedRoute requiredRole="admin"><DisplayAllInventory /></ProtectedRoute>} />
+
+        {/* ✅ NEW: MANAGE (UPDATE/DELETE) INVENTORY */}
+        <Route path="/admin/manage" element={<ProtectedRoute requiredRole="admin"><ManageInventory /></ProtectedRoute>} />
 
         {/* ================= USERS ================= */}
         <Route path="/admin/users" element={<ProtectedRoute requiredRole="admin"><Users /></ProtectedRoute>} />
