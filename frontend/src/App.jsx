@@ -263,6 +263,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminOrderManagement />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/trainer-dashboard"
