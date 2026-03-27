@@ -3,12 +3,20 @@ import TrainerSchedule from "../models/TrainerSchedule.js";
 import ChatSession from "../models/ChatSession.js";
 import User from "../models/User.js";
 import TrainerNote from "../models/TrainerNote.js";
+import {
+  validatePhone,
+  validateBio,
+  validateExperienceYears,
+  validateSpecializations,
+  validateTrainerStatus,
+  validateAvailability,
+} from "../utils/validation.js";
 
 // 1. Get all trainers for the leaderboard
 export const getLeaderboard = async (req, res) => {
     try {
         const trainers = await Trainer.find()
-            .populate('userId', 'name email') 
+            .populate('userId', 'name email')
             .sort({ 'metrics.avgRating': -1 });
         res.status(200).json(trainers);
     } catch (error) {
@@ -19,9 +27,63 @@ export const getLeaderboard = async (req, res) => {
 // 2. Create or update trainer details
 export const upsertProfile = async (req, res) => {
     try {
-        const { userId, ...updateData } = req.body;
+        const { userId, phone, bio, specializations, experienceYears, status, availability, ...rest } = req.body;
+
+        // Validate phone if provided
+        if (phone) {
+            const phoneValidation = validatePhone(phone);
+            if (!phoneValidation.valid) {
+                return res.status(400).json({ message: phoneValidation.message });
+            }
+        }
+
+        // Validate bio if provided
+        if (bio) {
+            const bioValidation = validateBio(bio);
+            if (!bioValidation.valid) {
+                return res.status(400).json({ message: bioValidation.message });
+            }
+        }
+
+        // Validate specializations if provided
+        if (specializations) {
+            const specializationsValidation = validateSpecializations(specializations);
+            if (!specializationsValidation.valid) {
+                return res.status(400).json({ message: specializationsValidation.message });
+            }
+        }
+
+        // Validate experienceYears if provided
+        if (experienceYears !== undefined) {
+            const experienceValidation = validateExperienceYears(experienceYears);
+            if (!experienceValidation.valid) {
+                return res.status(400).json({ message: experienceValidation.message });
+            }
+        }
+
+        // Validate status if provided
+        if (status) {
+            const statusValidation = validateTrainerStatus(status);
+            if (!statusValidation.valid) {
+                return res.status(400).json({ message: statusValidation.message });
+            }
+        }
+
+        // Validate availability if provided
+        if (availability) {
+            const availabilityValidation = validateAvailability(availability);
+            if (!availabilityValidation.valid) {
+                return res.status(400).json({ message: availabilityValidation.message });
+            }
+        }
+
+        const updateData = { phone, bio, specializations, experienceYears, status, availability, ...rest };
+
+        // Remove undefined values
+        Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
+
         const trainer = await Trainer.findOneAndUpdate(
-            { userId }, 
+            { userId },
             updateData,
             { new: true, upsert: true }
         );
@@ -50,8 +112,8 @@ export const addSchedule = async (req, res) => {
         for (const session of daySessions) {
             const existingTimeMins = timeToMinutes(session.time);
             if (Math.abs(newTimeMins - existingTimeMins) < 60) {
-                return res.status(400).json({ 
-                    message: `Conflict! This overlaps with your "${session.title}" session at ${session.time}. Sessions are 1 hour long.` 
+                return res.status(400).json({
+                    message: `Conflict! This overlaps with your "${session.title}" session at ${session.time}. Sessions are 1 hour long.`
                 });
             }
         }
@@ -60,7 +122,7 @@ export const addSchedule = async (req, res) => {
             title,
             date,
             time,
-            trainer: trainerId 
+            trainer: trainerId
         });
         res.status(201).json(schedule);
     } catch (error) {
@@ -72,7 +134,7 @@ export const addSchedule = async (req, res) => {
 export const getMySchedules = async (req, res) => {
     try {
         const schedules = await TrainerSchedule.find({ trainer: req.user.id })
-            .populate('bookedBy', 'name'); 
+            .populate('bookedBy', 'name');
         res.status(200).json(schedules);
     } catch (error) {
         res.status(500).json({ message: "Error fetching schedules", error });
@@ -84,7 +146,7 @@ export const deleteSchedule = async (req, res) => {
     try {
         const schedule = await TrainerSchedule.findById(req.params.id);
         if (!schedule) return res.status(404).json({ message: "Not found" });
-        
+
         if (schedule.trainer.toString() !== req.user.id) {
             return res.status(401).json({ message: "Not authorized" });
         }
@@ -102,9 +164,9 @@ export const updateSchedule = async (req, res) => {
         const { title, date, time } = req.body;
         const trainerId = req.user.id;
         const schedule = await TrainerSchedule.findById(req.params.id);
-        
+
         if (!schedule) return res.status(404).json({ message: "Schedule not found" });
-        
+
         if (schedule.trainer.toString() !== trainerId) {
             return res.status(401).json({ message: "Not authorized" });
         }
@@ -115,8 +177,8 @@ export const updateSchedule = async (req, res) => {
             const checkTime = time || schedule.time;
             const newTimeMins = timeToMinutes(checkTime);
 
-            const daySessions = await TrainerSchedule.find({ 
-                trainer: trainerId, 
+            const daySessions = await TrainerSchedule.find({
+                trainer: trainerId,
                 date: checkDate,
                 _id: { $ne: req.params.id }
             });
@@ -124,8 +186,8 @@ export const updateSchedule = async (req, res) => {
             for (const sess of daySessions) {
                 const existingTimeMins = timeToMinutes(sess.time);
                 if (Math.abs(newTimeMins - existingTimeMins) < 60) {
-                    return res.status(400).json({ 
-                        message: `Conflict! This overlaps with your "${sess.title}" session at ${sess.time}.` 
+                    return res.status(400).json({
+                        message: `Conflict! This overlaps with your "${sess.title}" session at ${sess.time}.`
                     });
                 }
             }
@@ -147,9 +209,9 @@ export const updateAttendance = async (req, res) => {
     try {
         const { attendanceStatus } = req.body;
         const schedule = await TrainerSchedule.findById(req.params.id);
-        
+
         if (!schedule) return res.status(404).json({ message: "Schedule not found" });
-        
+
         if (schedule.trainer.toString() !== req.user.id) {
             return res.status(401).json({ message: "Not authorized" });
         }
@@ -188,17 +250,17 @@ export const getAssignedStudents = async (req, res) => {
             if (!studentMap.has(studentIdStr)) {
                 // Fetch the latest goal from ChatSession
                 const chatSession = await ChatSession.findOne({ userId: student._id }).sort({ updatedAt: -1 }).lean();
-                
+
                 // Fetch the last workout (most recent attended session)
-                const lastWorkout = await TrainerSchedule.findOne({ 
-                    bookedBy: student._id, 
-                    attendanceStatus: 'Attended' 
+                const lastWorkout = await TrainerSchedule.findOne({
+                    bookedBy: student._id,
+                    attendanceStatus: 'Attended'
                 }).sort({ date: -1, time: -1 }).lean();
 
                 // Calculate relative monthly progress (based on membership started date)
                 const registrationDate = new Date(student.createdAt);
                 const now = new Date();
-                
+
                 // Determine the start of the current membership month
                 let startOfPeriod = new Date(now.getFullYear(), now.getMonth(), registrationDate.getDate());
                 if (startOfPeriod > now) {
@@ -207,8 +269,8 @@ export const getAssignedStudents = async (req, res) => {
                 startOfPeriod.setHours(0, 0, 0, 0);
                 const startOfPeriodStr = startOfPeriod.toISOString().split('T')[0];
 
-                const attendedSessionsCount = await TrainerSchedule.countDocuments({ 
-                    bookedBy: student._id, 
+                const attendedSessionsCount = await TrainerSchedule.countDocuments({
+                    bookedBy: student._id,
                     attendanceStatus: 'Attended',
                     date: { $gte: startOfPeriodStr }
                 });
@@ -255,10 +317,10 @@ export const updateStudentNote = async (req, res) => {
             { new: true, upsert: true }
         );
 
-        res.status(200).json({ 
-            message: "Roster data updated successfully", 
+        res.status(200).json({
+            message: "Roster data updated successfully",
             note: updatedNote.note,
-            progress: updatedNote.progress 
+            progress: updatedNote.progress
         });
     } catch (error) {
         console.error("Error updating student data:", error);

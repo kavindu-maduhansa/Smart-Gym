@@ -227,10 +227,10 @@ const AdminRenewRequests = () => {
           ) : (
             <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
               {/* Desktop Table View */}
-              <div className="hidden md:block overflow-x-auto">
+              <div className="hidden md:block overflow-x-auto max-h-[600px] overflow-y-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="backdrop-blur-md bg-white/10 border-b border-white/20">
+                    <tr className="backdrop-blur-md bg-white/10 border-b border-white/20 sticky top-0 z-10">
                       <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
                         User Name
                       </th>

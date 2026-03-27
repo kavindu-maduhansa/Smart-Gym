@@ -362,9 +362,9 @@ const MembershipManagement = () => {
               No memberships found for the selected filter.
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-gray-700">
+                <thead className="bg-gray-700 sticky top-0 z-10">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
                       User Name
@@ -534,9 +534,9 @@ const MembershipManagement = () => {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-gray-700">
+                <thead className="bg-gray-700 sticky top-0 z-10">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
                       User Name

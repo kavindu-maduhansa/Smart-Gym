@@ -281,66 +281,76 @@ const Users = () => {
                 No users found.
               </div>
             ) : (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="backdrop-blur-md bg-white/10 border-b border-white/20">
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                    <tr className="bg-gradient-to-r from-gray-800/90 to-gray-700/80 backdrop-blur-md sticky top-0 z-10">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Name
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Role
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Membership Type
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Membership Expiry
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {users.map((user) => {
+                  <tbody className="divide-y divide-white/5">
+                    {users.map((user, index) => {
                       const status = getMembershipStatus(user.membershipExpiry);
                       return (
                         <tr
                           key={user._id}
-                          className="hover:bg-white/5 transition-colors"
+                          className={`${
+                            index % 2 === 0 
+                              ? 'bg-gradient-to-r from-gray-800/40 to-gray-700/30' 
+                              : 'bg-gradient-to-r from-gray-800/20 to-gray-700/15'
+                          } hover:from-gray-700/50 hover:to-gray-600/40 transition-all duration-200`}
                         >
-                          <td className="px-6 py-4 whitespace-nowrap text-white text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-white text-sm font-medium">
                             {user.name}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-gray-300 text-sm">
                             {user.email}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-300 capitalize">
+                            <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                              user.role === 'admin' 
+                                ? 'bg-blue-600/80 text-white' 
+                                : user.role === 'trainer'
+                                ? 'bg-blue-500/80 text-white'
+                                : 'bg-blue-400/80 text-white'
+                            }`}>
                               {user.role}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-300 text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm">
                             {user.membershipType || "None"}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-300 text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm">
                             {formatDate(user.membershipExpiry)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span
                               className={`px-3 py-1 text-xs font-semibold rounded-full ${
                                 status === "Active"
-                                  ? "bg-green-500/20 text-green-300"
+                                  ? "bg-green-500/80 text-white"
                                   : status === "Expired"
-                                    ? "bg-red-500/20 text-red-300"
-                                    : "bg-gray-500/20 text-gray-300"
+                                    ? "bg-red-500/80 text-white"
+                                    : "bg-gray-500/80 text-white"
                               }`}
                             >
                               {status}
@@ -352,7 +362,7 @@ const Users = () => {
                                 onClick={() =>
                                   navigate(`/admin/users/${user._id}`)
                                 }
-                                className="bg-blue-600/20 border border-blue-500/50 hover:bg-blue-600/30 text-blue-200 px-3 py-1 rounded text-xs font-semibold transition-all duration-300"
+                                className="bg-blue-600/80 border border-blue-500/50 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
                               >
                                 View
                               </button>
@@ -360,13 +370,13 @@ const Users = () => {
                                 onClick={() =>
                                   navigate(`/admin/users/edit/${user._id}`)
                                 }
-                                className="bg-orange/20 border border-orange/50 hover:bg-orange/30 text-orange px-3 py-1 rounded text-xs font-semibold transition-all duration-300"
+                                className="bg-orange/80 border border-orange/50 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
                               >
                                 Edit
                               </button>
                               <button
                                 onClick={() => handleDelete(user._id, user.name)}
-                                className="bg-red-600/20 border border-red-500/50 hover:bg-red-600/30 text-red-200 px-3 py-1 rounded text-xs font-semibold transition-all duration-300"
+                                className="bg-red-600/80 border border-red-500/50 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
                               >
                                 Delete
                               </button>
