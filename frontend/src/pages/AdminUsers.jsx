@@ -508,45 +508,56 @@ const AdminUsers = () => {
                 {error}
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-white">
-                  <thead>
-                    <tr className="backdrop-blur-md bg-white/10 border-b border-white/20">
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+                  <table className="w-full text-white">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-gray-800/90 to-gray-700/80 backdrop-blur-md sticky top-0 z-10">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Name
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Role
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Membership Expiry
                       </th>
-                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {users.map((user) => (
+                  <tbody className="divide-y divide-white/5">
+                    {users.map((user, index) => (
                       <tr
                         key={user._id}
-                        className="hover:bg-white/5 transition-colors"
+                        className={`${
+                          index % 2 === 0 
+                            ? 'bg-gradient-to-r from-gray-800/40 to-gray-700/30' 
+                            : 'bg-gradient-to-r from-gray-800/20 to-gray-700/15'
+                        } hover:from-gray-700/50 hover:to-gray-600/40 transition-all duration-200`}
                       >
-                        <td className="px-6 py-4 text-sm whitespace-nowrap">
+                        <td className="px-6 py-4 text-sm whitespace-nowrap font-medium">
                           {user.name}
                         </td>
                         <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
                           {user.email}
                         </td>
                         <td className="px-6 py-4 text-sm whitespace-nowrap capitalize">
-                          <span className="bg-orange/20 text-orange px-3 py-1 rounded-full text-xs font-semibold">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            user.role === 'admin' 
+                              ? 'bg-blue-600/80 text-white' 
+                              : user.role === 'trainer'
+                              ? 'bg-blue-500/80 text-white'
+                              : 'bg-blue-400/80 text-white'
+                          }`}>
                             {user.role}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm whitespace-nowrap">
+                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-200">
                           {user.membershipExpiry ? (
                             new Date(user.membershipExpiry).toLocaleDateString()
                           ) : (
@@ -554,21 +565,74 @@ const AdminUsers = () => {
                           )}
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <button
-                            className="bg-orange hover:bg-orange/90 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
-                            onClick={() => {
-                              setProfileUser(user);
-                              setShowProfileModal(true);
-                            }}
-                          >
-                            View
-                          </button>
+                          <div className="flex gap-2 justify-center">
+                            <button
+                              className="bg-blue-600/80 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-blue-500/50"
+                              onClick={() => {
+                                setProfileUser(user);
+                                setShowProfileModal(true);
+                              }}
+                            >
+                              View
+                            </button>
+                            <button
+                              className="bg-orange/80 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-orange/50"
+                              onClick={() => {
+                                setUpdateUser(user);
+                                setUpdateForm({
+                                  name: user.name,
+                                  email: user.email,
+                                  role: user.role,
+                                });
+                                setShowUpdateModal(true);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="bg-red-600/80 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-red-500/50"
+                              onClick={async () => {
+                                if (
+                                  !window.confirm(
+                                    `Are you sure you want to delete ${user.name}?`,
+                                  )
+                                )
+                                  return;
+                                try {
+                                  const token = localStorage.getItem("token");
+                                  await axios.delete(
+                                    `http://localhost:5000/api/users/${user._id}`,
+                                    {
+                                      headers: { Authorization: `Bearer ${token}` },
+                                    },
+                                  );
+                                  setUsers((prev) =>
+                                    prev.filter((u) => u._id !== user._id),
+                                  );
+                                  setNotification(
+                                    `User '${user.name}' deleted successfully.`,
+                                  );
+                                } catch (err) {
+                                  setNotification(
+                                    err.response &&
+                                      err.response.data &&
+                                      err.response.data.message
+                                      ? err.response.data.message
+                                      : `Failed to delete user '${user.name}'.`,
+                                  );
+                                }
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+            </div>
             )}
           </div>
         </div>

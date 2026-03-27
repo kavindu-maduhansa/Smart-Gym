@@ -1,15 +1,13 @@
-
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import path from "path";
-import connectDB from "./db.js";
 
 // Load env variables
 dotenv.config();
 
-// Import routes (only those that exist)
+// Import all routes
 import inventoryRoutes from "./routes/inventoryRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
@@ -24,8 +22,6 @@ import chatRoutes from "./routes/chatRoutes.js";
 import planRoutes from "./routes/planRoutes.js";
 import gymScheduleRoutes from "./routes/gymScheduleRoutes.js";
 
-const app = express();
-
 // Validate required environment variables
 const requiredEnvVars = ["JWT_SECRET", "MONGODB_URI"];
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
@@ -37,20 +33,9 @@ if (missingEnvVars.length > 0) {
   process.exit(1);
 }
 
-// Connect to MongoDB with error handling
-const startServer = async () => {
-  try {
-    await connectDB();
-    console.log("Database connection established successfully.");
-  } catch (error) {
-    console.error("Failed to start server:", error.message);
-    process.exit(1);
-  }
-};
+const app = express();
 
-startServer();
-
-// Middleware
+// ================== MIDDLEWARE ==================
 // Configure CORS with allowed origins
 const corsOptions = {
   origin: function (origin, callback) {
@@ -78,12 +63,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// User registration and related routes
+// ================== STATIC FILES (IMAGES) ==================
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// ================== ROUTES ==================
+// User and system routes
 app.use("/api/users", userRoutes);
 app.use("/api/trainer", trainerRoutes);
 app.use("/api/membership", membershipRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/inventory", inventoryRoutes);
 app.use("/api/supplements", supplementRoutes);
 app.use("/api/cart", cartRoutes);
 app.use('/api/student', studentRoutes);
@@ -92,16 +80,24 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/gym-schedules", gymScheduleRoutes);
 
+// Inventory routes
+app.use("/api/inventory", inventoryRoutes);
+
 // Smart Gym chatbot + booking integration endpoints:
 // POST /chat, GET /get-slots, POST /book-slot, POST /cancel-slot
 app.use("/", chatRoutes);
 
-// Test route
+// ================== TEST ROUTE ==================
 app.get("/", (req, res) => {
-  res.send("Smart Gym Backend is running 🏋️‍♂️");
+  res.send("Smart Gym API Running 🏋️‍♂️");
 });
 
-// Global error handler
+// ================== 404 HANDLER ==================
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// ================== GLOBAL ERROR HANDLER ==================
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({
@@ -110,16 +106,47 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} 🚀`);
-  const allowedOrigins = ['http://localhost:5173', process.env.FRONTEND_URL].filter(Boolean);
-  console.log(`CORS enabled for: ${allowedOrigins.join(', ')}`);
-});
+// ================== DATABASE CONNECTION ==================
+const connectDB = async () => {
+  try {
+    const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/smart-gym";
 
-// Handle server errors
-server.on("error", (error) => {
-  console.error("Server error:", error);
-  process.exit(1);
-});
+    if (!process.env.MONGODB_URI) {
+      console.warn("⚠️ MONGODB_URI not set. Using local MongoDB fallback.");
+      console.warn("   Make sure MongoDB is running: mongod");
+    }
+
+    const conn = await mongoose.connect(mongoUri);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error("❌ DB Connection Error:", err.message);
+    process.exit(1);
+  }
+};
+
+// ================== START SERVER ==================
+const PORT = process.env.PORT || 5000;
+
+const startServer = async () => {
+  try {
+    await connectDB();
+    console.log("Database connection established successfully.");
+
+    const server = app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      const allowedOrigins = ['http://localhost:5173', process.env.FRONTEND_URL].filter(Boolean);
+      console.log(`CORS enabled for: ${allowedOrigins.join(', ')}`);
+    });
+
+    // Handle server errors
+    server.on("error", (error) => {
+      console.error("Server error:", error);
+      process.exit(1);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
