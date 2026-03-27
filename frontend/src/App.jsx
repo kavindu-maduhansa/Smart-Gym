@@ -14,6 +14,9 @@ import EditProfile from "./pages/EditProfile";
 import Membership from "./pages/Membership";
 import RenewMembership from "./pages/RenewMembership";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import MyOrders from "./pages/MyOrders";
+import AdminOrderManagement from "./pages/AdminOrderManagement";
 
 // Admin Pages
 import AdminDashboard from "./pages/AdminDashboard";
@@ -144,6 +147,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+<Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-orders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin/users"
           element={
@@ -197,6 +216,14 @@ function App() {
           element={
             <ProtectedRoute requiredRole="admin">
               <ScheduleManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminOrderManagement />
             </ProtectedRoute>
           }
         />
