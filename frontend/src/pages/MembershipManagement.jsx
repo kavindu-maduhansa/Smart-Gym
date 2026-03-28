@@ -364,7 +364,7 @@ const MembershipManagement = () => {
           ) : (
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-slate-100 sticky top-0 z-10">
+                <thead className="bg-gray-200/80 sticky top-0 z-10 border-b-2 border-gray-300">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       User Name
@@ -384,19 +384,19 @@ const MembershipManagement = () => {
                     <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-slate-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Action
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-gray-300/50">
                   {filteredUsers.map((user) => {
                     const status = getMembershipStatus(user.membershipExpiry);
                     const daysLeft = getDaysRemaining(user.membershipExpiry);
                     return (
                       <tr
                         key={user._id}
-                        className="hover:bg-slate-100 hover:bg-opacity-50 transition-colors duration-150"
+                        className="bg-white hover:bg-gray-50 transition-colors duration-150"
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-slate-900">
                           {user.name}
@@ -412,12 +412,12 @@ const MembershipManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`font-semibold ${
+                            className={`px-3 py-1 text-xs font-semibold rounded-lg ${
                               daysLeft === 0
-                                ? "text-red-400"
+                                ? "text-red-700 bg-red-200/50"
                                 : daysLeft <= 7
-                                  ? "text-yellow-400"
-                                  : "text-green-400"
+                                  ? "text-yellow-700 bg-yellow-200/50"
+                                  : "text-green-700 bg-green-200/50"
                             }`}
                           >
                             {daysLeft} days
@@ -425,37 +425,25 @@ const MembershipManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                            className={`px-3 py-1 text-xs font-semibold rounded-lg ${
                               status === "Active"
-                                ? "bg-green-500 bg-opacity-20 text-green-300"
+                                ? "bg-green-200/50 text-green-700"
                                 : status === "Expired"
-                                  ? "bg-red-500 bg-opacity-20 text-red-300"
-                                  : "bg-gray-500 bg-opacity-20 text-slate-700"
+                                  ? "bg-red-200/50 text-red-700"
+                                  : "bg-gray-200/50 text-slate-700"
                             }`}
                           >
                             {status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center space-x-2 flex justify-center">
+                        <td className="px-6 py-4 whitespace-nowrap text-left">
+                          <div className="flex gap-2">
                           <button
                             onClick={() =>
                               navigate(`/admin/memberships/renew/${user._id}`)
                             }
-                            className="bg-blue-600 hover:bg-blue-700 text-slate-900 px-3 py-2 rounded text-sm font-semibold transition-colors duration-200 inline-flex items-center"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                           >
-                            <svg
-                              className="w-4 h-4 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                              />
-                            </svg>
                             Renew
                           </button>
                           <button
@@ -463,43 +451,17 @@ const MembershipManagement = () => {
                             disabled={blockingUserId === user._id}
                             className={`${
                               user.isBlocked
-                                ? "bg-green-600 hover:bg-green-700 text-slate-900"
-                                : "bg-red-600 hover:bg-red-700 text-slate-900"
-                            } px-3 py-2 rounded text-sm font-semibold transition-colors duration-200 inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed`}
+                                ? "bg-green-600 hover:bg-green-700"
+                                : "bg-red-600 hover:bg-red-700"
+                            } text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
                           >
-                            {blockingUserId === user._id ? (
-                              <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-1"></div>
-                                Updating...
-                              </>
-                            ) : user.isBlocked ? (
-                              <>
-                                <svg
-                                  className="w-4 h-4 mr-1"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M13 7H7v6h6V7z" />
-                                </svg>
-                                Unlock
-                              </>
-                            ) : (
-                              <>
-                                <svg
-                                  className="w-4 h-4 mr-1"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                                Block
-                              </>
-                            )}
+                            {blockingUserId === user._id
+                              ? "..."
+                              : user.isBlocked
+                                ? "Unlock"
+                                : "Block"}
                           </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -536,7 +498,7 @@ const MembershipManagement = () => {
           ) : (
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-slate-100 sticky top-0 z-10">
+                <thead className="bg-gray-200/80 sticky top-0 z-10 border-b-2 border-gray-300">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       User Name
@@ -556,16 +518,16 @@ const MembershipManagement = () => {
                     <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-slate-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-gray-300/50">
                   {requests.map((request) => (
                     <tr
                       key={request._id}
-                      className="hover:bg-slate-100 hover:bg-opacity-30 transition-colors"
+                      className="bg-white hover:bg-gray-50 transition-colors duration-150"
                     >
                       <td className="px-6 py-4 text-slate-900 font-medium">
                         {request.userName}
@@ -585,40 +547,26 @@ const MembershipManagement = () => {
                       <td className="px-6 py-4">
                         {getStatusBadge(request.status)}
                       </td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-6 py-4 text-left">
                         {request.status === "pending" ? (
-                          <div className="flex gap-2 justify-center">
+                          <div className="flex gap-2">
                             <button
                               onClick={() => handleApproveRequest(request._id)}
                               disabled={processingRequestId === request._id}
-                              className="bg-green-600 hover:bg-green-700 text-slate-900 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center"
+                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {processingRequestId === request._id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                                  ...
-                                </>
-                              ) : (
-                                "Approve"
-                              )}
+                              {processingRequestId === request._id ? "..." : "Approve"}
                             </button>
                             <button
                               onClick={() => handleRejectRequest(request._id)}
                               disabled={processingRequestId === request._id}
-                              className="bg-red-600 hover:bg-red-700 text-slate-900 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center"
+                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {processingRequestId === request._id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                                  ...
-                                </>
-                              ) : (
-                                "Reject"
-                              )}
+                              {processingRequestId === request._id ? "..." : "Reject"}
                             </button>
                           </div>
                         ) : (
-                          <span className="text-slate-500 text-sm italic">
+                          <span className="text-slate-500 text-xs italic">
                             No actions available
                           </span>
                         )}
