@@ -315,8 +315,8 @@ const Users = () => {
                         <tr
                           key={user._id}
                           className={`${
-                            index % 2 === 0 
-                              ? 'bg-gradient-to-r from-gray-800/40 to-gray-700/30' 
+                            index % 2 === 0
+                              ? 'bg-gradient-to-r from-gray-800/40 to-gray-700/30'
                               : 'bg-gradient-to-r from-gray-800/20 to-gray-700/15'
                           } hover:from-gray-700/50 hover:to-gray-600/40 transition-all duration-200`}
                         >
@@ -328,8 +328,8 @@ const Users = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                              user.role === 'admin' 
-                                ? 'bg-blue-600/80 text-white' 
+                              user.role === 'admin'
+                                ? 'bg-blue-600/80 text-white'
                                 : user.role === 'trainer'
                                 ? 'bg-blue-500/80 text-white'
                                 : 'bg-blue-400/80 text-white'
