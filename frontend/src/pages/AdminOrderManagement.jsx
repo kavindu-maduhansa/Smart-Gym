@@ -85,7 +85,7 @@ const AdminOrderManagement = () => {
                 Back to Dashboard
               </button>
             </div>
-            <p className="text-slate-700 text-base sm:text-lg tracking-wide text-xs opacity-70">View Orders</p>
+            <p className="text-slate-700 text-base sm:text-lg tracking-wide opacity-70">View Orders</p>
           </div>
 
           {/* Filters */}
