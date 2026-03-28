@@ -45,7 +45,7 @@ const FormModal = ({ isOpen, title, fields, onSubmit, onClose, submitText = "Sub
         {fields.map((field) => (
           <div key={field.name}>
             {/* LABEL */}
-            <label className="block text-sm font-semibold text-gray-200 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               {field.label}
             </label>
 
@@ -57,7 +57,7 @@ const FormModal = ({ isOpen, title, fields, onSubmit, onClose, submitText = "Sub
                 value={formData[field.name]}
                 onChange={handleChange}
                 placeholder={field.placeholder}
-                className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition"
+                className="w-full p-3 rounded-lg bg-slate-50 text-slate-900 border border-slate-300 focus:border-blue-600 focus:outline-none transition"
                 disabled={field.disabled}
               />
             ) : field.type === "select" ? (
@@ -66,7 +66,7 @@ const FormModal = ({ isOpen, title, fields, onSubmit, onClose, submitText = "Sub
                 name={field.name}
                 value={formData[field.name]}
                 onChange={handleChange}
-                className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition"
+                className="w-full p-3 rounded-lg bg-slate-50 text-slate-900 border border-slate-300 focus:border-blue-600 focus:outline-none transition"
                 disabled={field.disabled}
               >
                 {field.options?.map((opt) => (
@@ -83,7 +83,7 @@ const FormModal = ({ isOpen, title, fields, onSubmit, onClose, submitText = "Sub
                 onChange={handleChange}
                 placeholder={field.placeholder}
                 rows={field.rows || 4}
-                className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition resize-none"
+                className="w-full p-3 rounded-lg bg-slate-50 text-slate-900 border border-slate-300 focus:border-blue-600 focus:outline-none transition resize-none"
                 disabled={field.disabled}
               />
             ) : field.type === "checkbox" ? (
@@ -94,16 +94,16 @@ const FormModal = ({ isOpen, title, fields, onSubmit, onClose, submitText = "Sub
                   name={field.name}
                   checked={formData[field.name]}
                   onChange={handleChange}
-                  className="w-4 h-4 rounded accent-orange-500 cursor-pointer"
+                  className="w-4 h-4 rounded accent-blue-600 cursor-pointer"
                   disabled={field.disabled}
                 />
-                <span className="ml-3 text-gray-300">{field.checkboxLabel}</span>
+                <span className="ml-3 text-slate-700">{field.checkboxLabel}</span>
               </div>
             ) : null}
 
             {/* HELPER TEXT */}
             {field.helperText && (
-              <p className="text-xs text-gray-400 mt-1">{field.helperText}</p>
+              <p className="text-xs text-slate-500 mt-1">{field.helperText}</p>
             )}
           </div>
         ))}

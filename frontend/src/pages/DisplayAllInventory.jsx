@@ -71,7 +71,7 @@ function DisplayAllInventory() {
 
   return (
     <div
-      className="min-h-screen text-white flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
+      className="min-h-screen text-slate-900 flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
       style={{
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(20, 24, 36, 0.7) 100%), url('${gymBg}')`,
         backgroundSize: "cover",
@@ -125,14 +125,14 @@ function DisplayAllInventory() {
 
       <div className={`relative z-10 flex flex-col min-h-screen ${isTransitioning ? "transitioning-out" : ""}`}>
         {/* ================= HEADER ================= */}
-        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#141824]/95 via-[#141824]/90 to-[#1a1f2e]/90 backdrop-blur-xl border-b border-orange-500/30 shadow-xl">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">
+        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#DBEAFE]/95 via-[#DBEAFE]/90 to-[#BFDBFE]/90 backdrop-blur-xl border-b border-blue-600/30 shadow-xl">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600-400 to-blue-600-500 bg-clip-text text-transparent">
             📦 All Inventory
           </h1>
 
           <button
             onClick={handleNavigation}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-orange-500/30 hover:to-orange-600/30 px-6 py-2 rounded-lg font-semibold border border-orange-400/20 transition duration-300 transform hover:scale-105"
+            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600-500/30 hover:to-blue-600/30 px-6 py-2 rounded-lg font-semibold border border-blue-500/20 transition duration-300 transform hover:scale-105"
           >
             ← Back
           </button>
@@ -151,14 +151,14 @@ function DisplayAllInventory() {
                     placeholder="🔎 Search items..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg bg-orange-500/20 text-white border-2 border-orange-400/50 focus:border-orange-500 focus:outline-none transition duration-300 backdrop-blur-md placeholder-orange-200/60 text-sm font-medium hover:bg-orange-500/25 hover:border-orange-400/70"
+                    className="w-full px-4 py-2.5 rounded-lg bg-blue-600/20 text-slate-900 border-2 border-blue-500/50 focus:border-blue-600 focus:outline-none transition duration-300 backdrop-blur-md placeholder-slate-400-200/60 text-sm font-medium hover:bg-blue-600/25 hover:border-blue-500/70"
                   />
                   
                   {/* Clear button */}
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-300 hover:text-orange-500 transition text-xs"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-600 transition text-xs"
                     >
                       ✕
                     </button>
@@ -174,8 +174,8 @@ function DisplayAllInventory() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-5 py-2 rounded-full font-semibold text-sm transition duration-300 transform hover:scale-105 ${
                       selectedCategory === cat
-                        ? "bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg shadow-orange-500/50 text-white scale-105"
-                        : "bg-gradient-to-r from-gray-700/50 to-gray-600/50 border border-gray-500/40 hover:border-orange-400/60 text-gray-300 hover:text-white"
+                        ? "bg-gradient-to-r from-blue-600-500 to-blue-600 shadow-lg shadow-blue-600/50 text-slate-900 scale-105"
+                        : "bg-gradient-to-r from-gray-700/50 to-gray-600/50 border border-gray-500/40 hover:border-blue-500/60 text-slate-700 hover:text-slate-900"
                     }`}
                   >
                     {cat === "Cardio" && "🏃 "}
@@ -187,8 +187,8 @@ function DisplayAllInventory() {
               </div>
 
               {/* Results Count */}
-              <div className="text-sm text-gray-400 font-medium">
-                📊 Found <span className="text-orange-400 font-bold">{filteredItems.length}</span> item{filteredItems.length !== 1 ? "s" : ""}
+              <div className="text-sm text-slate-500 font-medium">
+                📊 Found <span className="text-blue-500 font-bold">{filteredItems.length}</span> item{filteredItems.length !== 1 ? "s" : ""}
               </div>
             </div>
 
@@ -197,8 +197,8 @@ function DisplayAllInventory() {
               <div className="flex items-center justify-center py-32">
                 <div className="text-center">
                   <div className="text-6xl mb-4">📭</div>
-                  <p className="text-gray-300 text-lg font-semibold mb-2">No items found</p>
-                  <p className="text-gray-500 text-sm">Try adjusting your search or filters</p>
+                  <p className="text-slate-700 text-lg font-semibold mb-2">No items found</p>
+                  <p className="text-slate-600 text-sm">Try adjusting your search or filters</p>
                 </div>
               </div>
             ) : (
@@ -206,10 +206,10 @@ function DisplayAllInventory() {
                 {filteredItems.map((item) => (
                   <div
                     key={item._id}
-                    className="group relative bg-gradient-to-br from-[#1a1f2e]/90 via-[#141824]/85 to-[#0f1117]/95 backdrop-blur-xl p-6 rounded-3xl border border-orange-400/25 shadow-2xl hover:shadow-3xl hover:shadow-orange-500/40 hover:border-orange-400/60 transition duration-500 transform hover:-translate-y-3 overflow-hidden"
+                    className="group relative bg-gradient-to-br from-[#BFDBFE]/90 via-[#DBEAFE]/85 to-[#DBEAFE]/95 backdrop-blur-xl p-6 rounded-3xl border border-blue-500/25 shadow-2xl hover:shadow-3xl hover:shadow-blue-600/40 hover:border-blue-500/60 transition duration-500 transform hover:-translate-y-3 overflow-hidden"
                   >
                     {/* ANIMATED BACKGROUND GLOW */}
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600/0 via-orange-500/0 to-orange-600/0 group-hover:from-orange-600/20 group-hover:via-orange-500/20 group-hover:to-orange-600/20 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500 blur-xl -z-10"></div>
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600/0 via-blue-600-500/0 to-blue-600/0 group-hover:from-blue-600/20 group-hover:via-blue-600-500/20 group-hover:to-blue-600/20 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500 blur-xl -z-10"></div>
 
                     {/* IMAGE SECTION */}
                     {item.image && (
@@ -220,7 +220,7 @@ function DisplayAllInventory() {
                           className="w-full h-full object-cover group-hover:scale-125 transition duration-500"
                         />
                         {/* GRADIENT OVERLAY */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-blue-50/60 via-transparent to-blue-50/20 opacity-0 group-hover:opacity-100 transition duration-500"></div>
                         
                         {/* CONDITION BADGE ON IMAGE */}
                         <div className={`absolute top-3 right-3 px-4 py-2 rounded-full bg-gradient-to-r ${getConditionColor(item.condition)} border backdrop-blur-md font-bold text-sm`}>
@@ -230,7 +230,7 @@ function DisplayAllInventory() {
                     )}
 
                     {/* ITEM NAME - HIGHLIGHTED */}
-                    <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-orange-500 group-hover:bg-clip-text transition duration-300">
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600-400 group-hover:to-blue-600-500 group-hover:bg-clip-text transition duration-300">
                       {item.itemName}
                     </h3>
 
@@ -245,28 +245,28 @@ function DisplayAllInventory() {
                     </div>
 
                     {/* DIVIDER */}
-                    <div className="h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mb-4"></div>
+                    <div className="h-px bg-gradient-to-r from-transparent via-blue-600-400/30 to-transparent mb-4"></div>
 
                     {/* DETAILS SECTION */}
                     <div className="space-y-3">
                       {/* Stock Info */}
-                      <div className="p-3 rounded-lg bg-orange-500/10 border border-orange-400/20 hover:border-orange-400/40 transition">
-                        <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest">Stock</p>
-                        <p className="text-2xl font-bold text-orange-400 mt-1">{item.quantity}</p>
+                      <div className="p-3 rounded-lg bg-blue-600/10 border border-blue-500/20 hover:border-blue-500/40 transition">
+                        <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Stock</p>
+                        <p className="text-2xl font-bold text-blue-500 mt-1">{item.quantity}</p>
                       </div>
 
                       {/* Supplier */}
                       {item.supplier && (
                         <div className="p-3 rounded-lg bg-gradient-to-r from-gray-700/30 to-gray-600/20 border border-gray-500/20">
-                          <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest">Supplier</p>
-                          <p className="text-sm text-gray-200 mt-1 font-medium truncate">{item.supplier}</p>
+                          <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Supplier</p>
+                          <p className="text-sm text-slate-800 mt-1 font-medium truncate">{item.supplier}</p>
                         </div>
                       )}
 
                       {/* Purchase Date */}
                       {item.purchaseDate && (
                         <div className="p-3 rounded-lg bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-400/20">
-                          <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest">Purchase Date</p>
+                          <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Purchase Date</p>
                           <p className="text-sm text-indigo-300 mt-1 font-medium">
                             📅 {new Date(item.purchaseDate).toLocaleDateString("en-IN")}
                           </p>
@@ -276,7 +276,7 @@ function DisplayAllInventory() {
                       {/* Special Details */}
                       {item.specialDetails && (
                         <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/20">
-                          <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest">Special Details</p>
+                          <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Special Details</p>
                           <p className="text-sm text-blue-300 mt-1 font-medium line-clamp-3">{item.specialDetails}</p>
                         </div>
                       )}
@@ -293,3 +293,6 @@ function DisplayAllInventory() {
 }
 
 export default DisplayAllInventory;
+
+
+

@@ -7,19 +7,19 @@
 /* Global styles */
 body {
   font-family: 'Inter', sans-serif;
-  color: #fff;
-  background-color: #000;
+  color: #1E293B;
+  background-color: #EFF6FF;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* React DatePicker Dark Theme Overrides */
 .react-datepicker {
-  background-color: #111827 !important;
-  color: #fff !important;
-  border: 1px solid rgba(255, 127, 17, 0.3) !important;
+  background-color: #FFFFFF !important;
+  color: #1E293B !important;
+  border: 1px solid #E2E8F0 !important;
   border-radius: 0.75rem !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1) !important;
   font-family: inherit !important;
 }
 
@@ -28,8 +28,8 @@ body {
 }
 
 .react-datepicker__header {
-  background-color: #1f2937 !important;
-  border-bottom: 1px solid rgba(255, 127, 17, 0.2) !important;
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid #E2E8F0 !important;
   border-top-left-radius: 0.75rem !important;
   border-top-right-radius: 0.75rem !important;
 }
@@ -37,20 +37,20 @@ body {
 .react-datepicker__current-month,
 .react-datepicker-time__header,
 .react-datepicker-year-header {
-  color: #fff !important;
+  color: #1E293B !important;
 }
 
 .react-datepicker__day-name,
 .react-datepicker__day,
 .react-datepicker__time-name {
-  color: #e5e7eb !important;
+  color: #64748B !important;
 }
 
 .react-datepicker__day:hover,
 .react-datepicker__month-text:hover,
 .react-datepicker__quarter-text:hover,
 .react-datepicker__year-text:hover {
-  background-color: rgba(255, 127, 17, 0.2) !important;
+  background-color: #DBEAFE !important;
 }
 
 .react-datepicker__day--selected,
@@ -65,21 +65,21 @@ body {
 .react-datepicker__year-text--selected,
 .react-datepicker__year-text--in-selecting-range,
 .react-datepicker__year-text--in-range {
-  background-color: #ff7f11 !important;
-  color: #fff !important;
+  background-color: #3B82F6 !important;
+  color: #FFFFFF !important;
 }
 
 .react-datepicker__day--keyboard-selected,
 .react-datepicker__month-text--keyboard-selected,
 .react-datepicker__quarter-text--keyboard-selected,
 .react-datepicker__year-text--keyboard-selected {
-  background-color: rgba(255, 127, 17, 0.4) !important;
-  color: #fff !important;
+  background-color: #DBEAFE !important;
+  color: #1E293B !important;
 }
 
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before,
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::after {
-  border-bottom-color: #111827 !important;
+  border-bottom-color: #FFFFFF !important;
 }
 
 /* Fix width to fill container */
@@ -100,7 +100,7 @@ body {
 /* Customizing the clear icon (X button) to remove the blue circle */
 .react-datepicker__close-icon::after {
   background-color: transparent !important;
-  color: #f97316 !important;
+  color: #3B82F6 !important;
   font-size: 1.5rem !important;
   font-weight: bold !important;
   padding: 0 !important;
@@ -108,7 +108,7 @@ body {
 }
 
 .react-datepicker__close-icon:hover::after {
-  color: #fb923c !important;
+  color: #2563EB !important;
 }
 
 /* Print Overrides */
@@ -117,8 +117,8 @@ body {
     display: none !important;
   }
   body {
-    background: white !important;
-    color: black !important;
+    background: #FFFFFF !important;
+    color: #1E293B !important;
   }
 }
 
@@ -130,22 +130,22 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(59, 130, 246, 0.05);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 127, 17, 0.5);
+  background: rgba(59, 130, 246, 0.3);
   border-radius: 10px;
   transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 127, 17, 0.8);
+  background: rgba(59, 130, 246, 0.6);
 }
 
 /* For Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 127, 17, 0.5) rgba(255, 255, 255, 0.05);
+  scrollbar-color: rgba(59, 130, 246, 0.3) rgba(59, 130, 246, 0.05);
 }

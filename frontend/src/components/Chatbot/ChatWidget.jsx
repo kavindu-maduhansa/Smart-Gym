@@ -82,7 +82,7 @@ function ChatMessage({ sender, text }) {
       <div
         className={[
           "max-w-[90%] rounded-2xl px-3 py-2 text-xs sm:text-sm whitespace-pre-wrap",
-          isUser ? "bg-orange text-black" : "bg-white/5 text-white border border-white/10",
+          isUser ? "bg-blue-600 text-slate-900" : "bg-blue-50 text-slate-900 border border-blue-200",
         ].join(" ")}
       >
         {text}
@@ -228,7 +228,7 @@ export default function ChatWidget() {
       {!open && (
         <button
           onClick={() => navigate("/ai-gym-assistant")}
-          className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-orange text-black font-black shadow-2xl hover:bg-orange/90 transition flex items-center justify-center border border-orange/30"
+          className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-blue-600 text-slate-900 font-black shadow-2xl hover:bg-blue-700 transition flex items-center justify-center border border-blue-400"
           aria-label="Open AI assistant"
         >
           <IconChat />
@@ -237,22 +237,22 @@ export default function ChatWidget() {
 
       {/* Full-screen overlay like the screenshot */}
       {open && (
-        <div className="fixed inset-0 z-[120] bg-black/40">
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black overflow-hidden">
-            {/* Top orange bar */}
-            <div className="bg-orange">
+        <div className="fixed inset-0 z-[120] bg-blue-50/20">
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-blue-100 to-blue-50 overflow-hidden">
+            {/* Top blue bar */}
+            <div className="bg-blue-600">
               <div className="px-4 py-3 flex items-center justify-between">
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-9 h-9 rounded-xl bg-orange/20 border border-orange/40 text-black flex items-center justify-center text-lg font-bold"
+                  className="w-9 h-9 rounded-xl bg-blue-500 border border-blue-400 text-slate-900 flex items-center justify-center text-lg font-bold"
                   aria-label="Close"
                 >
                   ×
                 </button>
-                <div className="text-black font-extrabold tracking-wide text-lg sm:text-xl">
+                <div className="text-slate-900 font-extrabold tracking-wide text-lg sm:text-xl">
                   AI GYM ASSISTANT
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-orange/20 border border-orange/40 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-blue-500 border border-blue-400 flex items-center justify-center">
                   <IconUser />
                 </div>
               </div>
@@ -260,23 +260,23 @@ export default function ChatWidget() {
 
             <div className="px-4 pt-4 pb-28">
               {/* Main header card */}
-              <div className="bg-gray-900/70 border border-white/10 rounded-3xl overflow-hidden">
+              <div className="bg-white border border-blue-200 rounded-3xl overflow-hidden">
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="text-white/80 text-sm font-bold">Good Afternoon</div>
-                      <div className="text-white text-lg font-extrabold">Smart Gym Member</div>
-                      <div className="mt-2 text-white/60 text-xs">
+                      <div className="text-slate-600 text-sm font-bold">Good Afternoon</div>
+                      <div className="text-slate-900 text-lg font-extrabold">Smart Gym Member</div>
+                      <div className="mt-2 text-slate-500 text-xs">
                         Ask for workouts, diet, supplements, equipment usage, and booking guidance.
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                      <div className="px-4 py-2 rounded-full bg-white/10 border border-white/15 text-white font-extrabold text-sm">
+                      <div className="px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-slate-900 font-extrabold text-sm">
                         {tokenRole === "admin" ? "ADMIN" : tokenRole === "trainer" ? "TRAINER" : "PLATINUM"}
                       </div>
                       <button
                         onClick={() => inputRef.current?.focus?.()}
-                        className="px-5 py-3 rounded-2xl bg-orange text-black font-extrabold hover:bg-orange/90 transition"
+                        className="px-5 py-3 rounded-2xl bg-blue-600 text-slate-900 font-extrabold hover:bg-blue-700 transition"
                       >
                         RECHARGE
                       </button>
@@ -287,25 +287,25 @@ export default function ChatWidget() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       onClick={() => quickSend("book")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs"
+                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
                     >
                       Book Slot
                     </button>
                     <button
                       onClick={() => quickSend("cancel")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs"
+                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
                     >
                       Cancel Booking
                     </button>
                     <button
                       onClick={() => quickSend("diet")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs"
+                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
                     >
                       Diet Plan
                     </button>
                     <button
                       onClick={() => quickSend("workout")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs"
+                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
                     >
                       Workout Plan
                     </button>
@@ -313,36 +313,36 @@ export default function ChatWidget() {
 
                   {/* Info cards */}
                   <div className="mt-5 space-y-3">
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
                       <div className="flex items-center justify-between">
-                        <div className="text-white font-extrabold">Loyalty</div>
-                        <div className="text-white/90 font-extrabold">AI Points</div>
+                        <div className="text-slate-900 font-extrabold">Loyalty</div>
+                        <div className="text-slate-700 font-extrabold">AI Points</div>
                       </div>
-                      <div className="mt-2 h-3 rounded-full bg-white/10 overflow-hidden">
-                        <div className="h-full w-[55%] bg-orange rounded-full" />
+                      <div className="mt-2 h-3 rounded-full bg-blue-200 overflow-hidden">
+                        <div className="h-full w-[55%] bg-blue-600 rounded-full" />
                       </div>
-                      <div className="mt-2 text-white/60 text-xs">
+                      <div className="mt-2 text-slate-500 text-xs">
                         Earn points by asking and booking via chat.
                       </div>
                     </div>
 
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
                       <div className="flex items-center justify-between">
-                        <div className="text-white font-extrabold">Anytime Data</div>
-                        <div className="text-orange font-extrabold">Best Hours</div>
+                        <div className="text-slate-900 font-extrabold">Anytime Data</div>
+                        <div className="text-blue-600 font-extrabold">Best Hours</div>
                       </div>
-                      <div className="mt-2 text-white/70 text-xs">
-                        Try workouts in <span className="text-white font-bold">early morning</span> or{" "}
-                        <span className="text-white font-bold">late evening</span> for less crowd.
+                      <div className="mt-2 text-slate-900/70 text-xs">
+                        Try workouts in <span className="text-slate-900 font-bold">early morning</span> or{" "}
+                        <span className="text-slate-900 font-bold">late evening</span> for less crowd.
                       </div>
                     </div>
 
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                       <div className="flex items-center justify-between">
-                        <div className="text-white font-extrabold">Night Time Data</div>
-                        <div className="text-orange font-extrabold">Recovery</div>
+                        <div className="text-slate-900 font-extrabold">Night Time Data</div>
+                        <div className="text-blue-600 font-extrabold">Recovery</div>
                       </div>
-                      <div className="mt-2 text-white/70 text-xs">
+                      <div className="mt-2 text-slate-900/70 text-xs">
                         Post-workout: protein + carbs, hydrate, and do light stretching.
                       </div>
                     </div>
@@ -350,14 +350,14 @@ export default function ChatWidget() {
 
                   {/* Slots list (if toolResult returned) */}
                   {toolSlots.length > 0 && (
-                    <div className="mt-4 bg-black/30 border border-white/10 rounded-2xl p-4">
+                    <div className="mt-4 bg-blue-50/30 border border-slate-200 rounded-2xl p-4">
                       <div className="flex items-center justify-between">
-                        <div className="text-white font-extrabold">
+                        <div className="text-slate-900 font-extrabold">
                           {toolMode === "available" ? "Available Slots" : "Your Bookings"}
                         </div>
                         <button
                           onClick={() => setToolSlots([])}
-                          className="text-white/60 hover:text-orange text-xs font-bold"
+                          className="text-slate-900/60 hover:text-blue-600 text-xs font-bold"
                         >
                           Hide
                         </button>
@@ -366,10 +366,10 @@ export default function ChatWidget() {
                         {toolSlots.map((s) => (
                           <div
                             key={s._id}
-                            className="p-3 bg-white/5 border border-white/10 rounded-xl"
+                            className="p-3 bg-slate-50 border border-slate-200 rounded-xl"
                           >
-                            <div className="text-white font-bold text-sm">{s.title}</div>
-                            <div className="text-white/60 text-[11px] mt-1">
+                            <div className="text-slate-900 font-bold text-sm">{s.title}</div>
+                            <div className="text-slate-900/60 text-[11px] mt-1">
                               {s.trainer ? `Trainer: ${s.trainer} • ` : ""}
                               {s.date} • {s.time}
                             </div>
@@ -377,8 +377,8 @@ export default function ChatWidget() {
                               onClick={() => handleSlotAction(s._id)}
                               className={
                                 toolMode === "available"
-                                  ? "mt-2 w-full bg-orange text-black font-extrabold px-3 py-2 rounded-xl text-xs hover:bg-orange/90 transition"
-                                  : "mt-2 w-full bg-white/5 hover:bg-white/10 text-orange font-extrabold px-3 py-2 rounded-xl text-xs border border-orange/30 transition"
+                                  ? "mt-2 w-full bg-blue-600 text-black font-extrabold px-3 py-2 rounded-xl text-xs hover:bg-blue-700/90 transition"
+                                  : "mt-2 w-full bg-slate-50 hover:bg-slate-100 text-blue-600 font-extrabold px-3 py-2 rounded-xl text-xs border border-blue-600/30 transition"
                               }
                             >
                               {toolMode === "available" ? "Book via Chat" : "Cancel via Chat"}
@@ -392,23 +392,23 @@ export default function ChatWidget() {
               </div>
 
               {/* Chat area */}
-              <div className="mt-4 bg-gray-900/70 border border-white/10 rounded-3xl overflow-hidden">
-                <div className="p-4 border-b border-white/10">
-                  <div className="text-white font-extrabold">Chat</div>
-                  <div className="text-white/60 text-xs mt-1">
+              <div className="mt-4 bg-white/70 border border-slate-200 rounded-3xl overflow-hidden">
+                <div className="p-4 border-b border-slate-200">
+                  <div className="text-slate-900 font-extrabold">Chat</div>
+                  <div className="text-slate-900/60 text-xs mt-1">
                     Gym-only assistant. Use booking buttons for slots.
                   </div>
                 </div>
                 <div className="p-4 max-h-[200px] overflow-auto">
                   {messages.length === 0 ? (
-                    <div className="text-white/60 text-sm">Ask anything gym-related to start.</div>
+                    <div className="text-slate-900/60 text-sm">Ask anything gym-related to start.</div>
                   ) : (
                     messages.map((m) => (
                       <ChatMessage key={m.id} sender={m.sender} text={m.text} />
                     ))
                   )}
                   {typing && (
-                    <div className="text-white/60 text-xs mt-1">Assistant is typing...</div>
+                    <div className="text-slate-900/60 text-xs mt-1">Assistant is typing...</div>
                   )}
                 </div>
                 {error && (
@@ -418,7 +418,7 @@ export default function ChatWidget() {
                     </div>
                   </div>
                 )}
-                <div className="p-4 border-t border-white/10">
+                <div className="p-4 border-t border-slate-200">
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -433,18 +433,18 @@ export default function ChatWidget() {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Ask about workouts, diet, supplements, equipment, or bookings..."
-                        className="flex-1 bg-black/40 border border-white/10 rounded-2xl px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-orange transition"
+                        className="flex-1 bg-blue-50/40 border border-slate-200 rounded-2xl px-3 py-2 text-sm text-slate-900 placeholder:text-slate-900/40 focus:outline-none focus:border-blue-600 transition"
                       />
                       <button
                         type="submit"
                         disabled={typing}
-                        className="w-12 rounded-2xl bg-orange hover:bg-orange/90 text-black font-extrabold transition disabled:opacity-60"
+                        className="w-12 rounded-2xl bg-blue-600 hover:bg-blue-700/90 text-black font-extrabold transition disabled:opacity-60"
                         aria-label="Send"
                       >
                         →
                       </button>
                     </div>
-                    <div className="text-white/40 text-[10px] mt-2">
+                    <div className="text-slate-900/40 text-[10px] mt-2">
                       Replies are limited to gym topics only.
                     </div>
                   </form>
@@ -453,14 +453,14 @@ export default function ChatWidget() {
             </div>
 
             {/* Bottom navigation (UI only inside overlay) */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black/80 border-t border-white/10 backdrop-blur-md">
+            <div className="absolute bottom-0 left-0 right-0 bg-blue-50/80 border-t border-slate-200 backdrop-blur-md">
               <div className="flex items-center justify-around px-2 py-2">
                 <button
                   onClick={() => {
                     setOpen(false);
                     navigate("/");
                   }}
-                  className="flex flex-col items-center gap-1 text-white/70 hover:text-orange transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
                 >
                   <IconHome />
                   <div className="text-[10px] font-bold">Home</div>
@@ -470,7 +470,7 @@ export default function ChatWidget() {
                     // Focus chat input inside overlay
                     inputRef.current?.focus?.();
                   }}
-                  className="flex flex-col items-center gap-1 text-orange font-bold"
+                  className="flex flex-col items-center gap-1 text-blue-600 font-bold"
                 >
                   <IconChat />
                   <div className="text-[10px] font-bold">AI</div>
@@ -479,7 +479,7 @@ export default function ChatWidget() {
                   onClick={() => {
                     quickSend("book");
                   }}
-                  className="flex flex-col items-center gap-1 text-white/70 hover:text-orange transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
                 >
                   <IconCalendar />
                   <div className="text-[10px] font-bold">Offers</div>
@@ -488,7 +488,7 @@ export default function ChatWidget() {
                   onClick={() => {
                     quickSend("diet");
                   }}
-                  className="flex flex-col items-center gap-1 text-white/70 hover:text-orange transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
                 >
                   <IconGlobe />
                   <div className="text-[10px] font-bold">International</div>
@@ -498,7 +498,7 @@ export default function ChatWidget() {
                     setOpen(false);
                     navigate("/contact");
                   }}
-                  className="flex flex-col items-center gap-1 text-white/70 hover:text-orange transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
                 >
                   <IconBolt />
                   <div className="text-[10px] font-bold">Help</div>
@@ -511,4 +511,5 @@ export default function ChatWidget() {
     </>
   );
 }
+
 

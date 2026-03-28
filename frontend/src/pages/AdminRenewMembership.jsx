@@ -53,7 +53,7 @@ const AdminRenewMembership = () => {
         "Free monthly massage session",
         "Priority class booking",
       ],
-      color: "from-orange-500 to-orange-600",
+      color: "from-blue-600-500 to-blue-600",
     },
   ];
 
@@ -141,13 +141,13 @@ const AdminRenewMembership = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
@@ -155,16 +155,16 @@ const AdminRenewMembership = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}
           <div className="mb-12 text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-3">
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-3">
               Renew User Membership
             </h1>
-            <p className="text-gray-300 text-base sm:text-lg">Select a membership plan to renew</p>
+            <p className="text-slate-700 text-base sm:text-lg">Select a membership plan to renew</p>
           </div>
 
           {loading ? (
             <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
-              <p className="text-gray-300 mt-4">Loading user details...</p>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+              <p className="text-slate-700 mt-4">Loading user details...</p>
             </div>
           ) : error && !success ? (
             <div className="max-w-2xl mx-auto bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm sm:text-base">
@@ -192,37 +192,37 @@ const AdminRenewMembership = () => {
 
               {/* User Information */}
               {!success && (
-                <div className="max-w-3xl mx-auto mb-12 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-6 sm:p-8">
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-6">
+                <div className="max-w-3xl mx-auto mb-12 backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl p-6 sm:p-8">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6">
                     User Information
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Name</p>
-                      <p className="text-white text-base sm:text-lg font-semibold">{user.name}</p>
+                      <p className="text-slate-500 text-xs sm:text-sm mb-2">Name</p>
+                      <p className="text-slate-900 text-base sm:text-lg font-semibold">{user.name}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Email</p>
-                      <p className="text-white text-base sm:text-lg font-semibold">{user.email}</p>
+                      <p className="text-slate-500 text-xs sm:text-sm mb-2">Email</p>
+                      <p className="text-slate-900 text-base sm:text-lg font-semibold">{user.email}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Current Plan</p>
-                      <p className="text-white text-base sm:text-lg font-semibold capitalize">
+                      <p className="text-slate-500 text-xs sm:text-sm mb-2">Current Plan</p>
+                      <p className="text-slate-900 text-base sm:text-lg font-semibold capitalize">
                         {user.membershipType || "None"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Current Expiry</p>
-                      <p className="text-white text-base sm:text-lg font-semibold">
+                      <p className="text-slate-500 text-xs sm:text-sm mb-2">Current Expiry</p>
+                      <p className="text-slate-900 text-base sm:text-lg font-semibold">
                         {formatDate(user.membershipExpiry)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-xs sm:text-sm mb-2">Status</p>
+                      <p className="text-slate-500 text-xs sm:text-sm mb-2">Status</p>
                       <p
                         className={`text-base sm:text-lg font-semibold ${
                           getMembershipStatus() === "Active"
-                            ? "text-orange"
+                            ? "text-blue-600"
                             : "text-red-400"
                         }`}
                       >
@@ -236,30 +236,30 @@ const AdminRenewMembership = () => {
               {/* Membership Plans */}
               {!success && (
                 <>
-                  <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 text-center mb-12">
                     Select Membership Plan
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-12">
                     {membershipPlans.map((plan) => (
                       <div
                         key={plan.id}
-                        className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:border-orange/50 flex flex-col"
+                        className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:border-blue-600/50 flex flex-col"
                       >
                         {/* Plan Header */}
                         <div
                           className={`bg-gradient-to-r ${plan.color} p-6 text-center`}
                         >
-                          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
                             {plan.name}
                           </h3>
-                          <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
+                          <div className="text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
                             {plan.price}
                           </div>
-                          <p className="text-white text-opacity-90 text-xs sm:text-sm">
+                          <p className="text-slate-900 text-opacity-90 text-xs sm:text-sm">
                             {plan.duration}
                           </p>
                           {plan.savings && (
-                            <div className="mt-2 inline-block bg-white/20 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
+                            <div className="mt-2 inline-block bg-slate-200 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
                               {plan.savings}
                             </div>
                           )}
@@ -271,10 +271,10 @@ const AdminRenewMembership = () => {
                             {plan.features.map((feature, index) => (
                               <li
                                 key={index}
-                                className="flex items-start text-gray-300 text-xs sm:text-sm"
+                                className="flex items-start text-slate-700 text-xs sm:text-sm"
                               >
                                 <svg
-                                  className="w-4 h-4 sm:w-5 sm:h-5 text-orange mr-2 mt-0.5 flex-shrink-0"
+                                  className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0"
                                   fill="currentColor"
                                   viewBox="0 0 20 20"
                                 >
@@ -296,7 +296,7 @@ const AdminRenewMembership = () => {
                             className={`w-full py-3 px-4 rounded-lg font-bold transition-all duration-200 text-sm sm:text-base ${
                               renewing && selectedPlan === plan.id
                                 ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-orange hover:bg-orange/90 text-white"
+                                : "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
                             }`}
                           >
                             {renewing && selectedPlan === plan.id ? (
@@ -321,7 +321,7 @@ const AdminRenewMembership = () => {
                   <button
                     onClick={() => navigate("/admin/memberships")}
                     disabled={renewing}
-                    className="backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 inline-flex items-center text-sm sm:text-base"
+                    className="backdrop-blur-md bg-slate-100 border border-slate-300 hover:bg-white/15 hover:border-blue-600/50 text-slate-900 font-bold px-8 py-3 rounded-lg transition-all duration-300 inline-flex items-center text-sm sm:text-base"
                   >
                     <svg
                       className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -370,3 +370,7 @@ const AdminRenewMembership = () => {
 };
 
 export default AdminRenewMembership;
+
+
+
+

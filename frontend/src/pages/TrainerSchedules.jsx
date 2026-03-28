@@ -217,30 +217,30 @@ const TrainerSchedules = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 px-6 relative">
-      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black -z-10"></div>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative">
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+        <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <div>
-              <h2 className="text-3xl font-bold text-orange tracking-tight">My Schedules</h2>
-              <p className="text-gray-400 mt-2">Manage your training sessions and track student attendance.</p>
+              <h2 className="text-3xl font-bold text-blue-600 tracking-tight">My Schedules</h2>
+              <p className="text-slate-500 mt-2">Manage your training sessions and track student attendance.</p>
             </div>
-            <button onClick={() => setShowForm(true)} className="mt-4 md:mt-0 bg-orange px-6 py-2.5 rounded-xl font-bold hover:bg-orange/80 transition-all shadow-lg shadow-orange/20">
+            <button onClick={() => setShowForm(true)} className="mt-4 md:mt-0 bg-blue-600 px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700/80 transition-all shadow-lg shadow-blue-600/20">
               + Add Session
             </button>
           </div>
         </div>
 
         {/* Integrated Performance Hub */}
-        <div className="backdrop-blur-2xl bg-white/[0.03] border border-white/10 rounded-3xl p-1 mb-8 shadow-2xl overflow-hidden group">
+        <div className="backdrop-blur-2xl bg-white/[0.03] border border-slate-200 rounded-3xl p-1 mb-8 shadow-2xl overflow-hidden group">
           <div className="flex flex-col lg:flex-row items-stretch">
             {/* Hub Header */}
-            <div className="lg:w-1/4 p-6 bg-gradient-to-br from-orange/20 to-transparent border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-center relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-orange/10 blur-3xl -mr-16 -mt-16 rounded-full group-hover:bg-orange/20 transition-all duration-700"></div>
-               <h3 className="text-xl font-black text-white leading-tight relative z-10">Monthly<br /><span className="text-orange">Performance</span></h3>
-               <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
+            <div className="lg:w-1/4 p-6 bg-gradient-to-br from-blue-600/20 to-transparent border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col justify-center relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-3xl -mr-16 -mt-16 rounded-full group-hover:bg-blue-700/20 transition-all duration-700"></div>
+               <h3 className="text-xl font-black text-slate-900 leading-tight relative z-10">Monthly<br /><span className="text-blue-600">Performance</span></h3>
+               <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
             </div>
             
             {/* Stats Grid */}
@@ -259,7 +259,7 @@ const TrainerSchedules = () => {
                   label: "Upcoming", 
                   value: stats.upcoming, 
                   icon: (
-                    <svg className="w-5 h-5 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   )
@@ -284,14 +284,14 @@ const TrainerSchedules = () => {
                 },
               ].map((item, idx) => (
                 <div key={idx} className="p-6 transition-all hover:bg-white/[0.03] relative group/stat overflow-hidden">
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-orange/0 to-transparent group-hover/stat:via-orange/40 transition-all duration-500"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-600/0 to-transparent group-hover/stat:via-blue-600/40 transition-all duration-500"></div>
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-black/40 flex items-center justify-center transition-all group-hover/stat:scale-110 group-hover/stat:border-orange/20 border border-white/5">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50/40 flex items-center justify-center transition-all group-hover/stat:scale-110 group-hover/stat:border-blue-600/20 border border-white/5">
                       {item.icon}
                     </div>
                     <div>
-                      <div className="text-2xl font-black text-white group-hover/stat:text-orange transition-colors tracking-tight">{item.value}</div>
-                      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5 whitespace-nowrap">{item.label}</div>
+                      <div className="text-2xl font-black text-slate-900 group-hover/stat:text-blue-600 transition-colors tracking-tight">{item.value}</div>
+                      <div className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mt-0.5 whitespace-nowrap">{item.label}</div>
                     </div>
                   </div>
                 </div>
@@ -307,44 +307,44 @@ const TrainerSchedules = () => {
             placeholder="Search session or student..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all font-medium placeholder:text-gray-500"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-600"
           />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all cursor-pointer font-medium"
           >
-            <option value="All" className="bg-gray-900">All Status</option>
-            <option value="Booked" className="bg-gray-900">Booked</option>
-            <option value="Available" className="bg-gray-900">Available</option>
-            <option value="Expired" className="bg-gray-900">Expired</option>
-            <option value="Pending" className="bg-gray-900">Pending Attendance</option>
-            <option value="Attended" className="bg-gray-900">Attended</option>
-            <option value="Absent" className="bg-gray-900">Absent</option>
+            <option value="All" className="bg-white">All Status</option>
+            <option value="Booked" className="bg-white">Booked</option>
+            <option value="Available" className="bg-white">Available</option>
+            <option value="Expired" className="bg-white">Expired</option>
+            <option value="Pending" className="bg-white">Pending Attendance</option>
+            <option value="Attended" className="bg-white">Attended</option>
+            <option value="Absent" className="bg-white">Absent</option>
           </select>
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-orange/50 transition-all cursor-pointer font-medium"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all cursor-pointer font-medium"
           >
-            <option value="All" className="bg-gray-900">All Dates</option>
-            <option value="Today" className="bg-gray-900">Today Only</option>
-            <option value="Upcoming" className="bg-gray-900">Upcoming</option>
-            <option value="Past" className="bg-gray-900">Past Sessions</option>
+            <option value="All" className="bg-white">All Dates</option>
+            <option value="Today" className="bg-white">Today Only</option>
+            <option value="Upcoming" className="bg-white">Upcoming</option>
+            <option value="Past" className="bg-white">Past Sessions</option>
           </select>
         </div>
 
         {/* Add Session Modal */}
         {showForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-all"></div>
+            <div className="absolute inset-0 bg-blue-50/75 backdrop-blur-sm transition-all"></div>
             <div className="relative z-10 flex items-center justify-center w-full h-full">
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-md w-full p-8">
+              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl max-w-md w-full p-8">
                 {/* Header */}
-                <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-white">{editId ? 'Edit Session' : 'Add New Session'}</h3>
+                <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
+                  <h3 className="text-2xl font-bold text-slate-900">{editId ? 'Edit Session' : 'Add New Session'}</h3>
                   <button
-                    className="text-white/60 hover:text-white text-2xl font-bold transition"
+                    className="text-slate-900/60 hover:text-slate-900 text-2xl font-bold transition"
                     onClick={closeModal}
                     aria-label="Close"
                   >
@@ -358,24 +358,24 @@ const TrainerSchedules = () => {
                       {error}
                     </div>
                   )}
-                  <label className="text-gray-300 font-semibold text-sm">
+                  <label className="text-slate-700 font-semibold text-sm">
                     Session Name
                     <input
                       type="text"
-                      className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                      className="mt-2 w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                       value={sessionName}
                       onChange={(e) => setSessionName(e.target.value)}
                       placeholder="e.g. Morning Yoga"
                       required
                     />
                   </label>
-                  <label className="text-gray-300 font-semibold text-sm">
+                  <label className="text-slate-700 font-semibold text-sm">
                     Date
                     <div className="mt-2 w-full">
                       <DatePicker
                         selected={sessionDate}
                         onChange={(date) => setSessionDate(date)}
-                        className="w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                        className="w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                         placeholderText="Select a date"
                         dateFormat="yyyy-MM-dd"
                         minDate={new Date()}
@@ -383,11 +383,11 @@ const TrainerSchedules = () => {
                       />
                     </div>
                   </label>
-                  <label className="text-gray-300 font-semibold text-sm">
+                  <label className="text-slate-700 font-semibold text-sm">
                     Time
                     <input
                       type="time"
-                      className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                      className="mt-2 w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                       value={sessionTime}
                       onChange={(e) => setSessionTime(e.target.value)}
                       required
@@ -396,7 +396,7 @@ const TrainerSchedules = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="mt-4 bg-orange hover:bg-orange/90 disabled:bg-orange/50 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
+                    className="mt-4 bg-blue-600 hover:bg-blue-700/90 disabled:bg-blue-600/50 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300"
                   >
                     {loading ? "Saving..." : (editId ? "Update Session" : "Create Session")}
                   </button>
@@ -406,17 +406,17 @@ const TrainerSchedules = () => {
           </div>
         )}
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 backdrop-blur-md bg-white/5 shadow-2xl">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 backdrop-blur-md bg-slate-50 shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-white/10 border-b border-orange/20">
-                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange">Session</th>
-                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Date</th>
-                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Time</th>
-                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange">Student</th>
-                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-center">Attendance</th>
-                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-orange text-right">Actions</th>
+                <tr className="bg-slate-100 border-b border-blue-600/20">
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-blue-600">Session</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-blue-600 text-center">Date</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-blue-600 text-center">Time</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-blue-600">Student</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-blue-600 text-center">Attendance</th>
+                  <th className="px-6 py-5 text-sm font-bold tracking-wider text-blue-600 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -425,34 +425,34 @@ const TrainerSchedules = () => {
                   const isExpired = sessionDateTime < new Date();
 
                   return (
-                    <tr key={s._id} className={`hover:bg-white/5 transition-all group ${isExpired && !s.bookedBy ? 'opacity-60' : ''}`}>
+                    <tr key={s._id} className={`hover:bg-slate-50 transition-all group ${isExpired && !s.bookedBy ? 'opacity-60' : ''}`}>
                       <td className="px-6 py-5">
-                        <div className={`font-bold transition-colors ${isExpired && !s.bookedBy ? 'text-gray-500' : 'text-white group-hover:text-orange'}`}>
+                        <div className={`font-bold transition-colors ${isExpired && !s.bookedBy ? 'text-slate-600' : 'text-slate-900 group-hover:text-blue-600'}`}>
                           {s.title}
                         </div>
                       </td>
                       <td className="px-6 py-5 text-center">
-                        <span className={`${isExpired && !s.bookedBy ? 'text-gray-600' : 'text-gray-300'} text-sm font-medium`}>{s.date}</span>
+                        <span className={`${isExpired && !s.bookedBy ? 'text-gray-600' : 'text-slate-700'} text-sm font-medium`}>{s.date}</span>
                       </td>
                       <td className="px-6 py-5 text-center">
-                        <div className={`inline-block px-3 py-1 bg-white/5 rounded-lg border font-bold text-xs ${isExpired && !s.bookedBy ? 'text-gray-600 border-white/5' : 'text-orange border-white/10'}`}>
+                        <div className={`inline-block px-3 py-1 bg-slate-50 rounded-lg border font-bold text-xs ${isExpired && !s.bookedBy ? 'text-gray-600 border-white/5' : 'text-blue-600 border-slate-200'}`}>
                           {s.time}
                         </div>
                       </td>
                       <td className="px-6 py-5">
                         {s.bookedBy ? (
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-orange/20 rounded-full flex items-center justify-center text-[10px] text-orange font-bold border border-orange/30">
+                            <div className="w-8 h-8 bg-blue-600/20 rounded-full flex items-center justify-center text-[10px] text-blue-600 font-bold border border-blue-600/30">
                               {s.bookedBy.name?.charAt(0)}
                             </div>
-                            <span className="text-white font-bold text-sm tracking-tight">
+                            <span className="text-slate-900 font-bold text-sm tracking-tight">
                               {s.bookedBy.name}
                             </span>
                           </div>
                         ) : (
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-widest ${isExpired
                               ? 'bg-red-500/10 text-red-500/70 border-red-500/20'
-                              : 'bg-white/5 text-gray-500 border border-white/10'
+                              : 'bg-slate-50 text-slate-600 border border-slate-200'
                             }`}>
                             {isExpired ? 'Expired' : 'Available'}
                           </span>
@@ -463,7 +463,7 @@ const TrainerSchedules = () => {
                           <select
                             value={s.attendanceStatus || 'Pending'}
                             onChange={(e) => handleAttendance(s._id, e.target.value)}
-                            className={`text-xs font-bold px-2 py-1 rounded bg-black border border-white/20 outline-none cursor-pointer hover:border-orange transition-colors ${s.attendanceStatus === 'Attended' ? 'text-green-500' :
+                            className={`text-xs font-bold px-2 py-1 rounded bg-black border border-slate-300 outline-none cursor-pointer hover:border-blue-600 transition-colors ${s.attendanceStatus === 'Attended' ? 'text-green-500' :
                                 s.attendanceStatus === 'Absent' ? 'text-red-500' : 'text-yellow-500'
                               }`}
                           >
@@ -480,7 +480,7 @@ const TrainerSchedules = () => {
                           {!isExpired && (
                             <button
                               onClick={() => handleEdit(s)}
-                              className="text-orange hover:text-orange/80 text-sm font-bold transition-all"
+                              className="text-blue-600 hover:text-blue-600/80 text-sm font-bold transition-all"
                             >
                               Edit
                             </button>
@@ -502,15 +502,15 @@ const TrainerSchedules = () => {
             {/* Pagination Controls */}
             {filteredSchedules.length > 0 && (
               <div className="flex items-center justify-between px-6 py-4 border-t border-white/5 bg-white/[0.02]">
-                <div className="text-xs text-gray-500 font-medium">
-                  Showing <span className="text-orange">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-orange">{Math.min(currentPage * itemsPerPage, filteredSchedules.length)}</span> of <span className="text-orange">{filteredSchedules.length}</span> sessions
+                <div className="text-xs text-slate-600 font-medium">
+                  Showing <span className="text-blue-600">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-blue-600">{Math.min(currentPage * itemsPerPage, filteredSchedules.length)}</span> of <span className="text-blue-600">{filteredSchedules.length}</span> sessions
                 </div>
                 {filteredSchedules.length > itemsPerPage && (
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-white hover:bg-orange/20 hover:border-orange/50 disabled:opacity-30 disabled:hover:bg-white/5 disabled:hover:border-white/10 transition-all"
+                      className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 hover:bg-blue-700/20 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:bg-slate-50 disabled:hover:border-slate-200 transition-all"
                     >
                       Previous
                     </button>
@@ -519,8 +519,8 @@ const TrainerSchedules = () => {
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
                         className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${currentPage === i + 1
-                            ? 'bg-orange border-orange text-white shadow-[0_0_10px_rgba(255,127,17,0.3)]'
-                            : 'bg-white/5 border-white/10 text-gray-400 hover:border-orange/50 hover:text-white'
+                            ? 'bg-blue-600 border-blue-600 text-slate-900 shadow-[0_0_10px_rgba(59,130,246,0.3)]'
+                            : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900'
                           }`}
                       >
                         {i + 1}
@@ -529,7 +529,7 @@ const TrainerSchedules = () => {
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(filteredSchedules.length / itemsPerPage)))}
                       disabled={currentPage === Math.ceil(filteredSchedules.length / itemsPerPage)}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-white hover:bg-orange/20 hover:border-orange/50 disabled:opacity-30 disabled:hover:bg-white/5 disabled:hover:border-white/10 transition-all"
+                      className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 hover:bg-blue-700/20 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:bg-slate-50 disabled:hover:border-slate-200 transition-all"
                     >
                       Next
                     </button>
@@ -538,7 +538,7 @@ const TrainerSchedules = () => {
               </div>
             )}
             {filteredSchedules.length === 0 && (
-              <div className="text-center py-10 text-gray-500 italic">No matching sessions found.</div>
+              <div className="text-center py-10 text-slate-600 italic">No matching sessions found.</div>
             )}
           </div>
         </div>
@@ -548,3 +548,7 @@ const TrainerSchedules = () => {
 };
 
 export default TrainerSchedules;
+
+
+
+

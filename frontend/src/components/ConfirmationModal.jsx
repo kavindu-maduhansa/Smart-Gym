@@ -39,12 +39,12 @@ const ConfirmationModal = ({
         </div>
 
         {/* MESSAGE */}
-        <p className="text-lg text-gray-100 mb-2">{message}</p>
+        <p className="text-lg text-slate-700 mb-2">{message}</p>
 
         {/* LOADING STATE */}
         {isLoading && (
           <div className="mt-4 flex justify-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500" />
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
           </div>
         )}
       </div>

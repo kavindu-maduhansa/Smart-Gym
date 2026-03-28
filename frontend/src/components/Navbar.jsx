@@ -37,11 +37,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-md shadow-lg py-4 px-8">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-lg py-4 px-8 border-b border-slate-200">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <div
-          className="text-2xl font-bold text-orange cursor-pointer"
+          className="text-2xl font-bold text-blue-600 cursor-pointer"
           onClick={() => navigate("/")}
         >
           Gym Management System
@@ -51,25 +51,25 @@ const Navbar = () => {
           {/* Main navigation links */}
           <Link
             to="/"
-            className="text-white hover:text-orange transition-colors duration-200"
+            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
           >
             Home
           </Link>
           <Link
             to="/about"
-            className="text-white hover:text-orange transition-colors duration-200"
+            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
           >
             About
           </Link>
           <Link
             to="/leaderboard"
-            className="text-white hover:text-orange transition-colors duration-200"
+            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
           >
             Leaderboard
           </Link>
           <Link
             to="/contact"
-            className="text-white hover:text-orange transition-colors duration-200"
+            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
           >
             Contact
           </Link>
@@ -78,15 +78,15 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="bg-orange bg-opacity-70 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-orange hover:bg-orange-dark hover:text-white transition-all duration-200 backdrop-blur-md"
-                style={{ boxShadow: "0 4px 16px 0 rgba(255,127,17,0.15)" }}
+                className="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-blue-600 hover:bg-blue-700 hover:text-white transition-all duration-200"
+                style={{ boxShadow: "0 4px 16px 0 rgba(59,130,246,0.15)" }}
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-orange bg-opacity-70 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-orange hover:bg-orange-dark hover:text-white transition-all duration-200 backdrop-blur-md"
-                style={{ boxShadow: "0 4px 16px 0 rgba(255,127,17,0.15)" }}
+                className="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-blue-600 hover:bg-blue-700 hover:text-white transition-all duration-200"
+                style={{ boxShadow: "0 4px 16px 0 rgba(59,130,246,0.15)" }}
               >
                 Register
               </Link>
@@ -96,13 +96,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/admin-dashboard"
-                className="text-white hover:text-orange transition-colors duration-200"
+                className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
               >
                 Dashboard
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+                className="bg-blue-600 text-slate-900 px-4 py-2 rounded hover:bg-blue-700-dark transition-colors duration-200 font-semibold"
               >
                 Logout
               </button>
@@ -112,13 +112,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/student-dashboard"
-                className="text-white hover:text-orange transition-colors duration-200"
+                className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
               >
                 Dashboard
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+                className="bg-blue-600 text-slate-900 px-4 py-2 rounded hover:bg-blue-700-dark transition-colors duration-200 font-semibold"
               >
                 Logout
               </button>
@@ -128,13 +128,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/trainer-dashboard"
-                className="text-white hover:text-orange transition-colors duration-200"
+                className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
               >
                 Dashboard
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-orange text-white px-4 py-2 rounded hover:bg-orange-dark transition-colors duration-200 font-semibold"
+                className="bg-blue-600 text-slate-900 px-4 py-2 rounded hover:bg-blue-700-dark transition-colors duration-200 font-semibold"
               >
                 Logout
               </button>
@@ -147,3 +147,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

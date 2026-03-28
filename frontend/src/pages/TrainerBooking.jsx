@@ -413,23 +413,23 @@ const TrainerBooking = () => {
   const currentItems = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 px-6 relative">
-      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black -z-10"></div>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative">
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
 
-      <div className="max-w-4xl mx-auto backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8">
-        <h2 className="text-4xl font-bold text-orange mb-8 border-b border-orange/10 pb-6 text-center tracking-tight">
+      <div className="max-w-4xl mx-auto backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8">
+        <h2 className="text-4xl font-bold text-blue-600 mb-8 border-b border-blue-600/10 pb-6 text-center tracking-tight">
           My Booked Sessions
         </h2>
 
         <div className="flex justify-center mb-8">
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ${tab === "trainer" ? "bg-orange text-black" : "bg-gray-800 text-white hover:bg-gray-700"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ${tab === "trainer" ? "bg-blue-600 text-black" : "bg-white text-slate-900 hover:bg-slate-100"}`}
             onClick={() => setTab("trainer")}
           >
             Trainer Booking
           </button>
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 ${tab === "slot" ? "bg-orange text-black" : "bg-gray-800 text-white hover:bg-gray-700"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 ${tab === "slot" ? "bg-blue-600 text-black" : "bg-white text-slate-900 hover:bg-slate-100"}`}
             onClick={() => setTab("slot")}
           >
             Slot Booking
@@ -438,8 +438,8 @@ const TrainerBooking = () => {
 
         {tab === "trainer" && (
           <>
-            <div className="flex flex-nowrap gap-4 mb-6 items-center bg-black/40 p-4 rounded-xl border border-white/10 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar">
-              <span className="text-gray-500 font-semibold text-xs tracking-tight mr-2 shrink-0">Filter By:</span>
+            <div className="flex flex-nowrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar">
+              <span className="text-slate-600 font-semibold text-xs tracking-tight mr-2 shrink-0">Filter By:</span>
 
               <div className="relative flex-1 max-w-[180px]">
                 <input
@@ -447,17 +447,17 @@ const TrainerBooking = () => {
                   placeholder="Trainer name..."
                   value={filterTrainer}
                   onChange={(e) => setFilterTrainer(e.target.value)}
-                  className="bg-black/50 border border-white/10 p-2 rounded-lg text-white focus:outline-none focus:border-orange transition-all w-full text-xs font-medium placeholder:text-gray-600"
+                  className="bg-blue-50/50 border border-slate-200 p-2 rounded-lg text-slate-900 focus:outline-none focus:border-blue-600 transition-all w-full text-xs font-medium placeholder:text-gray-600"
                 />
               </div>
 
-              <div className="w-px h-6 bg-white/10 mx-2"></div>
+              <div className="w-px h-6 bg-slate-100 mx-2"></div>
 
               <div className="relative">
                 <DatePicker
                   selected={filterDate}
                   onChange={(date) => setFilterDate(date)}
-                  className="bg-black/50 border border-white/10 p-2 rounded-lg text-white focus:outline-none focus:border-orange transition-all min-w-[140px] text-xs font-medium placeholder:text-gray-600"
+                  className="bg-blue-50/50 border border-slate-200 p-2 rounded-lg text-slate-900 focus:outline-none focus:border-blue-600 transition-all min-w-[140px] text-xs font-medium placeholder:text-gray-600"
                   placeholderText="Search Date"
                   dateFormat="yyyy-MM-dd"
                   isClearable
@@ -465,26 +465,26 @@ const TrainerBooking = () => {
                 />
               </div>
 
-              <div className="w-px h-6 bg-white/10 mx-2"></div>
+              <div className="w-px h-6 bg-slate-100 mx-2"></div>
 
               <div className="relative">
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-black/50 border border-white/10 p-2 rounded-lg text-white focus:outline-none focus:border-orange transition-all min-w-[130px] text-xs font-bold uppercase tracking-widest cursor-pointer appearance-none pr-8"
+                  className="bg-blue-50/50 border border-slate-200 p-2 rounded-lg text-slate-900 focus:outline-none focus:border-blue-600 transition-all min-w-[130px] text-xs font-bold uppercase tracking-widest cursor-pointer appearance-none pr-8"
                 >
                   <option value="all">All Status</option>
                   <option value="upcoming">Upcoming</option>
                   <option value="attended">Attended</option>
                   <option value="absent">Absent</option>
                 </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-[10px]">▼</div>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-600 text-[10px]">▼</div>
               </div>
 
               {(filterDate || statusFilter !== "all" || filterTrainer) && (
                 <button
                   onClick={() => { setFilterDate(null); setStatusFilter("all"); setFilterTrainer(""); }}
-                  className="bg-white/5 border border-white/10 text-gray-400 px-4 py-2 rounded-lg font-bold hover:bg-white/10 hover:text-white transition-all text-[10px] uppercase tracking-widest ml-auto"
+                  className="bg-slate-50 border border-slate-200 text-slate-500 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 hover:text-slate-900 transition-all text-[10px] uppercase tracking-widest ml-auto"
                 >
                   Clear All
                 </button>
@@ -492,19 +492,19 @@ const TrainerBooking = () => {
             </div>
 
             {loading ? (
-              <p className="text-center text-gray-500 py-10">Loading your schedule...</p>
+              <p className="text-center text-slate-600 py-10">Loading your schedule...</p>
             ) : filteredBookings.length > 0 ? (
               <>
                 <div className="space-y-4">
                   {currentItems.map((b) => (
-                    <div key={b._id} className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1.2fr] gap-4 items-center p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all">
+                    <div key={b._id} className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1.2fr] gap-4 items-center p-6 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition-all">
                       <div>
-                        <h3 className="text-xl font-bold text-orange tracking-tight">{b.title}</h3>
-                        <p className="text-gray-400 text-[13px] font-medium mt-1">Trainer: {b.trainer?.name}</p>
+                        <h3 className="text-xl font-bold text-blue-600 tracking-tight">{b.title}</h3>
+                        <p className="text-slate-500 text-[13px] font-medium mt-1">Trainer: {b.trainer?.name}</p>
                       </div>
                     <div className="text-left md:text-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0">
-                      <p className="text-white text-sm font-semibold tracking-tight">{b.date}</p>
-                      <p className="text-orange text-sm font-bold mt-0.5">{b.time}</p>
+                      <p className="text-slate-900 text-sm font-semibold tracking-tight">{b.date}</p>
+                      <p className="text-blue-600 text-sm font-bold mt-0.5">{b.time}</p>
                     </div>
 
                       <div className="flex flex-col items-end gap-2">
@@ -528,7 +528,7 @@ const TrainerBooking = () => {
                                     Absent
                                   </span>
                                 ) : (
-                                  <span className="bg-white/5 text-gray-400 px-3 py-1.5 rounded-lg text-xs tracking-wider font-semibold border border-white/10">
+                                  <span className="bg-slate-50 text-slate-500 px-3 py-1.5 rounded-lg text-xs tracking-wider font-semibold border border-slate-200">
                                     Expired
                                   </span>
                                 )}
@@ -536,14 +536,14 @@ const TrainerBooking = () => {
                                 {isAttended && (
                                   hasFeedback ? (
                                     <button
-                                      className="bg-white/5 text-gray-300 px-4 py-2 rounded-lg font-semibold hover:bg-white/10 transition-all text-xs tracking-wider border border-white/10"
+                                      className="bg-slate-50 text-slate-700 px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition-all text-xs tracking-wider border border-slate-200"
                                       onClick={() => openViewFeedback(hasFeedback)}
                                     >
                                       View Feedback
                                     </button>
                                   ) : (
                                     <button
-                                      className="bg-orange text-white px-5 py-2.5 rounded-xl font-bold hover:bg-orange/90 transition-all text-xs tracking-wider shadow-lg shadow-orange/20 active:scale-95"
+                                      className="bg-blue-600 text-slate-900 px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700/90 transition-all text-xs tracking-wider shadow-lg shadow-blue-600/20 active:scale-95"
                                       onClick={() => openFeedback(b)}
                                     >
                                       Give Feedback
@@ -575,9 +575,9 @@ const TrainerBooking = () => {
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-6 mt-10 pt-6 border-t border-white/10">
+                  <div className="flex justify-center items-center gap-6 mt-10 pt-6 border-t border-slate-200">
                     <button
-                      className="px-6 py-2.5 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-orange/50 disabled:opacity-30 disabled:hover:border-white/10 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-2 group"
+                      className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:border-slate-200 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-2 group"
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                     >
@@ -585,13 +585,13 @@ const TrainerBooking = () => {
                     </button>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-orange font-bold text-sm tracking-wider">{currentPage}</span>
+                      <span className="text-blue-600 font-bold text-sm tracking-wider">{currentPage}</span>
                       <span className="text-gray-600 text-[10px] font-bold uppercase tracking-widest leading-none">of</span>
-                      <span className="text-white font-bold text-sm tracking-wider">{totalPages}</span>
+                      <span className="text-slate-900 font-bold text-sm tracking-wider">{totalPages}</span>
                     </div>
 
                     <button
-                      className="px-6 py-2.5 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-orange/50 disabled:opacity-30 disabled:hover:border-white/10 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-2 group"
+                      className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:border-slate-200 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-2 group"
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                     >
@@ -601,8 +601,8 @@ const TrainerBooking = () => {
                 )}
               </>
             ) : (
-              <div className="text-center py-10 px-4 bg-black/40 rounded-xl border border-white/10">
-                <p className="text-gray-500 italic">No trainer sessions found matching your criteria.</p>
+              <div className="text-center py-10 px-4 bg-blue-50/40 rounded-xl border border-slate-200">
+                <p className="text-slate-600 italic">No trainer sessions found matching your criteria.</p>
               </div>
             )}
           </>
@@ -611,22 +611,22 @@ const TrainerBooking = () => {
         {tab === "slot" && (
           <>
             {gymBookingRules && (
-              <ul className="text-sm text-gray-400 mb-6 space-y-2 border border-white/10 rounded-lg p-4 bg-black/30">
+              <ul className="text-sm text-slate-500 mb-6 space-y-2 border border-slate-200 rounded-lg p-4 bg-blue-50/30">
                 <li>
-                  <span className="text-orange font-bold">No double booking:</span> one slot per time
+                  <span className="text-blue-600 font-bold">No double booking:</span> one slot per time
                   window; overlapping bookings blocked.
                 </li>
                 <li>
-                  <span className="text-orange font-bold">Daily limit:</span>{" "}
+                  <span className="text-blue-600 font-bold">Daily limit:</span>{" "}
                   {gymBookingRules.maxBookingsPerDay} gym slot(s) per day.
                 </li>
                 <li>
-                  <span className="text-orange font-bold">Slot gap:</span> more than 2 hours between
+                  <span className="text-blue-600 font-bold">Slot gap:</span> more than 2 hours between
                   your same-day slots
                   {gymBookingRules.minGapMinutes ? ` (> ${gymBookingRules.minGapMinutes - 1} minutes)` : ""}.
                 </li>
                 <li>
-                  <span className="text-orange font-bold">Deadline:</span>{" "}
+                  <span className="text-blue-600 font-bold">Deadline:</span>{" "}
                   {gymBookingRules.deadlineHoursBeforeSlot > 0
                     ? `${gymBookingRules.deadlineHoursBeforeSlot} hour(s) before slot start`
                     : "none set"}
@@ -634,13 +634,13 @@ const TrainerBooking = () => {
                 </li>
               </ul>
             )}
-            <div className="flex flex-wrap gap-4 mb-6 items-center bg-black/40 p-4 rounded-xl border border-white/10">
-              <span className="text-gray-400 font-bold uppercase text-sm tracking-wider">Filter:</span>
+            <div className="flex flex-wrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200">
+              <span className="text-slate-500 font-bold uppercase text-sm tracking-wider">Filter:</span>
               <div className="relative">
                 <DatePicker
                   selected={slotFilterDate}
                   onChange={(d) => setSlotFilterDate(d)}
-                  className="bg-black border border-white/20 p-2 rounded text-white focus:outline-none focus:border-orange min-w-[150px]"
+                  className="bg-black border border-slate-300 p-2 rounded text-slate-900 focus:outline-none focus:border-blue-600 min-w-[150px]"
                   placeholderText="By date…"
                   dateFormat="yyyy-MM-dd"
                   isClearable
@@ -650,7 +650,7 @@ const TrainerBooking = () => {
                 <button
                   type="button"
                   onClick={() => setSlotFilterDate(null)}
-                  className="bg-white/5 border border-white/20 text-gray-300 px-4 py-2 rounded font-bold hover:bg-white/10 text-sm"
+                  className="bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded font-bold hover:bg-slate-100 text-sm"
                 >
                   Clear
                 </button>
@@ -658,7 +658,7 @@ const TrainerBooking = () => {
             </div>
 
             {loadingSlots ? (
-              <p className="text-center text-gray-500 py-10">Loading gym slot bookings…</p>
+              <p className="text-center text-slate-600 py-10">Loading gym slot bookings…</p>
             ) : (
               (() => {
                 const filtered = slotBookings.filter((b) =>
@@ -666,8 +666,8 @@ const TrainerBooking = () => {
                 );
                 if (filtered.length === 0) {
                   return (
-                    <div className="text-center py-10 px-4 bg-black/40 rounded-xl border border-white/10">
-                      <p className="text-gray-500 italic">
+                    <div className="text-center py-10 px-4 bg-blue-50/40 rounded-xl border border-slate-200">
+                      <p className="text-slate-600 italic">
                         {slotBookings.length === 0
                           ? "You have not booked any gym slots yet."
                           : "No bookings match this date."}
@@ -694,15 +694,15 @@ const TrainerBooking = () => {
                           key={`${b.scheduleId}-${b.slotId}`}
                           className={`flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-6 rounded-xl border transition-all ${
                             past
-                              ? "bg-black/20 border-white/5 opacity-70"
-                              : "bg-white/5 border-white/10 hover:bg-white/10"
+                              ? "bg-blue-50/20 border-white/5 opacity-70"
+                              : "bg-slate-50 border-slate-200 hover:bg-slate-100"
                           }`}
                         >
                           <div>
-                            <h3 className="text-xl font-bold text-orange">
+                            <h3 className="text-xl font-bold text-blue-600">
                               {b.startTime} – {b.endTime}
                             </h3>
-                            <p className="text-gray-400 text-sm mt-1">
+                            <p className="text-slate-500 text-sm mt-1">
                               {b.date}
                               {b.dayLabel ? ` · ${b.dayLabel}` : ""}
                             </p>
@@ -710,9 +710,9 @@ const TrainerBooking = () => {
                               {(() => {
                                 const cls =
                                   live === "ONGOING"
-                                    ? "bg-orange/20 text-orange"
+                                    ? "bg-blue-600/20 text-blue-600"
                                     : live === "FINISHED"
-                                      ? "bg-white/10 text-gray-400"
+                                      ? "bg-slate-100 text-slate-500"
                                       : "bg-green-500/15 text-green-400";
                                 return (
                                   <span className={`font-bold uppercase text-xs px-2 py-1 rounded ${cls}`}>
@@ -727,19 +727,19 @@ const TrainerBooking = () => {
                               </p>
                             ) : null}
                             {b.bookedAt && (
-                              <p className="text-gray-500 text-xs mt-1">
+                              <p className="text-slate-600 text-xs mt-1">
                                 Booked {format(new Date(b.bookedAt), "yyyy-MM-dd HH:mm")}
                               </p>
                             )}
                             {past && (
-                              <p className="text-gray-500 text-xs mt-2 uppercase tracking-wide">Past date</p>
+                              <p className="text-slate-600 text-xs mt-2 uppercase tracking-wide">Past date</p>
                             )}
                           </div>
                           <div className="flex flex-wrap gap-2 shrink-0">
                             <button
                               type="button"
                               onClick={() => setViewSlotModal({ open: true, row: b })}
-                              className="bg-white/10 border border-white/25 text-white font-bold px-4 py-2 rounded hover:bg-white/15"
+                              className="bg-slate-100 border border-white/25 text-slate-900 font-bold px-4 py-2 rounded hover:bg-white/15"
                             >
                               View
                             </button>
@@ -749,7 +749,7 @@ const TrainerBooking = () => {
                                   type="button"
                                   disabled={actionBusy}
                                   onClick={() => openEditSlot(b)}
-                                  className="bg-orange/90 text-black font-bold px-4 py-2 rounded hover:bg-orange disabled:opacity-50"
+                                  className="bg-blue-600/90 text-black font-bold px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
                                 >
                                   Edit
                                 </button>
@@ -772,27 +772,27 @@ const TrainerBooking = () => {
               })()
             )}
 
-            <div className="mt-8 bg-black/40 rounded-xl border border-white/10 p-6">
+            <div className="mt-8 bg-blue-50/40 rounded-xl border border-slate-200 p-6">
               <div className="flex items-end justify-between gap-4 mb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-orange">Cancelled bookings</h3>
-                  <p className="text-sm text-gray-400 mt-1">
+                  <h3 className="text-lg font-bold text-blue-600">Cancelled bookings</h3>
+                  <p className="text-sm text-slate-500 mt-1">
                     Recent gym slot cancellations.
                   </p>
                 </div>
               </div>
 
               {cancelledSlotNotifs.length === 0 ? (
-                <div className="text-gray-500 italic text-sm">No cancelled bookings yet.</div>
+                <div className="text-slate-600 italic text-sm">No cancelled bookings yet.</div>
               ) : (
                 <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
                   {cancelledSlotNotifs.slice(0, 20).map((n) => (
                     <div
                       key={n._id}
-                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-white/10 bg-black/30 px-4 py-3"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-slate-200 bg-blue-50/30 px-4 py-3"
                     >
-                      <div className="text-gray-200 font-semibold">{n.message}</div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-slate-800 font-semibold">{n.message}</div>
+                      <div className="text-xs text-slate-600">
                         {n.createdAt ? format(new Date(n.createdAt), "yyyy-MM-dd HH:mm") : ""}
                       </div>
                     </div>
@@ -802,45 +802,45 @@ const TrainerBooking = () => {
             </div>
 
             {viewSlotModal.open && viewSlotModal.row && (
-              <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                <div className="bg-gray-900 rounded-xl p-8 w-full max-w-md border border-orange/30 shadow-2xl relative">
+              <div className="fixed inset-0 bg-blue-50/70 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-xl p-8 w-full max-w-md border border-blue-600/30 shadow-2xl relative">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 text-gray-400 hover:text-orange text-2xl font-bold"
+                    className="absolute top-2 right-2 text-slate-500 hover:text-blue-600 text-2xl font-bold"
                     onClick={() => setViewSlotModal({ open: false, row: null })}
                   >
                     ×
                   </button>
-                  <h3 className="text-2xl font-bold text-orange mb-4">Gym slot booking</h3>
+                  <h3 className="text-2xl font-bold text-blue-600 mb-4">Gym slot booking</h3>
                   <div className="space-y-3 text-sm">
-                    <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                      <span className="text-gray-400">Time</span>
-                      <span className="text-white font-semibold text-right">
+                    <div className="flex justify-between gap-4 border-b border-slate-200 pb-2">
+                      <span className="text-slate-500">Time</span>
+                      <span className="text-slate-900 font-semibold text-right">
                         {viewSlotModal.row.startTime} – {viewSlotModal.row.endTime}
                       </span>
                     </div>
-                    <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                      <span className="text-gray-400">Date</span>
-                      <span className="text-white font-semibold text-right">{viewSlotModal.row.date}</span>
+                    <div className="flex justify-between gap-4 border-b border-slate-200 pb-2">
+                      <span className="text-slate-500">Date</span>
+                      <span className="text-slate-900 font-semibold text-right">{viewSlotModal.row.date}</span>
                     </div>
                     {viewSlotModal.row.dayLabel ? (
-                      <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                        <span className="text-gray-400">Label</span>
-                        <span className="text-white font-semibold text-right">
+                      <div className="flex justify-between gap-4 border-b border-slate-200 pb-2">
+                        <span className="text-slate-500">Label</span>
+                        <span className="text-slate-900 font-semibold text-right">
                           {viewSlotModal.row.dayLabel}
                         </span>
                       </div>
                     ) : null}
                     {viewSlotModal.row.bookedAt ? (
-                      <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                        <span className="text-gray-400">Booked at</span>
-                        <span className="text-white font-semibold text-right">
+                      <div className="flex justify-between gap-4 border-b border-slate-200 pb-2">
+                        <span className="text-slate-500">Booked at</span>
+                        <span className="text-slate-900 font-semibold text-right">
                           {format(new Date(viewSlotModal.row.bookedAt), "yyyy-MM-dd HH:mm")}
                         </span>
                       </div>
                     ) : null}
                     <div className="flex justify-between gap-4 pb-1">
-                      <span className="text-gray-400">Status</span>
+                      <span className="text-slate-500">Status</span>
                       {(() => {
                         const st = getGymSlotLiveStatus(
                           viewSlotModal.row.date,
@@ -849,9 +849,9 @@ const TrainerBooking = () => {
                         );
                         const cls =
                           st === "ONGOING"
-                            ? "bg-orange/20 text-orange"
+                            ? "bg-blue-600/20 text-blue-600"
                             : st === "FINISHED"
-                              ? "bg-white/10 text-gray-400"
+                              ? "bg-slate-100 text-slate-500"
                               : "bg-green-500/15 text-green-400";
                         return (
                           <span className={`font-bold uppercase text-xs px-2 py-1 rounded ${cls}`}>
@@ -863,7 +863,7 @@ const TrainerBooking = () => {
                   </div>
                   <button
                     type="button"
-                    className="mt-6 w-full bg-white/10 border border-white/20 text-white font-bold py-2 rounded hover:bg-white/15"
+                    className="mt-6 w-full bg-slate-100 border border-slate-300 text-slate-900 font-bold py-2 rounded hover:bg-white/15"
                     onClick={() => setViewSlotModal({ open: false, row: null })}
                   >
                     Close
@@ -873,11 +873,11 @@ const TrainerBooking = () => {
             )}
 
             {editSlotModal.open && editSlotModal.row && (
-              <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                <div className="bg-gray-900 rounded-xl p-8 w-full max-w-md border border-orange/30 shadow-2xl relative">
+              <div className="fixed inset-0 bg-blue-50/70 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-xl p-8 w-full max-w-md border border-blue-600/30 shadow-2xl relative">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 text-gray-400 hover:text-orange text-2xl font-bold"
+                    className="absolute top-2 right-2 text-slate-500 hover:text-blue-600 text-2xl font-bold"
                     onClick={() => {
                       setEditSlotModal({ open: false, row: null });
                       setMoveTarget("");
@@ -885,14 +885,14 @@ const TrainerBooking = () => {
                   >
                     ×
                   </button>
-                  <h3 className="text-2xl font-bold text-orange mb-2">Move booking</h3>
-                  <p className="text-gray-400 text-sm mb-4">
+                  <h3 className="text-2xl font-bold text-blue-600 mb-2">Move booking</h3>
+                  <p className="text-slate-500 text-sm mb-4">
                     Pick another open slot (today or future). Your current booking is released when you
                     confirm.
                   </p>
-                  <label className="block text-white text-sm font-semibold mb-2">New slot</label>
+                  <label className="block text-slate-900 text-sm font-semibold mb-2">New slot</label>
                   <select
-                    className="w-full bg-black border border-white/20 text-white rounded p-2 mb-2"
+                    className="w-full bg-black border border-slate-300 text-slate-900 rounded p-2 mb-2"
                     value={moveTarget}
                     onChange={(e) => setMoveTarget(e.target.value)}
                   >
@@ -910,7 +910,7 @@ const TrainerBooking = () => {
                     type="button"
                     disabled={!moveTarget || slotActionKey === `move-${editSlotModal.row.scheduleId}-${editSlotModal.row.slotId}`}
                     onClick={submitMoveSlot}
-                    className="w-full bg-orange text-black font-bold py-2 rounded hover:bg-orange/90 disabled:opacity-50"
+                    className="w-full bg-blue-600 text-black font-bold py-2 rounded hover:bg-blue-700/90 disabled:opacity-50"
                   >
                     {slotActionKey === `move-${editSlotModal.row.scheduleId}-${editSlotModal.row.slotId}`
                       ? "Saving…"
@@ -922,11 +922,11 @@ const TrainerBooking = () => {
           </>
         )}
 
-        <div className="mt-10 pt-6 border-t border-white/10 flex justify-center">
+        <div className="mt-10 pt-6 border-t border-slate-200 flex justify-center">
           <button
             type="button"
             onClick={() => navigate(dashboardPath)}
-            className="bg-white/10 border border-white/20 text-white font-bold px-6 py-2 rounded-lg hover:bg-white/15"
+            className="bg-slate-100 border border-slate-300 text-slate-900 font-bold px-6 py-2 rounded-lg hover:bg-white/15"
           >
             Back to dashboard
           </button>
@@ -935,28 +935,28 @@ const TrainerBooking = () => {
 
       {/* Give Feedback Modal */}
       {feedbackModal.open && (
-        <div className="fixed inset-0 z-[999] overflow-y-auto bg-black/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-[999] overflow-y-auto bg-blue-50/80 backdrop-blur-md">
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="bg-gray-900 rounded-2xl p-8 w-full max-w-md border border-orange/30 shadow-2xl relative animate-in zoom-in-95 duration-300">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-md border border-blue-600/30 shadow-2xl relative animate-in zoom-in-95 duration-300">
               <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold transition-colors"
+                className="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-2xl font-bold transition-colors"
                 onClick={() => setFeedbackModal({ open: false, booking: null })}
               >
                 ×
               </button>
-              <h3 className="text-2xl font-bold text-orange mb-2">{isEditing ? "Update Feedback" : "Session Feedback"}</h3>
-              <p className="text-gray-400 text-sm mb-6 underline decoration-orange/30 offset-4 italic">
+              <h3 className="text-2xl font-bold text-blue-600 mb-2">{isEditing ? "Update Feedback" : "Session Feedback"}</h3>
+              <p className="text-slate-500 text-sm mb-6 underline decoration-orange/30 offset-4 italic">
                 {feedbackModal.booking?.title} with {feedbackModal.booking?.trainer?.name}
               </p>
 
               <div className="mb-6">
-                <label className="block text-gray-300 mb-3 font-semibold uppercase text-xs tracking-widest">Your Rating</label>
+                <label className="block text-slate-700 mb-3 font-semibold uppercase text-xs tracking-widest">Your Rating</label>
                 <div className="flex gap-3">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
                       type="button"
-                      className={`text-4xl transition-all hover:scale-110 active:scale-95 ${feedbackForm.rating >= star ? "text-orange drop-shadow-[0_0_12px_rgba(255,127,17,0.6)]" : "text-gray-700"}`}
+                      className={`text-4xl transition-all hover:scale-110 active:scale-95 ${feedbackForm.rating >= star ? "text-blue-600 drop-shadow-[0_0_12px_rgba(255,127,17,0.6)]" : "text-gray-700"}`}
                       onClick={() => setFeedbackForm(f => ({ ...f, rating: star }))}
                     >
                       ★
@@ -966,11 +966,11 @@ const TrainerBooking = () => {
               </div>
 
               <div className="mb-8">
-                <label className="block text-gray-300 mb-3 font-semibold uppercase text-xs tracking-widest">
-                  Comments <span className="text-gray-500 font-normal lowercase">(Optional)</span>
+                <label className="block text-slate-700 mb-3 font-semibold uppercase text-xs tracking-widest">
+                  Comments <span className="text-slate-600 font-normal lowercase">(Optional)</span>
                 </label>
                 <textarea
-                  className="w-full rounded-xl bg-black/50 border border-white/10 text-white p-4 focus:outline-none focus:border-orange/50 transition-all text-sm placeholder:italic"
+                  className="w-full rounded-xl bg-blue-50/50 border border-slate-200 text-slate-900 p-4 focus:outline-none focus:border-blue-600/50 transition-all text-sm placeholder:italic"
                   rows={4}
                   value={feedbackForm.comment}
                   onChange={e => setFeedbackForm(f => ({ ...f, comment: e.target.value }))}
@@ -979,7 +979,7 @@ const TrainerBooking = () => {
               </div>
 
               <button
-                className="w-full bg-orange text-white font-bold py-3.5 rounded-xl hover:bg-orange/90 disabled:opacity-50 transition-all uppercase tracking-widest shadow-xl shadow-orange/20 active:scale-[0.98]"
+                className="w-full bg-blue-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-blue-700/90 disabled:opacity-50 transition-all uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-[0.98]"
                 onClick={submitFeedback}
                 disabled={submitting || feedbackForm.rating === 0}
               >
@@ -992,24 +992,24 @@ const TrainerBooking = () => {
 
       {/* View Feedback Modal */}
       {viewFeedbackModal.open && (
-        <div className="fixed inset-0 z-[999] overflow-y-auto bg-black/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-[999] overflow-y-auto bg-blue-50/80 backdrop-blur-md">
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="bg-gray-900 rounded-2xl p-8 w-full max-w-md border border-green-500/30 shadow-2xl relative animate-in zoom-in-95 duration-300">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-md border border-green-500/30 shadow-2xl relative animate-in zoom-in-95 duration-300">
               <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold transition-colors"
+                className="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-2xl font-bold transition-colors"
                 onClick={() => setViewFeedbackModal({ open: false, feedback: null })}
               >
                 ×
               </button>
               <h3 className="text-2xl font-bold text-green-400 mb-6">Your Feedback</h3>
 
-              <div className="mb-6 bg-black/40 p-4 rounded-xl border border-white/5">
-                <label className="block text-gray-400 mb-2 font-semibold uppercase text-[10px] tracking-[0.2em]">Rating Given</label>
+              <div className="mb-6 bg-blue-50/40 p-4 rounded-xl border border-white/5">
+                <label className="block text-slate-500 mb-2 font-semibold uppercase text-[10px] tracking-[0.2em]">Rating Given</label>
                 <div className="flex gap-2 text-2xl">
                   {[1, 2, 3, 4, 5].map((starValue) => (
                     <span
                       key={starValue}
-                      className={`${viewFeedbackModal.feedback?.rating >= starValue ? "text-orange drop-shadow-[0_0_8px_rgba(255,127,17,0.4)]" : "text-gray-700"}`}
+                      className={`${viewFeedbackModal.feedback?.rating >= starValue ? "text-blue-600 drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" : "text-gray-700"}`}
                     >
                       ★
                     </span>
@@ -1017,16 +1017,16 @@ const TrainerBooking = () => {
                 </div>
               </div>
 
-              <div className="mb-6 bg-black/40 p-4 rounded-xl border border-white/5">
-                <label className="block text-gray-400 mb-2 font-semibold uppercase text-[10px] tracking-[0.2em]">Your Comments</label>
-                <p className="text-gray-200 italic leading-relaxed">
+              <div className="mb-6 bg-blue-50/40 p-4 rounded-xl border border-white/5">
+                <label className="block text-slate-500 mb-2 font-semibold uppercase text-[10px] tracking-[0.2em]">Your Comments</label>
+                <p className="text-slate-800 italic leading-relaxed">
                   "{viewFeedbackModal.feedback?.comment || "No comment provided."}"
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mt-8">
                 <button
-                  className="bg-orange/10 text-orange border border-orange/30 font-bold py-3 rounded-xl hover:bg-orange/20 transition-all uppercase tracking-widest text-xs"
+                  className="bg-blue-600/10 text-blue-600 border border-blue-600/30 font-bold py-3 rounded-xl hover:bg-blue-700/20 transition-all uppercase tracking-widest text-xs"
                   onClick={() => handleStartEdit(viewFeedbackModal.feedback)}
                 >
                   Edit
@@ -1040,7 +1040,7 @@ const TrainerBooking = () => {
               </div>
 
               <button
-                className="w-full mt-3 bg-white/5 border border-white/10 text-white font-bold py-3 rounded-xl hover:bg-white/10 transition-all uppercase tracking-widest text-xs"
+                className="w-full mt-3 bg-slate-50 border border-slate-200 text-slate-900 font-bold py-3 rounded-xl hover:bg-slate-100 transition-all uppercase tracking-widest text-xs"
                 onClick={() => setViewFeedbackModal({ open: false, feedback: null })}
               >
                 Close
@@ -1054,3 +1054,6 @@ const TrainerBooking = () => {
 };
 
 export default TrainerBooking;
+
+
+

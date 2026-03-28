@@ -17,27 +17,27 @@ function BarChart2({ peak, low }) {
   return (
     <div className="w-full">
       <div className="flex items-end justify-between gap-4">
-        <div className="flex-1 bg-black/30 border border-white/10 rounded-lg p-4">
-          <div className="text-sm text-gray-400 font-bold">Peak</div>
+        <div className="flex-1 bg-blue-50/30 border border-slate-200 rounded-lg p-4">
+          <div className="text-sm text-slate-500 font-bold">Peak</div>
           <div
             className="mt-3 mx-auto rounded-md bg-red-500/20 border border-red-500/30"
             style={{ height: `${(peakPct / 100) * maxH}px`, width: "100%", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 8 }}
           >
-            <div className="text-orange font-bold text-sm">{peakPct}%</div>
+            <div className="text-blue-600 font-bold text-sm">{peakPct}%</div>
           </div>
-          <div className="mt-3 text-xs text-gray-400 text-center truncate">
+          <div className="mt-3 text-xs text-slate-500 text-center truncate">
             {peak ? peak.key.split("-").join(" to ") : "—"}
           </div>
         </div>
-        <div className="flex-1 bg-black/30 border border-white/10 rounded-lg p-4">
-          <div className="text-sm text-gray-400 font-bold">Low</div>
+        <div className="flex-1 bg-blue-50/30 border border-slate-200 rounded-lg p-4">
+          <div className="text-sm text-slate-500 font-bold">Low</div>
           <div
             className="mt-3 mx-auto rounded-md bg-green-500/15 border border-green-500/30"
             style={{ height: `${(lowPct / 100) * maxH}px`, width: "100%", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 8 }}
           >
-            <div className="text-orange font-bold text-sm">{lowPct}%</div>
+            <div className="text-blue-600 font-bold text-sm">{lowPct}%</div>
           </div>
-          <div className="mt-3 text-xs text-gray-400 text-center truncate">
+          <div className="mt-3 text-xs text-slate-500 text-center truncate">
             {low ? low.key.split("-").join(" to ") : "—"}
           </div>
         </div>
@@ -51,7 +51,7 @@ function LineChart({ points }) {
   const height = 180;
   const pad = 28;
   const n = Array.isArray(points) ? points.length : 0;
-  if (n === 0) return <div className="text-gray-400 text-sm">No data</div>;
+  if (n === 0) return <div className="text-slate-500 text-sm">No data</div>;
 
   const xs = points.map((_, i) => (n === 1 ? pad : pad + (i * (width - pad * 2)) / (n - 1)));
   const ys = points.map((p) => {
@@ -92,7 +92,7 @@ function LineChart({ points }) {
           </g>
         ))}
       </svg>
-      <div className="flex justify-between text-xs text-gray-500 px-2 -mt-2">
+      <div className="flex justify-between text-xs text-slate-600 px-2 -mt-2">
         <span>{points[0].date}</span>
         <span>{points[n - 1].date}</span>
       </div>
@@ -525,30 +525,30 @@ const ScheduleManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100" />
         <div
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage:
-              "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)",
+              "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)",
             backgroundSize: "50px 50px",
           }}
         />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
         <div
-          className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
+          className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
           style={{ animationDelay: "2s" }}
         />
       </div>
 
       <div className="relative z-10 pt-32 pb-20">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="backdrop-blur-md bg-gradient-to-br from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
+          <div className="backdrop-blur-md bg-gradient-to-br from-blue-600/20 to-blue-600/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
             <div className="flex items-center mb-4">
               <svg
-                className="w-10 h-10 sm:w-12 sm:h-12 text-orange mr-3 sm:mr-4"
+                className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 mr-3 sm:mr-4"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -560,20 +560,20 @@ const ScheduleManagement = () => {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">
                 Schedule Management
               </h1>
             </div>
-            <p className="text-gray-300 text-base sm:text-lg">
+            <p className="text-slate-700 text-base sm:text-lg">
               Pick a date and capacity. Open hours follow the gym’s weekly rules; every generated slot
-              is exactly <span className="text-orange font-bold">{GYM_SLOT_DURATION_MINUTES} minutes</span>.
+              is exactly <span className="text-blue-600 font-bold">{GYM_SLOT_DURATION_MINUTES} minutes</span>.
             </p>
           </div>
 
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-5 sm:p-6 mb-6">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-xl p-5 sm:p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
               <svg
-                className="w-7 h-7 text-orange shrink-0"
+                className="w-7 h-7 text-blue-600 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -585,43 +585,43 @@ const ScheduleManagement = () => {
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h2 className="text-lg font-bold text-white">Opening hours</h2>
+              <h2 className="text-lg font-bold text-slate-900">Opening hours</h2>
             </div>
-            <div className="divide-y divide-white/10 rounded-lg bg-black/35 border border-white/10 overflow-hidden">
+            <div className="divide-y divide-white/10 rounded-lg bg-blue-50/35 border border-slate-200 overflow-hidden">
               <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm">
-                <span className="text-gray-300">Monday – Friday</span>
-                <span className="text-white font-semibold">
+                <span className="text-slate-700">Monday – Friday</span>
+                <span className="text-slate-900 font-semibold">
                   {formatAmPm("08:00")} – {formatAmPm("20:00")}
                 </span>
               </div>
               <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm">
-                <span className="text-gray-300">Saturday</span>
-                <span className="text-white font-semibold">
+                <span className="text-slate-700">Saturday</span>
+                <span className="text-slate-900 font-semibold">
                   {formatAmPm("09:00")} – {formatAmPm("18:00")}
                 </span>
               </div>
               <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm">
-                <span className="text-gray-300">Sunday</span>
-                <span className="text-white font-semibold">
+                <span className="text-slate-700">Sunday</span>
+                <span className="text-slate-900 font-semibold">
                   {formatAmPm("09:00")} – {formatAmPm("13:00")}
                 </span>
               </div>
             </div>
             {previewHours && (
-              <p className="mt-3 text-sm text-orange/90">
+              <p className="mt-3 text-sm text-blue-600/90">
                 Selected date uses <span className="font-bold">{previewHours.label}</span> hours:{" "}
                 {previewHours.openingTime}–{previewHours.closingTime} (slots fill this range only).
               </p>
             )}
           </div>
 
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6 sm:p-8 mb-8">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-xl p-6 sm:p-8 mb-8">
             {msg && (
               <div
                 className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold ${
                   isErrorMsg
                     ? "bg-red-500/20 text-red-200 border border-red-500/40"
-                    : "bg-orange/20 text-orange border border-orange/40"
+                    : "bg-blue-600/20 text-blue-600 border border-blue-600/40"
                 }`}
               >
                 {msg}
@@ -631,7 +631,7 @@ const ScheduleManagement = () => {
             <form onSubmit={onSubmit} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-orange mb-1">
+                  <label className="block text-sm font-bold text-blue-600 mb-1">
                     Date <span className="text-red-400">*</span>
                   </label>
                   <input
@@ -641,8 +641,8 @@ const ScheduleManagement = () => {
                     value={form.date}
                     onChange={onChange}
                     aria-invalid={fieldErrors.date ? "true" : "false"}
-                    className={`w-full bg-black/50 border rounded-lg px-3 py-2 text-white ${
-                      fieldErrors.date ? "border-red-500/70" : "border-white/20"
+                    className={`w-full bg-blue-50/50 border rounded-lg px-3 py-2 text-slate-900 ${
+                      fieldErrors.date ? "border-red-500/70" : "border-slate-300"
                     }`}
                   />
                   {fieldErrors.date && (
@@ -650,7 +650,7 @@ const ScheduleManagement = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-orange mb-1">
+                  <label className="block text-sm font-bold text-blue-600 mb-1">
                     Day label (optional)
                   </label>
                   <input
@@ -660,8 +660,8 @@ const ScheduleManagement = () => {
                     onChange={onChange}
                     maxLength={80}
                     placeholder="e.g. Monday promo block"
-                    className={`w-full bg-black/50 border rounded-lg px-3 py-2 text-white placeholder-gray-500 ${
-                      fieldErrors.dayLabel ? "border-red-500/70" : "border-white/20"
+                    className={`w-full bg-blue-50/50 border rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 ${
+                      fieldErrors.dayLabel ? "border-red-500/70" : "border-slate-300"
                     }`}
                   />
                   {fieldErrors.dayLabel && (
@@ -672,11 +672,11 @@ const ScheduleManagement = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-orange mb-1">
+                  <label className="block text-sm font-bold text-blue-600 mb-1">
                     Slot duration
                   </label>
-                  <div className="w-full bg-black/40 border border-white/20 rounded-lg px-3 py-2 text-white text-sm">
-                    {GYM_SLOT_DURATION_MINUTES} minutes <span className="text-gray-500">(fixed)</span>
+                  <div className="w-full bg-blue-50/40 border border-slate-300 rounded-lg px-3 py-2 text-slate-900 text-sm">
+                    {GYM_SLOT_DURATION_MINUTES} minutes <span className="text-slate-600">(fixed)</span>
                   </div>
                   {fieldErrors.slotDurationMinutes && (
                     <p className="text-red-400 text-xs mt-1">
@@ -685,7 +685,7 @@ const ScheduleManagement = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-orange mb-1">Capacity per slot</label>
+                  <label className="block text-sm font-bold text-blue-600 mb-1">Capacity per slot</label>
                   <input
                     type="number"
                     name="capacityPerSlot"
@@ -697,8 +697,8 @@ const ScheduleManagement = () => {
                     value={form.capacityPerSlot}
                     onChange={onChange}
                     aria-invalid={fieldErrors.capacityPerSlot ? "true" : "false"}
-                    className={`w-full bg-black/50 border rounded-lg px-3 py-2 text-white ${
-                      fieldErrors.capacityPerSlot ? "border-red-500/70" : "border-white/20"
+                    className={`w-full bg-blue-50/50 border rounded-lg px-3 py-2 text-slate-900 ${
+                      fieldErrors.capacityPerSlot ? "border-red-500/70" : "border-slate-300"
                     }`}
                   />
                   {fieldErrors.capacityPerSlot && (
@@ -711,7 +711,7 @@ const ScheduleManagement = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-orange text-black font-bold px-6 py-2 rounded-lg hover:bg-orange/90 disabled:opacity-50"
+                  className="bg-blue-600 text-black font-bold px-6 py-2 rounded-lg hover:bg-blue-700/90 disabled:opacity-50"
                 >
                   {saving ? "Saving…" : editId ? "Update schedule" : "Generate slots"}
                 </button>
@@ -719,7 +719,7 @@ const ScheduleManagement = () => {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="bg-white/10 border border-white/30 font-bold px-6 py-2 rounded-lg hover:bg-white/15"
+                    className="bg-slate-100 border border-white/30 font-bold px-6 py-2 rounded-lg hover:bg-white/15"
                   >
                     Cancel edit
                   </button>
@@ -728,11 +728,11 @@ const ScheduleManagement = () => {
             </form>
           </div>
 
-          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6">
+          <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-xl p-6">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
               <div>
-                <h2 className="text-xl font-bold text-orange">Existing schedules</h2>
-                <p className="text-sm text-gray-400 mt-1">
+                <h2 className="text-xl font-bold text-blue-600">Existing schedules</h2>
+                <p className="text-sm text-slate-500 mt-1">
                   Search by date or label. Use “Manage slots” to close/open slots and adjust capacity.
                 </p>
               </div>
@@ -741,15 +741,15 @@ const ScheduleManagement = () => {
                   value={scheduleQuery}
                   onChange={(e) => setScheduleQuery(e.target.value)}
                   placeholder="Search (e.g. 2026-03-26 or exam)"
-                  className="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-gray-500 w-full sm:w-[280px]"
+                  className="bg-blue-50/40 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 w-full sm:w-[280px]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPastSchedules((v) => !v)}
                   className={`px-3 py-2 rounded-lg font-bold text-sm border transition-colors ${
                     showPastSchedules
-                      ? "bg-orange text-black border-orange/50"
-                      : "bg-black/30 text-gray-200 border-white/10 hover:bg-black/40"
+                      ? "bg-blue-600 text-black border-blue-600/50"
+                      : "bg-blue-50/30 text-slate-800 border-slate-200 hover:bg-blue-50/40"
                   }`}
                 >
                   {showPastSchedules ? "Showing past" : "Hide past"}
@@ -757,9 +757,9 @@ const ScheduleManagement = () => {
               </div>
             </div>
             {loading ? (
-              <p className="text-gray-400">Loading…</p>
+              <p className="text-slate-500">Loading…</p>
             ) : filteredSchedules.length === 0 ? (
-              <p className="text-gray-400">Nothing here yet. Add your first block above.</p>
+              <p className="text-slate-500">Nothing here yet. Add your first block above.</p>
             ) : (
               <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2">
                 {filteredSchedules.map((row) => {
@@ -767,15 +767,15 @@ const ScheduleManagement = () => {
                   return (
                     <div
                       key={row._id}
-                      className="border border-white/10 rounded-lg p-4 bg-black/30"
+                      className="border border-slate-200 rounded-lg p-4 bg-blue-50/30"
                     >
                       <div className="flex flex-wrap justify-between gap-3">
                         <div>
-                          <p className="font-bold text-white">
+                          <p className="font-bold text-slate-900">
                             {row.date}
                             {row.dayLabel ? ` · ${row.dayLabel}` : ""}
                           </p>
-                          <p className="text-sm text-gray-400">
+                          <p className="text-sm text-slate-500">
                             {row.openingTime} – {row.closingTime} · {row.slotDurationMinutes} min slots ·
                             cap {row.capacityPerSlot} · {row.slots?.length || 0} slots
                           </p>
@@ -786,10 +786,10 @@ const ScheduleManagement = () => {
                             <span className="px-2 py-1 rounded bg-red-500/15 text-red-200 border border-red-500/30 font-bold">
                               FULL {sum.full}
                             </span>
-                            <span className="px-2 py-1 rounded bg-gray-500/20 text-gray-200 border border-white/10 font-bold">
+                            <span className="px-2 py-1 rounded bg-gray-500/20 text-slate-800 border border-slate-200 font-bold">
                               CLOSED {sum.closed}
                             </span>
-                            <span className="px-2 py-1 rounded bg-white/5 text-gray-200 border border-white/10 font-bold">
+                            <span className="px-2 py-1 rounded bg-slate-50 text-slate-800 border border-slate-200 font-bold">
                               OPEN SPOTS {sum.openSpots}
                             </span>
                           </div>
@@ -798,14 +798,14 @@ const ScheduleManagement = () => {
                           <button
                             type="button"
                             onClick={() => openSlotsModal(row)}
-                            className="text-sm bg-white/10 text-white px-3 py-1 rounded border border-white/20 font-semibold hover:bg-white/15"
+                            className="text-sm bg-slate-100 text-slate-900 px-3 py-1 rounded border border-slate-300 font-semibold hover:bg-white/15"
                           >
                             Manage slots
                           </button>
                           <button
                             type="button"
                             onClick={() => onEdit(row)}
-                            className="text-sm bg-orange/20 text-orange px-3 py-1 rounded border border-orange/40 font-semibold"
+                            className="text-sm bg-blue-600/20 text-blue-600 px-3 py-1 rounded border border-blue-600/40 font-semibold"
                           >
                             Edit
                           </button>
@@ -825,11 +825,11 @@ const ScheduleManagement = () => {
             )}
           </div>
 
-          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 mt-8 mb-8">
+          <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-8 mt-8 mb-8">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-orange">Utilization & Peak Analytics</h2>
-                <p className="text-gray-300 text-sm mt-1">
+                <h2 className="text-2xl font-bold text-blue-600">Utilization & Peak Analytics</h2>
+                <p className="text-slate-700 text-sm mt-1">
                   Auto-updates every 30 seconds. Peak detection uses admin-open slots only.
                 </p>
               </div>
@@ -841,8 +841,8 @@ const ScheduleManagement = () => {
                     onClick={() => setAnalyticsDays(d)}
                     className={`px-3 py-2 rounded-lg font-bold text-sm border transition-all ${
                       analyticsDays === d
-                        ? "bg-orange text-black border-orange/50"
-                        : "bg-black/20 text-gray-300 border-white/10 hover:bg-black/30"
+                        ? "bg-blue-600 text-black border-blue-600/50"
+                        : "bg-blue-50/20 text-slate-700 border-slate-200 hover:bg-blue-50/30"
                     }`}
                   >
                     Last {d}d
@@ -851,7 +851,7 @@ const ScheduleManagement = () => {
               </div>
             </div>
 
-            {analyticsLoading && <div className="text-gray-400 text-sm mb-3">Updating charts…</div>}
+            {analyticsLoading && <div className="text-slate-500 text-sm mb-3">Updating charts…</div>}
             {analyticsError && (
               <div className="text-red-400 text-sm mb-3 font-bold border border-red-500/30 bg-red-500/10 rounded-lg p-3">
                 {analyticsError}
@@ -862,18 +862,18 @@ const ScheduleManagement = () => {
               <>
                 <div className="mb-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-black/30 border border-white/10 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 font-bold">Overall utilization</div>
-                      <div className="text-3xl font-bold text-orange mt-2">
+                    <div className="bg-blue-50/30 border border-slate-200 rounded-lg p-4">
+                      <div className="text-sm text-slate-500 font-bold">Overall utilization</div>
+                      <div className="text-3xl font-bold text-blue-600 mt-2">
                         {analytics.overallUtilizationPct}%
                       </div>
                     </div>
-                    <div className="bg-black/30 border border-white/10 rounded-lg p-4 md:col-span-2">
-                      <div className="text-sm text-gray-400 font-bold">Least busy time</div>
-                      <div className="text-lg font-bold text-white mt-2">
+                    <div className="bg-blue-50/30 border border-slate-200 rounded-lg p-4 md:col-span-2">
+                      <div className="text-sm text-slate-500 font-bold">Least busy time</div>
+                      <div className="text-lg font-bold text-slate-900 mt-2">
                         {analytics.low ? analytics.low.key.split("-").join(" to ") : analytics.leastBusyTime}
                       </div>
-                      <div className="text-sm text-gray-300 mt-1">
+                      <div className="text-sm text-slate-700 mt-1">
                         {analytics.low
                           ? `Utilization: ${analytics.low.utilizationPct}%`
                           : "No peak data yet."}
@@ -883,80 +883,80 @@ const ScheduleManagement = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-                    <div className="text-gray-400 font-bold mb-3">Bar chart (Peak vs Low)</div>
+                  <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4">
+                    <div className="text-slate-500 font-bold mb-3">Bar chart (Peak vs Low)</div>
                     <BarChart2 peak={analytics.peak} low={analytics.low} />
                   </div>
-                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-                    <div className="text-gray-400 font-bold mb-3">Line chart (Daily usage)</div>
+                  <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4">
+                    <div className="text-slate-500 font-bold mb-3">Line chart (Daily usage)</div>
                     <LineChart points={analytics.daily || []} />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-                    <div className="text-gray-400 font-bold mb-3">Popular slots</div>
+                  <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4">
+                    <div className="text-slate-500 font-bold mb-3">Popular slots</div>
                     {Array.isArray(analytics.popularSlots) && analytics.popularSlots.length > 0 ? (
                       <div className="space-y-2">
                         {analytics.popularSlots.slice(0, 5).map((s) => (
                           <div
                             key={s.key}
-                            className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+                            className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
                           >
-                            <div className="text-white font-semibold">
+                            <div className="text-slate-900 font-semibold">
                               {String(s.key).split("-").join(" to ")}
                             </div>
-                            <div className="text-orange font-bold text-sm">
-                              {s.utilizationPct}% <span className="text-gray-400 font-semibold">({s.bookedSeats}/{s.capacitySeats})</span>
+                            <div className="text-blue-600 font-bold text-sm">
+                              {s.utilizationPct}% <span className="text-slate-500 font-semibold">({s.bookedSeats}/{s.capacitySeats})</span>
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-gray-400 text-sm">No usage data yet.</div>
+                      <div className="text-slate-500 text-sm">No usage data yet.</div>
                     )}
                   </div>
 
-                  <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-                    <div className="text-gray-400 font-bold mb-3">Empty slots</div>
+                  <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4">
+                    <div className="text-slate-500 font-bold mb-3">Empty slots</div>
                     {Array.isArray(analytics.emptySlots) && analytics.emptySlots.length > 0 ? (
                       <div className="space-y-2">
                         {analytics.emptySlots.slice(0, 5).map((s) => (
                           <div
                             key={s.key}
-                            className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+                            className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
                           >
-                            <div className="text-white font-semibold">
+                            <div className="text-slate-900 font-semibold">
                               {String(s.key).split("-").join(" to ")}
                             </div>
-                            <div className="text-gray-300 font-bold text-sm">
-                              0% <span className="text-gray-500 font-semibold">({s.bookedSeats}/{s.capacitySeats})</span>
+                            <div className="text-slate-700 font-bold text-sm">
+                              0% <span className="text-slate-600 font-semibold">({s.bookedSeats}/{s.capacitySeats})</span>
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-gray-400 text-sm">No empty slots in this range.</div>
+                      <div className="text-slate-500 text-sm">No empty slots in this range.</div>
                     )}
                   </div>
                 </div>
 
-                <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-                  <div className="text-gray-400 font-bold mb-2">Best approach</div>
-                  <p className="text-white/90 text-sm">{analytics.bestApproach}</p>
+                <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4">
+                  <div className="text-slate-500 font-bold mb-2">Best approach</div>
+                  <p className="text-slate-900/90 text-sm">{analytics.bestApproach}</p>
                 </div>
               </>
             )}
           </div>
 
           {slotModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-              <div className="w-full max-w-3xl rounded-2xl border border-white/15 bg-gray-900/95 backdrop-blur-md shadow-2xl">
-                <div className="sticky top-0 z-10 px-5 sm:px-6 pt-5 sm:pt-6 pb-4 bg-gray-900/95 border-b border-white/10">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-50/70 px-4">
+              <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white/95 backdrop-blur-md shadow-2xl">
+                <div className="sticky top-0 z-10 px-5 sm:px-6 pt-5 sm:pt-6 pb-4 bg-white/95 border-b border-slate-200">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <div className="text-orange font-bold text-xl">Manage slots</div>
-                      <div className="text-gray-300 text-sm mt-1">
+                      <div className="text-blue-600 font-bold text-xl">Manage slots</div>
+                      <div className="text-slate-700 text-sm mt-1">
                         {slotModal.date}
                         {slotModal.dayLabel ? ` · ${slotModal.dayLabel}` : ""}
                       </div>
@@ -964,7 +964,7 @@ const ScheduleManagement = () => {
                     <button
                       type="button"
                       onClick={closeSlotsModal}
-                      className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15"
+                      className="px-3 py-2 rounded-lg bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15"
                     >
                       Close
                     </button>
@@ -979,7 +979,7 @@ const ScheduleManagement = () => {
                     value={slotSearch}
                     onChange={(e) => setSlotSearch(e.target.value)}
                     placeholder="Search time (e.g. 10:00)"
-                    className="w-full md:w-60 bg-black/50 border border-white/20 rounded px-3 py-2 text-white placeholder-gray-500"
+                    className="w-full md:w-60 bg-blue-50/50 border border-slate-300 rounded px-3 py-2 text-slate-900 placeholder-slate-400"
                   />
                   <div className="flex flex-wrap gap-2 items-center">
                     <button
@@ -994,7 +994,7 @@ const ScheduleManagement = () => {
                       type="button"
                       disabled={slotActionKey === `bulk-open-${slotModal.scheduleId}`}
                       onClick={bulkOpenAll}
-                      className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15 disabled:opacity-60"
+                      className="px-3 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15 disabled:opacity-60"
                     >
                       Open all
                     </button>
@@ -1006,13 +1006,13 @@ const ScheduleManagement = () => {
                         step={1}
                         value={bulkCap}
                         onChange={(e) => setBulkCap(e.target.value)}
-                        className="w-28 bg-black/50 border border-white/20 rounded px-2 py-2 text-white"
+                        className="w-28 bg-blue-50/50 border border-slate-300 rounded px-2 py-2 text-slate-900"
                       />
                       <button
                         type="button"
                         disabled={slotActionKey === `bulk-cap-${slotModal.scheduleId}`}
                         onClick={bulkApplyCapacity}
-                        className="px-3 py-2 rounded bg-orange text-black font-bold hover:bg-orange/90 disabled:opacity-60"
+                        className="px-3 py-2 rounded bg-blue-600 text-black font-bold hover:bg-blue-700/90 disabled:opacity-60"
                       >
                         Set cap (all)
                       </button>
@@ -1037,18 +1037,18 @@ const ScheduleManagement = () => {
                     return (
                       <div
                         key={String(s._id)}
-                        className="rounded-xl border border-white/10 bg-white/5 p-4"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-4"
                       >
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div>
-                            <div className="text-white font-bold">
+                            <div className="text-slate-900 font-bold">
                               {s.startTime} – {s.endTime}
                             </div>
-                            <div className="text-sm text-gray-400 mt-1">
-                              Booked: <span className="text-white font-semibold">{booked}</span> /{" "}
-                              <span className="text-white font-semibold">{cap}</span>{" "}
+                            <div className="text-sm text-slate-500 mt-1">
+                              Booked: <span className="text-slate-900 font-semibold">{booked}</span> /{" "}
+                              <span className="text-slate-900 font-semibold">{cap}</span>{" "}
                               {isClosed ? (
-                                <span className="ml-2 text-xs px-2 py-1 rounded bg-gray-500/20 text-gray-200 border border-white/10 font-bold">
+                                <span className="ml-2 text-xs px-2 py-1 rounded bg-gray-500/20 text-slate-800 border border-slate-200 font-bold">
                                   CLOSED
                                 </span>
                               ) : (
@@ -1065,7 +1065,7 @@ const ScheduleManagement = () => {
                                 type="button"
                                 disabled={slotActionKey === `open-${slotModal.scheduleId}-${s._id}`}
                                 onClick={() => adminOpenSlot(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15 disabled:opacity-60"
+                                className="px-3 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15 disabled:opacity-60"
                               >
                                 Reopen
                               </button>
@@ -1090,20 +1090,20 @@ const ScheduleManagement = () => {
                                 onChange={(e) =>
                                   setSlotCapEdits((m) => ({ ...m, [String(s._id)]: e.target.value }))
                                 }
-                                className="w-28 bg-black/50 border border-white/20 rounded px-2 py-2 text-white"
+                                className="w-28 bg-blue-50/50 border border-slate-300 rounded px-2 py-2 text-slate-900"
                               />
                               <button
                                 type="button"
                                 disabled={slotActionKey === `cap-${slotModal.scheduleId}-${s._id}`}
                                 onClick={() => adminSetSlotCapacity(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-orange text-black font-bold hover:bg-orange/90 disabled:opacity-60"
+                                className="px-3 py-2 rounded bg-blue-600 text-black font-bold hover:bg-blue-700/90 disabled:opacity-60"
                               >
                                 Set cap
                               </button>
                             </div>
                           </div>
                         </div>
-                        <div className="text-xs text-gray-500 mt-2">
+                        <div className="text-xs text-slate-600 mt-2">
                           Capacity can’t be reduced below current bookings.
                         </div>
                       </div>
@@ -1115,7 +1115,7 @@ const ScheduleManagement = () => {
                   <button
                     type="button"
                     onClick={closeSlotsModal}
-                    className="px-4 py-2 rounded bg-white/10 border border-white/20 text-white font-bold hover:bg-white/15"
+                    className="px-4 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15"
                   >
                     Close
                   </button>
@@ -1145,3 +1145,7 @@ function isDateBeforeToday(yyyyMmDd) {
 }
 
 export default ScheduleManagement;
+
+
+
+

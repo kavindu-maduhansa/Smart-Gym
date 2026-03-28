@@ -49,26 +49,26 @@ function RecentActivity() {
   const getCategoryColor = (category) => {
     switch (category) {
       case "Cardio":
-        return "bg-red-900 text-red-100";
+        return "bg-red-100 text-red-700";
       case "Strength":
-        return "bg-blue-900 text-blue-100";
+        return "bg-blue-100 text-blue-700";
       case "Accessories":
-        return "bg-purple-900 text-purple-100";
+        return "bg-purple-100 text-purple-700";
       default:
-        return "bg-gray-700 text-gray-100";
+        return "bg-slate-200 text-slate-700";
     }
   };
 
   return (
-    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg">
+    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-lg">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-bold text-orange-500">
+        <h3 className="text-xl font-bold text-blue-600">
           📊 Recent Activity
         </h3>
         <button
           onClick={fetchRecentActivity}
-          className="text-gray-400 hover:text-orange-500 transition text-sm"
+          className="text-slate-500 hover:text-blue-600 transition text-sm"
           title="Refresh"
         >
           🔄 Refresh
@@ -77,15 +77,15 @@ function RecentActivity() {
 
       {/* CONTENT */}
       {loading ? (
-        <p className="text-center text-gray-400">Loading...</p>
+        <p className="text-center text-slate-500">Loading...</p>
       ) : activities.length === 0 ? (
-        <p className="text-center text-gray-400">No recent activity</p>
+        <p className="text-center text-slate-500">No recent activity</p>
       ) : (
         <div className="space-y-3 max-h-96 overflow-y-auto">
           {activities.map((activity) => (
             <div
               key={activity.id}
-              className="bg-gray-700 p-4 rounded-lg border-l-4 border-orange-500 hover:bg-gray-600 transition"
+              className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:bg-blue-100 transition"
             >
               {/* ROW 1: Action, Item Name, Time */}
               <div className="flex justify-between items-start mb-2">
@@ -97,7 +97,7 @@ function RecentActivity() {
 
                   {/* ITEM NAME */}
                   <div className="flex-1">
-                    <p className="font-semibold text-white">
+                    <p className="font-semibold text-slate-900">
                       {activity.itemName}
                     </p>
                     <span
@@ -112,7 +112,7 @@ function RecentActivity() {
 
                 {/* TIME AGO */}
                 <div className="text-right">
-                  <p className="text-xs text-gray-400">{activity.timeAgo}</p>
+                  <p className="text-xs text-slate-500">{activity.timeAgo}</p>
                   <p className={`text-sm font-bold ${getActionColor(activity.action)}`}>
                     {activity.action}
                   </p>
@@ -120,20 +120,20 @@ function RecentActivity() {
               </div>
 
               {/* ROW 2: Details */}
-              <div className="flex justify-between items-center text-sm text-gray-300 mt-2">
+              <div className="flex justify-between items-center text-sm text-slate-700 mt-2">
                 <div className="flex gap-4">
                   <div>
-                    <span className="text-gray-400">Qty:</span>
+                    <span className="text-slate-500">Qty:</span>
                     <span className="ml-1 font-semibold">{activity.quantity}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Condition:</span>
+                    <span className="text-slate-500">Condition:</span>
                     <span className="ml-1 font-semibold">{activity.condition}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <span>{getStatusIcon(activity.status)}</span>
-                  <span className="capitalize text-gray-400">
+                  <span className="capitalize text-slate-500">
                     {activity.status.replace("_", " ")}
                   </span>
                 </div>

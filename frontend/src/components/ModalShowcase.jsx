@@ -27,7 +27,7 @@ export const BasicModalExample = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-orange-500 rounded text-white">
+      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-blue-600 rounded text-slate-900">
         Open Modal
       </button>
 
@@ -72,7 +72,7 @@ export const ItemDetailsModalExample = () => {
 
   return (
     <>
-      <button onClick={handleOpenDetails} className="px-4 py-2 bg-blue-600 rounded text-white">
+      <button onClick={handleOpenDetails} className="px-4 py-2 bg-blue-600 rounded text-slate-900">
         View Item Details
       </button>
 
@@ -101,7 +101,7 @@ export const ConfirmationModalExample = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-red-600 rounded text-white">
+      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-red-600 rounded text-slate-900">
         Delete Item (with confirmation)
       </button>
 
@@ -175,7 +175,7 @@ export const FormModalExample = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-green-600 rounded text-white">
+      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-green-600 rounded text-slate-900">
         Add New Item (Form Modal)
       </button>
 
@@ -194,27 +194,27 @@ export const FormModalExample = () => {
 // ============= DEMO COMPONENT =============
 export const ModalShowcase = () => {
   return (
-    <div className="min-h-screen bg-[#121418] p-8 text-white">
+    <div className="min-h-screen bg-[#FFFFFF] p-8 text-slate-900">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-orange-500 mb-8">Modal Components Showcase</h1>
+        <h1 className="text-3xl font-bold text-blue-600 mb-8">Modal Components Showcase</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gray-800 p-6 rounded-xl">
+          <div className="bg-white p-6 rounded-xl">
             <h2 className="text-xl font-bold mb-4">Basic Modal</h2>
             <BasicModalExample />
           </div>
 
-          <div className="bg-gray-800 p-6 rounded-xl">
+          <div className="bg-white p-6 rounded-xl">
             <h2 className="text-xl font-bold mb-4">Item Details Modal</h2>
             <ItemDetailsModalExample />
           </div>
 
-          <div className="bg-gray-800 p-6 rounded-xl">
+          <div className="bg-white p-6 rounded-xl">
             <h2 className="text-xl font-bold mb-4">Confirmation Modal</h2>
             <ConfirmationModalExample />
           </div>
 
-          <div className="bg-gray-800 p-6 rounded-xl">
+          <div className="bg-white p-6 rounded-xl">
             <h2 className="text-xl font-bold mb-4">Form Modal</h2>
             <FormModalExample />
           </div>
@@ -225,3 +225,5 @@ export const ModalShowcase = () => {
 };
 
 export default ModalShowcase;
+
+

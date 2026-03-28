@@ -56,21 +56,21 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden flex items-center justify-center">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-md mx-auto px-4">
-        <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
           {/* Header */}
-          <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 p-6 sm:p-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 p-6 sm:p-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 text-center">
               Login
             </h2>
           </div>
@@ -84,10 +84,10 @@ const Login = () => {
             )}
             <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
               <div>
-                <label className="block mb-2 font-semibold text-gray-300 text-sm">Email</label>
+                <label className="block mb-2 font-semibold text-slate-700 text-sm">Email</label>
                 <input
                   type="email"
-                  className="w-full border border-white/20 rounded-lg px-4 py-2 sm:py-3 bg-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition-all"
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2 sm:py-3 bg-slate-100 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -96,12 +96,12 @@ const Login = () => {
                 />
               </div>
               <div>
-                <label className="block mb-2 font-semibold text-gray-300 text-sm">
+                <label className="block mb-2 font-semibold text-slate-700 text-sm">
                   Password
                 </label>
                 <input
                   type="password"
-                  className="w-full border border-white/20 rounded-lg px-4 py-2 sm:py-3 bg-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition-all"
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2 sm:py-3 bg-slate-100 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -111,16 +111,16 @@ const Login = () => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-orange hover:bg-orange/90 text-white font-bold py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base"
               >
                 Login
               </button>
             </form>
             <div className="mt-6 text-center">
-              <span className="text-gray-300 text-sm">Don't have an account? </span>
+              <span className="text-slate-700 text-sm">Don't have an account? </span>
               <Link
                 to="/register"
-                className="text-orange hover:text-orange/90 font-bold text-sm"
+                className="text-blue-600 hover:text-blue-600/90 font-bold text-sm"
               >
                 Register
               </Link>
@@ -133,3 +133,8 @@ const Login = () => {
 };
 
 export default Login;
+
+
+
+
+

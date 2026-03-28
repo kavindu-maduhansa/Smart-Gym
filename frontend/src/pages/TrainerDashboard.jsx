@@ -36,21 +36,21 @@ const TrainerDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 relative overflow-hidden">
       {/* Team Background Theme - Glassmorphism style */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
         {/* Animated Blobs to match Home.jsx */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-5 animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-5 animate-pulse"></div>
       </div>
 
       <div className="relative z-10 pt-32 pb-20 container mx-auto px-6">
         <header className="mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange to-orange/80 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-600/80 tracking-tight">
             Trainer Dashboard
           </h1>
-          <p className="text-gray-400 mt-4 text-lg">Welcome back. Manage your classes and students below.</p>
+          <p className="text-slate-500 mt-4 text-lg">Welcome back. Manage your classes and students below.</p>
         </header>
 
         {/* Dashboard Grid */}
@@ -59,23 +59,23 @@ const TrainerDashboard = () => {
             const Icon = f.icon;
             return (
               <Link to={f.path} key={f.id} className="block group">
-                <div className="h-full backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:-translate-y-2">
+                <div className="h-full backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 hover:bg-white/15 hover:border-blue-600/50 transition-all duration-300 transform hover:-translate-y-2">
 
                   {/* Icon Container */}
-                  <div className="w-16 h-16 bg-orange/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange/30 transition-colors duration-300">
-                    <Icon className="text-orange text-3xl transform group-hover:scale-110 transition-transform duration-300" />
+                  <div className="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-700/30 transition-colors duration-300">
+                    <Icon className="text-blue-600 text-3xl transform group-hover:scale-110 transition-transform duration-300" />
                   </div>
 
                   {/* Text Content */}
-                  <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-orange transition-colors">
+                  <h3 className="text-2xl font-bold mb-3 text-slate-900 group-hover:text-blue-600 transition-colors">
                     {f.title}
                   </h3>
-                  <p className="text-gray-400 leading-relaxed">
+                  <p className="text-slate-500 leading-relaxed">
                     {f.desc}
                   </p>
 
                   {/* Arrow Indicator */}
-                  <div className="mt-6 flex items-center text-orange font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="mt-6 flex items-center text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     Open Section <span className="ml-2">→</span>
                   </div>
                 </div>
@@ -89,3 +89,4 @@ const TrainerDashboard = () => {
 };
 
 export default TrainerDashboard;
+

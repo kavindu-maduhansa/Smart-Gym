@@ -72,22 +72,22 @@ const ViewUser = () => {
   const isExpired = membershipStatus === "Expired";
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 p-6 sm:p-8">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white text-center">
+            <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 p-6 sm:p-8">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 text-center">
                 User Details
               </h2>
             </div>
@@ -96,8 +96,8 @@ const ViewUser = () => {
             <div className="p-6 sm:p-8">
               {loading ? (
                 <div className="text-center">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
-                  <p className="text-gray-300 mt-4">Loading user details...</p>
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                  <p className="text-slate-700 mt-4">Loading user details...</p>
                 </div>
               ) : error ? (
                 <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm">
@@ -106,10 +106,10 @@ const ViewUser = () => {
               ) : user ? (
                 <div className="space-y-6">
                   {/* Personal Information */}
-                  <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center">
+                  <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-xl p-6">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 flex items-center">
                       <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-orange flex-shrink-0"
+                        className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 flex-shrink-0"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -125,28 +125,28 @@ const ViewUser = () => {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">Full Name</p>
-                        <p className="text-white text-base sm:text-lg font-semibold">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">Full Name</p>
+                        <p className="text-slate-900 text-base sm:text-lg font-semibold">
                           {user.name}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">
                           Email Address
                         </p>
-                        <p className="text-white text-base sm:text-lg font-semibold">
+                        <p className="text-slate-900 text-base sm:text-lg font-semibold">
                           {user.email}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">Role</p>
-                        <p className="text-white text-base sm:text-lg font-semibold capitalize">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">Role</p>
+                        <p className="text-slate-900 text-base sm:text-lg font-semibold capitalize">
                           {user.role}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">User ID</p>
-                        <p className="text-white text-base sm:text-lg font-semibold font-mono">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">User ID</p>
+                        <p className="text-slate-900 text-base sm:text-lg font-semibold font-mono">
                           {user._id?.slice(-12)}
                         </p>
                       </div>
@@ -154,10 +154,10 @@ const ViewUser = () => {
                   </div>
 
                   {/* Membership Information */}
-                  <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center">
+                  <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-xl p-6">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 flex items-center">
                       <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-orange flex-shrink-0"
+                        className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 flex-shrink-0"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -173,24 +173,24 @@ const ViewUser = () => {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">
                           Membership Type
                         </p>
-                        <p className="text-white text-base sm:text-lg font-semibold capitalize">
+                        <p className="text-slate-900 text-base sm:text-lg font-semibold capitalize">
                           {user.membershipType || "None"}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">Expiry Date</p>
-                        <p className="text-white text-base sm:text-lg font-semibold">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">Expiry Date</p>
+                        <p className="text-slate-900 text-base sm:text-lg font-semibold">
                           {formatDate(user.membershipExpiry)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs sm:text-sm mb-2">Status</p>
+                        <p className="text-slate-500 text-xs sm:text-sm mb-2">Status</p>
                         <p
                           className={`text-base sm:text-lg font-semibold ${
-                            isExpired ? "text-red-400" : "text-orange"
+                            isExpired ? "text-red-400" : "text-blue-600"
                           }`}
                         >
                           {membershipStatus}
@@ -209,20 +209,20 @@ const ViewUser = () => {
 
                   {/* Recent Feedbacks for Trainers */}
                   {user.role === "trainer" && feedbacks.length > 0 && (
-                    <div className="backdrop-blur-md bg-white/5 border border-orange/30 rounded-xl p-6 mt-6">
-                      <h3 className="text-lg sm:text-xl font-bold text-orange mb-4 flex items-center">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-orange flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.036 6.29a1 1 0 00.95.69h6.631c.969 0 1.371 1.24.588 1.81l-5.37 3.905a1 1 0 00-.364 1.118l2.036 6.29c.3.921-.755 1.688-1.538 1.118l-5.37-3.905a1 1 0 00-1.176 0l-5.37 3.905c-.783.57-1.838-.197-1.538-1.118l2.036-6.29a1 1 0 00-.364-1.118L2.342 11.717c-.783-.57-.38-1.81.588-1.81h6.631a1 1 0 00.95-.69l2.036-6.29z" /></svg>
+                    <div className="backdrop-blur-md bg-slate-50 border border-blue-600/30 rounded-xl p-6 mt-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-blue-600 mb-4 flex items-center">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.036 6.29a1 1 0 00.95.69h6.631c.969 0 1.371 1.24.588 1.81l-5.37 3.905a1 1 0 00-.364 1.118l2.036 6.29c.3.921-.755 1.688-1.538 1.118l-5.37-3.905a1 1 0 00-1.176 0l-5.37 3.905c-.783.57-1.838-.197-1.538-1.118l2.036-6.29a1 1 0 00-.364-1.118L2.342 11.717c-.783-.57-.38-1.81.588-1.81h6.631a1 1 0 00.95-.69l2.036-6.29z" /></svg>
                         Recent Feedbacks
                       </h3>
                       <ul className="space-y-4">
                         {feedbacks.map(fb => (
-                          <li key={fb._id} className="bg-black/40 border border-white/10 rounded-lg p-4">
+                          <li key={fb._id} className="bg-blue-50/40 border border-slate-200 rounded-lg p-4">
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-yellow-400 text-lg font-bold">{'★'.repeat(fb.rating)}{'☆'.repeat(5 - fb.rating)}</span>
-                              <span className="text-gray-400 text-xs ml-2">{new Date(fb.createdAt).toLocaleDateString()}</span>
+                              <span className="text-slate-500 text-xs ml-2">{new Date(fb.createdAt).toLocaleDateString()}</span>
                             </div>
-                            <div className="text-white font-semibold mb-1">{fb.studentId?.name || "Student"}</div>
-                            <div className="text-gray-300 text-sm">{fb.comment || <span className="italic text-gray-500">No comment</span>}</div>
+                            <div className="text-slate-900 font-semibold mb-1">{fb.studentId?.name || "Student"}</div>
+                            <div className="text-slate-700 text-sm">{fb.comment || <span className="italic text-slate-600">No comment</span>}</div>
                           </li>
                         ))}
                       </ul>
@@ -233,7 +233,7 @@ const ViewUser = () => {
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4">
                     <button
                       onClick={() => navigate(`/admin/users/edit/${user._id}`)}
-                      className="bg-orange hover:bg-orange/90 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                      className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
                     >
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -252,7 +252,7 @@ const ViewUser = () => {
                     </button>
                     <button
                       onClick={() => navigate("/admin/users")}
-                      className="backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                      className="backdrop-blur-md bg-slate-100 border border-slate-300 hover:bg-white/15 hover:border-blue-600/50 text-slate-900 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
                     >
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -281,3 +281,7 @@ const ViewUser = () => {
 };
 
 export default ViewUser;
+
+
+
+

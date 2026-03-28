@@ -113,14 +113,14 @@ const AdminRenewRequests = () => {
   const getStatusBadge = (status) => {
     const styles = {
       pending: "bg-yellow-500 text-yellow-900",
-      approved: "bg-green-500 text-white",
-      rejected: "bg-red-500 text-white",
+      approved: "bg-green-500 text-slate-900",
+      rejected: "bg-red-500 text-slate-900",
     };
 
     return (
       <span
         className={`px-3 py-1 rounded-full text-sm font-semibold ${
-          styles[status] || "bg-gray-500 text-white"
+          styles[status] || "bg-gray-500 text-slate-900"
         }`}
       >
         {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -130,9 +130,9 @@ const AdminRenewRequests = () => {
 
   const getPackageBadge = (packageType) => {
     const styles = {
-      monthly: "bg-blue-500 text-white",
-      quarterly: "bg-purple-500 text-white",
-      annual: "bg-orange-500 text-white",
+      monthly: "bg-blue-500 text-slate-900",
+      quarterly: "bg-purple-500 text-slate-900",
+      annual: "bg-blue-600 text-slate-900",
     };
 
     const labels = {
@@ -144,7 +144,7 @@ const AdminRenewRequests = () => {
     return (
       <span
         className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-          styles[packageType] || "bg-gray-500 text-white"
+          styles[packageType] || "bg-gray-500 text-slate-900"
         }`}
       >
         {labels[packageType] || packageType}
@@ -153,23 +153,23 @@ const AdminRenewRequests = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}
-          <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
+          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
             <div className="flex items-center mb-4 gap-4">
               <svg
-                className="w-8 h-8 sm:w-12 sm:h-12 text-orange flex-shrink-0"
+                className="w-8 h-8 sm:w-12 sm:h-12 text-blue-600 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -182,10 +182,10 @@ const AdminRenewRequests = () => {
                 />
               </svg>
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">
                   Membership Renewal Requests
                 </h1>
-                <p className="text-gray-300 text-sm sm:text-base mt-1">
+                <p className="text-slate-700 text-sm sm:text-base mt-1">
                   Review and manage student membership renewal requests
                 </p>
               </div>
@@ -194,18 +194,18 @@ const AdminRenewRequests = () => {
 
           {/* Content */}
           {loading ? (
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-12 text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
-              <p className="text-gray-300 mt-4 text-sm sm:text-base">Loading requests...</p>
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-12 text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+              <p className="text-slate-700 mt-4 text-sm sm:text-base">Loading requests...</p>
             </div>
           ) : error ? (
             <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-sm sm:text-base">
               {error}
             </div>
           ) : requests.length === 0 ? (
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-12 text-center">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-12 text-center">
               <svg
-                className="w-20 h-20 text-gray-400 mx-auto mb-4"
+                className="w-20 h-20 text-slate-500 mx-auto mb-4"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -217,39 +217,39 @@ const AdminRenewRequests = () => {
                   d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
                 />
               </svg>
-              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                 No Renewal Requests
               </h3>
-              <p className="text-gray-400 text-sm sm:text-base">
+              <p className="text-slate-500 text-sm sm:text-base">
                 There are no membership renewal requests at the moment.
               </p>
             </div>
           ) : (
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
               {/* Desktop Table View */}
               <div className="hidden md:block overflow-x-auto max-h-[600px] overflow-y-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="backdrop-blur-md bg-white/10 border-b border-white/20 sticky top-0 z-10">
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                    <tr className="backdrop-blur-md bg-slate-100 border-b border-slate-300 sticky top-0 z-10">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         User Name
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         Package
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         Current Expiry
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         Request Date
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900/90 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -258,21 +258,21 @@ const AdminRenewRequests = () => {
                     {requests.map((request) => (
                       <tr
                         key={request._id}
-                        className="hover:bg-white/5 transition-colors"
+                        className="hover:bg-slate-50 transition-colors"
                       >
-                        <td className="px-6 py-4 text-white font-medium text-sm">
+                        <td className="px-6 py-4 text-slate-900 font-medium text-sm">
                           {request.userName}
                         </td>
-                        <td className="px-6 py-4 text-gray-300 text-sm">
+                        <td className="px-6 py-4 text-slate-700 text-sm">
                           {request.email}
                         </td>
                         <td className="px-6 py-4 text-sm">
                           {getPackageBadge(request.packageType)}
                         </td>
-                        <td className="px-6 py-4 text-gray-300 text-sm">
+                        <td className="px-6 py-4 text-slate-700 text-sm">
                           {formatDate(request.currentMembershipExpiry)}
                         </td>
-                        <td className="px-6 py-4 text-gray-300 text-sm">
+                        <td className="px-6 py-4 text-slate-700 text-sm">
                           {formatDate(request.requestDate)}
                         </td>
                         <td className="px-6 py-4 text-sm">
@@ -297,7 +297,7 @@ const AdminRenewRequests = () => {
                               </button>
                             </div>
                           ) : (
-                            <span className="text-gray-400 text-xs italic">
+                            <span className="text-slate-500 text-xs italic">
                               No actions available
                             </span>
                           )}
@@ -314,28 +314,28 @@ const AdminRenewRequests = () => {
                   <div key={request._id} className="p-6 space-y-4">
                     <div className="flex justify-between items-start gap-4">
                       <div>
-                        <h3 className="text-white font-bold text-base sm:text-lg">
+                        <h3 className="text-slate-900 font-bold text-base sm:text-lg">
                           {request.userName}
                         </h3>
-                        <p className="text-gray-400 text-xs sm:text-sm">{request.email}</p>
+                        <p className="text-slate-500 text-xs sm:text-sm">{request.email}</p>
                       </div>
                       {getStatusBadge(request.status)}
                     </div>
 
                     <div className="space-y-2 text-xs sm:text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Package:</span>
+                        <span className="text-slate-500">Package:</span>
                         {getPackageBadge(request.packageType)}
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Current Expiry:</span>
-                        <span className="text-gray-300">
+                        <span className="text-slate-500">Current Expiry:</span>
+                        <span className="text-slate-700">
                           {formatDate(request.currentMembershipExpiry)}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Request Date:</span>
-                        <span className="text-gray-300">
+                        <span className="text-slate-500">Request Date:</span>
+                        <span className="text-slate-700">
                           {formatDate(request.requestDate)}
                         </span>
                       </div>
@@ -368,9 +368,9 @@ const AdminRenewRequests = () => {
           {/* Summary Stats */}
           {!loading && !error && requests.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 text-center">
-                <p className="text-gray-400 text-xs sm:text-sm mb-2">Total Requests</p>
-                <p className="text-3xl sm:text-4xl font-bold text-white">{requests.length}</p>
+              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 text-center">
+                <p className="text-slate-500 text-xs sm:text-sm mb-2">Total Requests</p>
+                <p className="text-3xl sm:text-4xl font-bold text-slate-900">{requests.length}</p>
               </div>
               <div className="backdrop-blur-md bg-yellow-600/20 border border-yellow-500/50 rounded-2xl p-6 text-center">
                 <p className="text-yellow-300 text-xs sm:text-sm mb-2">Pending</p>
@@ -399,3 +399,6 @@ const AdminRenewRequests = () => {
 };
 
 export default AdminRenewRequests;
+
+
+
