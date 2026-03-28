@@ -5,14 +5,18 @@ import apiClient from "../services/apiClient";
 
 const Contact = () => {
   const navigate = useNavigate();
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
   const [feedback, setFeedback] = useState({ type: "", text: "" });
+  const isLoggedIn =
+    typeof localStorage !== "undefined" && Boolean(localStorage.getItem("token"));
 
   const contactItems = [
     {
@@ -89,16 +93,70 @@ const Contact = () => {
     },
   ];
 
+  const validateField = (fieldName, rawValue) => {
+    const value = String(rawValue || "").trim();
+    if (fieldName === "name") {
+      if (!value) return "Name is required.";
+      if (value.length < 2) return "Name must be at least 2 characters.";
+      if (value.length > 60) return "Name cannot exceed 60 characters.";
+      if (!/^[A-Za-z\s]+$/.test(value)) return "Name can contain letters only.";
+      return "";
+    }
+    if (fieldName === "email") {
+      if (!value) return "Email is required.";
+      if (!EMAIL_RE.test(value)) return "Please enter a valid email address.";
+      if (value.length > 120) return "Email cannot exceed 120 characters.";
+      return "";
+    }
+    if (fieldName === "subject") {
+      if (!value) return "Subject is required.";
+      if (value.length < 3) return "Subject must be at least 3 characters.";
+      if (value.length > 120) return "Subject cannot exceed 120 characters.";
+      return "";
+    }
+    if (fieldName === "message") {
+      if (!value) return "Message is required.";
+      if (value.length < 10) return "Message must be at least 10 characters.";
+      if (value.length > 1000) return "Message cannot exceed 1000 characters.";
+      return "";
+    }
+    return "";
+  };
+
+  const validateForm = (payload) => {
+    const nextErrors = {
+      name: validateField("name", payload.name),
+      email: validateField("email", payload.email),
+      subject: validateField("subject", payload.subject),
+      message: validateField("message", payload.message),
+    };
+
+    Object.keys(nextErrors).forEach((key) => {
+      if (!nextErrors[key]) delete nextErrors[key];
+    });
+
+    return nextErrors;
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+    if (feedback.text) setFeedback({ type: "", text: "" });
+  };
+
+  const handleFieldBlur = (event) => {
+    const { name, value } = event.target;
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const handleSendMessage = async () => {
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+    const formErrors = validateForm(formData);
+    setErrors(formErrors);
+    if (Object.keys(formErrors).length > 0) {
       setFeedback({
         type: "error",
-        text: "Please fill all fields before sending your message.",
+        text: "Please fix the highlighted fields before sending your message.",
       });
       return;
     }
@@ -206,33 +264,60 @@ const Contact = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange"
+                  maxLength={60}
+                  aria-invalid={Boolean(errors.name)}
+                  className={`w-full px-4 py-3 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:border-orange ${
+                    errors.name ? "border-red-400" : "border-white/20"
+                  }`}
                 />
+                {errors.name ? <p className="text-sm text-red-400 -mt-3">{errors.name}</p> : null}
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Your email"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange"
+                  maxLength={120}
+                  aria-invalid={Boolean(errors.email)}
+                  className={`w-full px-4 py-3 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:border-orange ${
+                    errors.email ? "border-red-400" : "border-white/20"
+                  }`}
                 />
+                {errors.email ? <p className="text-sm text-red-400 -mt-3">{errors.email}</p> : null}
                 <input
                   type="text"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Subject"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange"
+                  maxLength={120}
+                  aria-invalid={Boolean(errors.subject)}
+                  className={`w-full px-4 py-3 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:border-orange ${
+                    errors.subject ? "border-red-400" : "border-white/20"
+                  }`}
                 />
+                {errors.subject ? <p className="text-sm text-red-400 -mt-3">{errors.subject}</p> : null}
                 <textarea
                   rows="5"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Write your message"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange resize-none"
+                  maxLength={1000}
+                  aria-invalid={Boolean(errors.message)}
+                  className={`w-full px-4 py-3 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:border-orange resize-none ${
+                    errors.message ? "border-red-400" : "border-white/20"
+                  }`}
                 ></textarea>
+                <div className="flex items-center justify-between -mt-3">
+                  {errors.message ? <p className="text-sm text-red-400">{errors.message}</p> : <span />}
+                  <p className="text-xs text-gray-400">{formData.message.length}/1000</p>
+                </div>
                 {feedback.text && (
                   <p
                     className={`text-sm ${
@@ -251,13 +336,15 @@ const Contact = () => {
                   >
                     {sending ? "Sending..." : "Send Message"}
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => navigate("/login")}
-                    className="border-2 border-orange text-orange font-bold px-6 sm:px-8 py-2.5 rounded-lg hover:bg-orange/10 transition-all duration-300 text-sm sm:text-base"
-                  >
-                    Login to Continue
-                  </button>
+                  {!isLoggedIn && (
+                    <button
+                      type="button"
+                      onClick={() => navigate("/login")}
+                      className="border-2 border-orange text-orange font-bold px-6 sm:px-8 py-2.5 rounded-lg hover:bg-orange/10 transition-all duration-300 text-sm sm:text-base"
+                    >
+                      Login to Continue
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
