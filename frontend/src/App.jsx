@@ -50,6 +50,7 @@ import TrainerPlansHub from "./pages/TrainerPlansHub";
 import Leaderboard from "./pages/Leaderboard";
 import Schedules from "./pages/Schedules";
 import AiGymAssistant from "./pages/AiGymAssistant";
+import DisplayInventorysUser from "./pages/disply_inventorys _user";
 import ChatWidget from "./components/Chatbot/ChatWidget";
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/schedules" element={<Schedules />} />
+        <Route path="/disply-inventorys-user" element={<DisplayInventorysUser />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 

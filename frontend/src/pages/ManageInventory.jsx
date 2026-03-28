@@ -337,9 +337,9 @@ function ManageInventory() {
                 <p className="text-gray-400 text-lg">📭 No items found</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* ================= ITEMS LIST ================= */}
-                <div className="lg:col-span-3">
+                <div className="lg:col-span-2">
                   <h2 className="text-xl font-bold text-orange-400 mb-4">
                     Items ({filteredItems.length})
                   </h2>
@@ -411,7 +411,7 @@ function ManageInventory() {
                 </div>
 
                 {/* ================= EDIT FORM ================= */}
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-2">
                   {editingId ? (
                     <div className={`bg-gradient-to-br from-[#1a1f2e]/85 to-[#0f1117]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-orange-500/50 shadow-xl sticky top-8 ${isFormAnimating ? 'form-enter' : 'form-exit'}`}
                       onAnimationEnd={() => {

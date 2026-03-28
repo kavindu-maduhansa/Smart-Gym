@@ -213,7 +213,7 @@ function DisplayAllInventory() {
 
                     {/* IMAGE SECTION */}
                     {item.image && (
-                      <div className="relative mb-5 overflow-hidden rounded-2xl h-52">
+                      <div className="relative mb-6 overflow-hidden rounded-2xl h-60 w-full bg-gray-800">
                         <img
                           src={`http://localhost:5000/uploads/${item.image}`}
                           alt={item.itemName}
