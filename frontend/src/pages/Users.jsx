@@ -284,7 +284,7 @@ const Users = () => {
               <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-gradient-to-r from-gray-800/90 to-gray-700/80 backdrop-blur-md sticky top-0 z-10">
+                    <tr className="bg-gray-200/80 sticky top-0 z-10 border-b-2 border-gray-300">
                       <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Name
                       </th>
@@ -303,22 +303,18 @@ const Users = () => {
                       <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-gray-300/50">
                     {users.map((user, index) => {
                       const status = getMembershipStatus(user.membershipExpiry);
                       return (
                         <tr
                           key={user._id}
-                          className={`${
-                            index % 2 === 0
-                              ? 'bg-gradient-to-r from-gray-800/40 to-gray-700/30'
-                              : 'bg-gradient-to-r from-gray-800/20 to-gray-700/15'
-                          } hover:from-gray-700/50 hover:to-gray-600/40 transition-all duration-200`}
+                          className="bg-white hover:bg-gray-50 transition-colors duration-150"
                         >
                           <td className="px-6 py-4 whitespace-nowrap text-slate-900 text-sm font-medium">
                             {user.name}
@@ -345,24 +341,24 @@ const Users = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span
-                              className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                              className={`px-3 py-1 text-xs font-semibold rounded-lg ${
                                 status === "Active"
-                                  ? "bg-green-500/80 text-slate-900"
+                                  ? "bg-green-200/50 text-green-700"
                                   : status === "Expired"
-                                    ? "bg-red-500/80 text-slate-900"
-                                    : "bg-gray-500/80 text-slate-900"
+                                    ? "bg-red-200/50 text-red-700"
+                                    : "bg-gray-200/50 text-slate-700"
                               }`}
                             >
                               {status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-center">
-                            <div className="flex items-center justify-center gap-2">
+                          <td className="px-6 py-4 whitespace-nowrap text-left">
+                            <div className="flex gap-2">
                               <button
                                 onClick={() =>
                                   navigate(`/admin/users/${user._id}`)
                                 }
-                                className="bg-blue-600/80 border border-blue-500/50 hover:bg-blue-600 text-slate-900 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                               >
                                 View
                               </button>
@@ -370,13 +366,13 @@ const Users = () => {
                                 onClick={() =>
                                   navigate(`/admin/users/edit/${user._id}`)
                                 }
-                                className="bg-blue-600/80 border border-blue-600/50 hover:bg-blue-700 text-slate-900 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                               >
                                 Edit
                               </button>
                               <button
                                 onClick={() => handleDelete(user._id, user.name)}
-                                className="bg-red-600/80 border border-red-500/50 hover:bg-red-600 text-slate-900 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                               >
                                 Delete
                               </button>
