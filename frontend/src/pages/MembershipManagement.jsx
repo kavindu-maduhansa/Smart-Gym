@@ -404,7 +404,7 @@ const MembershipManagement = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-gray-300">
                           {user.email}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-300 capitalize">
                           {user.membershipType || "None"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-gray-300">

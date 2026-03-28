@@ -129,7 +129,7 @@ const Profile = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-4">
                       <div>
                         <p className="text-gray-400 text-xs sm:text-sm mb-2">Membership Type</p>
-                        <p className="text-white text-base sm:text-lg font-semibold">{user.membershipType || "None"}</p>
+                        <p className="text-white text-base sm:text-lg font-semibold capitalize">{user.membershipType || "None"}</p>
                       </div>
                       <div>
                         <p className="text-gray-400 text-xs sm:text-sm mb-2">Expiry Date</p>

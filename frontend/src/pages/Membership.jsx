@@ -233,7 +233,7 @@ const Membership = () => {
                         <p className="text-gray-300 text-xs sm:text-sm mb-2">
                           Plan Type
                         </p>
-                        <p className="text-white text-lg sm:text-xl font-bold">
+                        <p className="text-white text-lg sm:text-xl font-bold capitalize">
                           {user.membershipType || "None"}
                         </p>
                       </div>

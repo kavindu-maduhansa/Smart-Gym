@@ -337,7 +337,7 @@ const Users = () => {
                               {user.role}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm capitalize">
                             {user.membershipType || "None"}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm">

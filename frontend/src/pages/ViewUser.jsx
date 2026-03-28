@@ -176,7 +176,7 @@ const ViewUser = () => {
                         <p className="text-gray-400 text-xs sm:text-sm mb-2">
                           Membership Type
                         </p>
-                        <p className="text-white text-base sm:text-lg font-semibold">
+                        <p className="text-white text-base sm:text-lg font-semibold capitalize">
                           {user.membershipType || "None"}
                         </p>
                       </div>

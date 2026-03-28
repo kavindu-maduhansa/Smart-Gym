@@ -194,7 +194,7 @@ const RenewMembership = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <p className="text-gray-400 text-xs sm:text-sm mb-2">Plan Type</p>
-                      <p className="text-white font-semibold text-sm sm:text-base">
+                      <p className="text-white font-semibold text-sm sm:text-base capitalize">
                         {user.membershipType || "None"}
                       </p>
                     </div>

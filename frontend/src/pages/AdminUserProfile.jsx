@@ -84,7 +84,7 @@ const AdminUserProfile = () => {
                   </div>
                   <div>
                     <p className="text-gray-400 text-xs mb-1">Membership Type</p>
-                    <p className="text-white text-base font-semibold">{user.membershipType || "None"}</p>
+                    <p className="text-white text-base font-semibold capitalize">{user.membershipType || "None"}</p>
                   </div>
                   <div>
                     <p className="text-gray-400 text-xs mb-1">Membership Expiry</p>
