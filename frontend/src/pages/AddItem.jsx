@@ -100,7 +100,7 @@ function AddItem() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Clear previous errors
     setErrors({});
 
@@ -218,9 +218,9 @@ function AddItem() {
 
         {/* ================= SUCCESS NOTIFICATION ================= */}
         {successMessage && (
-          <div className={`success-notification fixed top-20 left-1/2 -translate-x-1/2 z-50 
-          bg-gradient-to-r from-gray-900/90 to-gray-800/90 
-          border border-green-400/40 
+          <div className={`success-notification fixed top-20 left-1/2 -translate-x-1/2 z-50
+          bg-gradient-to-r from-gray-900/90 to-gray-800/90
+          border border-green-400/40
           px-8 py-5 rounded-xl shadow-2xl flex flex-col items-center justify-center gap-3 backdrop-blur-xl
           ${isExiting ? 'exit' : ''} w-11/12 sm:w-96`}>
 
