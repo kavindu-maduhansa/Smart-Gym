@@ -249,20 +249,9 @@ const AdminRenewMembership = () => {
                         <div
                           className={`bg-gradient-to-r ${plan.color} p-6 text-center`}
                         >
-                          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
+                          <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
                             {plan.name}
                           </h3>
-                          <div className="text-3xl sm:text-4xl font-bold text-slate-900 mb-1">
-                            {plan.price}
-                          </div>
-                          <p className="text-slate-900 text-opacity-90 text-xs sm:text-sm">
-                            {plan.duration}
-                          </p>
-                          {plan.savings && (
-                            <div className="mt-2 inline-block bg-slate-200 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
-                              {plan.savings}
-                            </div>
-                          )}
                         </div>
 
                         {/* Features */}
