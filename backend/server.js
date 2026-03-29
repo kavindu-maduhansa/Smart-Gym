@@ -121,5 +121,12 @@ const server = app.listen(PORT, () => {
 // Handle server errors
 server.on("error", (error) => {
   console.error("Server error:", error);
+  if (error && error.code === "EADDRINUSE") {
+    console.error(
+      `\nPort ${PORT} is already in use.\n` +
+        "Run: npm start or npm run dev (both run scripts/free-port.mjs first), or stop the other process.\n" +
+        "Windows: netstat -ano | findstr :5000  then  taskkill /PID <pid> /F\n",
+    );
+  }
   process.exit(1);
 });
