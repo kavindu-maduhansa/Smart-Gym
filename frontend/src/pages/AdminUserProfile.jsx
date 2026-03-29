@@ -65,7 +65,7 @@ const AdminUserProfile = () => {
                   <p className="text-slate-700 mt-4">Loading...</p>
                 </div>
               ) : error ? (
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center text-sm">
                   {error}
                 </div>
               ) : user ? (

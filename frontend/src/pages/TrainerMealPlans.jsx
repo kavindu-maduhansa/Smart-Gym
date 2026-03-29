@@ -85,8 +85,8 @@ const TrainerMealPlans = () => {
         try {
             const token = localStorage.getItem("token");
             const isEdit = !!newPlan._id;
-            const url = isEdit 
-                ? `http://localhost:5000/api/plans/meal/${newPlan._id}` 
+            const url = isEdit
+                ? `http://localhost:5000/api/plans/meal/${newPlan._id}`
                 : "http://localhost:5000/api/plans/meal";
             const method = isEdit ? "put" : "post";
 
@@ -191,16 +191,16 @@ const TrainerMealPlans = () => {
                             plans.map((plan) => (
                                 <div key={plan._id} className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-blue-600/30 transition-all flex flex-col h-full group relative">
                                     <div className="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                                        <button 
+                                        <button
                                             onClick={() => handleEditPlan(plan)}
                                             className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-all"
                                             title="Edit Plan"
                                         >
                                             <FaEdit />
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => handleDeletePlan(plan._id)}
-                                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all"
+                                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-700 rounded-lg transition-all"
                                             title="Delete Plan"
                                         >
                                             <FaTrash />

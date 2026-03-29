@@ -80,7 +80,7 @@ function ManageInventory() {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Validation for specific fields
     if (name === "itemName") {
       // Only allow letters and spaces
@@ -316,7 +316,7 @@ function ManageInventory() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg bg-blue-600/20 text-slate-900 border-2 border-blue-500/50 focus:border-blue-600 focus:outline-none transition duration-300 backdrop-blur-md placeholder-slate-400-200/60 text-sm font-medium hover:bg-blue-600/25 hover:border-blue-500/70"
                 />
-                
+
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm("")}
@@ -398,7 +398,7 @@ function ManageInventory() {
                                 e.stopPropagation();
                                 handleDelete(item._id);
                               }}
-                              className="p-3 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-300 transition text-lg"
+                              className="p-3 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-700 transition text-lg"
                               title="Delete"
                             >
                               🗑️

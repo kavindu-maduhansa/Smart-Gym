@@ -272,7 +272,7 @@ const Users = () => {
               </div>
             ) : error ? (
               <div className="p-12 text-center">
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg inline-block text-sm sm:text-base">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg inline-block text-sm sm:text-base">
                   {error}
                 </div>
               </div>

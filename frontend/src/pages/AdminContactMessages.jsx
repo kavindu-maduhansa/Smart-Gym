@@ -175,8 +175,8 @@ const AdminContactMessages = () => {
   const statusPillClass = (status) => {
     const normalized = normalizeStatus(status);
     if (normalized === "new") return "bg-blue-600/20 text-blue-600 border border-blue-600/40";
-    if (normalized === "seen") return "bg-blue-500/20 text-blue-300 border border-blue-400/50";
-    return "bg-green-500/20 text-green-300 border border-green-400/50";
+    if (normalized === "seen") return "bg-blue-500/20 text-blue-700 border border-blue-400/50";
+    return "bg-green-500/20 text-green-700 border border-green-400/50";
   };
 
   const handleView = async (item) => {
@@ -279,7 +279,7 @@ const AdminContactMessages = () => {
                 onClick={() => setAutoRefresh((prev) => !prev)}
                 className={`font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm ${
                   autoRefresh
-                    ? "bg-green-500/20 border border-green-400 text-green-300"
+                    ? "bg-green-500/20 border border-green-400 text-green-700"
                     : "border border-white/30 text-slate-900 hover:bg-slate-100"
                 }`}
               >
@@ -289,7 +289,7 @@ const AdminContactMessages = () => {
           </div>
 
           <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8">
-            {error && <p className="text-red-400 mb-4">{error}</p>}
+            {error && <p className="text-red-700 mb-4">{error}</p>}
             {loading ? (
               <p className="text-slate-700">Loading messages...</p>
             ) : filteredMessages.length === 0 ? (
@@ -337,7 +337,7 @@ const AdminContactMessages = () => {
                         <button
                           type="button"
                           onClick={() => handleStatusUpdate(item._id, "seen")}
-                          className="border border-blue-400 text-blue-300 font-bold px-4 sm:px-6 py-2 rounded-lg hover:bg-blue-500/10 transition-all duration-300 text-xs sm:text-sm"
+                          className="border border-blue-400 text-blue-700 font-bold px-4 sm:px-6 py-2 rounded-lg hover:bg-blue-500/10 transition-all duration-300 text-xs sm:text-sm"
                         >
                           Mark Seen
                         </button>
@@ -346,7 +346,7 @@ const AdminContactMessages = () => {
                         <button
                           type="button"
                           onClick={() => handleStatusUpdate(item._id, "replied")}
-                          className="border border-green-400 text-green-300 font-bold px-4 sm:px-6 py-2 rounded-lg hover:bg-green-500/10 transition-all duration-300 text-xs sm:text-sm"
+                          className="border border-green-400 text-green-700 font-bold px-4 sm:px-6 py-2 rounded-lg hover:bg-green-500/10 transition-all duration-300 text-xs sm:text-sm"
                         >
                           Mark Replied
                         </button>
@@ -354,7 +354,7 @@ const AdminContactMessages = () => {
                       <button
                         type="button"
                         onClick={() => handleDelete(item._id)}
-                        className="border border-red-400 text-red-300 font-bold px-4 sm:px-6 py-2 rounded-lg hover:bg-red-500/10 transition-all duration-300 text-xs sm:text-sm"
+                        className="border border-red-400 text-red-700 font-bold px-4 sm:px-6 py-2 rounded-lg hover:bg-red-500/10 transition-all duration-300 text-xs sm:text-sm"
                       >
                         Delete
                       </button>

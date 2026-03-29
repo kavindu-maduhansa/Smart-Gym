@@ -132,7 +132,7 @@ const AdminContactMessageView = () => {
             {loading ? (
               <p className="text-slate-700">Loading message...</p>
             ) : error ? (
-              <p className="text-red-400">{error}</p>
+              <p className="text-red-700">{error}</p>
             ) : !messageData ? (
               <p className="text-slate-700">Message not found.</p>
             ) : (

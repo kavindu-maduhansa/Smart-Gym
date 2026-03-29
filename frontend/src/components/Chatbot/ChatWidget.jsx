@@ -413,7 +413,7 @@ export default function ChatWidget() {
                 </div>
                 {error && (
                   <div className="px-4 pb-3">
-                    <div className="text-red-200 bg-red-500/10 border border-red-500/30 text-xs rounded-xl p-3">
+                    <div className="text-red-800 bg-red-500/10 border border-red-500/30 text-xs rounded-xl p-3">
                       {error}
                     </div>
                   </div>

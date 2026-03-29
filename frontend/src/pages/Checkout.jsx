@@ -54,13 +54,13 @@ const Checkout = () => {
 
   const handleChange = (e) => {
     let { name, value } = e.target;
-    
+
     // Auto-formatting for Card Number
     if (name === "cardNumber") {
       value = value.replace(/\D/g, "").substring(0, 16);
       value = value.replace(/(\d{4})(?=\d)/g, "$1 ");
     }
-    
+
     // Auto-formatting for Expiry
     if (name === "expiry") {
       value = value.replace(/\D/g, "").substring(0, 4);
@@ -68,7 +68,7 @@ const Checkout = () => {
         value = value.substring(0, 2) + "/" + value.substring(2);
       }
     }
-    
+
     // CVV limit
     if (name === "cvv") {
       value = value.replace(/\D/g, "").substring(0, 4);
@@ -84,7 +84,7 @@ const Checkout = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    
+
     if (deliveryMethod === "Home Delivery") {
       if (!formData.address.trim()) newErrors.address = "Address is required";
       if (!formData.city.trim()) newErrors.city = "City is required";
@@ -97,7 +97,7 @@ const Checkout = () => {
     if (formData.cardNumber.replace(/\s/g, "").length !== 16) {
       newErrors.cardNumber = "Card number must be 16 digits";
     }
-    
+
     if (!/^\d{2}\/\d{2}$/.test(formData.expiry)) {
       newErrors.expiry = "Use MM/YY format";
     } else {
@@ -105,14 +105,14 @@ const Checkout = () => {
       const now = new Date();
       const currentYear = now.getFullYear() % 100;
       const currentMonth = now.getMonth() + 1;
-      
+
       if (m < 1 || m > 12) {
         newErrors.expiry = "Invalid month (01-12)";
       } else if (y < currentYear || (y === currentYear && m < currentMonth)) {
         newErrors.expiry = "Card has expired";
       }
     }
-    
+
     if (formData.cvv.length < 3) {
       newErrors.cvv = "Invalid CVV";
     }
@@ -171,7 +171,7 @@ const Checkout = () => {
           </h1>
 
           {message && (
-            <div className={`mb-8 p-4 rounded-lg border ${message.includes("successfully") ? "bg-green-500/20 border-green-500/50 text-green-200" : "bg-blue-600/20 border-blue-600/50 text-blue-200"}`}>
+            <div className={`mb-8 p-4 rounded-lg border ${message.includes("successfully") ? "bg-green-500/20 border-green-500/50 text-green-800" : "bg-blue-600/20 border-blue-600/50 text-blue-800"}`}>
               {message}
             </div>
           )}
@@ -389,7 +389,7 @@ const Checkout = () => {
             <div className="lg:col-span-1">
               <div className="backdrop-blur-md bg-gradient-to-br from-blue-600-500/20 to-blue-600-500/10 border border-blue-600/30 rounded-2xl p-6 sticky top-32 shadow-2xl">
                 <h2 className="text-xl font-bold text-slate-900 mb-6 uppercase tracking-tight">Order Summary</h2>
-                
+
                 <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                   {cart.items.map((item) => (
                     <div key={item.supplementId._id} className="flex gap-4 items-center group">
@@ -416,7 +416,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between text-slate-500 text-sm">
                     <span>Shipping</span>
-                    <span className="text-green-400 font-semibold uppercase text-[10px] bg-green-400/10 px-2 py-0.5 rounded tracking-tighter">Free</span>
+                    <span className="text-green-700 font-semibold uppercase text-[10px] bg-green-400/10 px-2 py-0.5 rounded tracking-tighter">Free</span>
                   </div>
                   <div className="flex justify-between text-slate-500 text-sm">
                     <span>Estimated Tax (10%)</span>
@@ -443,13 +443,13 @@ const Checkout = () => {
           <div className="relative z-10 w-full max-w-md bg-gradient-to-br from-gray-900 to-blue-50 border border-blue-600/30 rounded-3xl p-8 shadow-2xl shadow-blue-600/20 transform animate-in zoom-in-95 fade-in duration-300">
             <div className="flex flex-col items-center text-center">
               <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 border border-green-500/30 animate-pulse">
-                <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-10 h-10 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <h2 className="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">Order Confirmed!</h2>
               <p className="text-slate-500 mb-6">Thank you for your purchase. Your premium supplements are being prepared.</p>
-              
+
               <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-8">
                 <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Order Identifier</p>
                 <p className="text-xl font-mono font-bold text-blue-600">{generatedOrderId}</p>

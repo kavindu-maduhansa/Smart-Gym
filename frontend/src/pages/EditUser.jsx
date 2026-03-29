@@ -118,7 +118,7 @@ const EditUser = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Success Message */}
                 {success && (
-                  <div className="bg-green-500 bg-opacity-20 border border-green-500 text-green-200 p-4 rounded-lg flex items-center">
+                  <div className="bg-green-500 bg-opacity-20 border border-green-500 text-green-800 p-4 rounded-lg flex items-center">
                     <svg
                       className="w-5 h-5 mr-2"
                       fill="currentColor"
@@ -136,7 +136,7 @@ const EditUser = () => {
 
                 {/* Error Message */}
                 {error && (
-                  <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-4 rounded-lg flex items-center">
+                  <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-800 p-4 rounded-lg flex items-center">
                     <svg
                       className="w-5 h-5 mr-2"
                       fill="currentColor"
@@ -273,7 +273,7 @@ const EditUser = () => {
                 </div>
 
                 {/* Info Text */}
-                <div className="bg-blue-500 bg-opacity-20 border border-blue-500 text-blue-200 p-3 rounded-lg text-sm">
+                <div className="bg-blue-500 bg-opacity-20 border border-blue-500 text-blue-800 p-3 rounded-lg text-sm">
                   <p>
                     <strong>Note:</strong> Updating the user's information will
                     take effect immediately. Make sure all details are correct.

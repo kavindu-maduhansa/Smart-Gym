@@ -85,7 +85,7 @@ const Profile = () => {
                   <p className="text-slate-700 mt-4">Loading profile...</p>
                 </div>
               ) : error ? (
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center">
                   {error}
                 </div>
               ) : user ? (
@@ -137,14 +137,14 @@ const Profile = () => {
                       </div>
                       <div>
                         <p className="text-slate-500 text-xs sm:text-sm mb-2">Status</p>
-                        <p className={`text-base sm:text-lg font-semibold ${isExpired ? "text-red-400" : "text-blue-600"}`}>
+                        <p className={`text-base sm:text-lg font-semibold ${isExpired ? "text-red-700" : "text-blue-600"}`}>
                           {membershipStatus}
                         </p>
                       </div>
                     </div>
 
                     {isExpired && (
-                      <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-sm">
+                      <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-sm">
                         <p className="font-semibold">⚠ Your membership has expired. Please renew to continue enjoying our services.</p>
                       </div>
                     )}

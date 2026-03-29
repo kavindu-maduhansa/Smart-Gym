@@ -116,7 +116,7 @@ const EditProfile = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Success Message */}
                   {success && (
-                    <div className="bg-green-600/20 border border-green-500/50 text-green-200 p-4 rounded-lg flex items-center text-sm sm:text-base">
+                    <div className="bg-green-600/20 border border-green-500/50 text-green-800 p-4 rounded-lg flex items-center text-sm sm:text-base">
                       <svg
                         className="w-5 h-5 mr-2 flex-shrink-0"
                         fill="currentColor"
@@ -134,7 +134,7 @@ const EditProfile = () => {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg flex items-center text-sm sm:text-base">
+                    <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg flex items-center text-sm sm:text-base">
                       <svg
                         className="w-5 h-5 mr-2 flex-shrink-0"
                         fill="currentColor"
@@ -247,7 +247,7 @@ const EditProfile = () => {
                   </div>
 
                   {/* Info Text */}
-                  <div className="bg-blue-600/20 border border-blue-500/50 text-blue-200 p-3 sm:p-4 rounded-lg text-xs sm:text-sm">
+                  <div className="bg-blue-600/20 border border-blue-500/50 text-blue-800 p-3 sm:p-4 rounded-lg text-xs sm:text-sm">
                     <p>
                       <strong>Note:</strong> After updating your profile, the
                       changes will be reflected immediately across your account.

@@ -353,7 +353,7 @@ const MembershipManagement = () => {
             </div>
           ) : error ? (
             <div className="p-12 text-center">
-              <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-4 rounded-lg inline-block">
+              <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-800 p-4 rounded-lg inline-block">
                 {error}
               </div>
             </div>
@@ -592,14 +592,14 @@ const MembershipManagement = () => {
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-green-300 text-sm mb-1">Approved</p>
-                <p className="text-green-400 text-2xl font-bold">
+                <p className="text-green-700 text-sm mb-1">Approved</p>
+                <p className="text-green-700 text-2xl font-bold">
                   {requests.filter((r) => r.status === "approved").length}
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-red-300 text-sm mb-1">Rejected</p>
-                <p className="text-red-400 text-2xl font-bold">
+                <p className="text-red-700 text-sm mb-1">Rejected</p>
+                <p className="text-red-700 text-2xl font-bold">
                   {requests.filter((r) => r.status === "rejected").length}
                 </p>
               </div>
@@ -617,7 +617,7 @@ const MembershipManagement = () => {
           </div>
           <div className="bg-white bg-opacity-50 rounded-lg p-4">
             <p className="text-slate-500 text-sm mb-1">Active</p>
-            <p className="text-green-400 text-2xl font-bold">
+            <p className="text-green-700 text-2xl font-bold">
               {
                 users.filter(
                   (u) => getMembershipStatus(u.membershipExpiry) === "Active",
@@ -627,7 +627,7 @@ const MembershipManagement = () => {
           </div>
           <div className="bg-white bg-opacity-50 rounded-lg p-4">
             <p className="text-slate-500 text-sm mb-1">Expired</p>
-            <p className="text-red-400 text-2xl font-bold">
+            <p className="text-red-700 text-2xl font-bold">
               {
                 users.filter(
                   (u) =>

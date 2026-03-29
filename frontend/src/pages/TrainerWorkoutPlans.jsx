@@ -199,13 +199,13 @@ const TrainerWorkoutPlans = () => {
                                         </button>
                                         <button
                                             onClick={() => handleDeletePlan(plan._id)}
-                                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all"
+                                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-700 rounded-lg transition-all"
                                             title="Delete Plan"
                                         >
                                             <FaTrash />
                                         </button>
                                     </div>
-                                    <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded w-fit mb-4 ${plan.difficulty === "Beginner" ? "bg-green-500/10 text-green-400" : "bg-blue-600/10 text-blue-600"
+                                    <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded w-fit mb-4 ${plan.difficulty === "Beginner" ? "bg-green-500/10 text-green-700" : "bg-blue-600/10 text-blue-600"
                                         }`}>
                                         {plan.difficulty}
                                     </span>

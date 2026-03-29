@@ -156,7 +156,7 @@ const Cart = () => {
 
           {/* Message */}
           {message && (
-            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-200">
+            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-800">
               {message}
             </div>
           )}

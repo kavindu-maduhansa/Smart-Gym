@@ -109,7 +109,7 @@ const StudentDashboard = () => {
               </div>
               <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-lg p-4 hover:bg-white/15 transition-all">
                 <p className="text-slate-700 text-xs sm:text-sm font-semibold mb-2">Status</p>
-                <p className={`text-lg sm:text-xl font-bold ${isExpired ? "text-red-400" : "text-blue-600"}`}>
+                <p className={`text-lg sm:text-xl font-bold ${isExpired ? "text-red-700" : "text-blue-600"}`}>
                   {membershipStatus}
                 </p>
               </div>
@@ -120,7 +120,7 @@ const StudentDashboard = () => {
           {isExpired && (
             <div className="backdrop-blur-md bg-red-600/20 border border-red-500/50 text-slate-900 p-6 sm:p-8 rounded-2xl mb-8">
               <div className="flex items-start gap-4">
-                <svg className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 text-red-700" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                 </svg>
                 <div className="flex-1">

@@ -119,7 +119,7 @@ const MyOrders = () => {
           </div>
 
           {message && (
-            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-200">
+            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-800">
               {message}
             </div>
           )}
@@ -237,7 +237,7 @@ const MyOrders = () => {
                   {/* Order Footer */}
                   <div className="p-4 bg-blue-600/5 border-t border-white/5 flex justify-between items-center px-6">
                     <span className="text-xs text-slate-600">
-                      Payment Status: <span className="text-green-400 font-bold uppercase tracking-tighter">Paid</span>
+                      Payment Status: <span className="text-green-700 font-bold uppercase tracking-tighter">Paid</span>
                     </span>
                     <span className="text-xs text-slate-600">
                       Shipping Status: <span className="text-blue-500 font-bold uppercase tracking-tighter">{order.deliveryMethod === 'Pickup at Counter' ? 'Ready for Pickup' : 'Processing'}</span>

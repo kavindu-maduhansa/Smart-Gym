@@ -100,7 +100,7 @@ const ViewUser = () => {
                   <p className="text-slate-700 mt-4">Loading user details...</p>
                 </div>
               ) : error ? (
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center text-sm">
                   {error}
                 </div>
               ) : user ? (
@@ -190,7 +190,7 @@ const ViewUser = () => {
                         <p className="text-slate-500 text-xs sm:text-sm mb-2">Status</p>
                         <p
                           className={`text-base sm:text-lg font-semibold ${
-                            isExpired ? "text-red-400" : "text-blue-600"
+                            isExpired ? "text-red-700" : "text-blue-600"
                           }`}
                         >
                           {membershipStatus}
@@ -199,7 +199,7 @@ const ViewUser = () => {
                     </div>
 
                     {isExpired && membershipStatus !== "None" && (
-                      <div className="mt-4 bg-red-600/20 border border-red-500/50 text-red-200 p-3 rounded-lg text-xs sm:text-sm">
+                      <div className="mt-4 bg-red-600/20 border border-red-500/50 text-red-800 p-3 rounded-lg text-xs sm:text-sm">
                         <p className="font-semibold">
                           ⚠ This user's membership has expired.
                         </p>

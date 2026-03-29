@@ -393,7 +393,7 @@ const AiGymAssistant = () => {
               </div>
 
               {error ? (
-                <div className="mt-4 text-sm text-red-300 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+                <div className="mt-4 text-sm text-red-700 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
                   {error}
                 </div>
               ) : null}
@@ -488,7 +488,7 @@ const AiGymAssistant = () => {
                   </button>
                 </div>
                 {historyError ? (
-                  <div className="text-xs text-red-300">{historyError}</div>
+                  <div className="text-xs text-red-700">{historyError}</div>
                 ) : historyLoading ? (
                   <div className="text-xs text-slate-900/60">Loading history...</div>
                 ) : historySessions.length === 0 ? (

@@ -199,7 +199,7 @@ const AdminRenewRequests = () => {
               <p className="text-slate-700 mt-4 text-sm sm:text-base">Loading requests...</p>
             </div>
           ) : error ? (
-            <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-sm sm:text-base">
+            <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-sm sm:text-base">
               {error}
             </div>
           ) : requests.length === 0 ? (
@@ -284,14 +284,14 @@ const AdminRenewRequests = () => {
                               <button
                                 onClick={() => handleApprove(request._id)}
                                 disabled={processingId === request._id}
-                                className="bg-green-600/20 border border-green-500/50 hover:bg-green-600/30 text-green-200 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-green-600/20 border border-green-500/50 hover:bg-green-600/30 text-green-800 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {processingId === request._id ? "..." : "Approve"}
                               </button>
                               <button
                                 onClick={() => handleReject(request._id)}
                                 disabled={processingId === request._id}
-                                className="bg-red-600/20 border border-red-500/50 hover:bg-red-600/30 text-red-200 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-red-600/20 border border-red-500/50 hover:bg-red-600/30 text-red-800 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {processingId === request._id ? "..." : "Reject"}
                               </button>
@@ -346,14 +346,14 @@ const AdminRenewRequests = () => {
                         <button
                           onClick={() => handleApprove(request._id)}
                           disabled={processingId === request._id}
-                          className="flex-1 bg-green-600/20 border border-green-500/50 hover:bg-green-600/30 text-green-200 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex-1 bg-green-600/20 border border-green-500/50 hover:bg-green-600/30 text-green-800 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {processingId === request._id ? "..." : "Approve"}
                         </button>
                         <button
                           onClick={() => handleReject(request._id)}
                           disabled={processingId === request._id}
-                          className="flex-1 bg-red-600/20 border border-red-500/50 hover:bg-red-600/30 text-red-200 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex-1 bg-red-600/20 border border-red-500/50 hover:bg-red-600/30 text-red-800 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {processingId === request._id ? "..." : "Reject"}
                         </button>
@@ -379,14 +379,14 @@ const AdminRenewRequests = () => {
                 </p>
               </div>
               <div className="backdrop-blur-md bg-green-600/20 border border-green-500/50 rounded-2xl p-6 text-center">
-                <p className="text-green-300 text-xs sm:text-sm mb-2">Approved</p>
-                <p className="text-3xl sm:text-4xl font-bold text-green-400">
+                <p className="text-green-700 text-xs sm:text-sm mb-2">Approved</p>
+                <p className="text-3xl sm:text-4xl font-bold text-green-700">
                   {requests.filter((r) => r.status === "approved").length}
                 </p>
               </div>
               <div className="backdrop-blur-md bg-red-600/20 border border-red-500/50 rounded-2xl p-6 text-center">
-                <p className="text-red-300 text-xs sm:text-sm mb-2">Rejected</p>
-                <p className="text-3xl sm:text-4xl font-bold text-red-400">
+                <p className="text-red-700 text-xs sm:text-sm mb-2">Rejected</p>
+                <p className="text-3xl sm:text-4xl font-bold text-red-700">
                   {requests.filter((r) => r.status === "rejected").length}
                 </p>
               </div>

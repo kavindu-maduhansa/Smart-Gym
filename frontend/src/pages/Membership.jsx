@@ -137,21 +137,21 @@ const Membership = () => {
                   </p>
                 </div>
               ) : error && !showModal ? (
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center">
                   {error}
                 </div>
               ) : user ? (
                 <div className="space-y-6">
                   {/* Success Message */}
                   {successMessage && (
-                    <div className="bg-green-600/20 border border-green-500/50 text-green-200 p-4 rounded-lg text-center text-sm sm:text-base">
+                    <div className="bg-green-600/20 border border-green-500/50 text-green-800 p-4 rounded-lg text-center text-sm sm:text-base">
                       {successMessage}
                     </div>
                   )}
 
                   {/* Expired Warning */}
                   {isExpired && (
-                    <div className="bg-red-600/20 border border-red-500/30 text-red-200 p-6 rounded-xl">
+                    <div className="bg-red-600/20 border border-red-500/30 text-red-800 p-6 rounded-xl">
                       <div className="flex items-start">
                         <svg
                           className="w-6 h-6 sm:w-8 sm:h-8 mr-3 sm:mr-4 flex-shrink-0 mt-1"
@@ -168,7 +168,7 @@ const Membership = () => {
                           <h3 className="text-lg sm:text-xl font-bold mb-2">
                             Your membership has expired!
                           </h3>
-                          <p className="text-red-100 text-sm sm:text-base">
+                          <p className="text-red-800 text-sm sm:text-base">
                             Please renew your membership to continue enjoying our
                             services and facilities.
                           </p>
@@ -213,15 +213,15 @@ const Membership = () => {
                         <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
                           {user.name}
                         </h3>
-                        <p className="text-blue-200 text-sm sm:text-base">
+                        <p className="text-blue-800 text-sm sm:text-base">
                           Member ID: {user._id?.slice(-8).toUpperCase()}
                         </p>
                       </div>
                       <div
                         className={`px-4 py-2 rounded-full font-bold text-sm sm:text-base flex-shrink-0 ${
                           isExpired
-                            ? "bg-red-600/30 border border-red-500/50 text-red-200"
-                            : "bg-green-600/30 border border-green-500/50 text-green-200"
+                            ? "bg-red-600/30 border border-red-500/50 text-red-800"
+                            : "bg-green-600/30 border border-green-500/50 text-green-800"
                         }`}
                       >
                         {membershipStatus}
@@ -251,7 +251,7 @@ const Membership = () => {
                         </p>
                         <p
                           className={`text-lg sm:text-xl font-bold ${
-                            isExpired ? "text-red-400" : "text-blue-600"
+                            isExpired ? "text-red-700" : "text-blue-600"
                           }`}
                         >
                           {isExpired ? "0" : daysRemaining}
@@ -412,7 +412,7 @@ const Membership = () => {
                 {/* Modal Content */}
                 <div className="p-6 sm:p-8">
                   {error && (
-                    <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-3 sm:p-4 rounded-lg mb-4 text-xs sm:text-sm">
+                    <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-3 sm:p-4 rounded-lg mb-4 text-xs sm:text-sm">
                       {error}
                     </div>
                   )}

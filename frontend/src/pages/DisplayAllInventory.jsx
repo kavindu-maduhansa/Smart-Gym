@@ -153,7 +153,7 @@ function DisplayAllInventory() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-lg bg-blue-600/20 text-slate-900 border-2 border-blue-500/50 focus:border-blue-600 focus:outline-none transition duration-300 backdrop-blur-md placeholder-slate-400-200/60 text-sm font-medium hover:bg-blue-600/25 hover:border-blue-500/70"
                   />
-                  
+
                   {/* Clear button */}
                   {searchTerm && (
                     <button
@@ -221,7 +221,7 @@ function DisplayAllInventory() {
                         />
                         {/* GRADIENT OVERLAY */}
                         <div className="absolute inset-0 bg-gradient-to-t from-blue-50/60 via-transparent to-blue-50/20 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                        
+
                         {/* CONDITION BADGE ON IMAGE */}
                         <div className={`absolute top-3 right-3 px-4 py-2 rounded-full bg-gradient-to-r ${getConditionColor(item.condition)} border backdrop-blur-md font-bold text-sm`}>
                           {getConditionIcon(item.condition)} {item.condition}
@@ -277,7 +277,7 @@ function DisplayAllInventory() {
                       {item.specialDetails && (
                         <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/20">
                           <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Special Details</p>
-                          <p className="text-sm text-blue-300 mt-1 font-medium line-clamp-3">{item.specialDetails}</p>
+                          <p className="text-sm text-blue-700 mt-1 font-medium line-clamp-3">{item.specialDetails}</p>
                         </div>
                       )}
                     </div>

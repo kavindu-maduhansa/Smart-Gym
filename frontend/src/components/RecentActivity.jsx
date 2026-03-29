@@ -26,7 +26,7 @@ function RecentActivity() {
   };
 
   const getActionColor = (action) => {
-    return action === "Added" ? "text-green-400" : "text-blue-400";
+    return action === "Added" ? "text-green-700" : "text-blue-600";
   };
 
   const getActionIcon = (action) => {

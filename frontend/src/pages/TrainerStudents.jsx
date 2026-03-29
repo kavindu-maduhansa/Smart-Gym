@@ -34,12 +34,12 @@ const TrainerStudents = () => {
       const token = localStorage.getItem("token");
       const payload = { studentId };
       payload[field] = value;
-      
-      await axios.post("http://localhost:5000/api/trainer/student-note", 
+
+      await axios.post("http://localhost:5000/api/trainer/student-note",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       setStudents(prev => prev.map(s => s.id === studentId ? { ...s, [field]: value } : s));
     } catch (err) {
       console.error(`Error saving ${field}:`, err);
@@ -48,7 +48,7 @@ const TrainerStudents = () => {
 
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     if (weekFilter === "All") return matchesSearch;
 
     if (student.lastWorkout === "None yet") return false;
@@ -99,21 +99,21 @@ const TrainerStudents = () => {
         </div>
 
         {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-100 p-4 rounded-xl mb-8">
+          <div className="bg-red-500/20 border border-red-500 text-red-800 p-4 rounded-xl mb-8">
             {error}
           </div>
         )}
 
         {/* Filters Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Search by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-600"
           />
-          <select 
+          <select
             value={weekFilter}
             onChange={(e) => setWeekFilter(e.target.value)}
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all cursor-pointer font-medium"
@@ -161,7 +161,7 @@ const TrainerStudents = () => {
                           {student.progress || 0} / 4 {student.progress === 1 ? 'Session' : 'Sessions'}
                         </div>
                         <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                          <div 
+                          <div
                             className="h-full bg-gradient-to-r from-blue-600/60 to-blue-600 transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(59,130,246,0.4)]"
                             style={{ width: `${Math.min(((student.progress || 0) / 4) * 100, 100)}%` }}
                           ></div>
@@ -171,7 +171,7 @@ const TrainerStudents = () => {
                     </td>
                     <td className="px-6 py-5 min-w-[200px]">
                       <div className="relative group/note">
-                        <textarea 
+                        <textarea
                           rows="1"
                           defaultValue={student.note}
                           placeholder="Add private note..."
@@ -212,8 +212,8 @@ const TrainerStudents = () => {
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
                         className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
-                          currentPage === i + 1 
-                          ? 'bg-blue-600 border-blue-600 text-slate-900 shadow-[0_0_10px_rgba(59,130,246,0.3)]' 
+                          currentPage === i + 1
+                          ? 'bg-blue-600 border-blue-600 text-slate-900 shadow-[0_0_10px_rgba(59,130,246,0.3)]'
                           : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900'
                         }`}
                       >

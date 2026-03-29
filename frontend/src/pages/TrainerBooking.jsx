@@ -520,11 +520,11 @@ const TrainerBooking = () => {
                             return (
                               <div className="flex flex-col items-end gap-2">
                                 {isAttended ? (
-                                  <span className="bg-green-500/5 text-green-400 px-3 py-1.5 rounded-lg text-xs tracking-wider font-semibold border border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]">
+                                  <span className="bg-green-500/5 text-green-700 px-3 py-1.5 rounded-lg text-xs tracking-wider font-semibold border border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]">
                                     Attended
                                   </span>
                                 ) : isAbsent ? (
-                                  <span className="bg-red-500/5 text-red-400 px-3 py-1.5 rounded-lg text-xs tracking-wider font-semibold border border-red-500/10">
+                                  <span className="bg-red-500/5 text-red-700 px-3 py-1.5 rounded-lg text-xs tracking-wider font-semibold border border-red-500/10">
                                     Absent
                                   </span>
                                 ) : (
@@ -713,7 +713,7 @@ const TrainerBooking = () => {
                                     ? "bg-blue-600/20 text-blue-600"
                                     : live === "FINISHED"
                                       ? "bg-slate-100 text-slate-500"
-                                      : "bg-green-500/15 text-green-400";
+                                      : "bg-green-500/15 text-green-700";
                                 return (
                                   <span className={`font-bold uppercase text-xs px-2 py-1 rounded ${cls}`}>
                                     {live}
@@ -757,7 +757,7 @@ const TrainerBooking = () => {
                                   type="button"
                                   disabled={actionBusy}
                                   onClick={() => deleteSlotBooking(b)}
-                                  className="bg-red-500/20 text-red-300 border border-red-500/40 font-bold px-4 py-2 rounded hover:bg-red-500/30 disabled:opacity-50"
+                                  className="bg-red-500/20 text-red-700 border border-red-500/40 font-bold px-4 py-2 rounded hover:bg-red-500/30 disabled:opacity-50"
                                 >
                                   {slotActionKey === `del-${b.scheduleId}-${b.slotId}` ? "…" : "Delete"}
                                 </button>
@@ -852,7 +852,7 @@ const TrainerBooking = () => {
                             ? "bg-blue-600/20 text-blue-600"
                             : st === "FINISHED"
                               ? "bg-slate-100 text-slate-500"
-                              : "bg-green-500/15 text-green-400";
+                              : "bg-green-500/15 text-green-700";
                         return (
                           <span className={`font-bold uppercase text-xs px-2 py-1 rounded ${cls}`}>
                             {st}
@@ -1001,7 +1001,7 @@ const TrainerBooking = () => {
               >
                 ×
               </button>
-              <h3 className="text-2xl font-bold text-green-400 mb-6">Your Feedback</h3>
+              <h3 className="text-2xl font-bold text-green-700 mb-6">Your Feedback</h3>
 
               <div className="mb-6 bg-blue-50/40 p-4 rounded-xl border border-white/5">
                 <label className="block text-slate-500 mb-2 font-semibold uppercase text-[10px] tracking-[0.2em]">Rating Given</label>

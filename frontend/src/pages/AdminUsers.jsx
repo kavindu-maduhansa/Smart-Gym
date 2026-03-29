@@ -229,7 +229,7 @@ const AdminUsers = () => {
                 <button
                   className={`w-full px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
                     profileUser.isBlocked
-                      ? "bg-green-600/20 border border-green-500/50 text-green-200 hover:bg-green-600/30"
+                      ? "bg-green-600/20 border border-green-500/50 text-green-800 hover:bg-green-600/30"
                       : "bg-yellow-600/20 border border-yellow-500/50 text-yellow-200 hover:bg-yellow-600/30"
                   }`}
                   onClick={async () => {
@@ -282,7 +282,7 @@ const AdminUsers = () => {
                   Edit User
                 </button>
                 <button
-                  className="w-full bg-blue-600/20 border border-blue-500/50 text-blue-200 hover:bg-blue-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
+                  className="w-full bg-blue-600/20 border border-blue-500/50 text-blue-800 hover:bg-blue-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
                   onClick={async () => {
                     try {
                       const token = localStorage.getItem("token");
@@ -321,7 +321,7 @@ const AdminUsers = () => {
                   Renew Membership
                 </button>
                 <button
-                  className="w-full bg-red-600/20 border border-red-500/50 text-red-200 hover:bg-red-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
+                  className="w-full bg-red-600/20 border border-red-500/50 text-red-800 hover:bg-red-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
                   onClick={async () => {
                     if (
                       !window.confirm(
@@ -504,7 +504,7 @@ const AdminUsers = () => {
                 <p className="text-slate-700 mt-4">Loading users...</p>
               </div>
             ) : error ? (
-              <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center mb-8">
+              <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center mb-8">
                 {error}
               </div>
             ) : (

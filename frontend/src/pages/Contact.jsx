@@ -272,7 +272,7 @@ const Contact = () => {
                     errors.name ? "border-red-400" : "border-slate-300"
                   }`}
                 />
-                {errors.name ? <p className="text-sm text-red-400 -mt-3">{errors.name}</p> : null}
+                {errors.name ? <p className="text-sm text-red-700 -mt-3">{errors.name}</p> : null}
                 <input
                   type="email"
                   name="email"
@@ -286,7 +286,7 @@ const Contact = () => {
                     errors.email ? "border-red-400" : "border-slate-300"
                   }`}
                 />
-                {errors.email ? <p className="text-sm text-red-400 -mt-3">{errors.email}</p> : null}
+                {errors.email ? <p className="text-sm text-red-700 -mt-3">{errors.email}</p> : null}
                 <input
                   type="text"
                   name="subject"
@@ -300,7 +300,7 @@ const Contact = () => {
                     errors.subject ? "border-red-400" : "border-slate-300"
                   }`}
                 />
-                {errors.subject ? <p className="text-sm text-red-400 -mt-3">{errors.subject}</p> : null}
+                {errors.subject ? <p className="text-sm text-red-700 -mt-3">{errors.subject}</p> : null}
                 <textarea
                   rows="5"
                   name="message"
@@ -315,13 +315,13 @@ const Contact = () => {
                   }`}
                 ></textarea>
                 <div className="flex items-center justify-between -mt-3">
-                  {errors.message ? <p className="text-sm text-red-400">{errors.message}</p> : <span />}
+                  {errors.message ? <p className="text-sm text-red-700">{errors.message}</p> : <span />}
                   <p className="text-xs text-slate-500">{formData.message.length}/1000</p>
                 </div>
                 {feedback.text && (
                   <p
                     className={`text-sm ${
-                      feedback.type === "success" ? "text-green-400" : "text-red-400"
+                      feedback.type === "success" ? "text-green-700" : "text-red-700"
                     }`}
                   >
                     {feedback.text}

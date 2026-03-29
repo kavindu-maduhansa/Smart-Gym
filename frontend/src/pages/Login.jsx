@@ -78,7 +78,7 @@ const Login = () => {
           {/* Content */}
           <div className="p-6 sm:p-8">
             {error && (
-              <div className="p-3 sm:p-4 mb-4 text-xs sm:text-sm text-red-200 bg-red-600/20 border border-red-500/50 rounded-lg">
+              <div className="p-3 sm:p-4 mb-4 text-xs sm:text-sm text-red-800 bg-red-600/20 border border-red-500/50 rounded-lg">
                 {error}
               </div>
             )}

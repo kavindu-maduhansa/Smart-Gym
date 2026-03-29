@@ -114,8 +114,8 @@ const TrainerAvailability = () => {
         <div
           className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold border ${
             trainerMsg.type === "success"
-              ? "bg-green-500/15 border-green-500/40 text-green-300"
-              : "bg-red-500/15 border-red-500/40 text-red-300"
+              ? "bg-green-500/15 border-green-500/40 text-green-700"
+              : "bg-red-500/15 border-red-500/40 text-red-700"
           }`}
         >
           {trainerMsg.text}
@@ -123,7 +123,7 @@ const TrainerAvailability = () => {
       )}
       <div className="flex flex-nowrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar">
         <span className="text-slate-600 font-semibold text-xs tracking-tight mr-2 shrink-0">Filter By:</span>
-        
+
         <div className="relative flex-1 max-w-[200px]">
           <input
             type="text"
@@ -210,13 +210,13 @@ const TrainerAvailability = () => {
               return (
                 <div key={s._id} className={`p-5 border rounded-2xl bg-blue-50/40 backdrop-blur-sm transition-all group relative overflow-hidden ${isExpired ? 'border-white/5 opacity-60 grayscale-[0.8]' : 'border-slate-200 hover:border-blue-600/40 hover:bg-slate-50 shadow-xl hover:shadow-blue-600/5'}`}>
                   {!isExpired && <div className="absolute top-0 right-0 w-12 h-12 bg-blue-600/10 rotate-45 translate-x-6 -translate-y-6 group-hover:bg-blue-700/20 transition-all"></div>}
-                  
+
                   <div className="flex justify-between items-start mb-4 relative z-10">
                     <div className="flex flex-col">
                       <h3 className={`text-xl font-bold transition-colors ${isExpired ? 'text-slate-600' : 'text-slate-900 group-hover:text-blue-600'}`}>{s.title}</h3>
                       <div className="text-[11px] text-slate-600 font-semibold mt-1 tracking-wide">Session Protocol</div>
                     </div>
-                    <span className={`text-[10px] px-3 py-1.5 rounded-lg border uppercase font-bold tracking-wider leading-none ${isExpired ? 'bg-red-500/5 text-red-500 border-red-500/10' : 'bg-green-500/5 text-green-400 border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]'}`}>
+                    <span className={`text-[10px] px-3 py-1.5 rounded-lg border uppercase font-bold tracking-wider leading-none ${isExpired ? 'bg-red-500/5 text-red-500 border-red-500/10' : 'bg-green-500/5 text-green-700 border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]'}`}>
                       {isExpired ? "Closed" : "Available"}
                     </span>
                   </div>
@@ -263,7 +263,7 @@ const TrainerAvailability = () => {
               >
                 <span className="group-hover:-translate-x-1 transition-transform">←</span> Prev
               </button>
-              
+
               <div className="flex items-center gap-4">
                 <span className="text-blue-600 font-bold text-sm tracking-wider">{currentPage}</span>
                 <span className="text-gray-600 text-[10px] font-bold uppercase tracking-widest leading-none">of</span>
@@ -608,8 +608,8 @@ const SlotAvailability = () => {
         <div
           className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold border ${
             slotMsg.type === "success"
-              ? "bg-green-500/15 border-green-500/40 text-green-300"
-              : "bg-red-500/15 border-red-500/40 text-red-300"
+              ? "bg-green-500/15 border-green-500/40 text-green-700"
+              : "bg-red-500/15 border-red-500/40 text-red-700"
           }`}
         >
           {slotMsg.text}
@@ -676,7 +676,7 @@ const SlotAvailability = () => {
         </div>
         <div className="bg-blue-50/40 border border-slate-200 rounded-xl p-4">
           <div className="text-xs uppercase tracking-wide text-slate-500 font-bold">Open slots</div>
-          <div className="text-2xl font-extrabold text-green-400 mt-1">{loading ? "—" : openSpots}</div>
+          <div className="text-2xl font-extrabold text-green-700 mt-1">{loading ? "—" : openSpots}</div>
         </div>
         <div className="bg-blue-50/40 border border-slate-200 rounded-xl p-4">
           <div className="text-xs uppercase tracking-wide text-slate-500 font-bold">Full slots</div>
@@ -856,7 +856,7 @@ const SlotAvailability = () => {
                       {hasSlots ? (
                         <div className="mt-2 space-y-1 text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="text-green-400 font-bold">Available</span>
+                            <span className="text-green-700 font-bold">Available</span>
                             <span className="text-slate-900 font-semibold">{sum.available}</span>
                           </div>
                           <div className="flex items-center justify-between">
@@ -902,7 +902,7 @@ const SlotAvailability = () => {
       {viewMode === "list" && loading ? (
         <div className="text-center py-8 text-blue-600 font-bold animate-pulse">Loading…</div>
       ) : viewMode === "list" && err ? (
-        <div className="text-center py-8 text-red-400 font-bold">{err}</div>
+        <div className="text-center py-8 text-red-700 font-bold">{err}</div>
       ) : viewMode === "list" && filtered.length === 0 ? (
         <div className="text-center py-8 text-slate-500 italic">No slots match these filters.</div>
       ) : viewMode === "list" ? (
@@ -922,8 +922,8 @@ const SlotAvailability = () => {
                       s.status === "CLOSED"
                         ? "bg-gray-500/20 text-slate-700"
                         : s.status === "FULL"
-                          ? "bg-red-500/20 text-red-300"
-                          : "bg-green-500/15 text-green-400"
+                          ? "bg-red-500/20 text-red-700"
+                          : "bg-green-500/15 text-green-700"
                     }`}
                   >
                     {s.status === "AVAILABLE" ? "Available" : s.status}
@@ -941,7 +941,7 @@ const SlotAvailability = () => {
               </div>
               {isStudent ? (
                 s.iBooked ? (
-                  <p className="mt-3 text-sm font-bold text-green-400 text-center">
+                  <p className="mt-3 text-sm font-bold text-green-700 text-center">
                     You have booked this slot
                   </p>
                 ) : s.status === "CLOSED" ? (

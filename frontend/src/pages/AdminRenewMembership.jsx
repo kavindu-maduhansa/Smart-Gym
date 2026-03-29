@@ -167,14 +167,14 @@ const AdminRenewMembership = () => {
               <p className="text-slate-700 mt-4">Loading user details...</p>
             </div>
           ) : error && !success ? (
-            <div className="max-w-2xl mx-auto bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm sm:text-base">
+            <div className="max-w-2xl mx-auto bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center text-sm sm:text-base">
               {error}
             </div>
           ) : user ? (
             <>
               {/* Success Message */}
               {success && (
-                <div className="max-w-2xl mx-auto mb-8 bg-green-600/20 border border-green-500/50 text-green-200 p-6 rounded-lg flex items-center justify-center text-sm sm:text-base">
+                <div className="max-w-2xl mx-auto mb-8 bg-green-600/20 border border-green-500/50 text-green-800 p-6 rounded-lg flex items-center justify-center text-sm sm:text-base">
                   <svg
                     className="w-5 h-5 sm:w-6 sm:h-6 mr-3 flex-shrink-0"
                     fill="currentColor"
@@ -223,7 +223,7 @@ const AdminRenewMembership = () => {
                         className={`text-base sm:text-lg font-semibold ${
                           getMembershipStatus() === "Active"
                             ? "text-blue-600"
-                            : "text-red-400"
+                            : "text-red-700"
                         }`}
                       >
                         {getMembershipStatus()}
@@ -343,7 +343,7 @@ const AdminRenewMembership = () => {
 
               {/* Info Section */}
               {!success && (
-                <div className="max-w-4xl mx-auto backdrop-blur-md bg-blue-600/20 border border-blue-500/50 text-blue-200 p-6 rounded-lg text-xs sm:text-sm">
+                <div className="max-w-4xl mx-auto backdrop-blur-md bg-blue-600/20 border border-blue-500/50 text-blue-800 p-6 rounded-lg text-xs sm:text-sm">
                   <h4 className="font-bold text-base sm:text-lg mb-3">📋 Admin Notes</h4>
                   <ul className="space-y-2">
                     <li>

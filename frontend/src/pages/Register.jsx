@@ -66,9 +66,9 @@ const Register = () => {
           Register
         </h2>
         {success && (
-          <p className="text-green-400 text-center mt-4">{success}</p>
+          <p className="text-green-700 text-center mt-4">{success}</p>
         )}
-        {error && <p className="text-red-400 text-center mt-4">{error}</p>}
+        {error && <p className="text-red-700 text-center mt-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block mb-1 font-medium text-slate-900">Name</label>

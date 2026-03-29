@@ -53,7 +53,7 @@ const AdminInventoryDashboard = () => {
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          
+
           {/* Welcome Section */}
           <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 sm:mb-12">
             <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-4">
@@ -83,7 +83,7 @@ const AdminInventoryDashboard = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" d={card.icon} />
                       </svg>
                     </div>
-                    
+
                     <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                       {card.title}
                     </h3>
@@ -111,8 +111,8 @@ const AdminInventoryDashboard = () => {
                   </svg>
                   Recent Activity
                 </h3>
-                <button 
-                  onClick={() => window.location.reload()} 
+                <button
+                  onClick={() => window.location.reload()}
                   className="text-sm text-blue-600 hover:text-blue-600/80 transition font-semibold flex items-center gap-1"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -148,22 +148,22 @@ const AdminInventoryDashboard = () => {
 
                 <div className="flex justify-between items-center p-4 bg-gradient-to-r from-green-500/10 to-green-500/5 border border-green-400/20 rounded-xl hover:border-green-400/50 transition">
                   <span className="font-medium text-slate-800 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Available
                   </span>
-                  <span className="text-2xl font-bold text-green-400">128</span>
+                  <span className="text-2xl font-bold text-green-700">128</span>
                 </div>
 
                 <div className="flex justify-between items-center p-4 bg-gradient-to-r from-red-500/10 to-red-500/5 border border-red-400/20 rounded-xl hover:border-red-400/50 transition">
                   <span className="font-medium text-slate-800 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-red-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Out of Stock
                   </span>
-                  <span className="text-2xl font-bold text-red-400">12</span>
+                  <span className="text-2xl font-bold text-red-700">12</span>
                 </div>
 
                 <div className="flex justify-between items-center p-4 bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 border border-yellow-400/20 rounded-xl hover:border-yellow-400/50 transition">

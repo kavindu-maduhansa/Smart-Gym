@@ -176,7 +176,7 @@ const TrainerSchedules = () => {
     const dateTimeA = new Date(`${a.date}T${a.time || "00:00"}`);
     const dateTimeB = new Date(`${b.date}T${b.time || "00:00"}`);
     const now = new Date();
-    
+
     const isPastA = dateTimeA < now;
     const isPastB = dateTimeB < now;
 
@@ -242,40 +242,40 @@ const TrainerSchedules = () => {
                <h3 className="text-xl font-black text-slate-900 leading-tight relative z-10">Monthly<br /><span className="text-blue-600">Performance</span></h3>
                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
             </div>
-            
+
             {/* Stats Grid */}
             <div className="flex-1 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/5">
               {[
-                { 
-                  label: "Total Sessions", 
-                  value: stats.total, 
+                {
+                  label: "Total Sessions",
+                  value: stats.total,
                   icon: (
                     <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   )
                 },
-                { 
-                  label: "Upcoming", 
-                  value: stats.upcoming, 
+                {
+                  label: "Upcoming",
+                  value: stats.upcoming,
                   icon: (
                     <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   )
                 },
-                { 
-                  label: "Available", 
-                  value: stats.available, 
+                {
+                  label: "Available",
+                  value: stats.available,
                   icon: (
-                    <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                     </svg>
                   )
                 },
-                { 
-                  label: "Completed", 
-                  value: stats.completed, 
+                {
+                  label: "Completed",
+                  value: stats.completed,
                   icon: (
                     <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -354,7 +354,7 @@ const TrainerSchedules = () => {
 
                 <form onSubmit={handleSave} className="flex flex-col gap-4 w-full">
                   {error && (
-                    <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-3 rounded-lg text-sm font-semibold text-center">
+                    <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-3 rounded-lg text-sm font-semibold text-center">
                       {error}
                     </div>
                   )}
@@ -487,7 +487,7 @@ const TrainerSchedules = () => {
                           )}
                           <button
                             onClick={() => handleDelete(s._id)}
-                            className="text-red-500 hover:text-red-400 text-sm font-bold transition-all"
+                            className="text-red-600 hover:text-red-700 text-sm font-bold transition-all"
                           >
                             Delete
                           </button>

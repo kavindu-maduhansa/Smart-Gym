@@ -85,7 +85,7 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-slate-100 p-3 rounded-lg">
               <p className="text-xs text-slate-500 mb-1">Quantity</p>
-              <p className="font-bold text-2xl text-green-400">
+              <p className="font-bold text-2xl text-green-700">
                 {item.quantity}
               </p>
             </div>
@@ -99,7 +99,7 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-slate-100 p-3 rounded-lg">
               <p className="text-xs text-slate-500 mb-1">Price</p>
-              <p className="font-bold text-lg text-blue-400">
+              <p className="font-bold text-lg text-blue-700">
                 Rs. {item.purchase?.price || "N/A"}
               </p>
             </div>

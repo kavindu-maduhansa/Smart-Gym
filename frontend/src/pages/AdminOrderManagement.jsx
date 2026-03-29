@@ -185,7 +185,7 @@ const AdminOrderManagement = () => {
                             ${order.totalAmount.toFixed(2)}
                           </td>
                           <td className="px-6 py-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${order.status === 'Delivered' ? 'bg-green-500/20 text-green-400' :
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${order.status === 'Delivered' ? 'bg-green-500/20 text-green-700' :
                               order.status === 'Processing' ? 'bg-yellow-500/20 text-yellow-400' :
                                 'bg-blue-600/20 text-blue-500'
                               }`}>
@@ -231,7 +231,7 @@ const AdminOrderManagement = () => {
                                   <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
                                       <span className="text-slate-500">Payment Status</span>
-                                      <span className="text-green-400 font-bold uppercase text-xs">{order.paymentStatus}</span>
+                                      <span className="text-green-700 font-bold uppercase text-xs">{order.paymentStatus}</span>
                                     </div>
                                     <div className="flex justify-between">
                                       <span className="text-slate-500">Delivery Identifier</span>

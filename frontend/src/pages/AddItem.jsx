@@ -226,7 +226,7 @@ function AddItem() {
 
             {/* icon with soft glow */}
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20">
-              <span className="text-green-400 text-2xl">✔</span>
+              <span className="text-green-700 text-2xl">✔</span>
             </div>
 
             {/* message */}
@@ -234,7 +234,7 @@ function AddItem() {
               <span className="text-slate-900 font-semibold text-sm tracking-wide">
                 {successMessage}
               </span>
-              <span className="text-green-300/80 text-xs">
+              <span className="text-green-700/80 text-xs">
                 Successfully added to inventory
               </span>
             </div>
@@ -264,7 +264,7 @@ function AddItem() {
                       onChange={handleItemNameChange}
                       className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.itemName ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                     />
-                    {errors.itemName && <p className="text-red-400 text-sm mt-1">{errors.itemName}</p>}
+                    {errors.itemName && <p className="text-red-700 text-sm mt-1">{errors.itemName}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-800 mb-2">Category *</label>
@@ -292,7 +292,7 @@ function AddItem() {
                       min="1"
                       className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.quantity ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                     />
-                    {errors.quantity && <p className="text-red-400 text-sm mt-1">{errors.quantity}</p>}
+                    {errors.quantity && <p className="text-red-700 text-sm mt-1">{errors.quantity}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-800 mb-2">Condition *</label>
@@ -319,7 +319,7 @@ function AddItem() {
                     onChange={handleSupplierChange}
                     className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.supplier ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                   />
-                  {errors.supplier && <p className="text-red-400 text-sm mt-1">{errors.supplier}</p>}
+                  {errors.supplier && <p className="text-red-700 text-sm mt-1">{errors.supplier}</p>}
                 </div>
 
                 {/* ROW 4: Special Details */}
@@ -332,7 +332,7 @@ function AddItem() {
                     rows="4"
                     className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition resize-none ${errors.specialDetails ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                   />
-                  {errors.specialDetails && <p className="text-red-400 text-sm mt-1">{errors.specialDetails}</p>}
+                  {errors.specialDetails && <p className="text-red-700 text-sm mt-1">{errors.specialDetails}</p>}
                 </div>
 
                 {/* ROW 5: Purchase Date */}
@@ -344,7 +344,7 @@ function AddItem() {
                     onChange={(e) => setPurchaseDate(e.target.value)}
                     className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.purchaseDate ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                   />
-                  {errors.purchaseDate && <p className="text-red-400 text-sm mt-1">{errors.purchaseDate}</p>}
+                  {errors.purchaseDate && <p className="text-red-700 text-sm mt-1">{errors.purchaseDate}</p>}
                 </div>
 
                 {/* ROW 6: Image Upload */}

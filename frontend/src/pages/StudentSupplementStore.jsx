@@ -125,7 +125,7 @@ const StudentSupplementStore = () => {
 
           {/* Message */}
           {message && (
-            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-200">
+            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-800">
               {message}
             </div>
           )}
@@ -192,7 +192,7 @@ const StudentSupplementStore = () => {
                       <p className="text-sm">
                         <span
                           className={
-                            supplement.quantity > 0 ? "text-green-400" : "text-red-400"
+                            supplement.quantity > 0 ? "text-green-700" : "text-red-700"
                           }
                         >
                           {supplement.quantity > 0

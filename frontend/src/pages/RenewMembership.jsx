@@ -162,14 +162,14 @@ const RenewMembership = () => {
               <p className="text-slate-700 mt-4">Loading plans...</p>
             </div>
           ) : error && !success ? (
-            <div className="max-w-2xl mx-auto bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center text-sm sm:text-base">
+            <div className="max-w-2xl mx-auto bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center text-sm sm:text-base">
               {error}
             </div>
           ) : (
             <>
               {/* Success Message */}
               {success && (
-                <div className="max-w-2xl mx-auto mb-8 bg-green-600/20 border border-green-500/50 text-green-200 p-6 rounded-lg flex items-center justify-center text-sm sm:text-base">
+                <div className="max-w-2xl mx-auto mb-8 bg-green-600/20 border border-green-500/50 text-green-800 p-6 rounded-lg flex items-center justify-center text-sm sm:text-base">
                   <svg
                     className="w-5 h-5 sm:w-6 sm:h-6 mr-3 flex-shrink-0"
                     fill="currentColor"
@@ -209,8 +209,8 @@ const RenewMembership = () => {
                       <p
                         className={`font-semibold text-sm sm:text-base ${
                           new Date(user.membershipExpiry) > new Date()
-                            ? "text-green-400"
-                            : "text-red-400"
+                            ? "text-green-700"
+                            : "text-red-700"
                         }`}
                       >
                         {new Date(user.membershipExpiry) > new Date()
@@ -336,7 +336,7 @@ const RenewMembership = () => {
 
               {/* Info Section */}
               {!success && (
-                <div className="max-w-4xl mx-auto mt-12 bg-blue-600/20 border border-blue-500/50 text-blue-200 p-6 rounded-lg text-sm sm:text-base">
+                <div className="max-w-4xl mx-auto mt-12 bg-blue-600/20 border border-blue-500/50 text-blue-800 p-6 rounded-lg text-sm sm:text-base">
                   <h4 className="font-bold text-base sm:text-lg mb-3">
                     📋 Important Information
                   </h4>

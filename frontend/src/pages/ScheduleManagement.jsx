@@ -620,7 +620,7 @@ const ScheduleManagement = () => {
               <div
                 className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold ${
                   isErrorMsg
-                    ? "bg-red-500/20 text-red-200 border border-red-500/40"
+                    ? "bg-red-500/20 text-red-800 border border-red-500/40"
                     : "bg-blue-600/20 text-blue-600 border border-blue-600/40"
                 }`}
               >
@@ -632,7 +632,7 @@ const ScheduleManagement = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-blue-600 mb-1">
-                    Date <span className="text-red-400">*</span>
+                    Date <span className="text-red-700">*</span>
                   </label>
                   <input
                     type="date"
@@ -646,7 +646,7 @@ const ScheduleManagement = () => {
                     }`}
                   />
                   {fieldErrors.date && (
-                    <p className="text-red-400 text-xs mt-1">{fieldErrors.date}</p>
+                    <p className="text-red-700 text-xs mt-1">{fieldErrors.date}</p>
                   )}
                 </div>
                 <div>
@@ -665,7 +665,7 @@ const ScheduleManagement = () => {
                     }`}
                   />
                   {fieldErrors.dayLabel && (
-                    <p className="text-red-400 text-xs mt-1">{fieldErrors.dayLabel}</p>
+                    <p className="text-red-700 text-xs mt-1">{fieldErrors.dayLabel}</p>
                   )}
                 </div>
               </div>
@@ -679,7 +679,7 @@ const ScheduleManagement = () => {
                     {GYM_SLOT_DURATION_MINUTES} minutes <span className="text-slate-600">(fixed)</span>
                   </div>
                   {fieldErrors.slotDurationMinutes && (
-                    <p className="text-red-400 text-xs mt-1">
+                    <p className="text-red-700 text-xs mt-1">
                       {fieldErrors.slotDurationMinutes}
                     </p>
                   )}
@@ -702,7 +702,7 @@ const ScheduleManagement = () => {
                     }`}
                   />
                   {fieldErrors.capacityPerSlot && (
-                    <p className="text-red-400 text-xs mt-1">{fieldErrors.capacityPerSlot}</p>
+                    <p className="text-red-700 text-xs mt-1">{fieldErrors.capacityPerSlot}</p>
                   )}
                 </div>
               </div>
@@ -780,10 +780,10 @@ const ScheduleManagement = () => {
                             cap {row.capacityPerSlot} · {row.slots?.length || 0} slots
                           </p>
                           <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                            <span className="px-2 py-1 rounded bg-green-500/15 text-green-300 border border-green-500/30 font-bold">
+                            <span className="px-2 py-1 rounded bg-green-500/15 text-green-700 border border-green-500/30 font-bold">
                               OPEN {sum.open}
                             </span>
-                            <span className="px-2 py-1 rounded bg-red-500/15 text-red-200 border border-red-500/30 font-bold">
+                            <span className="px-2 py-1 rounded bg-red-500/15 text-red-700 border border-red-500/30 font-bold">
                               FULL {sum.full}
                             </span>
                             <span className="px-2 py-1 rounded bg-gray-500/20 text-slate-800 border border-slate-200 font-bold">
@@ -812,7 +812,7 @@ const ScheduleManagement = () => {
                           <button
                             type="button"
                             onClick={() => onDelete(row._id)}
-                            className="text-sm bg-red-500/20 text-red-300 px-3 py-1 rounded border border-red-500/40 font-semibold"
+                            className="text-sm bg-red-500/20 text-red-700 px-3 py-1 rounded border border-red-500/40 font-semibold"
                           >
                             Delete
                           </button>
@@ -853,7 +853,7 @@ const ScheduleManagement = () => {
 
             {analyticsLoading && <div className="text-slate-500 text-sm mb-3">Updating charts…</div>}
             {analyticsError && (
-              <div className="text-red-400 text-sm mb-3 font-bold border border-red-500/30 bg-red-500/10 rounded-lg p-3">
+              <div className="text-red-700 text-sm mb-3 font-bold border border-red-500/30 bg-red-500/10 rounded-lg p-3">
                 {analyticsError}
               </div>
             )}
@@ -986,7 +986,7 @@ const ScheduleManagement = () => {
                       type="button"
                       disabled={slotActionKey === `bulk-close-${slotModal.scheduleId}`}
                       onClick={bulkCloseAll}
-                      className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-200 font-bold hover:bg-red-500/20 disabled:opacity-60"
+                      className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-800 font-bold hover:bg-red-500/20 disabled:opacity-60"
                     >
                       Close all
                     </button>
@@ -1052,7 +1052,7 @@ const ScheduleManagement = () => {
                                   CLOSED
                                 </span>
                               ) : (
-                                <span className="ml-2 text-xs px-2 py-1 rounded bg-green-500/15 text-green-300 border border-green-500/30 font-bold">
+                                <span className="ml-2 text-xs px-2 py-1 rounded bg-green-500/15 text-green-700 border border-green-500/30 font-bold">
                                   OPEN
                                 </span>
                               )}
@@ -1074,7 +1074,7 @@ const ScheduleManagement = () => {
                                 type="button"
                                 disabled={slotActionKey === `close-${slotModal.scheduleId}-${s._id}`}
                                 onClick={() => adminCloseSlot(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-200 font-bold hover:bg-red-500/20 disabled:opacity-60"
+                                className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-800 font-bold hover:bg-red-500/20 disabled:opacity-60"
                               >
                                 Close slot
                               </button>
