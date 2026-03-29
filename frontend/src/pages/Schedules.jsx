@@ -696,7 +696,7 @@ const SlotAvailability = () => {
               onClick={() => setViewMode("calendar")}
               className={`px-4 py-2 rounded-lg font-bold border transition-colors duration-300 ${
                 viewMode === "calendar"
-                  ? "bg-blue-600 text-black border-blue-600/50"
+                  ? "bg-blue-600 text-white border-blue-600/50"
                   : "bg-blue-50 text-slate-900 border-slate-300 hover:bg-blue-50/80"
               }`}
             >
@@ -707,7 +707,7 @@ const SlotAvailability = () => {
               onClick={() => setViewMode("list")}
               className={`px-4 py-2 rounded-lg font-bold border transition-colors duration-300 ${
                 viewMode === "list"
-                  ? "bg-blue-600 text-black border-blue-600/50"
+                  ? "bg-blue-600 text-white border-blue-600/50"
                   : "bg-blue-50 text-slate-900 border-slate-300 hover:bg-blue-50/80"
               }`}
             >
@@ -958,7 +958,7 @@ const SlotAvailability = () => {
                       type="button"
                       disabled={bookingKey === `${s.scheduleId}-${s.slotId}`}
                       onClick={() => handleJoinWaitlist(s.scheduleId, s.slotId)}
-                      className="mt-3 w-full bg-blue-600 text-black font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="mt-3 w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {bookingKey === `${s.scheduleId}-${s.slotId}` ? "Joining…" : "Join waitlist"}
                     </button>

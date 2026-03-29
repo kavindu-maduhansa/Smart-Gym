@@ -318,7 +318,7 @@ const AiGymAssistant = () => {
                   if (!payload?.role) navigate("/login");
                   handleFloatButton();
                 }}
-                className="bg-blue-600 text-black font-bold px-4 py-2 rounded-xl hover:bg-blue-700/90 transition"
+                className="bg-blue-600 text-white font-bold px-4 py-2 rounded-xl hover:bg-blue-700/90 transition"
               >
                 Ask Now
               </button>
@@ -351,7 +351,7 @@ const AiGymAssistant = () => {
                 <button
                   onClick={handleAsk}
                   disabled={loading || !input.trim()}
-                  className="bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed text-black font-extrabold px-5 py-2 rounded-xl hover:bg-blue-700/90 transition"
+                  className="bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-extrabold px-5 py-2 rounded-xl hover:bg-blue-700/90 transition"
                 >
                   {loading ? "Asking..." : "Ask Assistant"}
                 </button>
@@ -372,7 +372,7 @@ const AiGymAssistant = () => {
                         className={[
                           "max-w-[85%] rounded-2xl px-3 py-2 whitespace-pre-wrap",
                           m.sender === "user"
-                            ? "bg-blue-600 text-black"
+                            ? "bg-blue-600 text-white"
                             : "bg-slate-50 text-slate-900 border border-slate-200",
                         ].join(" ")}
                       >
@@ -537,7 +537,7 @@ const AiGymAssistant = () => {
       {/* Floating icon button (bottom-right) */}
       <button
         onClick={handleFloatButton}
-        className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-blue-600 text-black shadow-2xl hover:bg-blue-700/90 transition flex items-center justify-center"
+        className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-blue-600 text-white shadow-2xl hover:bg-blue-700/90 transition flex items-center justify-center"
         aria-label="Focus chatbot input"
       >
         <FloatingAiIcon />

@@ -377,7 +377,7 @@ export default function ChatWidget() {
                               onClick={() => handleSlotAction(s._id)}
                               className={
                                 toolMode === "available"
-                                  ? "mt-2 w-full bg-blue-600 text-black font-extrabold px-3 py-2 rounded-xl text-xs hover:bg-blue-700/90 transition"
+                                  ? "mt-2 w-full bg-blue-600 text-white font-extrabold px-3 py-2 rounded-xl text-xs hover:bg-blue-700/90 transition"
                                   : "mt-2 w-full bg-slate-50 hover:bg-slate-100 text-blue-600 font-extrabold px-3 py-2 rounded-xl text-xs border border-blue-600/30 transition"
                               }
                             >
@@ -438,7 +438,7 @@ export default function ChatWidget() {
                       <button
                         type="submit"
                         disabled={typing}
-                        className="w-12 rounded-2xl bg-blue-600 hover:bg-blue-700/90 text-black font-extrabold transition disabled:opacity-60"
+                        className="w-12 rounded-2xl bg-blue-600 hover:bg-blue-700/90 text-white font-extrabold transition disabled:opacity-60"
                         aria-label="Send"
                       >
                         →

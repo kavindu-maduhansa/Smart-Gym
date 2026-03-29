@@ -183,7 +183,7 @@ const Checkout = () => {
                 {/* Delivery Method */}
                 <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-xl">
                   <h2 className="text-2xl font-bold mb-6 flex items-center">
-                    <span className="w-8 h-8 rounded-full bg-blue-600 text-black flex items-center justify-center text-sm mr-3">1</span>
+                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm mr-3">1</span>
                     Delivery Method
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -221,7 +221,7 @@ const Checkout = () => {
                 {/* Shipping Details - Only show for Home Delivery or just show Full Name for Pickup */}
                 <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-xl">
                   <h2 className="text-2xl font-bold mb-6 flex items-center">
-                    <span className="w-8 h-8 rounded-full bg-blue-600 text-black flex items-center justify-center text-sm mr-3">2</span>
+                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm mr-3">2</span>
                     {deliveryMethod === "Home Delivery" ? "Shipping Address" : "Receiver Details"}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -306,7 +306,7 @@ const Checkout = () => {
                 {/* Payment Details */}
                 <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-xl">
                   <h2 className="text-2xl font-bold mb-6 flex items-center">
-                    <span className="w-8 h-8 rounded-full bg-blue-600 text-black flex items-center justify-center text-sm mr-3">3</span>
+                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm mr-3">3</span>
                     Payment Method
                   </h2>
                   <div className="bg-blue-600/10 border border-blue-600/30 rounded-xl p-4 mb-6">
@@ -457,7 +457,7 @@ const Checkout = () => {
 
               <button
                 onClick={() => navigate("/supplement-store")}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-black font-black py-4 rounded-2xl transition shadow-xl shadow-blue-600/20 uppercase tracking-widest"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition shadow-xl shadow-blue-600/20 uppercase tracking-widest"
               >
                 Confirm & Return to Store
               </button>
