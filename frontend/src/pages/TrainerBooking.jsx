@@ -61,6 +61,22 @@ function minutesUntilSlotStartLocal(dateYmd, startTime) {
   }
 }
 
+/** ONGOING → UPCOMING → FINISHED; FINISHED grouped at bottom. */
+function sortGymSlotBookingsByLiveStatus(bookings) {
+  const rank = (live) =>
+    live === "ONGOING" ? 0 : live === "UPCOMING" ? 1 : live === "FINISHED" ? 2 : 3;
+  return [...bookings].sort((a, b) => {
+    const liveA = getGymSlotLiveStatus(a.date, a.startTime, a.endTime);
+    const liveB = getGymSlotLiveStatus(b.date, b.startTime, b.endTime);
+    const byRank = rank(liveA) - rank(liveB);
+    if (byRank !== 0) return byRank;
+    const tA = new Date(`${a.date}T${a.startTime || "00:00"}`).getTime();
+    const tB = new Date(`${b.date}T${b.startTime || "00:00"}`).getTime();
+    if (liveA === "FINISHED") return tB - tA;
+    return tA - tB;
+  });
+}
+
 function getUserId() {
   const fromLs = localStorage.getItem("userId");
   if (fromLs) return fromLs;
@@ -661,8 +677,10 @@ const TrainerBooking = () => {
               <p className="text-center text-slate-600 py-10">Loading gym slot bookings…</p>
             ) : (
               (() => {
-                const filtered = slotBookings.filter((b) =>
-                  slotFilterDate ? b.date === format(slotFilterDate, "yyyy-MM-dd") : true,
+                const filtered = sortGymSlotBookingsByLiveStatus(
+                  slotBookings.filter((b) =>
+                    slotFilterDate ? b.date === format(slotFilterDate, "yyyy-MM-dd") : true,
+                  ),
                 );
                 if (filtered.length === 0) {
                   return (
