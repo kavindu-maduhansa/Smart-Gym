@@ -244,43 +244,13 @@ const RenewMembership = () => {
                         <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
                           {plan.name}
                         </h3>
-                        <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-1">
-                          {plan.price}
-                        </div>
                         <p className="text-slate-700 text-sm">
                           {plan.duration}
                         </p>
-                        {plan.savings && (
-                          <div className="mt-2 inline-block bg-blue-600/20 border border-blue-600/50 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold text-blue-600">
-                            {plan.savings}
-                          </div>
-                        )}
                       </div>
 
-                      {/* Features */}
-                      <div className="p-6 sm:p-8">
-                        <ul className="space-y-3 mb-6">
-                          {plan.features.map((feature, index) => (
-                            <li
-                              key={index}
-                              className="flex items-start text-slate-700 text-xs sm:text-sm"
-                            >
-                              <svg
-                                className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-
+                      {/* Button Section */}
+                      <div className="p-6 sm:p-8 flex items-center justify-center">
                         {/* Select Button */}
                         <button
                           onClick={() => handleRenew(plan.id)}
@@ -290,7 +260,7 @@ const RenewMembership = () => {
                               ? "bg-gray-600/50 cursor-not-allowed text-slate-500"
                               : plan.popular
                                 ? "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
-                                : "backdrop-blur-md bg-slate-100 border border-slate-300 hover:bg-white/15 hover:border-blue-600/50 text-slate-900"
+                                : "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
                           }`}
                         >
                           {renewing && selectedPlan === plan.id ? (
@@ -299,7 +269,7 @@ const RenewMembership = () => {
                               Processing...
                             </div>
                           ) : (
-                            "Select Plan"
+                            "Renew with this Plan"
                           )}
                         </button>
                       </div>
