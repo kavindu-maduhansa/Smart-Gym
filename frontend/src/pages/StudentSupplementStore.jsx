@@ -187,7 +187,7 @@ const StudentSupplementStore = () => {
                         <span className="text-slate-900">{supplement.servingSize}</span>
                       </p>
                       <p className="text-lg font-bold text-blue-500">
-                        ${supplement.price}
+                        Rs. {supplement.price}
                       </p>
                       <p className="text-sm">
                         <span

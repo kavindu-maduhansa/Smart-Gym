@@ -212,7 +212,7 @@ const Cart = () => {
                             {item.supplementId.name}
                           </h3>
                           <p className="text-sm text-slate-500">
-                            ${item.price.toFixed(2)} each
+                            Rs. {item.price.toFixed(2)} each
                           </p>
                         </div>
 
@@ -246,7 +246,7 @@ const Cart = () => {
 
                         <div className="min-w-max">
                           <p className="text-lg font-bold text-blue-500 mb-2">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            Rs. {(item.price * item.quantity).toFixed(2)}
                           </p>
                           <button
                             onClick={() => handleRemoveItem(item.supplementId._id)}
@@ -278,19 +278,16 @@ const Cart = () => {
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between text-slate-700">
                       <span>Subtotal:</span>
-                      <span>${cart.totalPrice.toFixed(2)}</span>
+                      <span>Rs. {cart.totalPrice.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-slate-700">
+                    <div className="flex justify-between text-slate-700 items-center">
                       <span>Shipping:</span>
-                      <span>Free</span>
+                      <span className="text-xs text-slate-500">Calculated at checkout</span>
                     </div>
-                    <div className="flex justify-between text-slate-700">
-                      <span>Tax:</span>
-                      <span>${(cart.totalPrice * 0.1).toFixed(2)}</span>
-                    </div>
+
                     <div className="border-t border-slate-300 pt-4 flex justify-between text-lg font-bold text-blue-500">
                       <span>Total:</span>
-                      <span>${(cart.totalPrice + cart.totalPrice * 0.1).toFixed(2)}</span>
+                      <span>Rs. {(cart.totalPrice).toFixed(2)}</span>
                     </div>
                   </div>
 

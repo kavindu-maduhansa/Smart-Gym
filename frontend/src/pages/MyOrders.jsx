@@ -19,36 +19,18 @@ const MyOrders = () => {
     fetchOrders();
   }, [token, navigate]);
 
-  const fetchOrders = () => {
-    // Mock order data
-    const mockOrders = [
-      {
-        _id: "ORD65F123456",
-        createdAt: new Date().toISOString(),
-        totalAmount: 48.40,
-        subtotal: 44.00,
-        tax: 4.40,
-        deliveryMethod: "Home Delivery",
-        status: "Processing",
-        items: [
-          { name: "Mega Grow Mass Gainer (5kg)", quantity: 1, price: 44.00 }
-        ]
-      },
-      {
-        _id: "ORD65F987654",
-        createdAt: new Date(Date.now() - 86400000).toISOString(),
-        totalAmount: 22.00,
-        subtotal: 20.00,
-        tax: 2.00,
-        deliveryMethod: "Pickup at Counter",
-        status: "Ready for Pickup",
-        items: [
-          { name: "BCAA Performance (30 Servings)", quantity: 2, price: 10.00 }
-        ]
-      }
-    ];
-    setOrders(mockOrders);
-    setLoading(false);
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/orders/myorders`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setOrders(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setMessage("Failed to load your orders");
+      setLoading(false);
+    }
   };
 
   const [expandedOrders, setExpandedOrders] = useState({});
@@ -164,7 +146,7 @@ const MyOrders = () => {
                       </div>
                       <div>
                         <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Total Amount</p>
-                        <p className="text-sm font-bold text-blue-500">${order.totalAmount.toFixed(2)}</p>
+                        <p className="text-sm font-bold text-blue-500">Rs. {order.totalAmount.toFixed(2)}</p>
                       </div>
                       <div>
                         <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Delivery Method</p>
@@ -201,10 +183,10 @@ const MyOrders = () => {
                               </div>
                               <div>
                                 <p className="text-sm font-bold text-slate-900">{item.name}</p>
-                                <p className="text-xs text-slate-600">${item.price.toFixed(2)} x {item.quantity}</p>
+                                <p className="text-xs text-slate-600">Rs. {item.price.toFixed(2)} x {item.quantity}</p>
                               </div>
                             </div>
-                            <p className="text-sm font-bold text-slate-900">${(item.price * item.quantity).toFixed(2)}</p>
+                            <p className="text-sm font-bold text-slate-900">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                           </div>
                         ))}
                       </div>
@@ -212,15 +194,15 @@ const MyOrders = () => {
                       <div className="border-t border-slate-200 pt-4 space-y-2 max-w-xs ml-auto">
                         <div className="flex justify-between text-xs text-slate-500">
                           <span>Subtotal</span>
-                          <span className="text-slate-900">${order.subtotal.toFixed(2)}</span>
+                          <span className="text-slate-900">Rs. {order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-xs text-slate-500">
-                          <span>Tax (10%)</span>
-                          <span className="text-slate-900">${order.tax.toFixed(2)}</span>
+                          <span>Shipping</span>
+                          <span className="text-slate-900">{order.deliveryMethod === 'Home Delivery' ? 'Rs. 400.00' : 'Free'}</span>
                         </div>
                         <div className="flex justify-between text-sm font-bold border-t border-slate-200 pt-2 mt-2">
                           <span className="text-blue-600">Total Charged</span>
-                          <span className="text-blue-600">${order.totalAmount.toFixed(2)}</span>
+                          <span className="text-blue-600">Rs. {order.totalAmount.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
@@ -228,10 +210,10 @@ const MyOrders = () => {
 
                   {/* Minimal Order Footer (Always visible) */}
                   {!expandedOrders[order._id] && (
-                     <div className="px-6 py-2 bg-slate-50 text-[10px] text-slate-600 flex gap-4">
-                        <span>Items: {order.items.length}</span>
-                        <span>Status: <span className="text-blue-500 uppercase font-bold">{order.status}</span></span>
-                     </div>
+                    <div className="px-6 py-2 bg-slate-50 text-[10px] text-slate-600 flex gap-4">
+                      <span>Items: {order.items.length}</span>
+                      <span>Status: <span className="text-blue-500 uppercase font-bold">{order.status}</span></span>
+                    </div>
                   )}
 
                   {/* Order Footer */}

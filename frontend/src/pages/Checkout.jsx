@@ -121,21 +121,46 @@ const Checkout = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) {
       setMessage("Please correct the errors in the form.");
       return;
     }
     setProcessing(true);
+    setMessage("");
 
-    // Mock success flow
-    setTimeout(() => {
-      const orderId = "ORD" + Math.random().toString(36).substr(2, 9).toUpperCase();
-      setGeneratedOrderId(orderId);
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/orders`,
+        {
+          deliveryMethod,
+          shippingDetails:
+            deliveryMethod === "Home Delivery"
+              ? {
+                  fullName: formData.fullName,
+                  address: formData.address,
+                  city: formData.city,
+                  postalCode: formData.postalCode,
+                  country: formData.country,
+                }
+              : undefined,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setGeneratedOrderId(response.data._id);
       setProcessing(false);
       setShowSuccessModal(true);
-    }, 1500);
+    } catch (error) {
+      console.error("Error creating order:", error);
+      setMessage(
+        error.response?.data?.message || "Failed to place order. Please try again."
+      );
+      setProcessing(false);
+    }
   };
 
   if (loading) {
@@ -146,8 +171,8 @@ const Checkout = () => {
     );
   }
 
-  const tax = cart.totalPrice * 0.1;
-  const total = cart.totalPrice + tax;
+  const shippingCost = deliveryMethod === "Home Delivery" ? 400 : 0;
+  const total = cart.totalPrice + shippingCost;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
@@ -379,7 +404,7 @@ const Checkout = () => {
                     disabled={processing}
                     className="flex-[2] bg-gradient-to-r from-blue-600-500 to-blue-600 hover:from-blue-600 hover:to-blue-600-700 text-slate-900 font-bold py-4 rounded-xl transition shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
                   >
-                    {processing ? "Processing..." : `Pay $${total.toFixed(2)}`}
+                    {processing ? "Processing..." : `Pay Rs. ${total.toFixed(2)}`}
                   </button>
                 </div>
               </form>
@@ -403,7 +428,7 @@ const Checkout = () => {
                         <p className="text-xs text-slate-500">Qty: {item.quantity}</p>
                       </div>
                       <p className="text-sm font-bold text-slate-900">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        Rs. {(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
                   ))}
@@ -412,20 +437,21 @@ const Checkout = () => {
                 <div className="space-y-3 border-t border-slate-200 pt-6">
                   <div className="flex justify-between text-slate-500 text-sm">
                     <span>Subtotal</span>
-                    <span className="text-slate-900 font-semibold">${cart.totalPrice.toFixed(2)}</span>
+                    <span className="text-slate-900 font-semibold">Rs. {cart.totalPrice.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-slate-500 text-sm">
+                  <div className="flex justify-between text-slate-500 text-sm items-center">
                     <span>Shipping</span>
-                    <span className="text-green-700 font-semibold uppercase text-[10px] bg-green-400/10 px-2 py-0.5 rounded tracking-tighter">Free</span>
+                    {shippingCost === 0 ? (
+                      <span className="text-green-700 font-semibold uppercase text-[10px] bg-green-400/10 px-2 py-0.5 rounded tracking-tighter">Free</span>
+                    ) : (
+                      <span className="text-slate-900 font-semibold">Rs. {shippingCost.toFixed(2)}</span>
+                    )}
                   </div>
-                  <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Estimated Tax (10%)</span>
-                    <span className="text-slate-900 font-semibold">${tax.toFixed(2)}</span>
-                  </div>
+
                   <div className="border-t border-slate-300 pt-4 mt-2 flex justify-between items-baseline">
                     <span className="text-slate-900 font-bold text-lg">Total</span>
                     <div className="text-right">
-                      <span className="text-blue-600 text-2xl font-black">${total.toFixed(2)}</span>
+                      <span className="text-blue-600 text-2xl font-black">Rs. {total.toFixed(2)}</span>
                       <p className="text-[10px] text-slate-600 uppercase tracking-widest leading-none">All taxes included</p>
                     </div>
                   </div>
@@ -439,8 +465,8 @@ const Checkout = () => {
       {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden">
-          <div className="absolute inset-0 bg-blue-50/80 backdrop-blur-xl animate-in fade-in duration-300"></div>
-          <div className="relative z-10 w-full max-w-md bg-gradient-to-br from-gray-900 to-blue-50 border border-blue-600/30 rounded-3xl p-8 shadow-2xl shadow-blue-600/20 transform animate-in zoom-in-95 fade-in duration-300">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300"></div>
+          <div className="relative z-10 w-full max-w-md bg-white border border-slate-200 rounded-3xl p-8 shadow-2xl shadow-blue-900/20 transform animate-in zoom-in-95 fade-in duration-300">
             <div className="flex flex-col items-center text-center">
               <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 border border-green-500/30 animate-pulse">
                 <svg className="w-10 h-10 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">

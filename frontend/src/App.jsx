@@ -47,7 +47,7 @@ import TrainerStudents from "./pages/TrainerStudents";
 import TrainerWorkoutPlans from "./pages/TrainerWorkoutPlans";
 import TrainerMealPlans from "./pages/TrainerMealPlans";
 import TrainerPlansHub from "./pages/TrainerPlansHub";
-import Leaderboard from "./pages/Leaderboard";
+
 import Schedules from "./pages/Schedules";
 import AiGymAssistant from "./pages/AiGymAssistant";
 import ChatWidget from "./components/Chatbot/ChatWidget";
@@ -338,7 +338,7 @@ function App() {
         />
         {/* Removed /student/available route for cleanup */}
       <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><TrainerBooking /></ProtectedRoute>} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route

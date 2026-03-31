@@ -1,48 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 const AdminOrderManagement = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState([
-    {
-      _id: "ORD65F123456",
-      user: { name: "John Doe", email: "john@example.com" },
-      createdAt: new Date().toISOString(),
-      totalAmount: 48.40,
-      deliveryMethod: "Home Delivery",
-      status: "Processing",
-      paymentStatus: "Paid",
-      items: [{ name: "Mass Gainer", quantity: 1, price: 44.00 }]
-    },
-    {
-      _id: "ORD65F987654",
-      user: { name: "Jane Smith", email: "jane@example.com" },
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-      totalAmount: 22.00,
-      deliveryMethod: "Pickup at Counter",
-      status: "Ready for Pickup",
-      paymentStatus: "Paid",
-      items: [{ name: "Protein Powder", quantity: 2, price: 10.00 }]
-    },
-    {
-      _id: "ORD65F555444",
-      user: { name: "Sam Wilson", email: "sam@example.com" },
-      createdAt: new Date(Date.now() - 172800000).toISOString(),
-      totalAmount: 110.00,
-      deliveryMethod: "Home Delivery",
-      status: "Delivered",
-      paymentStatus: "Paid",
-      items: [{ name: "BCAA Energy", quantity: 1, price: 100.00 }]
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BASE_URL}/orders`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Filter out orphaned orders (where user is null or name is missing)
+      const validOrders = response.data.filter(order => order.user && order.user.name);
+      setOrders(validOrders);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError("Failed to fetch orders");
+      setLoading(false);
     }
-  ]);
+  };
 
   const [expandedRows, setExpandedRows] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [methodFilter, setMethodFilter] = useState("All");
 
-  const handleUpdateStatus = (id, newStatus) => {
-    setOrders(orders.map(order => order._id === id ? { ...order, status: newStatus } : order));
+  const handleUpdateStatus = async (id, newStatus) => {
+    try {
+      // Optimistically update UI
+      setOrders(orders.map(order => order._id === id ? { ...order, status: newStatus } : order));
+      
+      const token = localStorage.getItem("token");
+      await axios.put(`${API_BASE_URL}/orders/${id}/status`, 
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("Error updating status:", err);
+      // Optional: Handle error by refetching orders to revert optimistic update
+    }
   };
 
   const toggleRow = (id) => {
@@ -140,15 +147,15 @@ const AdminOrderManagement = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-100 text-blue-500 uppercase text-xs tracking-widest font-bold">
-                    <th className="px-6 py-4">Order ID</th>
-                    <th className="px-6 py-4">Customer</th>
-                    <th className="px-6 py-4">Date</th>
-                    <th className="px-6 py-4">Method</th>
-                    <th className="px-6 py-4">Items</th>
-                    <th className="px-6 py-4">Total</th>
-                    <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Action</th>
+                  <tr className="bg-slate-100 text-slate-500 uppercase text-xs tracking-widest font-bold border-b border-slate-200">
+                    <th className="px-4 py-3">Order ID</th>
+                    <th className="px-4 py-3">Customer</th>
+                    <th className="px-4 py-3">Date</th>
+                    <th className="px-4 py-3">Method</th>
+                    <th className="px-4 py-3">Items</th>
+                    <th className="px-4 py-3">Total</th>
+                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -156,7 +163,7 @@ const AdminOrderManagement = () => {
                     filteredOrders.map((order) => (
                       <React.Fragment key={order._id}>
                         <tr className="hover:bg-slate-50 transition group cursor-pointer" onClick={() => toggleRow(order._id)}>
-                          <td className="px-6 py-4 font-mono text-sm text-slate-500 group-hover:text-slate-900">
+                          <td className="px-4 py-3 font-mono text-sm text-slate-500 group-hover:text-slate-900">
                             <div className="flex items-center gap-2">
                               <svg className={`w-3 h-3 transition-transform ${expandedRows[order._id] ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" />
@@ -164,37 +171,37 @@ const AdminOrderManagement = () => {
                               {order._id}
                             </div>
                           </td>
-                          <td className="px-6 py-4">
-                            <p className="font-semibold text-slate-900">{order.user.name}</p>
-                            <p className="text-xs text-slate-600">{order.user.email}</p>
+                          <td className="px-4 py-3">
+                            <p className="font-semibold text-slate-900">{order.user?.name || 'Unknown'}</p>
+                            <p className="text-xs text-slate-600">{order.user?.email || 'N/A'}</p>
                           </td>
-                          <td className="px-6 py-4 text-sm text-slate-700">
+                          <td className="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">
                             {new Date(order.createdAt).toLocaleDateString()}
                           </td>
-                          <td className="px-6 py-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${order.deliveryMethod === 'Pickup at Counter' ? 'bg-purple-500/20 text-purple-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                          <td className="px-4 py-3">
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap inline-block shadow-sm border ${order.deliveryMethod === 'Pickup at Counter' ? 'bg-purple-100/80 text-purple-700 border-purple-200' : 'bg-blue-100/80 text-blue-700 border-blue-200'}`}>
                               {order.deliveryMethod}
                             </span>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-4 py-3">
                             <span className="text-xs bg-slate-100 px-2 py-1 rounded text-slate-700">
                               {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
                             </span>
                           </td>
-                          <td className="px-6 py-4 font-bold text-blue-600">
-                            ${order.totalAmount.toFixed(2)}
+                          <td className="px-4 py-3 font-black text-slate-900 whitespace-nowrap">
+                            Rs. {order.totalAmount.toFixed(2)}
                           </td>
-                          <td className="px-6 py-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${order.status === 'Delivered' ? 'bg-green-500/20 text-green-700' :
-                              order.status === 'Processing' ? 'bg-yellow-500/20 text-yellow-400' :
-                                'bg-blue-600/20 text-blue-500'
+                          <td className="px-4 py-3">
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap shadow-sm border ${order.status === 'Delivered' ? 'bg-green-100/80 text-green-700 border-green-200' :
+                              order.status === 'Processing' ? 'bg-amber-100/80 text-amber-700 border-amber-200' :
+                                'bg-blue-100/80 text-blue-700 border-blue-200'
                               }`}>
                               {order.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                          <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                             <select
-                              className="bg-blue-50/40 border border-slate-300 rounded px-2 py-1 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition"
+                              className="bg-white border border-slate-200 shadow-sm rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer whitespace-nowrap"
                               value={order.status}
                               onChange={(e) => handleUpdateStatus(order._id, e.target.value)}
                             >
@@ -216,11 +223,11 @@ const AdminOrderManagement = () => {
                                       <div key={idx} className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-white/5">
                                         <div>
                                           <p className="text-sm font-semibold text-slate-900">{item.name}</p>
-                                          <p className="text-xs text-slate-500">${item.price.toFixed(2)} each</p>
+                                          <p className="text-xs text-slate-500">Rs. {item.price.toFixed(2)} each</p>
                                         </div>
                                         <div className="text-right">
                                           <p className="text-sm font-bold text-blue-500">Qty: {item.quantity}</p>
-                                          <p className="text-xs text-slate-900">${(item.price * item.quantity).toFixed(2)}</p>
+                                          <p className="text-xs text-slate-900">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                                         </div>
                                       </div>
                                     ))}
@@ -239,7 +246,7 @@ const AdminOrderManagement = () => {
                                     </div>
                                     <div className="pt-4 border-t border-slate-200 flex justify-between items-baseline">
                                       <span className="text-slate-900 font-bold">Total Amount</span>
-                                      <span className="text-blue-600 text-xl font-black">${order.totalAmount.toFixed(2)}</span>
+                                      <span className="text-blue-600 text-xl font-black">Rs. {order.totalAmount.toFixed(2)}</span>
                                     </div>
                                   </div>
                                 </div>
