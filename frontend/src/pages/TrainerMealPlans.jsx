@@ -10,6 +10,8 @@ const TrainerMealPlans = () => {
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [toastMsg, setToastMsg] = useState({ type: "", text: "" });
+    const [deleteConfirm, setDeleteConfirm] = useState(null);
 
     // Form State for Meal Creator
     const [newPlan, setNewPlan] = useState({
@@ -79,8 +81,9 @@ const TrainerMealPlans = () => {
         setShowAssignModal(true);
     };
 
-    const handlePublishPlan = async () => {
-        if (!newPlan.title) return alert("Please enter a plan name");
+    const handlePublishPlan = async (e) => {
+        if (e) e.preventDefault();
+        setToastMsg({ type: "", text: "" });
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
@@ -102,29 +105,33 @@ const TrainerMealPlans = () => {
 
             setNewPlan({ title: "", macros: { p: "", c: "" }, meals: [{ name: "Breakfast", detail: "" }, { name: "Lunch", detail: "" }, { name: "Dinner", detail: "" }] });
             setActiveTab("library");
-            alert(isEdit ? "Meal plan updated successfully!" : "Meal plan published successfully!");
+            setToastMsg({ type: "success", text: isEdit ? "Meal plan updated successfully!" : "Meal plan published successfully!" });
+            setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
         } catch (err) {
             console.error("Publish failed", err);
             const errorMsg = err.response?.data?.message || err.message;
             const detail = err.response?.data?.error || "";
-            alert(`Failed to publish meal plan: ${errorMsg} ${detail ? `\n\nDetail: ${detail}` : ""}`);
+            setToastMsg({ type: "error", text: `Failed to publish meal plan: ${errorMsg} ${detail ? `\n\nDetail: ${detail}` : ""}` });
         } finally {
             setLoading(false);
         }
     };
 
     const handleDeletePlan = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this meal plan?")) return;
+        setToastMsg({ type: "", text: "" });
         try {
             const token = localStorage.getItem("token");
             await axios.delete(`http://localhost:5000/api/plans/meal/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPlans(plans.filter(p => p._id !== id));
-            alert("Meal plan deleted successfully");
+            setDeleteConfirm(null);
+            setToastMsg({ type: "success", text: "Meal plan deleted successfully" });
+            setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
         } catch (err) {
             console.error("Delete failed", err);
-            alert("Failed to delete meal plan");
+            setDeleteConfirm(null);
+            setToastMsg({ type: "error", text: "Failed to delete meal plan" });
         }
     };
 
@@ -143,11 +150,12 @@ const TrainerMealPlans = () => {
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            alert(`Successfully assigned ${selectedPlan.title} to student!`);
+            setToastMsg({ type: "success", text: `Successfully assigned ${selectedPlan.title} to student!` });
+            setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
             setShowAssignModal(false);
         } catch (err) {
             console.error("Assignment failed", err);
-            alert("Failed to assign meal plan");
+            setToastMsg({ type: "error", text: "Failed to assign meal plan. Please try again." });
         }
     };
 
@@ -155,6 +163,18 @@ const TrainerMealPlans = () => {
         <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative print:p-0">
             {/* Background Effects */}
             <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10 print:hidden"></div>
+
+            {/* Global Toast Notification */}
+            {toastMsg.text && (
+                <div className={`fixed top-24 left-1/2 -translate-x-1/2 z-[100] text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 print:hidden ${toastMsg.type === "success" ? "bg-green-500" : "bg-red-500"}`}>
+                    {toastMsg.type === "success" ? (
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                    ) : (
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                    )}
+                    <span className="font-bold text-sm tracking-wide">{toastMsg.text}</span>
+                </div>
+            )}
 
             <div className="max-w-6xl mx-auto">
                 {/* Header Information */}
@@ -199,7 +219,7 @@ const TrainerMealPlans = () => {
                                             <FaEdit />
                                         </button>
                                         <button
-                                            onClick={() => handleDeletePlan(plan._id)}
+                                            onClick={() => setDeleteConfirm(plan)}
                                             className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-700 rounded-lg transition-all"
                                             title="Delete Plan"
                                         >
@@ -247,7 +267,7 @@ const TrainerMealPlans = () => {
                         )}
                     </div>
                 ) : (
-                    <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 max-w-4xl mx-auto print:hidden">
+                    <form onSubmit={handlePublishPlan} className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 max-w-4xl mx-auto print:hidden">
                         <div className="mb-8 border-b border-slate-200 pb-6">
                             <h3 className="text-xl font-bold text-blue-600 tracking-tight mb-6">
                                 {newPlan._id ? "Edit Meal Plan" : "Plan Identity & Macros"}
@@ -256,6 +276,7 @@ const TrainerMealPlans = () => {
                                 <div className="md:col-span-2">
                                     <label className="text-[10px] text-slate-600 font-black uppercase tracking-widest block mb-2">Meal Plan Title</label>
                                     <input
+                                        required
                                         className="w-full bg-blue-50/40 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium"
                                         placeholder="E.g. Summer Shred Nutrition"
                                         value={newPlan.title}
@@ -265,6 +286,7 @@ const TrainerMealPlans = () => {
                                 <div>
                                     <label className="text-[10px] text-blue-600 font-black uppercase tracking-widest block mb-2">Protein %</label>
                                     <input
+                                        required
                                         className="w-full bg-blue-50/40 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 text-center focus:border-blue-600/50 outline-none transition-all"
                                         placeholder="40"
                                         value={newPlan.macros.p}
@@ -274,6 +296,7 @@ const TrainerMealPlans = () => {
                                 <div>
                                     <label className="text-[10px] text-blue-400 font-black uppercase tracking-widest block mb-2">Carbs %</label>
                                     <input
+                                        required
                                         className="w-full bg-blue-50/40 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 text-center focus:border-blue-400/50 outline-none transition-all"
                                         placeholder="30"
                                         value={newPlan.macros.c}
@@ -300,6 +323,7 @@ const TrainerMealPlans = () => {
                                         <div className="md:col-span-3">
                                             <label className="text-[10px] text-slate-500 mb-1 block">Meal Name</label>
                                             <input
+                                                required
                                                 className="w-full bg-blue-50/40 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 font-bold"
                                                 placeholder="Breakfast"
                                                 value={meal.name}
@@ -309,6 +333,7 @@ const TrainerMealPlans = () => {
                                         <div className="md:col-span-7">
                                             <label className="text-[10px] text-slate-500 mb-1 block">Recommended Foods / Quantities</label>
                                             <textarea
+                                                required
                                                 className="w-full bg-blue-50/40 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 resize-none"
                                                 placeholder="3 Egg Whites, 1 Whole Egg, 1/2 Cup Oats..."
                                                 rows="1"
@@ -331,14 +356,14 @@ const TrainerMealPlans = () => {
 
                         <div className="mt-8">
                             <button
-                                onClick={handlePublishPlan}
+                                type="submit"
                                 disabled={loading}
                                 className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
                             >
                                 {loading ? (newPlan._id ? "Updating..." : "Publishing...") : (newPlan._id ? "Update" : "Publish")}
                             </button>
                         </div>
-                    </div>
+                    </form>
                 )}
 
                 {/* Print-Only Professional Nutritional Guide */}
@@ -420,8 +445,8 @@ const TrainerMealPlans = () => {
                         <div className="space-y-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                             {students.length > 0 ? students.map(student => (
                                 <button
-                                    key={student._id}
-                                    onClick={() => handleAssignToStudent(student._id)}
+                                    key={student.id}
+                                    onClick={() => handleAssignToStudent(student.id)}
                                     className="w-full flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-blue-700/10 hover:border-blue-600/50 transition-all group"
                                 >
                                     <div className="flex flex-col items-start">
@@ -444,12 +469,52 @@ const TrainerMealPlans = () => {
                     </div>
                 </div>
             )}
+            {/* Delete Confirmation Modal */}
+            {deleteConfirm && (
+                <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+                    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setDeleteConfirm(null)}></div>
+                    <div className="relative bg-white border border-slate-200 rounded-2xl w-full max-w-sm p-8 text-center animate-in zoom-in-95 duration-200 shadow-2xl">
+                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <FaTrash className="text-red-600 text-2xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">Delete Plan?</h3>
+                        <p className="text-slate-500 mb-8 text-sm">Are you sure you want to delete <span className="font-bold text-slate-900">"{deleteConfirm.title}"</span>? This action cannot be undone.</p>
+                        
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setDeleteConfirm(null)}
+                                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold transition-all text-sm"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => handleDeletePlan(deleteConfirm._id)}
+                                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold transition-all text-sm shadow-lg shadow-red-600/20"
+                            >
+                                Delete It
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Premium Toast Notification */}
+            {toastMsg.text && (
+                <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[2000] animate-in slide-in-from-top-8 duration-300">
+                    <div className={`px-8 py-4 rounded-full shadow-2xl font-black tracking-widest uppercase text-xs flex items-center gap-3 backdrop-blur-md ${
+                        toastMsg.type === "success" 
+                            ? "bg-green-500 text-slate-900 border border-green-400/50" 
+                            : "bg-red-500 text-white border border-red-400/50"
+                    }`}>
+                        {toastMsg.text}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default TrainerMealPlans;
-
 
 
 

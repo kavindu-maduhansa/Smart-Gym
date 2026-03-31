@@ -16,6 +16,7 @@ import RenewMembership from "./pages/RenewMembership";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/MyOrders";
+import MyPlans from "./pages/MyPlans";
 import AdminOrderManagement from "./pages/AdminOrderManagement";
 
 // Admin Pages
@@ -164,6 +165,14 @@ function App() {
           element={
             <ProtectedRoute>
               <MyOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-plans"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <MyPlans />
             </ProtectedRoute>
           }
         />

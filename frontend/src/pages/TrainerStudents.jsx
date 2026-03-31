@@ -10,6 +10,20 @@ const TrainerStudents = () => {
   const [weekFilter, setWeekFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [isWeekOpen, setIsWeekOpen] = useState(false);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.custom-dropdown')) {
+        setIsWeekOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const weekLabels = { "All": "All Activity", "This Week": "Active This Week", "Last Week": "Active Last Week" };
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -113,15 +127,34 @@ const TrainerStudents = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-600"
           />
-          <select
-            value={weekFilter}
-            onChange={(e) => setWeekFilter(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all cursor-pointer font-medium"
-          >
-            <option value="All" className="bg-white">All Activity</option>
-            <option value="This Week" className="bg-white">Active This Week</option>
-            <option value="Last Week" className="bg-white">Active Last Week</option>
-          </select>
+          <div className="relative w-full custom-dropdown">
+            <button
+              onClick={() => setIsWeekOpen(!isWeekOpen)}
+              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 flex items-center justify-between hover:border-blue-600/50 focus:border-blue-600/50 hover:bg-blue-50/30 transition-all font-medium focus:outline-none"
+            >
+              <span className="truncate">{weekLabels[weekFilter]}</span>
+              <svg className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isWeekOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            {isWeekOpen && (
+              <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                {Object.entries(weekLabels).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setWeekFilter(key);
+                      setIsWeekOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:bg-blue-50 ${weekFilter === key ? 'bg-blue-50/50 text-blue-700' : 'text-slate-700'}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Data Table */}

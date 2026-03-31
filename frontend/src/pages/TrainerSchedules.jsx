@@ -11,13 +11,38 @@ const TrainerSchedules = () => {
   const [sessionDate, setSessionDate] = useState(null);
   const [sessionTime, setSessionTime] = useState("");
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("Upcoming");
   const [editId, setEditId] = useState(null);
+  const [sessionToDelete, setSessionToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const [isDateOpen, setIsDateOpen] = useState(false);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.custom-dropdown')) {
+        setIsStatusOpen(false);
+        setIsDateOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const statusLabels = {
+    All: "All Status", Booked: "Booked", Available: "Available", 
+    Expired: "Expired", Pending: "Pending Attendance", Attended: "Attended", Absent: "Absent"
+  };
+  const dateLabels = {
+    All: "All Dates", Today: "Today Only", Upcoming: "Upcoming", Past: "Past Sessions"
+  };
 
   // BASE URL - Adjust if your backend port is different
   const API_URL = "http://localhost:5000/api/trainer/schedules";
@@ -87,6 +112,8 @@ const TrainerSchedules = () => {
       }
 
       fetchSchedules();
+      setSuccessMsg(editId ? "Session successfully updated!" : "Session successfully created!");
+      setTimeout(() => setSuccessMsg(""), 3000);
       closeModal();
     } catch (err) {
       setError(err.response?.data?.message || "Server Error. Ensure you are logged in as a Trainer.");
@@ -111,17 +138,24 @@ const TrainerSchedules = () => {
     setSessionTime("");
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this session?")) {
-      try {
-        const token = localStorage.getItem("token");
-        await axios.delete(`${API_URL}/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        fetchSchedules(); // Refresh the list
-      } catch (err) {
-        alert("Failed to delete the session.");
-      }
+  const handleDeleteClick = (session) => {
+    setSessionToDelete(session);
+  };
+
+  const confirmDelete = async () => {
+    if (!sessionToDelete) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/${sessionToDelete._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchSchedules(); // Refresh the list
+      setSuccessMsg("Session successfully deleted!");
+      setTimeout(() => setSuccessMsg(""), 3000);
+    } catch (err) {
+      alert("Failed to delete the session.");
+    } finally {
+      setSessionToDelete(null);
     }
   };
 
@@ -219,6 +253,13 @@ const TrainerSchedules = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
+      
+      {successMsg && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[60] bg-green-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+          <span className="font-bold text-sm tracking-wide">{successMsg}</span>
+        </div>
+      )}
 
       <div className="max-w-6xl mx-auto">
         <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 mb-8">
@@ -307,31 +348,57 @@ const TrainerSchedules = () => {
             placeholder="Search session or student..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-600"
+            className="w-full bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-400"
           />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all cursor-pointer font-medium"
-          >
-            <option value="All" className="bg-white">All Status</option>
-            <option value="Booked" className="bg-white">Booked</option>
-            <option value="Available" className="bg-white">Available</option>
-            <option value="Expired" className="bg-white">Expired</option>
-            <option value="Pending" className="bg-white">Pending Attendance</option>
-            <option value="Attended" className="bg-white">Attended</option>
-            <option value="Absent" className="bg-white">Absent</option>
-          </select>
-          <select
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all cursor-pointer font-medium"
-          >
-            <option value="All" className="bg-white">All Dates</option>
-            <option value="Today" className="bg-white">Today Only</option>
-            <option value="Upcoming" className="bg-white">Upcoming</option>
-            <option value="Past" className="bg-white">Past Sessions</option>
-          </select>
+          {/* Custom Status Dropdown */}
+          <div className="relative custom-dropdown">
+            <button
+              onClick={() => { setIsStatusOpen(!isStatusOpen); setIsDateOpen(false); }}
+              className="w-full bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600/50 transition-all font-medium text-left flex justify-between items-center"
+            >
+              {statusLabels[statusFilter]}
+              <svg className={`w-4 h-4 text-slate-400 transition-transform ${isStatusOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {isStatusOpen && (
+              <div className="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                {Object.keys(statusLabels).map(opt => (
+                  <div
+                    key={opt}
+                    onClick={() => { setStatusFilter(opt); setIsStatusOpen(false); }}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors flex items-center justify-between ${statusFilter === opt ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-blue-50/50 hover:text-blue-600'}`}
+                  >
+                    {statusLabels[opt]}
+                    {statusFilter === opt && <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Custom Date Dropdown */}
+          <div className="relative custom-dropdown">
+            <button
+              onClick={() => { setIsDateOpen(!isDateOpen); setIsStatusOpen(false); }}
+              className="w-full bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600/50 transition-all font-medium text-left flex justify-between items-center"
+            >
+              {dateLabels[dateFilter]}
+              <svg className={`w-4 h-4 text-slate-400 transition-transform ${isDateOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {isDateOpen && (
+              <div className="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                {Object.keys(dateLabels).map(opt => (
+                  <div
+                    key={opt}
+                    onClick={() => { setDateFilter(opt); setIsDateOpen(false); }}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors flex items-center justify-between ${dateFilter === opt ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-blue-50/50 hover:text-blue-600'}`}
+                  >
+                    {dateLabels[opt]}
+                    {dateFilter === opt && <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Add Session Modal */}
@@ -452,7 +519,7 @@ const TrainerSchedules = () => {
                         ) : (
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-widest ${isExpired
                               ? 'bg-red-500/10 text-red-500/70 border-red-500/20'
-                              : 'bg-slate-50 text-slate-600 border border-slate-200'
+                              : 'bg-green-500/10 text-green-700 border-green-500/20'
                             }`}>
                             {isExpired ? 'Expired' : 'Available'}
                           </span>
@@ -463,13 +530,13 @@ const TrainerSchedules = () => {
                           <select
                             value={s.attendanceStatus || 'Pending'}
                             onChange={(e) => handleAttendance(s._id, e.target.value)}
-                            className={`text-xs font-bold px-2 py-1 rounded bg-black border border-slate-300 outline-none cursor-pointer hover:border-blue-600 transition-colors ${s.attendanceStatus === 'Attended' ? 'text-green-500' :
-                                s.attendanceStatus === 'Absent' ? 'text-red-500' : 'text-yellow-500'
+                            className={`text-xs font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer transition-colors shadow-sm ${s.attendanceStatus === 'Attended' ? 'text-green-700 bg-green-50 border-green-200 hover:border-green-300' :
+                                s.attendanceStatus === 'Absent' ? 'text-red-700 bg-red-50 border-red-200 hover:border-red-300' : 'text-amber-700 bg-amber-50 border-amber-200 hover:border-amber-300'
                               }`}
                           >
-                            <option value="Pending" className="text-yellow-500">Pending</option>
-                            <option value="Attended" className="text-green-500">Attended</option>
-                            <option value="Absent" className="text-red-500">Absent</option>
+                            <option value="Pending" className="text-amber-700 bg-white">Pending</option>
+                            <option value="Attended" className="text-green-700 bg-white">Attended</option>
+                            <option value="Absent" className="text-red-700 bg-white">Absent</option>
                           </select>
                         ) : (
                           <span className="text-gray-700 text-xs font-black">—</span>
@@ -486,7 +553,7 @@ const TrainerSchedules = () => {
                             </button>
                           )}
                           <button
-                            onClick={() => handleDelete(s._id)}
+                            onClick={() => handleDeleteClick(s)}
                             className="text-red-600 hover:text-red-700 text-sm font-bold transition-all"
                           >
                             Delete
@@ -542,6 +609,25 @@ const TrainerSchedules = () => {
             )}
           </div>
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {sessionToDelete && (
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-blue-900/40 backdrop-blur-sm transition-opacity" onClick={() => setSessionToDelete(null)}></div>
+            <div className="relative z-10 bg-white border border-slate-200 rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center animate-in zoom-in-95 duration-200">
+              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 border-8 border-red-50/50">
+                <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Delete Session?</h3>
+              <p className="text-slate-500 mb-8 leading-lax">Are you sure you want to delete <span className="font-bold text-slate-800">"{sessionToDelete.title}"</span>? This action cannot be undone.</p>
+              <div className="flex gap-4 justify-center">
+                <button onClick={() => setSessionToDelete(null)} className="px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors w-full">Cancel</button>
+                <button onClick={confirmDelete} className="px-6 py-3 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 w-full">Delete It</button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
