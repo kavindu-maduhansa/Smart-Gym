@@ -32,7 +32,7 @@ const TrainerPlansHub = () => {
 
       <div className="relative z-10 max-w-5xl mx-auto">
         <header className="mb-16 text-center">
-          <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-white tracking-tighter mb-4">
+          <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-white tracking-tighter mb-4 pb-2">
             Manage Plans
           </h1>
           <p className="text-slate-700 text-lg max-w-2xl mx-auto">

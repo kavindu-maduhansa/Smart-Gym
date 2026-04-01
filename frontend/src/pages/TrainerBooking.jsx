@@ -111,6 +111,8 @@ const TrainerBooking = () => {
   const [gymCatalog, setGymCatalog] = useState([]);
   const [slotActionKey, setSlotActionKey] = useState(null);
   const [gymBookingRules, setGymBookingRules] = useState(null);
+  const [toastMsg, setToastMsg] = useState({ type: "", text: "" });
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const role = useMemo(() => {
     const p = readJwtPayload();
@@ -257,9 +259,11 @@ const TrainerBooking = () => {
       setEditSlotModal({ open: false, row: null });
       setMoveTarget("");
       await fetchSlotBookings();
-      alert("Booking updated.");
+      setToastMsg({ type: "success", text: "Booking updated successfully." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     } catch (e) {
-      alert(e.response?.data?.message || "Could not update booking.");
+      setToastMsg({ type: "error", text: e.response?.data?.message || "Could not update booking." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     } finally {
       setSlotActionKey(null);
     }
@@ -280,7 +284,6 @@ const TrainerBooking = () => {
   ]);
 
   const deleteSlotBooking = async (row) => {
-    if (!window.confirm("Cancel this gym slot booking?")) return;
     setSlotActionKey(`del-${row.scheduleId}-${row.slotId}`);
     try {
       const token = localStorage.getItem("token");
@@ -288,9 +291,11 @@ const TrainerBooking = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       await fetchSlotBookings();
-      alert("Booking cancelled.");
+      setToastMsg({ type: "success", text: "Booking cancelled successfully." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     } catch (e) {
-      alert(e.response?.data?.message || "Could not cancel.");
+      setToastMsg({ type: "error", text: e.response?.data?.message || "Could not cancel." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     } finally {
       setSlotActionKey(null);
     }
@@ -326,23 +331,25 @@ const TrainerBooking = () => {
   };
 
   const handleDeleteFeedback = async (feedbackId) => {
-    if (!window.confirm("Are you sure you want to delete this feedback?")) return;
     try {
       const token = localStorage.getItem("token");
       await axios.delete(apiClient.feedback.delete(feedbackId), {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("Feedback deleted successfully!");
+      setToastMsg({ type: "success", text: "Feedback deleted successfully!" });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       fetchMyBookings();
       setViewFeedbackModal({ open: false, feedback: null });
     } catch (err) {
-      alert("Failed to delete feedback.");
+      setToastMsg({ type: "error", text: "Failed to delete feedback." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     }
   };
 
   const submitFeedback = async () => {
     if (feedbackForm.rating === 0) {
-      alert("Please select a rating.");
+      setToastMsg({ type: "error", text: "Please select a rating." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       return;
     }
     setSubmitting(true);
@@ -357,7 +364,8 @@ const TrainerBooking = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        alert("Feedback updated!");
+        setToastMsg({ type: "success", text: "Feedback updated!" });
+        setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       } else {
         await axios.post(apiClient.feedback.submit, {
           sessionId: feedbackModal.booking._id,
@@ -367,29 +375,31 @@ const TrainerBooking = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        alert("Feedback submitted!");
+        setToastMsg({ type: "success", text: "Feedback submitted!" });
+        setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       }
       fetchMyBookings();
       setFeedbackModal({ open: false, booking: null });
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to process feedback.");
+      setToastMsg({ type: "error", text: err.response?.data?.message || "Failed to process feedback." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleCancelBooking = async (bookingId) => {
-    if (!window.confirm("Are you sure you want to cancel this booking? This will make the slot available for others.")) return;
-
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`http://localhost:5000/api/student/cancel/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("Booking cancelled successfully!");
+      setToastMsg({ type: "success", text: "Booking cancelled successfully!" });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       fetchMyBookings(); // Refresh the list
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to cancel booking.");
+      setToastMsg({ type: "error", text: err.response?.data?.message || "Failed to cancel booking." });
+      setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
     }
   };
 
@@ -577,7 +587,12 @@ const TrainerBooking = () => {
                               </span>
                               <button
                                 className="bg-red-500/5 text-red-500 hover:bg-red-500/10 px-4 py-2 rounded-lg font-semibold transition-all text-xs tracking-wider border border-red-500/20 active:scale-95"
-                                onClick={() => handleCancelBooking(b._id)}
+                                onClick={() => setDeleteConfirm({
+                                  type: 'delete',
+                                  title: 'Cancel Booking?',
+                                  text: 'Are you sure you want to cancel this session? This will make it available to other students.',
+                                  onConfirm: () => handleCancelBooking(b._id)
+                                })}
                               >
                                 Cancel Booking
                               </button>
@@ -774,7 +789,12 @@ const TrainerBooking = () => {
                                 <button
                                   type="button"
                                   disabled={actionBusy}
-                                  onClick={() => deleteSlotBooking(b)}
+                                  onClick={() => setDeleteConfirm({
+                                    type: 'delete',
+                                    title: 'Cancel Gym Slot?',
+                                    text: 'Are you sure you want to release this gym slot booking?',
+                                    onConfirm: () => deleteSlotBooking(b)
+                                  })}
                                   className="bg-red-500/20 text-red-700 border border-red-500/40 font-bold px-4 py-2 rounded hover:bg-red-500/30 disabled:opacity-50"
                                 >
                                   {slotActionKey === `del-${b.scheduleId}-${b.slotId}` ? "…" : "Delete"}
@@ -1051,7 +1071,12 @@ const TrainerBooking = () => {
                 </button>
                 <button
                   className="bg-red-500/10 text-red-500 border border-red-500/30 font-bold py-3 rounded-xl hover:bg-red-500/20 transition-all uppercase tracking-widest text-xs"
-                  onClick={() => handleDeleteFeedback(viewFeedbackModal.feedback?._id)}
+                  onClick={() => setDeleteConfirm({
+                    type: 'delete',
+                    title: 'Delete Feedback?',
+                    text: 'This action cannot be undone. Your rating and comments will be permanently removed.',
+                    onConfirm: () => handleDeleteFeedback(viewFeedbackModal.feedback?._id)
+                  })}
                 >
                   Delete
                 </button>
@@ -1062,6 +1087,59 @@ const TrainerBooking = () => {
                 onClick={() => setViewFeedbackModal({ open: false, feedback: null })}
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Premium Toast Notification */}
+      {toastMsg.text && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[2000] animate-in slide-in-from-top-8 duration-300">
+          <div className={`px-8 py-4 rounded-full shadow-2xl font-black tracking-widest uppercase text-xs flex items-center gap-3 backdrop-blur-md ${
+            toastMsg.type === "success" 
+              ? "bg-green-500 text-slate-900 border border-green-400/50" 
+              : "bg-red-500 text-white border border-red-400/50"
+          }`}>
+            {toastMsg.text}
+          </div>
+        </div>
+      )}
+
+      {/* Premium Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setDeleteConfirm(null)}></div>
+          <div className="relative bg-white border border-slate-200 rounded-3xl w-full max-w-sm p-10 text-center animate-in zoom-in-95 duration-300 shadow-2xl shadow-blue-600/10">
+            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-inner ${deleteConfirm.type === 'delete' ? 'bg-red-50' : 'bg-blue-50'}`}>
+              {deleteConfirm.type === 'delete' ? (
+                <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              ) : (
+                <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+            </div>
+            <h3 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">{deleteConfirm.title}</h3>
+            <p className="text-slate-500 mb-10 text-sm leading-relaxed">{deleteConfirm.text}</p>
+            
+            <div className="flex gap-4">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 py-4 rounded-2xl font-black transition-all text-xs uppercase tracking-widest border border-slate-200"
+              >
+                Go Back
+              </button>
+              <button
+                onClick={() => {
+                  deleteConfirm.onConfirm();
+                  setDeleteConfirm(null);
+                }}
+                className={`flex-1 py-4 rounded-2xl font-black transition-all text-xs uppercase tracking-widest shadow-xl text-white ${deleteConfirm.type === 'delete' ? 'bg-red-600 hover:bg-red-700 shadow-red-600/20' : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20'}`}
+              >
+                Confirm
               </button>
             </div>
           </div>

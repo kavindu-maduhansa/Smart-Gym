@@ -218,7 +218,7 @@ const AdminSupplementStore = () => {
                       </p>
                       <p className="text-sm">
                         <span className="text-slate-500">Price:</span>{" "}
-                        <span className="text-slate-900 font-semibold">${supplement.price}</span>
+                        <span className="text-slate-900 font-semibold">Rs. {supplement.price}</span>
                       </p>
                       <p className="text-sm">
                         <span className="text-slate-500">Stock:</span>{" "}

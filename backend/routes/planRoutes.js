@@ -169,4 +169,19 @@ router.get("/debug", authenticateJWT, async (req, res) => {
   }
 });
 
+// Get Student's Assigned Plans
+router.get("/student/assignments", authenticateJWT, async (req, res) => {
+  try {
+    const assignments = await PlanAssignment.find({ studentId: req.user.id })
+      .populate({
+        path: "planId",
+        select: "title exercises difficulty macros meals" // Fetch fields for both models
+      })
+      .populate("trainerId", "name email");
+    res.json(assignments);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch student assignments", error: error.message });
+  }
+});
+
 export default router;

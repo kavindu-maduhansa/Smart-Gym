@@ -51,6 +51,24 @@ const TrainerAvailability = () => {
   const [filterDate, setFilterDate] = useState(null);
   const [trainerMsg, setTrainerMsg] = useState({ type: "", text: "" });
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.custom-status-dropdown')) {
+        setIsStatusDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const statusLabels = {
+    all: "ALL STATUS",
+    available: "AVAILABLE",
+    closed: "CLOSED"
+  };
 
   const handleBook = async (id) => {
     setTrainerMsg({ type: "", text: "" });
@@ -87,6 +105,12 @@ const TrainerAvailability = () => {
     const now = new Date();
     const isExpired = sessionDateTime < now;
 
+    // Remove if it's been more than 6 hours since the session started
+    const hoursSinceStart = (now - sessionDateTime) / (1000 * 60 * 60);
+    if (isExpired && hoursSinceStart > 6) {
+      return false;
+    }
+
     let matchesStatus = true;
     if (statusFilter === "available") {
       matchesStatus = !isExpired;
@@ -121,7 +145,7 @@ const TrainerAvailability = () => {
           {trainerMsg.text}
         </div>
       )}
-      <div className="flex flex-nowrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar">
+      <div className="flex flex-wrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200 min-w-0">
         <span className="text-slate-600 font-semibold text-xs tracking-tight mr-2 shrink-0">Filter By:</span>
 
         <div className="relative flex-1 max-w-[200px]">
@@ -162,17 +186,29 @@ const TrainerAvailability = () => {
 
         <div className="w-px h-6 bg-slate-100 mx-2 shrink-0"></div>
 
-        <div className="relative shrink-0">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-blue-50/50 border border-slate-200 p-2 rounded-lg text-slate-900 focus:outline-none focus:border-blue-600 transition-all min-w-[130px] text-[10px] font-bold uppercase tracking-widest cursor-pointer appearance-none pr-8"
+        <div className="relative shrink-0 custom-status-dropdown">
+          <button
+            onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+            className="flex items-center justify-between border border-slate-200 bg-white p-2 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600/50 transition-all min-w-[130px] text-[10px] font-bold uppercase tracking-widest cursor-pointer shadow-sm"
           >
-            <option value="all">All Status</option>
-            <option value="available">Available</option>
-            <option value="closed">Closed</option>
-          </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-600 text-[10px]">▼</div>
+            {statusLabels[statusFilter]}
+            <svg className={`w-3 h-3 text-slate-500 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+          </button>
+          
+          {isStatusDropdownOpen && (
+            <div className="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200 right-0">
+              {Object.keys(statusLabels).map(opt => (
+                <div
+                  key={opt}
+                  onClick={() => { setStatusFilter(opt); setIsStatusDropdownOpen(false); }}
+                  className={`px-4 py-2 text-[10px] font-bold tracking-widest uppercase cursor-pointer transition-colors flex items-center justify-between ${statusFilter === opt ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-blue-50/50 hover:text-blue-600'}`}
+                >
+                  {statusLabels[opt]}
+                  {statusFilter === opt && <svg className="w-3 h-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {(filterTitle || filterTrainer || filterDate || statusFilter !== "all") && (
@@ -214,7 +250,7 @@ const TrainerAvailability = () => {
                   <div className="flex justify-between items-start mb-4 relative z-10">
                     <div className="flex flex-col">
                       <h3 className={`text-xl font-bold transition-colors ${isExpired ? 'text-slate-600' : 'text-slate-900 group-hover:text-blue-600'}`}>{s.title}</h3>
-                      <div className="text-[11px] text-slate-600 font-semibold mt-1 tracking-wide">Session Protocol</div>
+                      <div className="text-[11px] text-slate-600 font-semibold mt-1 tracking-wide">Session Plan</div>
                     </div>
                     <span className={`text-[10px] px-3 py-1.5 rounded-lg border uppercase font-bold tracking-wider leading-none ${isExpired ? 'bg-red-500/5 text-red-500 border-red-500/10' : 'bg-green-500/5 text-green-700 border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]'}`}>
                       {isExpired ? "Closed" : "Available"}
