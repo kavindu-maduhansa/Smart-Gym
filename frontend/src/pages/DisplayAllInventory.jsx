@@ -3,6 +3,25 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import gymBg from "../assets/gym-bg.jpg";
 
+const modalAnimationStyles = `
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes popIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .modal-fade-in { animation: fadeIn 0.3s ease-out; }
+  .modal-pop-in { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+`;
+
 function DisplayAllInventory() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -79,6 +98,7 @@ function DisplayAllInventory() {
         backgroundAttachment: "fixed",
       }}
     >
+      <style>{modalAnimationStyles}</style>
       <style>{`
         @keyframes slideOutLeft {
           from {
