@@ -629,9 +629,9 @@ const AdminInventoryDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       <style>{modalAnimationStyles}</style>
-      {/* Animated Background - Same as other admin pages */}
+      {/* Animated Background — matches Home.jsx */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
@@ -656,19 +656,29 @@ const AdminInventoryDashboard = () => {
             </p>
           </div>
 
-          {/* Action Cards */}
+          {/* Action Cards — homepage-style feature tiles */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Quick Actions</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 sm:mb-3">Quick Actions</h2>
+            <p className="text-slate-600 text-sm sm:text-base mb-6 sm:mb-8">Jump to common inventory tasks</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
               {cards.map((card, i) => (
                 <div
                   key={i}
                   onClick={card.onClick}
-                  className="group relative backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange/20 cursor-pointer flex flex-col"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      card.onClick();
+                    }
+                  }}
+                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-7 hover:bg-white hover:border-blue-600/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-600/15 cursor-pointer flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >
+                  <div className="absolute inset-0 rounded-2xl border border-blue-600/0 group-hover:border-blue-600/40 transition-all duration-300 pointer-events-none" />
                   <div className="relative z-10 flex flex-col h-full">
-                    <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-orange/20 rounded-xl flex-shrink-0 group-hover:bg-orange/30 transition-colors duration-300 mb-4">
-                      <svg className="w-7 h-7 sm:w-8 sm:h-8 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-blue-600/15 rounded-xl flex-shrink-0 group-hover:bg-blue-600/25 transition-colors duration-300 mb-4">
+                      <svg className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d={card.icon} />
                       </svg>
                     </div>
@@ -676,12 +686,12 @@ const AdminInventoryDashboard = () => {
                     <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                       {card.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-gray-300 mb-4 group-hover:text-gray-200 transition-colors flex-grow">
+                    <p className="text-xs sm:text-sm text-slate-600 mb-4 flex-grow">
                       {card.desc}
                     </p>
-                    <button className="w-full bg-orange hover:bg-orange/90 text-white font-bold px-4 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm mt-auto">
+                    <span className="w-full inline-flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg transition-all duration-300 text-xs sm:text-sm mt-auto min-h-[44px]">
                       {card.btn}
-                    </button>
+                    </span>
                   </div>
                 </div>
               ))}
@@ -692,7 +702,7 @@ const AdminInventoryDashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mt-12 sm:mt-16">
 
             {/* RECENT ACTIVITY */}
-            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 hover:bg-white/15 transition-all">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 hover:border-blue-300/60 hover:shadow-md transition-all">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
                   <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -715,7 +725,7 @@ const AdminInventoryDashboard = () => {
             </div>
 
             {/* STATS */}
-            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 hover:bg-white/15 transition-all">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 hover:border-blue-300/60 hover:shadow-md transition-all">
               <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                 <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -725,49 +735,49 @@ const AdminInventoryDashboard = () => {
 
               {loading ? (
                 <div className="flex items-center justify-center py-8">
-                  <p className="text-gray-400">⏳ Loading stats...</p>
+                  <p className="text-slate-500 font-medium">⏳ Loading stats...</p>
                 </div>
               ) : (
                 <div className="space-y-4">
 
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-orange/10 to-orange/5 border border-orange/20 rounded-xl hover:border-orange/50 transition">
-                    <span className="font-medium text-gray-200 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <div className="flex justify-between items-center p-4 bg-white border border-blue-200 rounded-xl shadow-sm hover:border-blue-300 transition">
+                    <span className="font-medium text-slate-700 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                       </svg>
                       Total Items
                     </span>
-                    <span className="text-2xl font-bold text-orange">{stats.totalItems}</span>
+                    <span className="text-2xl font-bold text-blue-600">{stats.totalItems}</span>
                   </div>
 
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-green-500/10 to-green-500/5 border border-green-400/20 rounded-xl hover:border-green-400/50 transition">
-                    <span className="font-medium text-gray-200 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <div className="flex justify-between items-center p-4 bg-white border border-emerald-200 rounded-xl shadow-sm hover:border-emerald-300 transition">
+                    <span className="font-medium text-slate-700 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       Available
                     </span>
-                    <span className="text-2xl font-bold text-green-400">{stats.available}</span>
+                    <span className="text-2xl font-bold text-emerald-600">{stats.available}</span>
                   </div>
 
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-red-500/10 to-red-500/5 border border-red-400/20 rounded-xl hover:border-red-400/50 transition">
-                    <span className="font-medium text-gray-200 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <div className="flex justify-between items-center p-4 bg-white border border-red-200 rounded-xl shadow-sm hover:border-red-300 transition">
+                    <span className="font-medium text-slate-700 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4v2m-6-4h.01H3m6 0h.01m6 0h.01m6 0h.01M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
                       </svg>
                       Damaged Items
                     </span>
-                    <span className="text-2xl font-bold text-red-400">{stats.damaged}</span>
+                    <span className="text-2xl font-bold text-red-600">{stats.damaged}</span>
                   </div>
 
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 border border-yellow-400/20 rounded-xl hover:border-yellow-400/50 transition">
-                    <span className="font-medium text-gray-200 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <div className="flex justify-between items-center p-4 bg-white border border-amber-200 rounded-xl shadow-sm hover:border-amber-300 transition">
+                    <span className="font-medium text-slate-700 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       Maintenance
                     </span>
-                    <span className="text-2xl font-bold text-yellow-400">{stats.maintenance}</span>
+                    <span className="text-2xl font-bold text-amber-600">{stats.maintenance}</span>
                   </div>
 
                 </div>
@@ -781,19 +791,20 @@ const AdminInventoryDashboard = () => {
 
       {/* REPORT MODAL */}
       {showReportModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-fade-in">
-          <div className="bg-gray-900 border border-orange/30 rounded-2xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto modal-pop-in">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-fade-in">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto modal-pop-in">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6 border-b border-orange/20 pb-4">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
-                <svg className="w-8 h-8 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Inventory Report
               </h2>
               <button
                 onClick={() => setShowReportModal(false)}
-                className="text-gray-400 hover:text-white transition"
+                className="text-slate-500 hover:text-slate-900 transition rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                aria-label="Close report"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -803,92 +814,92 @@ const AdminInventoryDashboard = () => {
 
             {reportLoading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-gray-400">⏳ Loading report data...</p>
+                <p className="text-slate-500">⏳ Loading report data...</p>
               </div>
             ) : (
               <>
                 {/* SUMMARY SECTION */}
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                    <svg className="w-6 h-6 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                     Report Summary
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-orange/10 border border-orange/30 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm">Total Items</p>
-                      <p className="text-2xl font-bold text-orange">{generateSummary().total}</p>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-slate-600 text-sm">Total Items</p>
+                      <p className="text-2xl font-bold text-blue-600">{generateSummary().total}</p>
                     </div>
-                    <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm">Total Quantity</p>
-                      <p className="text-2xl font-bold text-blue-400">{generateSummary().totalQuantity}</p>
+                    <div className="bg-sky-50 border border-sky-200 rounded-lg p-4">
+                      <p className="text-slate-600 text-sm">Total Quantity</p>
+                      <p className="text-2xl font-bold text-sky-700">{generateSummary().totalQuantity}</p>
                     </div>
-                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm">Good/New</p>
-                      <p className="text-2xl font-bold text-green-400">{generateSummary().byCondition.Good + generateSummary().byCondition.New}</p>
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+                      <p className="text-slate-600 text-sm">Good/New</p>
+                      <p className="text-2xl font-bold text-emerald-700">{generateSummary().byCondition.Good + generateSummary().byCondition.New}</p>
                     </div>
-                    <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm">Damaged/Maint.</p>
-                      <p className="text-2xl font-bold text-red-400">{generateSummary().byCondition.Damaged + generateSummary().byCondition.Maintenance}</p>
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <p className="text-slate-600 text-sm">Damaged/Maint.</p>
+                      <p className="text-2xl font-bold text-red-700">{generateSummary().byCondition.Damaged + generateSummary().byCondition.Maintenance}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* CONDITION BREAKDOWN */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-bold text-white mb-4">Items by Condition</h3>
+                  <h3 className="text-lg font-bold text-slate-900 mb-4">Items by Condition</h3>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
-                      <span className="text-gray-300">Good Condition:</span>
-                      <span className="font-bold text-green-400">{generateSummary().byCondition.Good}</span>
+                    <div className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                      <span className="text-slate-700">Good Condition:</span>
+                      <span className="font-bold text-emerald-600">{generateSummary().byCondition.Good}</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
-                      <span className="text-gray-300">New:</span>
-                      <span className="font-bold text-green-400">{generateSummary().byCondition.New}</span>
+                    <div className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                      <span className="text-slate-700">New:</span>
+                      <span className="font-bold text-emerald-600">{generateSummary().byCondition.New}</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
-                      <span className="text-gray-300">Damaged:</span>
-                      <span className="font-bold text-red-400">{generateSummary().byCondition.Damaged}</span>
+                    <div className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                      <span className="text-slate-700">Damaged:</span>
+                      <span className="font-bold text-red-600">{generateSummary().byCondition.Damaged}</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
-                      <span className="text-gray-300">Maintenance:</span>
-                      <span className="font-bold text-yellow-400">{generateSummary().byCondition.Maintenance}</span>
+                    <div className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                      <span className="text-slate-700">Maintenance:</span>
+                      <span className="font-bold text-amber-600">{generateSummary().byCondition.Maintenance}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* ITEMS TABLE */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-bold text-white mb-4">Complete Inventory List</h3>
-                  <div className="overflow-x-auto">
+                  <h3 className="text-lg font-bold text-slate-900 mb-4">Complete Inventory List</h3>
+                  <div className="overflow-x-auto rounded-lg border border-slate-200">
                     <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-orange/30">
-                          <th className="text-left py-2 px-3 text-orange font-semibold">Item Name</th>
-                          <th className="text-left py-2 px-3 text-orange font-semibold">Category</th>
-                          <th className="text-center py-2 px-3 text-orange font-semibold">Qty</th>
-                          <th className="text-left py-2 px-3 text-orange font-semibold">Condition</th>
-                          <th className="text-left py-2 px-3 text-orange font-semibold">Supplier</th>
+                      <thead className="bg-slate-50">
+                        <tr className="border-b border-slate-200">
+                          <th className="text-left py-2 px-3 text-blue-700 font-semibold">Item Name</th>
+                          <th className="text-left py-2 px-3 text-blue-700 font-semibold">Category</th>
+                          <th className="text-center py-2 px-3 text-blue-700 font-semibold">Qty</th>
+                          <th className="text-left py-2 px-3 text-blue-700 font-semibold">Condition</th>
+                          <th className="text-left py-2 px-3 text-blue-700 font-semibold">Supplier</th>
                         </tr>
                       </thead>
                       <tbody>
                         {reportData.map((item, idx) => (
-                          <tr key={idx} className="border-b border-gray-700 hover:bg-gray-800/50 transition">
-                            <td className="py-3 px-3 text-gray-300">{item.itemName}</td>
-                            <td className="py-3 px-3 text-gray-300">{item.category}</td>
-                            <td className="py-3 px-3 text-center text-gray-300">{item.quantity}</td>
+                          <tr key={idx} className="border-b border-slate-100 hover:bg-blue-50/50 transition bg-white">
+                            <td className="py-3 px-3 text-slate-800">{item.itemName}</td>
+                            <td className="py-3 px-3 text-slate-800">{item.category}</td>
+                            <td className="py-3 px-3 text-center text-slate-800">{item.quantity}</td>
                             <td className="py-3 px-3">
                               <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                                item.condition === "Good" ? "bg-green-500/20 text-green-400" :
-                                item.condition === "New" ? "bg-blue-500/20 text-blue-400" :
-                                item.condition === "Damaged" ? "bg-red-500/20 text-red-400" :
-                                "bg-yellow-500/20 text-yellow-400"
+                                item.condition === "Good" ? "bg-emerald-100 text-emerald-800" :
+                                item.condition === "New" ? "bg-blue-100 text-blue-800" :
+                                item.condition === "Damaged" ? "bg-red-100 text-red-800" :
+                                "bg-amber-100 text-amber-800"
                               }`}>
                                 {item.condition}
                               </span>
                             </td>
-                            <td className="py-3 px-3 text-gray-300">{item.supplier || "N/A"}</td>
+                            <td className="py-3 px-3 text-slate-800">{item.supplier || "N/A"}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -897,10 +908,10 @@ const AdminInventoryDashboard = () => {
                 </div>
 
                 {/* ACTION BUTTONS */}
-                <div className="flex gap-4 border-t border-orange/20 pt-6">
+                <div className="flex flex-col sm:flex-row gap-4 border-t border-slate-200 pt-6">
                   <button
                     onClick={downloadCSVReport}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -909,7 +920,7 @@ const AdminInventoryDashboard = () => {
                   </button>
                   <button
                     onClick={() => setShowReportModal(false)}
-                    className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition"
+                    className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold py-2.5 px-4 rounded-lg border border-slate-300 transition"
                   >
                     Close
                   </button>
@@ -922,19 +933,20 @@ const AdminInventoryDashboard = () => {
 
       {/* BOOKINGS MODAL */}
       {showBookingsModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-fade-in">
-          <div className="bg-gray-900 border border-orange/30 rounded-2xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto modal-pop-in">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-fade-in">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto modal-pop-in">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6 border-b border-orange/20 pb-4">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
-                <svg className="w-8 h-8 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 Equipment Bookings
               </h2>
               <button
                 onClick={() => setShowBookingsModal(false)}
-                className="text-gray-400 hover:text-white transition"
+                className="text-slate-500 hover:text-slate-900 transition rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                aria-label="Close bookings"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -943,15 +955,16 @@ const AdminInventoryDashboard = () => {
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex gap-2 mb-6 border-b border-orange/20 pb-4 flex-wrap">
+            <div className="flex gap-2 mb-6 border-b border-slate-200 pb-4 flex-wrap">
               {["pending", "approved", "declined"].map((status) => (
                 <button
                   key={status}
+                  type="button"
                   onClick={() => fetchBookings(status)}
-                  className={`px-4 py-2 rounded-full font-semibold text-sm transition capitalize ${
+                  className={`px-4 py-2 rounded-full font-semibold text-sm transition capitalize min-h-[40px] ${
                     bookingFilter === status
-                      ? "bg-orange text-white"
-                      : "bg-white/10 text-gray-300 hover:bg-white/20"
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
                   }`}
                 >
                   {status}
@@ -962,11 +975,11 @@ const AdminInventoryDashboard = () => {
             {/* Content */}
             {bookingsLoading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-gray-400">⏳ Loading bookings...</p>
+                <p className="text-slate-500">⏳ Loading bookings...</p>
               </div>
             ) : bookings.length === 0 ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-gray-400">No bookings found for this status</p>
+                <p className="text-slate-500">No bookings found for this status</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -974,31 +987,31 @@ const AdminInventoryDashboard = () => {
                   const duplicateIds = getDuplicateBookingIds();
                   const isDuplicate = duplicateIds.has(booking._id);
                   const borderClass = isDuplicate 
-                    ? "border-blue-500/60 bg-blue-500/10" 
-                    : "border-orange/20 bg-gray-800/50";
+                    ? "border-blue-400 bg-blue-50" 
+                    : "border-slate-200 bg-white";
                   
                   return (
-                    <div key={booking._id} className={`${borderClass} border rounded-lg p-4 hover:border-orange/50 transition`}>
+                    <div key={booking._id} className={`${borderClass} border rounded-xl p-4 hover:border-blue-300 transition shadow-sm`}>
                       <div className="flex justify-between items-start mb-3">
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-bold text-white">{booking.itemName}</h3>
+                            <h3 className="text-lg font-bold text-slate-900">{booking.itemName}</h3>
                             {isDuplicate && (
-                              <span className="px-2 py-1 bg-blue-500/30 border border-blue-400/50 text-blue-300 text-xs font-bold rounded-full">
+                              <span className="px-2 py-1 bg-blue-100 border border-blue-300 text-blue-800 text-xs font-bold rounded-full">
                                 ⚠️ Duplicate Request
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-400">
-                            User: <span className="text-orange">{booking.userName}</span> ({booking.userEmail})
+                          <p className="text-sm text-slate-600 mt-1">
+                            User: <span className="font-semibold text-blue-700">{booking.userName}</span> ({booking.userEmail})
                           </p>
                         </div>
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${
                           booking.status === "approved"
-                            ? "bg-green-500/20 text-green-400"
+                            ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
                             : booking.status === "declined"
-                            ? "bg-red-500/20 text-red-400"
-                            : "bg-yellow-500/20 text-yellow-400"
+                            ? "bg-red-100 text-red-800 border border-red-200"
+                            : "bg-amber-100 text-amber-900 border border-amber-200"
                         }`}>
                           {booking.status}
                         </span>
@@ -1006,38 +1019,38 @@ const AdminInventoryDashboard = () => {
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
                       <div>
-                        <p className="text-gray-400">Quantity</p>
-                        <p className="font-semibold text-white">{booking.quantity} units</p>
+                        <p className="text-slate-500">Quantity</p>
+                        <p className="font-semibold text-slate-900">{booking.quantity} units</p>
                       </div>
                       <div>
-                        <p className="text-gray-400">Start Date</p>
-                        <p className="font-semibold text-white">{new Date(booking.requestedStartDate).toLocaleDateString()}</p>
+                        <p className="text-slate-500">Start Date</p>
+                        <p className="font-semibold text-slate-900">{new Date(booking.requestedStartDate).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400">End Date</p>
-                        <p className="font-semibold text-white">{new Date(booking.requestedEndDate).toLocaleDateString()}</p>
+                        <p className="text-slate-500">End Date</p>
+                        <p className="font-semibold text-slate-900">{new Date(booking.requestedEndDate).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400">Purpose</p>
-                        <p className="font-semibold text-white line-clamp-1">{booking.purpose}</p>
+                        <p className="text-slate-500">Purpose</p>
+                        <p className="font-semibold text-slate-900 line-clamp-1">{booking.purpose}</p>
                       </div>
                     </div>
 
                     {booking.adminNotes && (
-                      <div className="bg-orange/10 border border-orange/20 rounded p-3 mb-4">
-                        <p className="text-sm text-gray-300"><strong>Admin Notes:</strong> {booking.adminNotes}</p>
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                        <p className="text-sm text-slate-800"><strong>Admin Notes:</strong> {booking.adminNotes}</p>
                       </div>
                     )}
 
                     {booking.declinedReason && (
-                      <div className="bg-red-500/10 border border-red-500/20 rounded p-3 mb-4">
-                        <p className="text-sm text-red-300"><strong>Decline Reason:</strong> {booking.declinedReason}</p>
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                        <p className="text-sm text-red-800"><strong>Decline Reason:</strong> {booking.declinedReason}</p>
                       </div>
                     )}
 
                     {/* Action Buttons */}
                     {booking.status === "pending" && (
-                      <div className="flex gap-3 pt-4 border-t border-gray-700">
+                      <div className="flex gap-3 pt-4 border-t border-slate-200">
                         <button
                           onClick={() => handleApproveBooking(booking._id)}
                           className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
@@ -1068,19 +1081,20 @@ const AdminInventoryDashboard = () => {
       )}
       {/* MOST BOOKED ITEMS MODAL */}
       {showMostBookedModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-fade-in">
-          <div className="bg-gray-900 border border-orange/30 rounded-2xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto modal-pop-in">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-fade-in">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto modal-pop-in">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6 border-b border-orange/20 pb-4">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
-                <svg className="w-8 h-8 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 Most Booked Equipment
               </h2>
               <button
                 onClick={() => setShowMostBookedModal(false)}
-                className="text-gray-400 hover:text-white transition"
+                className="text-slate-500 hover:text-slate-900 transition rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                aria-label="Close most booked list"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -1091,35 +1105,35 @@ const AdminInventoryDashboard = () => {
             {/* Content */}
             {mostBookedLoading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-gray-400">⏳ Loading most booked items...</p>
+                <p className="text-slate-500">⏳ Loading most booked items...</p>
               </div>
             ) : mostBookedItems.length === 0 ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-gray-400">No booking data available</p>
+                <p className="text-slate-500">No booking data available</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {mostBookedItems.map((item, index) => (
-                  <div key={index} className="bg-gray-800/50 border border-orange/20 rounded-lg p-4 hover:border-orange/50 transition">
+                  <div key={index} className="bg-slate-50 border border-slate-200 rounded-xl p-4 hover:border-blue-300 transition shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="text-2xl font-bold text-orange bg-orange/20 rounded-full w-10 h-10 flex items-center justify-center">
+                          <span className="text-lg font-bold text-blue-700 bg-blue-100 border border-blue-200 rounded-full w-10 h-10 flex items-center justify-center">
                             #{index + 1}
                           </span>
-                          <h3 className="text-lg font-bold text-white">{item.itemName}</h3>
+                          <h3 className="text-lg font-bold text-slate-900">{item.itemName}</h3>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-400">Total Bookings</p>
-                        <p className="text-3xl font-bold text-orange">{item.bookingCount}</p>
+                        <p className="text-sm text-slate-500">Total Bookings</p>
+                        <p className="text-3xl font-bold text-blue-600">{item.bookingCount}</p>
                       </div>
                     </div>
                     
                     {/* Progress Bar */}
-                    <div className="bg-gray-700/50 rounded-full h-2 overflow-hidden">
+                    <div className="bg-slate-200 rounded-full h-2 overflow-hidden">
                       <div
-                        className="bg-gradient-to-r from-orange to-orange/50 h-full transition-all duration-300"
+                        className="bg-gradient-to-r from-blue-500 to-blue-600 h-full transition-all duration-300"
                         style={{
                           width: `${(item.bookingCount / mostBookedItems[0].bookingCount) * 100}%`,
                         }}
@@ -1132,15 +1146,16 @@ const AdminInventoryDashboard = () => {
 
             {/* Summary */}
             {mostBookedItems.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-orange/20">
-                <p className="text-sm text-gray-400 text-center">
-                  📊 Showing top <span className="text-orange font-bold">{mostBookedItems.length}</span> most booked equipment items
+              <div className="mt-6 pt-6 border-t border-slate-200">
+                <p className="text-sm text-slate-600 text-center">
+                  📊 Showing top <span className="text-blue-700 font-bold">{mostBookedItems.length}</span> most booked equipment items
                 </p>
               </div>
             )}
           </div>
         </div>
-      )}    </div>
+      )}
+    </div>
   );
 };
 
