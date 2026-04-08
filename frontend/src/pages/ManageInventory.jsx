@@ -29,7 +29,6 @@ function ManageInventory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const navigate = useNavigate();
-  const PAGE_BG = "#F2F2F2";
   const BORDER = "#E6E6E6";
 
   // Edit form state
@@ -207,10 +206,7 @@ function ManageInventory() {
   };
 
   return (
-    <div
-      className="min-h-screen text-slate-900 flex flex-col"
-      style={{ backgroundColor: PAGE_BG }}
-    >
+    <div className="surface-app">
       <style>{`
         @keyframes slideOutLeft {
           from {

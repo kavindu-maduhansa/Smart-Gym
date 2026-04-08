@@ -251,7 +251,7 @@ const TrainerSchedules = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative">
+    <div className="page-bg-base pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
       
       {successMsg && (

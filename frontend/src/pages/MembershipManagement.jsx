@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -233,10 +233,10 @@ const MembershipManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div className="absolute inset-0 opacity-5" style={{backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px"}}></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{animationDelay: "2s"}}></div>
@@ -345,7 +345,7 @@ const MembershipManagement = () => {
 
         {/* Content */}
         {activeTab === "memberships" ? (
-          <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="overflow-hidden rounded-2xl border border-transparent bg-white bg-opacity-90 shadow-2xl dark:border-slate-700">
           {loading ? (
             <div className="p-12 text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
@@ -412,12 +412,14 @@ const MembershipManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1 text-xs font-semibold rounded-lg ${
+                            className={`rounded-lg px-3 py-1 text-xs font-semibold ${
                               daysLeft === 0
-                                ? "text-red-700 bg-red-200/50"
+                                ? "bg-red-200/50 text-red-700 dark:bg-red-700/50 dark:text-red-50"
                                 : daysLeft <= 7
-                                  ? "text-yellow-700 bg-yellow-200/50"
-                                  : "text-green-700 bg-green-200/50"
+                                  ? "bg-amber-200/70 text-amber-900 dark:bg-amber-600/70 dark:text-white"
+                                  : daysLeft <= 30
+                                    ? "bg-yellow-200/60 text-yellow-900 dark:bg-yellow-600/55 dark:text-yellow-50"
+                                    : "bg-green-200/50 text-green-700 dark:bg-emerald-700/45 dark:text-emerald-50"
                             }`}
                           >
                             {daysLeft} days
@@ -425,12 +427,12 @@ const MembershipManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1 text-xs font-semibold rounded-lg ${
+                            className={`rounded-lg px-3 py-1 text-xs font-semibold ${
                               status === "Active"
-                                ? "bg-green-200/50 text-green-700"
+                                ? "bg-green-200/50 text-green-700 dark:bg-emerald-800/50 dark:text-emerald-100"
                                 : status === "Expired"
-                                  ? "bg-red-200/50 text-red-700"
-                                  : "bg-gray-200/50 text-slate-700"
+                                  ? "bg-red-200/50 text-red-700 dark:bg-red-700/45 dark:text-red-50"
+                                  : "bg-gray-200/50 text-slate-700 dark:bg-slate-600 dark:text-slate-100"
                             }`}
                           >
                             {status}
@@ -472,7 +474,7 @@ const MembershipManagement = () => {
           )}
         </div>
       ) : (
-        <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="overflow-hidden rounded-2xl border border-transparent bg-white bg-opacity-90 shadow-2xl dark:border-slate-700">
           {requests.length === 0 ? (
             <div className="p-12 text-center">
               <svg

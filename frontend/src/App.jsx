@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -10,7 +10,8 @@ import ProtectedRoute from "./ProtectedRoute";
 // Student Pages
 import Profile from "./pages/Profile";
 import StudentDashboard from "./pages/StudentDashboard";
-import EditProfile from "./pages/EditProfile";
+import SiteSettings from "./pages/SiteSettings";
+import EditAccount from "./pages/EditAccount";
 import Membership from "./pages/Membership";
 import RenewMembership from "./pages/RenewMembership";
 import Cart from "./pages/Cart";
@@ -114,11 +115,21 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/edit-profile" element={<Navigate to="/my-settings" replace />} />
+        <Route path="/site-settings" element={<Navigate to="/my-settings" replace />} />
         <Route
-          path="/edit-profile"
+          path="/my-settings"
           element={
             <ProtectedRoute requiredRole="student">
-              <EditProfile />
+              <SiteSettings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-account"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <EditAccount />
             </ProtectedRoute>
           }
         />

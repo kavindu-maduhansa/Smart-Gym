@@ -27,7 +27,6 @@ function DisplayAllInventory() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const PAGE_BG = "#F2F2F2";
   const BORDER = "#E6E6E6";
 
   useEffect(() => {
@@ -90,7 +89,7 @@ function DisplayAllInventory() {
   };
 
   return (
-    <div className="min-h-screen text-slate-900 flex flex-col" style={{ backgroundColor: PAGE_BG }}>
+    <div className="surface-app">
       <style>{modalAnimationStyles}</style>
       <style>{`
         @keyframes slideOutLeft {

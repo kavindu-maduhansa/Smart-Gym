@@ -100,10 +100,10 @@ const Users = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
@@ -323,13 +323,15 @@ const Users = () => {
                             {user.email}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                              user.role === 'admin'
-                                ? 'bg-blue-600/80 text-white'
-                                : user.role === 'trainer'
-                                ? 'bg-blue-500/80 text-slate-900'
-                                : 'bg-blue-400/80 text-slate-900'
-                            }`}>
+                            <span
+                              className={`rounded-full px-3 py-1 text-xs font-semibold text-white ${
+                                user.role === "admin"
+                                  ? "bg-blue-600/90"
+                                  : user.role === "trainer"
+                                    ? "bg-blue-600/85"
+                                    : "bg-blue-500/90"
+                              }`}
+                            >
                               {user.role}
                             </span>
                           </td>
@@ -341,12 +343,12 @@ const Users = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span
-                              className={`px-3 py-1 text-xs font-semibold rounded-lg ${
+                              className={`rounded-lg px-3 py-1 text-xs font-semibold ${
                                 status === "Active"
-                                  ? "bg-green-200/50 text-green-700"
+                                  ? "bg-green-200/50 text-green-700 dark:bg-emerald-700/45 dark:text-emerald-50"
                                   : status === "Expired"
-                                    ? "bg-red-200/50 text-red-700"
-                                    : "bg-gray-200/50 text-slate-700"
+                                    ? "bg-red-200/50 text-red-700 dark:bg-red-700/40 dark:text-red-50"
+                                    : "bg-gray-200/50 text-slate-700 dark:bg-slate-600 dark:text-slate-100"
                               }`}
                             >
                               {status}

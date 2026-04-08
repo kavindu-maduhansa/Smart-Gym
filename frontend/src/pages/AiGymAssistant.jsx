@@ -294,7 +294,7 @@ const AiGymAssistant = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-4 sm:px-8">
+    <div className="page-bg-base pt-24 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Page header */}
         <div className="mb-6 rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50 via-white to-blue-100/80 p-4 shadow-lg sm:p-5">

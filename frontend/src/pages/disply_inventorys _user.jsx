@@ -218,11 +218,11 @@ const DisplayInventorysUser = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden" style={{ backgroundColor: COLORS.pageBg, color: COLORS.text }}>
+    <div className="min-h-screen overflow-hidden bg-[#F2F2F2] text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
       <style>{modalAnimationStyles}</style>
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f2f2f2] via-[#f8faff] to-[#eaf1ff]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f2f2f2] via-[#f8faff] to-[#eaf1ff] dark:from-slate-950 dark:via-slate-900 dark:to-slate-950"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{

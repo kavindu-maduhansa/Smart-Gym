@@ -41,14 +41,14 @@ const MyPlans = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-50 pt-24 flex items-center justify-center">
+      <div className="page-bg-base pt-24 flex items-center justify-center">
         <div className="text-slate-900 text-xl font-bold animate-pulse">Loading Plans...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative print:p-0">
+    <div className="page-bg-base pt-24 px-6 relative print:p-0">
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10 print:hidden"></div>
 
       <div className="max-w-6xl mx-auto">

@@ -441,7 +441,7 @@ const TrainerBooking = () => {
   const currentItems = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative">
+    <div className="page-bg-base pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
 
       <div className="max-w-4xl mx-auto backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8">
@@ -851,27 +851,27 @@ const TrainerBooking = () => {
               })()
             )}
 
-            <div className="mt-8 bg-blue-50/40 rounded-xl border border-slate-200 p-6">
-              <div className="flex items-end justify-between gap-4 mb-4">
+            <div className="mt-8 rounded-xl border border-slate-200 bg-blue-50/40 p-6 dark:border-slate-600 dark:bg-slate-800/85">
+              <div className="mb-4 flex items-end justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold text-blue-600">Cancelled bookings</h3>
-                  <p className="text-sm text-slate-500 mt-1">
+                  <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">Cancelled bookings</h3>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
                     Recent gym slot cancellations.
                   </p>
                 </div>
               </div>
 
               {cancelledSlotNotifs.length === 0 ? (
-                <div className="text-slate-600 italic text-sm">No cancelled bookings yet.</div>
+                <div className="text-sm italic text-slate-600 dark:text-slate-400">No cancelled bookings yet.</div>
               ) : (
-                <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                <div className="max-h-[280px] space-y-3 overflow-y-auto pr-1">
                   {cancelledSlotNotifs.slice(0, 20).map((n) => (
                     <div
                       key={n._id}
-                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-slate-200 bg-blue-50/30 px-4 py-3"
+                      className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-blue-50/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-slate-600 dark:bg-slate-900/70"
                     >
-                      <div className="text-slate-800 font-semibold">{n.message}</div>
-                      <div className="text-xs text-slate-600">
+                      <div className="font-semibold text-slate-800 dark:text-slate-100">{n.message}</div>
+                      <div className="text-xs text-slate-600 dark:text-slate-400">
                         {n.createdAt ? format(new Date(n.createdAt), "yyyy-MM-dd HH:mm") : ""}
                       </div>
                     </div>

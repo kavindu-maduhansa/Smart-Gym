@@ -82,7 +82,7 @@ function ChatMessage({ sender, text }) {
       <div
         className={[
           "max-w-[90%] rounded-2xl px-3 py-2 text-xs sm:text-sm whitespace-pre-wrap",
-          isUser ? "bg-blue-600 text-white" : "bg-blue-50 text-slate-900 border border-blue-200",
+          isUser ? "bg-blue-600 text-white" : "border border-blue-200 bg-blue-50 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100",
         ].join(" ")}
       >
         {text}
@@ -237,8 +237,8 @@ export default function ChatWidget() {
 
       {/* Full-screen overlay like the screenshot */}
       {open && (
-        <div className="fixed inset-0 z-[120] bg-blue-50/20">
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-blue-100 to-blue-50 overflow-hidden">
+        <div className="fixed inset-0 z-[120] bg-blue-50/20 dark:bg-slate-950/80">
+          <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-blue-50 via-blue-100 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
             {/* Top blue bar */}
             <div className="bg-blue-600">
               <div className="px-4 py-3 flex items-center justify-between">
@@ -260,18 +260,18 @@ export default function ChatWidget() {
 
             <div className="px-4 pt-4 pb-28">
               {/* Main header card */}
-              <div className="bg-white border border-blue-200 rounded-3xl overflow-hidden">
+              <div className="overflow-hidden rounded-3xl border border-blue-200 bg-white dark:border-slate-600 dark:bg-slate-900">
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="text-slate-600 text-sm font-bold">Good Afternoon</div>
-                      <div className="text-slate-900 text-lg font-extrabold">Smart Gym Member</div>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                      <div className="text-sm font-bold text-slate-600 dark:text-slate-400">Good Afternoon</div>
+                      <div className="text-lg font-extrabold text-slate-900 dark:text-slate-100">Smart Gym Member</div>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                         Ask for workouts, diet, supplements, equipment usage, and booking guidance.
                       </p>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                      <div className="px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-slate-900 font-extrabold text-sm">
+                      <div className="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-extrabold text-slate-900 dark:border-blue-500/40 dark:bg-slate-800 dark:text-slate-100">
                         {tokenRole === "admin" ? "ADMIN" : tokenRole === "trainer" ? "TRAINER" : "PLATINUM"}
                       </div>
                       <button
@@ -287,25 +287,25 @@ export default function ChatWidget() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       onClick={() => quickSend("book")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
+                      className="flex-1 min-w-[140px] rounded-xl border border-blue-200 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-900 hover:bg-blue-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                     >
                       Book Slot
                     </button>
                     <button
                       onClick={() => quickSend("cancel")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
+                      className="flex-1 min-w-[140px] rounded-xl border border-blue-200 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-900 hover:bg-blue-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                     >
                       Cancel Booking
                     </button>
                     <button
                       onClick={() => quickSend("diet")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
+                      className="flex-1 min-w-[140px] rounded-xl border border-blue-200 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-900 hover:bg-blue-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                     >
                       Diet Plan
                     </button>
                     <button
                       onClick={() => quickSend("workout")}
-                      className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-slate-100 border border-blue-200 hover:bg-blue-50 text-slate-900 font-bold text-xs"
+                      className="flex-1 min-w-[140px] rounded-xl border border-blue-200 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-900 hover:bg-blue-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                     >
                       Workout Plan
                     </button>
@@ -313,36 +313,36 @@ export default function ChatWidget() {
 
                   {/* Info cards */}
                   <div className="mt-5 space-y-3">
-                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                    <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-500/30 dark:bg-slate-800/80">
                       <div className="flex items-center justify-between">
-                        <div className="text-slate-900 font-extrabold">Loyalty</div>
-                        <div className="text-slate-700 font-extrabold">AI Points</div>
+                        <div className="font-extrabold text-slate-900 dark:text-slate-100">Loyalty</div>
+                        <div className="font-extrabold text-slate-700 dark:text-slate-300">AI Points</div>
                       </div>
-                      <div className="mt-2 h-3 rounded-full bg-blue-200 overflow-hidden">
-                        <div className="h-full w-[55%] bg-blue-600 rounded-full" />
+                      <div className="mt-2 h-3 overflow-hidden rounded-full bg-blue-200 dark:bg-slate-700">
+                        <div className="h-full w-[55%] rounded-full bg-blue-600" />
                       </div>
-                      <div className="mt-2 text-slate-500 text-xs">
+                      <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
                         Earn points by asking and booking via chat.
                       </div>
                     </div>
 
-                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                    <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-500/30 dark:bg-slate-800/80">
                       <div className="flex items-center justify-between">
-                        <div className="text-slate-900 font-extrabold">Anytime Data</div>
-                        <div className="text-blue-600 font-extrabold">Best Hours</div>
+                        <div className="font-extrabold text-slate-900 dark:text-slate-100">Anytime Data</div>
+                        <div className="font-extrabold text-blue-600 dark:text-blue-400">Best Hours</div>
                       </div>
-                      <div className="mt-2 text-slate-900/70 text-xs">
-                        Try workouts in <span className="text-slate-900 font-bold">early morning</span> or{" "}
-                        <span className="text-slate-900 font-bold">late evening</span> for less crowd.
+                      <div className="mt-2 text-xs text-slate-900/70 dark:text-slate-300">
+                        Try workouts in <span className="font-bold text-slate-900 dark:text-slate-100">early morning</span> or{" "}
+                        <span className="font-bold text-slate-900 dark:text-slate-100">late evening</span> for less crowd.
                       </div>
                     </div>
 
-                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-800/60">
                       <div className="flex items-center justify-between">
-                        <div className="text-slate-900 font-extrabold">Night Time Data</div>
-                        <div className="text-blue-600 font-extrabold">Recovery</div>
+                        <div className="font-extrabold text-slate-900 dark:text-slate-100">Night Time Data</div>
+                        <div className="font-extrabold text-blue-600 dark:text-blue-400">Recovery</div>
                       </div>
-                      <div className="mt-2 text-slate-900/70 text-xs">
+                      <div className="mt-2 text-xs text-slate-900/70 dark:text-slate-300">
                         Post-workout: protein + carbs, hydrate, and do light stretching.
                       </div>
                     </div>
@@ -350,14 +350,14 @@ export default function ChatWidget() {
 
                   {/* Slots list (if toolResult returned) */}
                   {toolSlots.length > 0 && (
-                    <div className="mt-4 bg-blue-50/30 border border-slate-200 rounded-2xl p-4">
+                    <div className="mt-4 rounded-2xl border border-slate-200 bg-blue-50/30 p-4 dark:border-slate-600 dark:bg-slate-800/50">
                       <div className="flex items-center justify-between">
-                        <div className="text-slate-900 font-extrabold">
+                        <div className="font-extrabold text-slate-900 dark:text-slate-100">
                           {toolMode === "available" ? "Available Slots" : "Your Bookings"}
                         </div>
                         <button
                           onClick={() => setToolSlots([])}
-                          className="text-slate-900/60 hover:text-blue-600 text-xs font-bold"
+                          className="text-xs font-bold text-slate-900/60 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                         >
                           Hide
                         </button>
@@ -366,10 +366,10 @@ export default function ChatWidget() {
                         {toolSlots.map((s) => (
                           <div
                             key={s._id}
-                            className="p-3 bg-slate-50 border border-slate-200 rounded-xl"
+                            className="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-600 dark:bg-slate-900/80"
                           >
-                            <div className="text-slate-900 font-bold text-sm">{s.title}</div>
-                            <div className="text-slate-900/60 text-[11px] mt-1">
+                            <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{s.title}</div>
+                            <div className="mt-1 text-[11px] text-slate-900/60 dark:text-slate-400">
                               {s.trainer ? `Trainer: ${s.trainer} • ` : ""}
                               {s.date} • {s.time}
                             </div>
@@ -392,23 +392,23 @@ export default function ChatWidget() {
               </div>
 
               {/* Chat area */}
-              <div className="mt-4 bg-white/70 border border-slate-200 rounded-3xl overflow-hidden">
-                <div className="p-4 border-b border-slate-200">
-                  <div className="text-slate-900 font-extrabold">Chat</div>
-                  <div className="text-slate-900/60 text-xs mt-1">
+              <div className="mt-4 overflow-hidden rounded-3xl border border-slate-200 bg-white/70 dark:border-slate-600 dark:bg-slate-900/80">
+                <div className="border-b border-slate-200 p-4 dark:border-slate-600">
+                  <div className="font-extrabold text-slate-900 dark:text-slate-100">Chat</div>
+                  <div className="mt-1 text-xs text-slate-900/60 dark:text-slate-400">
                     Gym-only assistant. Use booking buttons for slots.
                   </div>
                 </div>
                 <div className="p-4 max-h-[200px] overflow-auto">
                   {messages.length === 0 ? (
-                    <div className="text-slate-900/60 text-sm">Ask anything gym-related to start.</div>
+                    <div className="text-sm text-slate-900/60 dark:text-slate-400">Ask anything gym-related to start.</div>
                   ) : (
                     messages.map((m) => (
                       <ChatMessage key={m.id} sender={m.sender} text={m.text} />
                     ))
                   )}
                   {typing && (
-                    <div className="text-slate-900/60 text-xs mt-1">Assistant is typing...</div>
+                    <div className="mt-1 text-xs text-slate-900/60 dark:text-slate-400">Assistant is typing...</div>
                   )}
                 </div>
                 {error && (
@@ -418,7 +418,7 @@ export default function ChatWidget() {
                     </div>
                   </div>
                 )}
-                <div className="p-4 border-t border-slate-200">
+                <div className="border-t border-slate-200 p-4 dark:border-slate-600">
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -442,7 +442,7 @@ export default function ChatWidget() {
                         }}
                         rows={2}
                         placeholder="Ask about workouts, diet, supplements, equipment, or bookings..."
-                        className="flex-1 min-h-[44px] max-h-32 resize-y bg-blue-50/40 border border-slate-200 rounded-2xl px-3 py-2 text-sm text-slate-900 placeholder:text-slate-900/40 focus:outline-none focus:border-blue-600 transition"
+                        className="flex-1 min-h-[44px] max-h-32 resize-y rounded-2xl border border-slate-200 bg-blue-50/40 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-900/40 transition focus:border-blue-600 focus:outline-none dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:placeholder:text-slate-500"
                       />
                       <button
                         type="submit"
@@ -453,7 +453,7 @@ export default function ChatWidget() {
                         →
                       </button>
                     </div>
-                    <div className="text-slate-900/40 text-[10px] mt-2 flex flex-col gap-0.5">
+                    <div className="mt-2 flex flex-col gap-0.5 text-[10px] text-slate-900/40 dark:text-slate-500">
                       <span>Enter to send · Shift+Enter for a new line.</span>
                       <span>Replies are limited to gym topics only.</span>
                     </div>
@@ -463,14 +463,14 @@ export default function ChatWidget() {
             </div>
 
             {/* Bottom navigation (UI only inside overlay) */}
-            <div className="absolute bottom-0 left-0 right-0 bg-blue-50/80 border-t border-slate-200 backdrop-blur-md">
+            <div className="absolute bottom-0 left-0 right-0 border-t border-slate-200 bg-blue-50/80 backdrop-blur-md dark:border-slate-600 dark:bg-slate-900/90">
               <div className="flex items-center justify-around px-2 py-2">
                 <button
                   onClick={() => {
                     setOpen(false);
                     navigate("/");
                   }}
-                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 transition hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   <IconHome />
                   <div className="text-[10px] font-bold">Home</div>
@@ -480,7 +480,7 @@ export default function ChatWidget() {
                     // Focus chat input inside overlay
                     inputRef.current?.focus?.();
                   }}
-                  className="flex flex-col items-center gap-1 text-blue-600 font-bold"
+                  className="flex flex-col items-center gap-1 font-bold text-blue-600 dark:text-blue-400"
                 >
                   <IconChat />
                   <div className="text-[10px] font-bold">AI</div>
@@ -489,7 +489,7 @@ export default function ChatWidget() {
                   onClick={() => {
                     quickSend("book");
                   }}
-                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 transition hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   <IconCalendar />
                   <div className="text-[10px] font-bold">Offers</div>
@@ -498,7 +498,7 @@ export default function ChatWidget() {
                   onClick={() => {
                     quickSend("diet");
                   }}
-                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 transition hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   <IconGlobe />
                   <div className="text-[10px] font-bold">International</div>
@@ -508,7 +508,7 @@ export default function ChatWidget() {
                     setOpen(false);
                     navigate("/contact");
                   }}
-                  className="flex flex-col items-center gap-1 text-slate-900/70 hover:text-blue-600 transition"
+                  className="flex flex-col items-center gap-1 text-slate-900/70 transition hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   <IconBolt />
                   <div className="text-[10px] font-bold">Help</div>
