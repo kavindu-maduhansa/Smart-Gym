@@ -37,7 +37,7 @@ const Contact = () => {
       id: 3,
       icon: FaMapMarkerAlt,
       title: "Location",
-      detail: "Colombo, Sri Lanka",
+      detail: "Sri Lanka Institute of Information Technology, Malabe",
       note: "Visit our admin office for direct assistance.",
     },
   ];
@@ -203,29 +203,31 @@ const Contact = () => {
         ></div>
       </div>
 
-      <div className="relative z-10 pt-32 pb-20">
+      <div className="relative z-10 pt-32 pb-24">
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
+            <p className="hero-eyebrow mb-6">We&apos;re here to help</p>
             <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight text-slate-900">
-              Get in Touch with Smart Gym Team
+              Get in touch with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">Smart Gym</span>
             </h1>
-            <p className="text-lg sm:text-xl text-slate-700 leading-relaxed">
-              Have a question about memberships, schedules, or platform access?
-              Reach out and our team will help you quickly.
+            <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              Memberships, schedules, or platform access—send a message and we&apos;ll route it to the right team.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12 max-w-3xl mx-auto">
-              <div className="text-center">
-                <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">24/7</h3>
-                <p className="text-slate-700">Inquiry Tracking</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Fast</h3>
-                <p className="text-slate-700">Support Response</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Direct</h3>
-                <p className="text-slate-700">Admin Assistance</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 max-w-3xl mx-auto">
+              {[
+                { n: "24/7", l: "Tracking", d: "Follow every inquiry" },
+                { n: "Fast", l: "Replies", d: "Same-day when we can" },
+                { n: "Direct", l: "To admins", d: "No runaround" },
+              ].map((s) => (
+                <div
+                  key={s.l}
+                  className="rounded-2xl border border-slate-200/90 bg-white/85 px-5 py-5 shadow-md backdrop-blur-sm"
+                >
+                  <h3 className="text-2xl font-bold text-blue-600 sm:text-3xl">{s.n}</h3>
+                  <p className="mt-1 font-semibold text-slate-900">{s.l}</p>
+                  <p className="mt-1 text-xs text-slate-600">{s.d}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -237,17 +239,14 @@ const Contact = () => {
               return (
                 <div
                   key={item.id}
-                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-blue-600/50 transition-all duration-300 transform hover:scale-105"
+                  className="marketing-panel p-6 sm:p-8 transition hover:border-blue-200"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/0 group-hover:from-blue-600/10 group-hover:to-blue-600/5 rounded-2xl transition-all duration-300"></div>
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-center w-14 h-14 bg-blue-600/20 rounded-xl mb-5 group-hover:bg-blue-700/30 transition-colors duration-300">
-                      <Icon className="text-blue-600 text-2xl" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-slate-900 font-semibold mb-2">{item.detail}</p>
-                    <p className="text-slate-700">{item.note}</p>
+                  <div className="flex items-center justify-center w-14 h-14 bg-blue-600/15 rounded-xl mb-5">
+                    <Icon className="text-blue-600 text-2xl" />
                   </div>
+                  <h3 className="text-xl font-bold mb-2 text-slate-900">{item.title}</h3>
+                  <p className="text-slate-900 font-semibold mb-2">{item.detail}</p>
+                  <p className="text-slate-600 text-sm leading-relaxed">{item.note}</p>
                 </div>
               );
             })}
@@ -256,8 +255,9 @@ const Contact = () => {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="backdrop-blur-md bg-white border border-slate-200 rounded-2xl p-8 sm:p-10 shadow-sm">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-6">Send an Inquiry</h2>
+            <div className="marketing-panel p-8 sm:p-10 border-blue-100/80 bg-gradient-to-br from-white to-blue-50/20">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-slate-900">Send an inquiry</h2>
+              <p className="text-slate-600 text-sm mb-8">Fields marked with validation will highlight if something needs attention.</p>
               <div className="space-y-4">
                 <label className="block">
                   <span className="block text-sm font-semibold text-slate-700 mb-2">Your name</span>
@@ -339,22 +339,22 @@ const Contact = () => {
                     {feedback.text}
                   </p>
                 )}
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     type="button"
                     onClick={handleSendMessage}
                     disabled={sending}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="ui-btn-primary px-8 disabled:opacity-60"
                   >
-                    {sending ? "Sending..." : "Send Message"}
+                    {sending ? "Sending..." : "Send message"}
                   </button>
                   {!isLoggedIn && (
                     <button
                       type="button"
                       onClick={() => navigate("/login")}
-                      className="border-2 border-blue-600 text-blue-600 font-bold px-6 sm:px-8 py-2.5 rounded-lg hover:bg-blue-700/10 transition-all duration-300 text-sm sm:text-base"
+                      className="ui-btn-ghost px-8"
                     >
-                      Login to Continue
+                      Log in to continue
                     </button>
                   )}
                 </div>
@@ -362,10 +362,10 @@ const Contact = () => {
             </div>
 
             <div className="space-y-8">
-              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10">
+              <div className="marketing-panel p-8 sm:p-10">
                 <div className="flex items-center gap-3 mb-5">
                   <FaClock className="text-blue-600 text-2xl" />
-                  <h2 className="text-3xl font-bold">Opening Hours</h2>
+                  <h2 className="text-2xl font-bold text-slate-900">Opening hours</h2>
                 </div>
                 <div className="space-y-4">
                   {hours.map((item) => (
@@ -380,18 +380,17 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10">
-                <h2 className="text-3xl font-bold mb-4">Need Help Fast?</h2>
-                <p className="text-slate-700 mb-6">
-                  For urgent membership or account-related support, contact us by
-                  phone for the fastest response from our team.
+              <div className="marketing-panel border-blue-100/80 bg-gradient-to-br from-blue-600/5 to-white p-8 sm:p-10">
+                <h2 className="text-2xl font-bold mb-3 text-slate-900">Need help fast?</h2>
+                <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                  For urgent membership or account issues, call us during opening hours for the quickest response.
                 </p>
                 <button
                   type="button"
                   onClick={() => navigate("/")}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                  className="ui-btn-primary px-8"
                 >
-                  Back to Home
+                  Back to home
                 </button>
               </div>
             </div>
@@ -399,9 +398,10 @@ const Contact = () => {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold">Department Contacts</h2>
-            <p className="text-slate-700 mt-3">
+          <div className="section-intro mb-10">
+            <p className="section-kicker mb-2">Teams</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Department contacts</h2>
+            <p className="text-slate-600 mt-3 text-base">
               Reach the right team directly for faster assistance.
             </p>
           </div>
@@ -409,30 +409,31 @@ const Contact = () => {
             {supportContacts.map((item) => (
               <div
                 key={item.id}
-                className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8"
+                className="marketing-panel p-6 sm:p-8"
               >
-                <h3 className="text-xl sm:text-2xl font-bold text-blue-600 mb-3">
+                <h3 className="text-lg sm:text-xl font-bold text-blue-600 mb-3">
                   {item.team}
                 </h3>
-                <p className="text-slate-700 mb-1">{item.email}</p>
-                <p className="text-slate-800 font-semibold mb-3">{item.phone}</p>
-                <p className="text-slate-700 text-sm sm:text-base">{item.note}</p>
+                <p className="text-slate-600 mb-1 text-sm">{item.email}</p>
+                <p className="text-slate-900 font-semibold mb-3">{item.phone}</p>
+                <p className="text-slate-600 text-sm leading-relaxed">{item.note}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10 max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">Frequently Asked Questions</h2>
-            <div className="space-y-4">
+          <div className="marketing-panel mx-auto max-w-6xl p-8 sm:p-10">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-slate-900">Frequently asked questions</h2>
+            <p className="text-slate-600 text-sm mb-8">Quick answers before you write in.</p>
+            <div className="space-y-3">
               {faqItems.map((item) => (
                 <div
                   key={item.id}
-                  className="border border-slate-200 rounded-xl p-5 bg-blue-50/20"
+                  className="rounded-xl border border-blue-100/80 bg-blue-50/30 p-5 transition hover:border-blue-200 hover:bg-blue-50/50"
                 >
-                  <h3 className="text-lg sm:text-xl font-bold mb-2">{item.question}</h3>
-                  <p className="text-slate-700">{item.answer}</p>
+                  <h3 className="text-lg font-bold mb-2 text-slate-900">{item.question}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>

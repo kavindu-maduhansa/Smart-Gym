@@ -1,9 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaCalendarAlt, FaUsers, FaClipboardList, FaStar, FaUtensils } from "react-icons/fa";
+import { FaCalendarAlt, FaUsers, FaClipboardList, FaStar } from "react-icons/fa";
 
 const TrainerDashboard = () => {
-  // Added 'path' to each feature to enable navigation
   const trainerFeatures = [
     {
       id: 1,
@@ -40,43 +39,53 @@ const TrainerDashboard = () => {
       {/* Team Background Theme - Glassmorphism style */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
-        {/* Animated Blobs to match Home.jsx */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-5 animate-pulse"></div>
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(59,130,246,0.12) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.12) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+        <div className="absolute top-20 left-10 h-72 w-72 rounded-full bg-blue-600 mix-blend-screen opacity-10 blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 h-72 w-72 rounded-full bg-blue-600 mix-blend-screen opacity-[0.06] blur-3xl animate-pulse" />
       </div>
 
-      <div className="relative z-10 pt-32 pb-20 container mx-auto px-6">
-        <header className="mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-600/80 tracking-tight">
-            Trainer Dashboard
+      <div className="relative z-10 container mx-auto px-4 pb-24 pt-32 sm:px-6 lg:px-8">
+        <header className="dashboard-hero mb-10 sm:mb-14">
+          <p className="section-kicker mb-2">Trainer workspace</p>
+          <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+              Trainer
+            </span>{" "}
+            dashboard
           </h1>
-          <p className="text-slate-500 mt-4 text-lg">Welcome back. Manage your classes and students below.</p>
+          <p className="mt-4 max-w-2xl text-base text-slate-600 sm:text-lg leading-relaxed">
+            Schedules, students, and plans—open a card below to get to work. Tab to each link, then Enter to open.
+          </p>
         </header>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {trainerFeatures.map((f) => {
             const Icon = f.icon;
             return (
-              <Link to={f.path} key={f.id} className="block group">
-                <div className="h-full backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 hover:bg-white/15 hover:border-blue-600/50 transition-all duration-300 transform hover:-translate-y-2">
-
-                  {/* Icon Container */}
-                  <div className="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-700/30 transition-colors duration-300">
-                    <Icon className="text-blue-600 text-3xl transform group-hover:scale-110 transition-transform duration-300" />
+              <Link
+                to={f.path}
+                key={f.id}
+                className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              >
+                <div className="tile-interactive flex h-full min-h-[220px] flex-col">
+                  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl bg-blue-600/15 transition-colors duration-300 group-hover:bg-blue-600/25">
+                    <Icon className="text-3xl text-blue-600 transition-transform duration-300 group-hover:scale-105" />
                   </div>
-
-                  {/* Text Content */}
-                  <h3 className="text-2xl font-bold mb-3 text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="mb-3 text-xl font-bold text-slate-900 transition-colors group-hover:text-blue-700 sm:text-2xl">
                     {f.title}
                   </h3>
-                  <p className="text-slate-500 leading-relaxed">
+                  <p className="flex-1 text-sm leading-relaxed text-slate-600">
                     {f.desc}
                   </p>
-
-                  {/* Arrow Indicator */}
-                  <div className="mt-6 flex items-center text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Open Section <span className="ml-2">→</span>
+                  <div className="mt-6 flex items-center text-sm font-bold text-blue-600 opacity-80 transition group-hover:opacity-100">
+                    Open <span className="ml-2 transition group-hover:translate-x-0.5">→</span>
                   </div>
                 </div>
               </Link>

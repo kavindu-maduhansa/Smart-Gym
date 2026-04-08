@@ -49,8 +49,6 @@ const AdminDashboard = () => {
     { label: "User Management", description: "View, edit and manage system users", route: "/admin/users", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
     { label: "Membership Management", description: "Renew and manage user memberships", route: "/admin/memberships", icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" },
     { label: "Schedule Management", description: "Manage gym class schedules and sessions", route: "/admin/schedules", icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
-
-    // ✅ ONLY CHANGE IS HERE
     { label: "Inventory Management", description: "Track gym equipment and stock levels", route: "/admin/inventory-dashboard", icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
 
     { label: "Supplement Store", description: "Manage supplements and product listings", route: "/admin/store", icon: "M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" },
@@ -72,42 +70,52 @@ const AdminDashboard = () => {
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 
-          {/* Welcome Section */}
-          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-2 sm:mb-4">Welcome Admin</h1>
-            <p className="text-sm sm:text-base md:text-lg text-slate-700">
-              Manage your gym's operations efficiently from this dashboard
+          <div className="dashboard-hero mb-8 sm:mb-12">
+            <p className="section-kicker mb-2">Admin control center</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-3">Welcome, admin</h1>
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
+              Jump into the tools your gym uses every day—members, schedules, inventory, and messages in one calm layout.
             </p>
           </div>
 
-          {/* Action Cards */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 sm:mb-8">Quick Actions</h2>
+            <div className="mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Quick actions</h2>
+              <p className="mt-2 text-slate-600 text-sm sm:text-base max-w-2xl">
+                Choose a module to manage. You can use Tab and Enter for keyboard access.
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {dashboardCards.map((card) => (
                 <div
                   key={card.label}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => navigate(card.route)}
-                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8 hover:bg-white hover:border-blue-400 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-600/15 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      navigate(card.route);
+                    }
+                  }}
+                  className="group tile-interactive"
                 >
-                  <div className="relative z-10">
-                    <div className="flex items-start gap-4 sm:gap-6">
-                      <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-blue-600/20 rounded-xl flex-shrink-0 group-hover:bg-blue-700/30 transition-colors duration-300">
-                        <svg className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d={card.icon} />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
-                          {card.label}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-slate-700 mb-4 group-hover:text-slate-800 transition-colors">
-                          {card.description}
-                        </p>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm">
-                          Open
-                        </button>
-                      </div>
+                  <div className="flex items-start gap-4 sm:gap-6">
+                    <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-blue-600/15 rounded-xl flex-shrink-0 group-hover:bg-blue-600/25 transition-colors duration-300">
+                      <svg className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d={card.icon} />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
+                        {card.label}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed group-hover:text-slate-700 transition-colors">
+                        {card.description}
+                      </p>
+                      <span className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition group-hover:bg-blue-700">
+                        Open →
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -115,11 +123,13 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Stats Section */}
           <div className="mt-12 sm:mt-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 sm:mb-8">Dashboard Stats</h2>
+            <div className="mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">At a glance</h2>
+              <p className="mt-2 text-slate-600 text-sm sm:text-base">Live counts from your gym database.</p>
+            </div>
             {error && (
-              <div className="mb-6 p-4 bg-red/20 border border-red/50 rounded-lg text-red-700">
+              <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800 text-sm">
                 {error}
               </div>
             )}
@@ -130,7 +140,7 @@ const AdminDashboard = () => {
                 { label: "Scheduled Classes", value: stats.scheduledClasses, icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
                 { label: "Equipment Items", value: stats.equipmentItems, icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
               ].map((stat, idx) => (
-                <div key={idx} className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-4 sm:p-6 transition-all hover:border-blue-300 hover:bg-white hover:shadow-md">
+                <div key={idx} className="marketing-panel p-4 sm:p-6 transition hover:border-blue-200">
                   <div className="flex items-center gap-3 sm:gap-4 mb-4">
                     <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-blue-600/20 rounded-lg">
                       <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

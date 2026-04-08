@@ -42,6 +42,25 @@
 }
 
 @layer components {
+  /* Shared marketing & dashboard surfaces */
+  .hero-eyebrow {
+    @apply inline-flex items-center rounded-full border border-blue-200/90 bg-white/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-blue-700 shadow-sm backdrop-blur-sm;
+  }
+  .marketing-panel {
+    @apply rounded-2xl border border-slate-200/90 bg-white/90 shadow-md backdrop-blur-md transition-shadow duration-300 hover:shadow-lg;
+  }
+  .tile-interactive {
+    @apply cursor-pointer rounded-2xl border border-slate-200/90 bg-gradient-to-br from-slate-50/95 to-white/90 p-6 shadow-md backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300/80 hover:bg-white hover:shadow-xl hover:shadow-blue-600/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:p-8;
+  }
+  .dashboard-hero {
+    @apply rounded-2xl border border-blue-200/70 bg-gradient-to-br from-white via-blue-50/40 to-white p-6 shadow-xl backdrop-blur-md transition-shadow duration-300 hover:shadow-lg sm:p-8;
+  }
+  .section-intro {
+    @apply mx-auto mb-12 max-w-3xl text-center;
+  }
+  .section-kicker {
+    @apply text-sm font-bold uppercase tracking-wider text-blue-600;
+  }
   .ui-card {
     @apply rounded-2xl border border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm transition-shadow duration-200 hover:shadow-md;
   }
