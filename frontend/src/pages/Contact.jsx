@@ -5,14 +5,18 @@ import apiClient from "../services/apiClient";
 
 const Contact = () => {
   const navigate = useNavigate();
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
   const [feedback, setFeedback] = useState({ type: "", text: "" });
+  const isLoggedIn =
+    typeof localStorage !== "undefined" && Boolean(localStorage.getItem("token"));
 
   const contactItems = [
     {
@@ -89,16 +93,70 @@ const Contact = () => {
     },
   ];
 
+  const validateField = (fieldName, rawValue) => {
+    const value = String(rawValue || "").trim();
+    if (fieldName === "name") {
+      if (!value) return "Name is required.";
+      if (value.length < 2) return "Name must be at least 2 characters.";
+      if (value.length > 60) return "Name cannot exceed 60 characters.";
+      if (!/^[A-Za-z\s]+$/.test(value)) return "Name can contain letters only.";
+      return "";
+    }
+    if (fieldName === "email") {
+      if (!value) return "Email is required.";
+      if (!EMAIL_RE.test(value)) return "Please enter a valid email address.";
+      if (value.length > 120) return "Email cannot exceed 120 characters.";
+      return "";
+    }
+    if (fieldName === "subject") {
+      if (!value) return "Subject is required.";
+      if (value.length < 3) return "Subject must be at least 3 characters.";
+      if (value.length > 120) return "Subject cannot exceed 120 characters.";
+      return "";
+    }
+    if (fieldName === "message") {
+      if (!value) return "Message is required.";
+      if (value.length < 10) return "Message must be at least 10 characters.";
+      if (value.length > 1000) return "Message cannot exceed 1000 characters.";
+      return "";
+    }
+    return "";
+  };
+
+  const validateForm = (payload) => {
+    const nextErrors = {
+      name: validateField("name", payload.name),
+      email: validateField("email", payload.email),
+      subject: validateField("subject", payload.subject),
+      message: validateField("message", payload.message),
+    };
+
+    Object.keys(nextErrors).forEach((key) => {
+      if (!nextErrors[key]) delete nextErrors[key];
+    });
+
+    return nextErrors;
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+    if (feedback.text) setFeedback({ type: "", text: "" });
+  };
+
+  const handleFieldBlur = (event) => {
+    const { name, value } = event.target;
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const handleSendMessage = async () => {
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+    const formErrors = validateForm(formData);
+    setErrors(formErrors);
+    if (Object.keys(formErrors).length > 0) {
       setFeedback({
         type: "error",
-        text: "Please fill all fields before sending your message.",
+        text: "Please fix the highlighted fields before sending your message.",
       });
       return;
     }
@@ -127,20 +185,20 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage:
-              "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)",
+              "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)",
             backgroundSize: "50px 50px",
           }}
         ></div>
-        <div className="absolute top-24 left-12 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute top-24 left-12 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div
-          className="absolute bottom-20 right-12 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
+          className="absolute bottom-20 right-12 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
@@ -148,25 +206,25 @@ const Contact = () => {
       <div className="relative z-10 pt-32 pb-20">
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight text-white">
+            <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight text-slate-900">
               Get in Touch with Smart Gym Team
             </h1>
-            <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg sm:text-xl text-slate-700 leading-relaxed">
               Have a question about memberships, schedules, or platform access?
               Reach out and our team will help you quickly.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12 max-w-3xl mx-auto">
               <div className="text-center">
-                <h3 className="text-3xl sm:text-4xl font-bold text-orange mb-2">24/7</h3>
-                <p className="text-gray-300">Inquiry Tracking</p>
+                <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">24/7</h3>
+                <p className="text-slate-700">Inquiry Tracking</p>
               </div>
               <div className="text-center">
-                <h3 className="text-3xl sm:text-4xl font-bold text-orange mb-2">Fast</h3>
-                <p className="text-gray-300">Support Response</p>
+                <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Fast</h3>
+                <p className="text-slate-700">Support Response</p>
               </div>
               <div className="text-center">
-                <h3 className="text-3xl sm:text-4xl font-bold text-orange mb-2">Direct</h3>
-                <p className="text-gray-300">Admin Assistance</p>
+                <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Direct</h3>
+                <p className="text-slate-700">Admin Assistance</p>
               </div>
             </div>
           </div>
@@ -179,16 +237,16 @@ const Contact = () => {
               return (
                 <div
                   key={item.id}
-                  className="group relative backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-orange/50 transition-all duration-300 transform hover:scale-105"
+                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-blue-600/50 transition-all duration-300 transform hover:scale-105"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange/0 to-orange/0 group-hover:from-orange/10 group-hover:to-orange/5 rounded-2xl transition-all duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/0 group-hover:from-blue-600/10 group-hover:to-blue-600/5 rounded-2xl transition-all duration-300"></div>
                   <div className="relative z-10">
-                    <div className="flex items-center justify-center w-14 h-14 bg-orange/20 rounded-xl mb-5 group-hover:bg-orange/30 transition-colors duration-300">
-                      <Icon className="text-orange text-2xl" />
+                    <div className="flex items-center justify-center w-14 h-14 bg-blue-600/20 rounded-xl mb-5 group-hover:bg-blue-700/30 transition-colors duration-300">
+                      <Icon className="text-blue-600 text-2xl" />
                     </div>
                     <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-white font-semibold mb-2">{item.detail}</p>
-                    <p className="text-gray-300">{item.note}</p>
+                    <p className="text-slate-900 font-semibold mb-2">{item.detail}</p>
+                    <p className="text-slate-700">{item.note}</p>
                   </div>
                 </div>
               );
@@ -198,7 +256,7 @@ const Contact = () => {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 sm:p-10">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10">
               <h2 className="text-3xl sm:text-4xl font-bold mb-6">Send an Inquiry</h2>
               <div className="space-y-5">
                 <input
@@ -206,37 +264,64 @@ const Contact = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange"
+                  maxLength={60}
+                  aria-invalid={Boolean(errors.name)}
+                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 ${
+                    errors.name ? "border-red-400" : "border-slate-300"
+                  }`}
                 />
+                {errors.name ? <p className="text-sm text-red-700 -mt-3">{errors.name}</p> : null}
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Your email"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange"
+                  maxLength={120}
+                  aria-invalid={Boolean(errors.email)}
+                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 ${
+                    errors.email ? "border-red-400" : "border-slate-300"
+                  }`}
                 />
+                {errors.email ? <p className="text-sm text-red-700 -mt-3">{errors.email}</p> : null}
                 <input
                   type="text"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Subject"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange"
+                  maxLength={120}
+                  aria-invalid={Boolean(errors.subject)}
+                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 ${
+                    errors.subject ? "border-red-400" : "border-slate-300"
+                  }`}
                 />
+                {errors.subject ? <p className="text-sm text-red-700 -mt-3">{errors.subject}</p> : null}
                 <textarea
                   rows="5"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
+                  onBlur={handleFieldBlur}
                   placeholder="Write your message"
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-orange resize-none"
+                  maxLength={1000}
+                  aria-invalid={Boolean(errors.message)}
+                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 resize-none ${
+                    errors.message ? "border-red-400" : "border-slate-300"
+                  }`}
                 ></textarea>
+                <div className="flex items-center justify-between -mt-3">
+                  {errors.message ? <p className="text-sm text-red-700">{errors.message}</p> : <span />}
+                  <p className="text-xs text-slate-500">{formData.message.length}/1000</p>
+                </div>
                 {feedback.text && (
                   <p
                     className={`text-sm ${
-                      feedback.type === "success" ? "text-green-400" : "text-red-400"
+                      feedback.type === "success" ? "text-green-700" : "text-red-700"
                     }`}
                   >
                     {feedback.text}
@@ -247,50 +332,52 @@ const Contact = () => {
                     type="button"
                     onClick={handleSendMessage}
                     disabled={sending}
-                    className="bg-orange hover:bg-orange/90 text-white font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                    className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
                   >
                     {sending ? "Sending..." : "Send Message"}
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => navigate("/login")}
-                    className="border-2 border-orange text-orange font-bold px-6 sm:px-8 py-2.5 rounded-lg hover:bg-orange/10 transition-all duration-300 text-sm sm:text-base"
-                  >
-                    Login to Continue
-                  </button>
+                  {!isLoggedIn && (
+                    <button
+                      type="button"
+                      onClick={() => navigate("/login")}
+                      className="border-2 border-blue-600 text-blue-600 font-bold px-6 sm:px-8 py-2.5 rounded-lg hover:bg-blue-700/10 transition-all duration-300 text-sm sm:text-base"
+                    >
+                      Login to Continue
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="space-y-8">
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 sm:p-10">
+              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10">
                 <div className="flex items-center gap-3 mb-5">
-                  <FaClock className="text-orange text-2xl" />
+                  <FaClock className="text-blue-600 text-2xl" />
                   <h2 className="text-3xl font-bold">Opening Hours</h2>
                 </div>
                 <div className="space-y-4">
                   {hours.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between border-b border-white/10 pb-3"
+                      className="flex items-center justify-between border-b border-slate-200 pb-3"
                     >
-                      <p className="text-gray-300">{item.day}</p>
-                      <p className="text-white font-semibold">{item.time}</p>
+                      <p className="text-slate-700">{item.day}</p>
+                      <p className="text-slate-900 font-semibold">{item.time}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 sm:p-10">
+              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10">
                 <h2 className="text-3xl font-bold mb-4">Need Help Fast?</h2>
-                <p className="text-gray-300 mb-6">
+                <p className="text-slate-700 mb-6">
                   For urgent membership or account-related support, contact us by
                   phone for the fastest response from our team.
                 </p>
                 <button
                   type="button"
                   onClick={() => navigate("/")}
-                  className="bg-orange hover:bg-orange/90 text-white font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
                 >
                   Back to Home
                 </button>
@@ -302,7 +389,7 @@ const Contact = () => {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold">Department Contacts</h2>
-            <p className="text-gray-300 mt-3">
+            <p className="text-slate-700 mt-3">
               Reach the right team directly for faster assistance.
             </p>
           </div>
@@ -310,30 +397,30 @@ const Contact = () => {
             {supportContacts.map((item) => (
               <div
                 key={item.id}
-                className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8"
+                className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8"
               >
-                <h3 className="text-xl sm:text-2xl font-bold text-orange mb-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-blue-600 mb-3">
                   {item.team}
                 </h3>
-                <p className="text-gray-300 mb-1">{item.email}</p>
-                <p className="text-gray-200 font-semibold mb-3">{item.phone}</p>
-                <p className="text-gray-300 text-sm sm:text-base">{item.note}</p>
+                <p className="text-slate-700 mb-1">{item.email}</p>
+                <p className="text-slate-800 font-semibold mb-3">{item.phone}</p>
+                <p className="text-slate-700 text-sm sm:text-base">{item.note}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 sm:p-10 max-w-6xl mx-auto">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10 max-w-6xl mx-auto">
             <h2 className="text-3xl sm:text-4xl font-bold mb-6">Frequently Asked Questions</h2>
             <div className="space-y-4">
               {faqItems.map((item) => (
                 <div
                   key={item.id}
-                  className="border border-white/15 rounded-xl p-5 bg-black/20"
+                  className="border border-slate-200 rounded-xl p-5 bg-blue-50/20"
                 >
                   <h3 className="text-lg sm:text-xl font-bold mb-2">{item.question}</h3>
-                  <p className="text-gray-300">{item.answer}</p>
+                  <p className="text-slate-700">{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -346,3 +433,6 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
+

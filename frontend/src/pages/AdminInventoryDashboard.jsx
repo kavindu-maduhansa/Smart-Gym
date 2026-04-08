@@ -633,25 +633,25 @@ const AdminInventoryDashboard = () => {
       <style>{modalAnimationStyles}</style>
       {/* Animated Background - Same as other admin pages */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          
+
           {/* Welcome Section */}
-          <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 sm:mb-12">
+          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 sm:mb-12">
             <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-4">
-              <svg className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V6c0-.6.4-1 1-1h2M4 8v8M4 8h2m14-2V6c0-.6-.4-1-1-1h-2m4 2v8m0-8h-2M4 16v2c0 .6.4 1 1 1h2m-3-3h2m14 3v2c0 .6-.4 1-1 1h-2m4-3h-2M8 7h8m-8 0a2 2 0 00-2 2v6a2 2 0 002 2m0-10v10m8-10v10m0-10a2 2 0 012 2v6a2 2 0 01-2 2m-4-5h.01" />
               </svg>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">Inventory Management</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900">Inventory Management</h1>
             </div>
-            <p className="text-sm sm:text-base md:text-lg text-gray-300">
+            <p className="text-sm sm:text-base md:text-lg text-slate-700">
               Manage gym equipment and inventory efficiently
             </p>
           </div>
@@ -672,8 +672,8 @@ const AdminInventoryDashboard = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" d={card.icon} />
                       </svg>
                     </div>
-                    
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
+
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                       {card.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-300 mb-4 group-hover:text-gray-200 transition-colors flex-grow">
@@ -692,17 +692,17 @@ const AdminInventoryDashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mt-12 sm:mt-16">
 
             {/* RECENT ACTIVITY */}
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 hover:bg-white/15 transition-all">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
-                  <svg className="w-6 h-6 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Recent Activity
                 </h3>
-                <button 
-                  onClick={() => window.location.reload()} 
-                  className="text-sm text-orange hover:text-orange/80 transition font-semibold flex items-center gap-1"
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-sm text-blue-600 hover:text-blue-600/80 transition font-semibold flex items-center gap-1"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -715,9 +715,9 @@ const AdminInventoryDashboard = () => {
             </div>
 
             {/* STATS */}
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                <svg className="w-6 h-6 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 hover:bg-white/15 transition-all">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 Inventory Stats
@@ -1145,3 +1145,6 @@ const AdminInventoryDashboard = () => {
 };
 
 export default AdminInventoryDashboard;
+
+
+

@@ -43,15 +43,15 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
             <img
               src={`http://localhost:5000/uploads/${item.image}`}
               alt={item.itemName}
-              className="w-full h-64 object-cover rounded-xl mb-4 border border-gray-700"
+              className="w-full h-64 object-cover rounded-xl mb-4 border border-slate-200"
             />
           ) : (
-            <div className="w-full h-64 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl mb-4 flex items-center justify-center border border-gray-700">
+            <div className="w-full h-64 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl mb-4 flex items-center justify-center border border-slate-200">
               <span className="text-5xl">📷</span>
             </div>
           )}
           <div className="w-full">
-            <p className="text-sm text-gray-400 mb-2">Status</p>
+            <p className="text-sm text-slate-500 mb-2">Status</p>
             <div className="flex items-center gap-2">
               <span className="text-xl">
                 {item.status === "available"
@@ -71,40 +71,40 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
         <div className="space-y-4">
           {/* CATEGORY & CONDITION */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-xs text-gray-400 mb-1">Category</p>
-              <p className="font-bold text-orange-400">{item.category}</p>
+            <div className="bg-slate-100 p-3 rounded-lg">
+              <p className="text-xs text-slate-500 mb-1">Category</p>
+              <p className="font-bold text-blue-500">{item.category}</p>
             </div>
-            <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-xs text-gray-400 mb-1">Condition</p>
-              <p className="font-bold text-orange-400">{item.condition}</p>
+            <div className="bg-slate-100 p-3 rounded-lg">
+              <p className="text-xs text-slate-500 mb-1">Condition</p>
+              <p className="font-bold text-blue-500">{item.condition}</p>
             </div>
           </div>
 
           {/* QUANTITY & SUPPLIER */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-xs text-gray-400 mb-1">Quantity</p>
-              <p className="font-bold text-2xl text-green-400">
+            <div className="bg-slate-100 p-3 rounded-lg">
+              <p className="text-xs text-slate-500 mb-1">Quantity</p>
+              <p className="font-bold text-2xl text-green-700">
                 {item.quantity}
               </p>
             </div>
-            <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-xs text-gray-400 mb-1">Supplier</p>
+            <div className="bg-slate-100 p-3 rounded-lg">
+              <p className="text-xs text-slate-500 mb-1">Supplier</p>
               <p className="font-bold truncate">{item.supplier || "N/A"}</p>
             </div>
           </div>
 
           {/* PRICE & DATE */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-xs text-gray-400 mb-1">Price</p>
-              <p className="font-bold text-lg text-blue-400">
+            <div className="bg-slate-100 p-3 rounded-lg">
+              <p className="text-xs text-slate-500 mb-1">Price</p>
+              <p className="font-bold text-lg text-blue-700">
                 Rs. {item.purchase?.price || "N/A"}
               </p>
             </div>
-            <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-xs text-gray-400 mb-1">Purchase Date</p>
+            <div className="bg-slate-100 p-3 rounded-lg">
+              <p className="text-xs text-slate-500 mb-1">Purchase Date</p>
               <p className="font-bold text-sm">
                 {item.purchase?.purchaseDate
                   ? new Date(item.purchase.purchaseDate).toLocaleDateString()
@@ -114,18 +114,18 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
           </div>
 
           {/* TIMESTAMPS */}
-          <div className="bg-gray-700 p-3 rounded-lg">
-            <p className="text-xs text-gray-400 mb-2">Activity</p>
+          <div className="bg-slate-100 p-3 rounded-lg">
+            <p className="text-xs text-slate-500 mb-2">Activity</p>
             <div className="space-y-1 text-sm">
               <p>
                 ✨ Added:{" "}
-                <span className="text-gray-300">
+                <span className="text-slate-700">
                   {new Date(item.createdAt).toLocaleString()}
                 </span>
               </p>
               <p>
                 ✏️ Updated:{" "}
-                <span className="text-gray-300">
+                <span className="text-slate-700">
                   {new Date(item.updatedAt).toLocaleString()}
                 </span>
               </p>
@@ -138,3 +138,4 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
 };
 
 export default ItemDetailsModal;
+

@@ -119,7 +119,7 @@ function AddItem() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Clear previous errors
     setErrors({});
 
@@ -170,7 +170,7 @@ function AddItem() {
 
   return (
     <div
-      className="min-h-screen text-white flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
+      className="min-h-screen text-slate-900 flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
       style={{
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(20, 24, 36, 0.7) 100%), url('${gymBg}')`,
         backgroundSize: 'cover',
@@ -223,14 +223,14 @@ function AddItem() {
 
       <div className={`relative z-10 flex flex-col min-h-screen ${isTransitioning ? 'transitioning-out' : ''}`}>
         {/* ================= HEADER ================= */}
-        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#141824]/95 via-[#141824]/90 to-[#1a1f2e]/90 backdrop-blur-xl border-b border-orange-500/30 shadow-xl">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">
+        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#DBEAFE]/95 via-[#DBEAFE]/90 to-[#BFDBFE]/90 backdrop-blur-xl border-b border-blue-600/30 shadow-xl">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600-400 to-blue-600-500 bg-clip-text text-transparent">
             ➕ Add New Machine
           </h1>
 
           <button
             onClick={handleNavigation}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-orange-500/30 hover:to-orange-600/30 px-6 py-2 rounded-lg font-semibold border border-orange-400/20 transition duration-300 transform hover:scale-105"
+            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600-500/30 hover:to-blue-600/30 px-6 py-2 rounded-lg font-semibold border border-blue-500/20 transition duration-300 transform hover:scale-105"
           >
             ← Back
           </button>
@@ -238,23 +238,23 @@ function AddItem() {
 
         {/* ================= SUCCESS NOTIFICATION ================= */}
         {successMessage && (
-          <div className={`success-notification fixed top-20 left-1/2 -translate-x-1/2 z-50 
-          bg-gradient-to-r from-gray-900/90 to-gray-800/90 
-          border border-green-400/40 
+          <div className={`success-notification fixed top-20 left-1/2 -translate-x-1/2 z-50
+          bg-gradient-to-r from-gray-900/90 to-gray-800/90
+          border border-green-400/40
           px-8 py-5 rounded-xl shadow-2xl flex flex-col items-center justify-center gap-3 backdrop-blur-xl
           ${isExiting ? 'exit' : ''} w-11/12 sm:w-96`}>
 
             {/* icon with soft glow */}
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20">
-              <span className="text-green-400 text-2xl">✔</span>
+              <span className="text-green-700 text-2xl">✔</span>
             </div>
 
             {/* message */}
             <div className="flex flex-col text-center">
-              <span className="text-white font-semibold text-sm tracking-wide">
+              <span className="text-slate-900 font-semibold text-sm tracking-wide">
                 {successMessage}
               </span>
-              <span className="text-green-300/80 text-xs">
+              <span className="text-green-700/80 text-xs">
                 Successfully added to inventory
               </span>
             </div>
@@ -268,30 +268,30 @@ function AddItem() {
         <main className="flex-1 p-8 flex items-center justify-center">
           {/* FORM CONTAINER */}
           <div className="w-full max-w-3xl">
-            <div className="bg-gradient-to-br from-[#1a1f2e]/85 to-[#0f1117]/85 backdrop-blur-md p-8 rounded-2xl border border-orange-400/30 shadow-xl">
-              <h2 className="text-3xl font-bold text-orange-400 mb-2">Add New Inventory Item</h2>
-              <p className="text-gray-400 mb-8">Fill in all the details below</p>
+            <div className="bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-8 rounded-2xl border border-blue-500/30 shadow-xl">
+              <h2 className="text-3xl font-bold text-blue-500 mb-2">Add New Inventory Item</h2>
+              <p className="text-slate-500 mb-8">Fill in all the details below</p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* ROW 1: Item Name & Category */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-200 mb-2">Item Name *</label>
+                    <label className="block text-sm font-semibold text-slate-800 mb-2">Item Name *</label>
                     <input
                       type="text"
                       placeholder="Enter machine name"
                       value={itemName}
                       onChange={handleItemNameChange}
-                      className={`w-full p-3 rounded-lg bg-gray-700 text-white border focus:outline-none transition ${errors.itemName ? 'border-red-500 focus:border-red-500' : 'border-gray-600 focus:border-orange-500'}`}
+                      className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.itemName ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                     />
-                    {errors.itemName && <p className="text-red-400 text-sm mt-1">{errors.itemName}</p>}
+                    {errors.itemName && <p className="text-red-700 text-sm mt-1">{errors.itemName}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-200 mb-2">Category *</label>
+                    <label className="block text-sm font-semibold text-slate-800 mb-2">Category *</label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition"
+                      className="w-full p-3 rounded-lg bg-slate-100 text-slate-900 border border-slate-300 focus:border-blue-600 focus:outline-none transition"
                     >
                       <option value="Cardio">🏃 Cardio</option>
                       <option value="Strength">💪 Strength</option>
@@ -303,23 +303,23 @@ function AddItem() {
                 {/* ROW 2: Quantity & Condition */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-200 mb-2">Quantity *</label>
+                    <label className="block text-sm font-semibold text-slate-800 mb-2">Quantity *</label>
                     <input
                       type="number"
                       placeholder="0"
                       value={quantity}
                       onChange={handleQuantityChange}
                       min="1"
-                      className={`w-full p-3 rounded-lg bg-gray-700 text-white border focus:outline-none transition ${errors.quantity ? 'border-red-500 focus:border-red-500' : 'border-gray-600 focus:border-orange-500'}`}
+                      className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.quantity ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                     />
-                    {errors.quantity && <p className="text-red-400 text-sm mt-1">{errors.quantity}</p>}
+                    {errors.quantity && <p className="text-red-700 text-sm mt-1">{errors.quantity}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-200 mb-2">Condition *</label>
+                    <label className="block text-sm font-semibold text-slate-800 mb-2">Condition *</label>
                     <select
                       value={condition}
                       onChange={(e) => setCondition(e.target.value)}
-                      className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition"
+                      className="w-full p-3 rounded-lg bg-slate-100 text-slate-900 border border-slate-300 focus:border-blue-600 focus:outline-none transition"
                     >
                       <option value="New">🆕 New</option>
                       <option value="Good">✅ Good</option>
@@ -331,54 +331,54 @@ function AddItem() {
 
                 {/* ROW 3: Supplier */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-200 mb-2">Supplier</label>
+                  <label className="block text-sm font-semibold text-slate-800 mb-2">Supplier</label>
                   <input
                     type="text"
                     placeholder="Supplier name"
                     value={supplier}
                     onChange={handleSupplierChange}
-                    className={`w-full p-3 rounded-lg bg-gray-700 text-white border focus:outline-none transition ${errors.supplier ? 'border-red-500 focus:border-red-500' : 'border-gray-600 focus:border-orange-500'}`}
+                    className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.supplier ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                   />
-                  {errors.supplier && <p className="text-red-400 text-sm mt-1">{errors.supplier}</p>}
+                  {errors.supplier && <p className="text-red-700 text-sm mt-1">{errors.supplier}</p>}
                 </div>
 
                 {/* ROW 4: Special Details */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-200 mb-2">Special Details</label>
+                  <label className="block text-sm font-semibold text-slate-800 mb-2">Special Details</label>
                   <textarea
                     placeholder="Enter any special details or maintenance notes..."
                     value={specialDetails}
                     onChange={(e) => setSpecialDetails(e.target.value)}
                     rows="4"
-                    className={`w-full p-3 rounded-lg bg-gray-700 text-white border focus:outline-none transition resize-none ${errors.specialDetails ? 'border-red-500 focus:border-red-500' : 'border-gray-600 focus:border-orange-500'}`}
+                    className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition resize-none ${errors.specialDetails ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                   />
-                  {errors.specialDetails && <p className="text-red-400 text-sm mt-1">{errors.specialDetails}</p>}
+                  {errors.specialDetails && <p className="text-red-700 text-sm mt-1">{errors.specialDetails}</p>}
                 </div>
 
                 {/* ROW 5: Purchase Date */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-200 mb-2">Purchase Date</label>
+                  <label className="block text-sm font-semibold text-slate-800 mb-2">Purchase Date</label>
                   <input
                     type="date"
                     value={purchaseDate}
                     onChange={(e) => setPurchaseDate(e.target.value)}
-                    className={`w-full p-3 rounded-lg bg-gray-700 text-white border focus:outline-none transition ${errors.purchaseDate ? 'border-red-500 focus:border-red-500' : 'border-gray-600 focus:border-orange-500'}`}
+                    className={`w-full p-3 rounded-lg bg-slate-100 text-slate-900 border focus:outline-none transition ${errors.purchaseDate ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-blue-600'}`}
                   />
-                  {errors.purchaseDate && <p className="text-red-400 text-sm mt-1">{errors.purchaseDate}</p>}
+                  {errors.purchaseDate && <p className="text-red-700 text-sm mt-1">{errors.purchaseDate}</p>}
                 </div>
 
                 {/* ROW 6: Image Upload */}
-                <div className="bg-gray-700/50 border-2 border-dashed border-orange-400/30 rounded-lg p-6 text-center hover:border-orange-400/60 transition">
-                  <label className="block text-sm font-semibold text-gray-200 mb-3">Upload Image</label>
+                <div className="bg-slate-100/50 border-2 border-dashed border-blue-500/30 rounded-lg p-6 text-center hover:border-blue-500/60 transition">
+                  <label className="block text-sm font-semibold text-slate-800 mb-3">Upload Image</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="p-3 rounded-lg bg-gray-700 text-gray-300 w-full cursor-pointer"
+                    className="p-3 rounded-lg bg-slate-100 text-slate-700 w-full cursor-pointer"
                   />
                   {preview && (
                     <div className="mt-4">
-                      <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded-lg border border-orange-400/30" />
+                      <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded-lg border border-blue-500/30" />
                     </div>
                   )}
                 </div>
@@ -387,7 +387,7 @@ function AddItem() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-lg shadow-lg hover:shadow-orange-500/50 transition duration-300 transform hover:scale-105 disabled:opacity-50"
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600-500 to-blue-600 hover:from-blue-600-400 hover:to-blue-600-500 text-slate-900 font-bold text-lg shadow-lg hover:shadow-blue-600/50 transition duration-300 transform hover:scale-105 disabled:opacity-50"
                 >
                   {isLoading ? "⏳ Adding..." : "✨ Add Item"}
                 </button>
@@ -401,3 +401,5 @@ function AddItem() {
 }
 
 export default AddItem;
+
+

@@ -99,7 +99,7 @@ function ManageInventory() {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Validation for specific fields
     if (name === "itemName") {
       // Only allow letters and spaces
@@ -207,7 +207,7 @@ function ManageInventory() {
 
   return (
     <div
-      className="min-h-screen text-white flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
+      className="min-h-screen text-slate-900 flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
       style={{
         backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(20, 24, 36, 0.7) 100%), url('${gymBg}')`,
         backgroundSize: "cover",
@@ -325,14 +325,14 @@ function ManageInventory() {
 
       <div className={`relative z-10 flex flex-col min-h-screen ${isTransitioning ? "transitioning-out" : ""}`}>
         {/* ================= HEADER ================= */}
-        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#141824]/95 via-[#141824]/90 to-[#1a1f2e]/90 backdrop-blur-xl border-b border-orange-500/30 shadow-xl">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">
+        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#DBEAFE]/95 via-[#DBEAFE]/90 to-[#BFDBFE]/90 backdrop-blur-xl border-b border-blue-600/30 shadow-xl">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600-400 to-blue-600-500 bg-clip-text text-transparent">
             ⚙️ Manage Inventory
           </h1>
 
           <button
             onClick={handleNavigation}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-orange-500/30 hover:to-orange-600/30 px-6 py-2 rounded-lg font-semibold border border-orange-400/20 transition duration-300 transform hover:scale-105"
+            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600-500/30 hover:to-blue-600/30 px-6 py-2 rounded-lg font-semibold border border-blue-500/20 transition duration-300 transform hover:scale-105"
           >
             ← Back
           </button>
@@ -349,13 +349,13 @@ function ManageInventory() {
                   placeholder="🔎 Search items..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-lg bg-orange-500/20 text-white border-2 border-orange-400/50 focus:border-orange-500 focus:outline-none transition duration-300 backdrop-blur-md placeholder-orange-200/60 text-sm font-medium hover:bg-orange-500/25 hover:border-orange-400/70"
+                  className="w-full px-4 py-2.5 rounded-lg bg-blue-600/20 text-slate-900 border-2 border-blue-500/50 focus:border-blue-600 focus:outline-none transition duration-300 backdrop-blur-md placeholder-slate-400-200/60 text-sm font-medium hover:bg-blue-600/25 hover:border-blue-500/70"
                 />
-                
+
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-300 hover:text-orange-500 transition text-xs"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-600 transition text-xs"
                   >
                     ✕
                   </button>
@@ -365,11 +365,11 @@ function ManageInventory() {
 
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <p className="text-gray-400 text-lg">⏳ Loading items...</p>
+                <p className="text-slate-700 text-lg">⏳ Loading items...</p>
               </div>
             ) : filteredItems.length === 0 ? (
               <div className="flex items-center justify-center py-20">
-                <p className="text-gray-400 text-lg">📭 No items found</p>
+                <p className="text-slate-700 text-lg">📭 No items found</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -385,7 +385,7 @@ function ManageInventory() {
                         className={`item-card p-8 rounded-2xl backdrop-blur-md cursor-pointer transition duration-300 transform ${
                           editingId === item._id
                             ? "bg-gradient-to-br from-blue-500/15 to-blue-600/15 border-2 border-blue-400 shadow-lg shadow-blue-500/20"
-                            : "bg-gradient-to-br from-[#1a1f2e]/85 to-[#0f1117]/85 border-2 border-gray-600/50 hover:border-gray-500 hover:shadow-lg hover:shadow-gray-400/10"
+                            : "bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 border-2 border-slate-300/50 hover:border-gray-500 hover:shadow-lg hover:shadow-gray-400/10"
                         }`}
                         style={{ animationDelay: `${idx * 0.1}s` }}
                         onClick={() => handleEdit(item)}
@@ -411,7 +411,7 @@ function ManageInventory() {
                                 {getConditionIcon(item.condition)}
                               </span>
                             </div>
-                            <div className="text-base text-gray-300 mt-3 space-y-1.5">
+                            <div className="text-base text-slate-700 mt-3 space-y-1.5">
                               <p>📦 {item.quantity} units</p>
                             </div>
                           </div>
@@ -433,7 +433,7 @@ function ManageInventory() {
                                 e.stopPropagation();
                                 handleDelete(item._id);
                               }}
-                              className="p-3 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-300 transition text-lg"
+                              className="p-3 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-700 transition text-lg"
                               title="Delete"
                             >
                               🗑️
@@ -448,37 +448,37 @@ function ManageInventory() {
                 {/* ================= EDIT FORM ================= */}
                 <div className="lg:col-span-2">
                   {editingId ? (
-                    <div className={`bg-gradient-to-br from-[#1a1f2e]/85 to-[#0f1117]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-orange-500/50 shadow-xl sticky top-8 ${isFormAnimating ? 'form-enter' : 'form-exit'}`}
+                    <div className={`bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-blue-600/50 shadow-xl sticky top-8 ${isFormAnimating ? 'form-enter' : 'form-exit'}`}
                       onAnimationEnd={() => {
                         if (!editingId) {
                           setIsFormAnimating(false);
                         }
                       }}
                     >
-                      <h2 className="text-xl font-bold text-orange-400 mb-4">✏️ Edit Item</h2>
+                      <h2 className="text-xl font-bold text-blue-500 mb-4">✏️ Edit Item</h2>
 
                       <div className="space-y-4 max-h-[calc(100vh-280px)] overflow-y-auto">
                         {/* Item Name */}
                         <div>
-                          <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Item Name</label>
+                          <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Item Name</label>
                           <input
                             type="text"
                             name="itemName"
                             value={formData.itemName}
                             onChange={handleFormChange}
-                            className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition"
+                            className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition"
                           />
                         </div>
 
                         {/* Category & Quantity */}
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Category</label>
+                            <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Category</label>
                             <select
                               name="category"
                               value={formData.category}
                               onChange={handleFormChange}
-                              className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition text-sm"
+                              className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition text-sm"
                             >
                               <option value="Cardio">🏃 Cardio</option>
                               <option value="Strength">💪 Strength</option>
@@ -486,26 +486,26 @@ function ManageInventory() {
                             </select>
                           </div>
                           <div>
-                            <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Quantity</label>
+                            <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Quantity</label>
                             <input
                               type="number"
                               name="quantity"
                               value={formData.quantity}
                               onChange={handleFormChange}
                               min="0"
-                              className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition"
+                              className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition"
                             />
                           </div>
                         </div>
 
                         {/* Condition */}
                         <div>
-                          <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Condition</label>
+                          <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Condition</label>
                           <select
                             name="condition"
                             value={formData.condition}
                             onChange={handleFormChange}
-                            className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition text-sm"
+                            className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition text-sm"
                           >
                             <option value="New">🆕 New</option>
                             <option value="Good">✅ Good</option>
@@ -516,65 +516,65 @@ function ManageInventory() {
 
                         {/* Supplier */}
                         <div>
-                          <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Supplier</label>
+                          <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Supplier</label>
                           <input
                             type="text"
                             name="supplier"
                             value={formData.supplier}
                             onChange={handleFormChange}
-                            className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition"
+                            className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition"
                           />
                         </div>
 
                         {/* Special Details */}
                         <div>
-                          <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Special Details</label>
+                          <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Special Details</label>
                           <textarea
                             name="specialDetails"
                             value={formData.specialDetails}
                             onChange={handleFormChange}
                             rows="3"
-                            className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition text-sm resize-none"
+                            className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition text-sm resize-none"
                             placeholder="Enter special details or maintenance notes..."
                           />
                         </div>
 
                         {/* Purchase Date */}
                         <div>
-                          <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Purchase Date</label>
+                          <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Purchase Date</label>
                           <input
                             type="date"
                             name="purchaseDate"
                             value={formData.purchaseDate}
                             onChange={handleFormChange}
-                            className="w-full p-2.5 rounded-lg bg-gray-700/50 text-white border border-orange-400/30 focus:border-orange-500 focus:outline-none transition text-sm"
+                            className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-900 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition text-sm"
                           />
                         </div>
 
                         {/* Image */}
                         <div>
-                          <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Item Image</label>
+                          <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Item Image</label>
                           <input
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="w-full p-2.5 rounded-lg bg-gray-700/50 text-gray-300 border border-orange-400/30 focus:border-orange-500 focus:outline-none transition text-sm cursor-pointer"
+                            className="w-full p-2.5 rounded-lg bg-slate-100/50 text-slate-700 border border-blue-500/30 focus:border-blue-600 focus:outline-none transition text-sm cursor-pointer"
                           />
                           {formData.previewUrl && (
                             <img
                               src={formData.previewUrl}
                               alt="Preview"
-                              className="mt-3 w-full h-32 object-cover rounded-lg border border-orange-400/30"
+                              className="mt-3 w-full h-32 object-cover rounded-lg border border-blue-500/30"
                             />
                           )}
                         </div>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex gap-3 mt-6 border-t border-orange-400/20 pt-4">
+                      <div className="flex gap-3 mt-6 border-t border-blue-500/20 pt-4">
                         <button
                           onClick={handleUpdate}
-                          className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 px-4 py-2.5 rounded-lg font-bold text-white transition transform hover:scale-105 shadow-lg text-sm"
+                          className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 px-4 py-2.5 rounded-lg font-bold text-slate-900 transition transform hover:scale-105 shadow-lg text-sm"
                         >
                           ✓ Save
                         </button>
@@ -596,15 +596,15 @@ function ManageInventory() {
                               });
                             }, 300);
                           }}
-                          className="flex-1 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 px-4 py-2.5 rounded-lg font-bold text-white transition transform hover:scale-105 shadow-lg text-sm"
+                          className="flex-1 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 px-4 py-2.5 rounded-lg font-bold text-slate-900 transition transform hover:scale-105 shadow-lg text-sm"
                         >
                           ✕ Cancel
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-gradient-to-br from-[#1a1f2e]/85 to-[#0f1117]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-gray-500/20 shadow-xl text-center sticky top-8">
-                      <p className="text-gray-400 text-sm">👈 Click on an item to edit it</p>
+                    <div className="bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-gray-500/20 shadow-xl text-center sticky top-8">
+                      <p className="text-slate-500 text-sm">👈 Click on an item to edit it</p>
                     </div>
                   )}
                 </div>
@@ -618,3 +618,7 @@ function ManageInventory() {
 }
 
 export default ManageInventory;
+
+
+
+

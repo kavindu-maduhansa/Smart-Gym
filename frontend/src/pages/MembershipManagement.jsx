@@ -193,14 +193,14 @@ const MembershipManagement = () => {
   const getStatusBadge = (status) => {
     const styles = {
       pending: "bg-yellow-500 text-yellow-900",
-      approved: "bg-green-500 text-white",
-      rejected: "bg-red-500 text-white",
+      approved: "bg-green-500 text-slate-900",
+      rejected: "bg-red-500 text-slate-900",
     };
 
     return (
       <span
         className={`px-3 py-1 rounded-full text-sm font-semibold ${
-          styles[status] || "bg-gray-500 text-white"
+          styles[status] || "bg-gray-500 text-slate-900"
         }`}
       >
         {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -210,9 +210,9 @@ const MembershipManagement = () => {
 
   const getPackageBadge = (packageType) => {
     const styles = {
-      monthly: "bg-blue-500 text-white",
-      quarterly: "bg-purple-500 text-white",
-      annual: "bg-orange-500 text-white",
+      monthly: "bg-blue-500 text-slate-900",
+      quarterly: "bg-purple-500 text-slate-900",
+      annual: "bg-blue-600 text-slate-900",
     };
 
     const labels = {
@@ -224,7 +224,7 @@ const MembershipManagement = () => {
     return (
       <span
         className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-          styles[packageType] || "bg-gray-500 text-white"
+          styles[packageType] || "bg-gray-500 text-slate-900"
         }`}
       >
         {labels[packageType] || packageType}
@@ -233,41 +233,41 @@ const MembershipManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px"}}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px"}}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{animationDelay: "2s"}}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}
-          <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
+          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
             <div className="flex items-center mb-4 gap-4">
-              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-orange flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 sm:w-12 sm:h-12 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">
                   Membership Management
                 </h1>
-                <p className="text-gray-300 text-sm sm:text-base mt-1">Renew and manage user memberships</p>
+                <p className="text-slate-700 text-sm sm:text-base mt-1">Renew and manage user memberships</p>
               </div>
             </div>
           </div>
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-4 border-b border-white/20 backdrop-blur-sm">
+        <div className="mb-8 flex gap-4 border-b border-slate-300 backdrop-blur-sm">
           <button
             onClick={() => setActiveTab("memberships")}
             className={`pb-4 px-6 font-semibold transition-all duration-200 ${
               activeTab === "memberships"
-                ? "text-orange border-b-2 border-orange"
-                : "text-gray-400 hover:text-gray-300"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             💳 Memberships
@@ -276,13 +276,13 @@ const MembershipManagement = () => {
             onClick={() => setActiveTab("requests")}
             className={`pb-4 px-6 font-semibold transition-all duration-200 flex items-center gap-2 ${
               activeTab === "requests"
-                ? "text-orange border-b-2 border-orange"
-                : "text-gray-400 hover:text-gray-300"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             📋 Renewal Requests
             {requests.filter((r) => r.status === "pending").length > 0 && (
-              <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+              <span className="bg-red-500 text-slate-900 text-xs font-bold px-2 py-1 rounded-full">
                 {requests.filter((r) => r.status === "pending").length}
               </span>
             )}
@@ -296,8 +296,8 @@ const MembershipManagement = () => {
               onClick={() => setFilter("all")}
               className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
                 filter === "all"
-                  ? "bg-orange text-white"
-                  : "bg-white/10 border border-white/20 text-gray-300 hover:bg-white/20"
+                  ? "bg-blue-600 text-slate-900"
+                  : "bg-slate-100 border border-slate-300 text-slate-700 hover:bg-slate-200"
               }`}
             >
               All Users
@@ -306,8 +306,8 @@ const MembershipManagement = () => {
               onClick={() => setFilter("active")}
               className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
                 filter === "active"
-                  ? "bg-green-600 text-white"
-                  : "bg-white/10 border border-white/20 text-gray-300 hover:bg-white/20"
+                  ? "bg-green-600 text-slate-900"
+                  : "bg-slate-100 border border-slate-300 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Active Memberships
@@ -316,8 +316,8 @@ const MembershipManagement = () => {
               onClick={() => setFilter("expired")}
               className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
                 filter === "expired"
-                  ? "bg-red-600 text-white"
-                  : "bg-white/10 border border-white/20 text-gray-300 hover:bg-white/20"
+                  ? "bg-red-600 text-slate-900"
+                  : "bg-slate-100 border border-slate-300 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Expired Memberships
@@ -327,7 +327,7 @@ const MembershipManagement = () => {
 
         {/* Notification */}
         {notification && (
-          <div className="mb-6 bg-green-500 bg-opacity-90 border border-green-600 text-white p-4 rounded-lg flex items-center">
+          <div className="mb-6 bg-green-500 bg-opacity-90 border border-green-600 text-slate-900 p-4 rounded-lg flex items-center">
             <svg
               className="w-6 h-6 mr-3"
               fill="currentColor"
@@ -345,79 +345,79 @@ const MembershipManagement = () => {
 
         {/* Content */}
         {activeTab === "memberships" ? (
-          <div className="bg-gray-800 bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
           {loading ? (
             <div className="p-12 text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-              <p className="text-gray-300 mt-4">Loading memberships...</p>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+              <p className="text-slate-700 mt-4">Loading memberships...</p>
             </div>
           ) : error ? (
             <div className="p-12 text-center">
-              <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 p-4 rounded-lg inline-block">
+              <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-800 p-4 rounded-lg inline-block">
                 {error}
               </div>
             </div>
           ) : filteredUsers.length === 0 ? (
-            <div className="p-12 text-center text-gray-300">
+            <div className="p-12 text-center text-slate-700">
               No memberships found for the selected filter.
             </div>
           ) : (
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-gray-700 sticky top-0 z-10">
+                <thead className="bg-gray-200/80 sticky top-0 z-10 border-b-2 border-gray-300">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       User Name
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Membership Type
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Expiry Date
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Days Left
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Action
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-gray-300/50">
                   {filteredUsers.map((user) => {
                     const status = getMembershipStatus(user.membershipExpiry);
                     const daysLeft = getDaysRemaining(user.membershipExpiry);
                     return (
                       <tr
                         key={user._id}
-                        className="hover:bg-gray-700 hover:bg-opacity-50 transition-colors duration-150"
+                        className="bg-white hover:bg-gray-50 transition-colors duration-150"
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-white">
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-900">
                           {user.name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-700">
                           {user.email}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-700 capitalize">
                           {user.membershipType || "None"}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-700">
                           {formatDate(user.membershipExpiry)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`font-semibold ${
+                            className={`px-3 py-1 text-xs font-semibold rounded-lg ${
                               daysLeft === 0
-                                ? "text-red-400"
+                                ? "text-red-700 bg-red-200/50"
                                 : daysLeft <= 7
-                                  ? "text-yellow-400"
-                                  : "text-green-400"
+                                  ? "text-yellow-700 bg-yellow-200/50"
+                                  : "text-green-700 bg-green-200/50"
                             }`}
                           >
                             {daysLeft} days
@@ -425,37 +425,25 @@ const MembershipManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                            className={`px-3 py-1 text-xs font-semibold rounded-lg ${
                               status === "Active"
-                                ? "bg-green-500 bg-opacity-20 text-green-300"
+                                ? "bg-green-200/50 text-green-700"
                                 : status === "Expired"
-                                  ? "bg-red-500 bg-opacity-20 text-red-300"
-                                  : "bg-gray-500 bg-opacity-20 text-gray-300"
+                                  ? "bg-red-200/50 text-red-700"
+                                  : "bg-gray-200/50 text-slate-700"
                             }`}
                           >
                             {status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center space-x-2 flex justify-center">
+                        <td className="px-6 py-4 whitespace-nowrap text-left">
+                          <div className="flex gap-2">
                           <button
                             onClick={() =>
                               navigate(`/admin/memberships/renew/${user._id}`)
                             }
-                            className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded text-sm font-semibold transition-colors duration-200 inline-flex items-center"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                           >
-                            <svg
-                              className="w-4 h-4 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                              />
-                            </svg>
                             Renew
                           </button>
                           <button
@@ -463,43 +451,17 @@ const MembershipManagement = () => {
                             disabled={blockingUserId === user._id}
                             className={`${
                               user.isBlocked
-                                ? "bg-green-600 hover:bg-green-700 text-white"
-                                : "bg-red-600 hover:bg-red-700 text-white"
-                            } px-3 py-2 rounded text-sm font-semibold transition-colors duration-200 inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed`}
+                                ? "bg-green-600 hover:bg-green-700"
+                                : "bg-red-600 hover:bg-red-700"
+                            } text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
                           >
-                            {blockingUserId === user._id ? (
-                              <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-1"></div>
-                                Updating...
-                              </>
-                            ) : user.isBlocked ? (
-                              <>
-                                <svg
-                                  className="w-4 h-4 mr-1"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M13 7H7v6h6V7z" />
-                                </svg>
-                                Unlock
-                              </>
-                            ) : (
-                              <>
-                                <svg
-                                  className="w-4 h-4 mr-1"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                                Block
-                              </>
-                            )}
+                            {blockingUserId === user._id
+                              ? "..."
+                              : user.isBlocked
+                                ? "Unlock"
+                                : "Block"}
                           </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -510,11 +472,11 @@ const MembershipManagement = () => {
           )}
         </div>
       ) : (
-        <div className="bg-gray-800 bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl overflow-hidden">
           {requests.length === 0 ? (
             <div className="p-12 text-center">
               <svg
-                className="w-20 h-20 text-gray-400 mx-auto mb-4"
+                className="w-20 h-20 text-slate-500 mx-auto mb-4"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -526,99 +488,85 @@ const MembershipManagement = () => {
                   d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
                 />
               </svg>
-              <h3 className="text-xl font-bold text-white mb-2">
+              <h3 className="text-xl font-bold text-slate-900 mb-2">
                 No Renewal Requests
               </h3>
-              <p className="text-gray-400">
+              <p className="text-slate-500">
                 There are no membership renewal requests at the moment.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-gray-700 sticky top-0 z-10">
+                <thead className="bg-gray-200/80 sticky top-0 z-10 border-b-2 border-gray-300">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       User Name
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Package
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Current Expiry
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Request Date
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-900 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-gray-300/50">
                   {requests.map((request) => (
                     <tr
                       key={request._id}
-                      className="hover:bg-gray-700 hover:bg-opacity-30 transition-colors"
+                      className="bg-white hover:bg-gray-50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 text-white font-medium">
+                      <td className="px-6 py-4 text-slate-900 font-medium">
                         {request.userName}
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4 text-slate-700">
                         {request.email}
                       </td>
                       <td className="px-6 py-4">
                         {getPackageBadge(request.packageType)}
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4 text-slate-700">
                         {formatDate(request.currentMembershipExpiry)}
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4 text-slate-700">
                         {formatDate(request.requestDate)}
                       </td>
                       <td className="px-6 py-4">
                         {getStatusBadge(request.status)}
                       </td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-6 py-4 text-left">
                         {request.status === "pending" ? (
-                          <div className="flex gap-2 justify-center">
+                          <div className="flex gap-2">
                             <button
                               onClick={() => handleApproveRequest(request._id)}
                               disabled={processingRequestId === request._id}
-                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center"
+                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {processingRequestId === request._id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                                  ...
-                                </>
-                              ) : (
-                                "Approve"
-                              )}
+                              {processingRequestId === request._id ? "..." : "Approve"}
                             </button>
                             <button
                               onClick={() => handleRejectRequest(request._id)}
                               disabled={processingRequestId === request._id}
-                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center"
+                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {processingRequestId === request._id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                                  ...
-                                </>
-                              ) : (
-                                "Reject"
-                              )}
+                              {processingRequestId === request._id ? "..." : "Reject"}
                             </button>
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm italic">
+                          <span className="text-slate-500 text-xs italic">
                             No actions available
                           </span>
                         )}
@@ -632,10 +580,10 @@ const MembershipManagement = () => {
 
           {/* Request Stats */}
           {requests.length > 0 && (
-            <div className="bg-gray-900 bg-opacity-50 border-t border-gray-700 p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white bg-opacity-50 border-t border-slate-200 p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <p className="text-gray-400 text-sm mb-1">Total Requests</p>
-                <p className="text-white text-2xl font-bold">{requests.length}</p>
+                <p className="text-slate-500 text-sm mb-1">Total Requests</p>
+                <p className="text-slate-900 text-2xl font-bold">{requests.length}</p>
               </div>
               <div className="text-center">
                 <p className="text-yellow-300 text-sm mb-1">Pending</p>
@@ -644,14 +592,14 @@ const MembershipManagement = () => {
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-green-300 text-sm mb-1">Approved</p>
-                <p className="text-green-400 text-2xl font-bold">
+                <p className="text-green-700 text-sm mb-1">Approved</p>
+                <p className="text-green-700 text-2xl font-bold">
                   {requests.filter((r) => r.status === "approved").length}
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-red-300 text-sm mb-1">Rejected</p>
-                <p className="text-red-400 text-2xl font-bold">
+                <p className="text-red-700 text-sm mb-1">Rejected</p>
+                <p className="text-red-700 text-2xl font-bold">
                   {requests.filter((r) => r.status === "rejected").length}
                 </p>
               </div>
@@ -663,13 +611,13 @@ const MembershipManagement = () => {
         {/* Statistics - Only show for Memberships tab */}
         {activeTab === "memberships" && (
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-            <p className="text-gray-400 text-sm mb-1">Total Memberships</p>
-            <p className="text-white text-2xl font-bold">{users.length}</p>
+          <div className="bg-white bg-opacity-50 rounded-lg p-4">
+            <p className="text-slate-500 text-sm mb-1">Total Memberships</p>
+            <p className="text-slate-900 text-2xl font-bold">{users.length}</p>
           </div>
-          <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-            <p className="text-gray-400 text-sm mb-1">Active</p>
-            <p className="text-green-400 text-2xl font-bold">
+          <div className="bg-white bg-opacity-50 rounded-lg p-4">
+            <p className="text-slate-500 text-sm mb-1">Active</p>
+            <p className="text-green-700 text-2xl font-bold">
               {
                 users.filter(
                   (u) => getMembershipStatus(u.membershipExpiry) === "Active",
@@ -677,9 +625,9 @@ const MembershipManagement = () => {
               }
             </p>
           </div>
-          <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-            <p className="text-gray-400 text-sm mb-1">Expired</p>
-            <p className="text-red-400 text-2xl font-bold">
+          <div className="bg-white bg-opacity-50 rounded-lg p-4">
+            <p className="text-slate-500 text-sm mb-1">Expired</p>
+            <p className="text-red-700 text-2xl font-bold">
               {
                 users.filter(
                   (u) =>
@@ -696,7 +644,7 @@ const MembershipManagement = () => {
         <div className="mt-8 text-center">
           <button
             onClick={() => navigate("/admin-dashboard")}
-            className="bg-white/10 border border-white/20 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 inline-flex items-center"
+            className="bg-slate-100 border border-slate-300 hover:bg-slate-200 text-slate-900 font-semibold px-6 py-3 rounded-lg transition-colors duration-200 inline-flex items-center"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -721,3 +669,6 @@ const MembershipManagement = () => {
 };
 
 export default MembershipManagement;
+
+
+

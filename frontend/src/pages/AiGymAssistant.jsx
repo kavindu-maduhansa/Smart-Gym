@@ -294,20 +294,20 @@ const AiGymAssistant = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 px-4 sm:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Page header */}
-        <div className="mb-6 bg-gradient-to-r from-orange/30 via-black to-black border border-orange/20 rounded-2xl p-4 sm:p-5 shadow-lg">
+        <div className="mb-6 bg-gradient-to-r from-blue-600/30 via-black to-blue-50 border border-blue-600/20 rounded-2xl p-4 sm:p-5 shadow-lg">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-orange/20 border border-orange/30 flex items-center justify-center">
-                <span className="text-orange font-black">AI</span>
+              <div className="w-11 h-11 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
+                <span className="text-blue-600 font-black">AI</span>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-orange">
+                <div className="text-xl sm:text-2xl font-extrabold text-blue-600">
                   AI Gym Assistant
                 </div>
-                <div className="text-xs sm:text-sm text-white/70 mt-1">
+                <div className="text-xs sm:text-sm text-slate-900/70 mt-1">
                   Ask about workouts, diet plans, meals, equipment usage, recovery, and booking guidance.
                 </div>
               </div>
@@ -318,13 +318,13 @@ const AiGymAssistant = () => {
                   if (!payload?.role) navigate("/login");
                   handleFloatButton();
                 }}
-                className="bg-orange text-black font-bold px-4 py-2 rounded-xl hover:bg-orange/90 transition"
+                className="bg-blue-600 text-white font-bold px-4 py-2 rounded-xl hover:bg-blue-700/90 transition"
               >
                 Ask Now
               </button>
               <button
                 onClick={startNewChat}
-                className="bg-white/5 border border-white/10 text-white font-bold px-4 py-2 rounded-xl hover:bg-white/10 transition"
+                className="bg-slate-50 border border-slate-200 text-slate-900 font-bold px-4 py-2 rounded-xl hover:bg-slate-100 transition"
               >
                 New Chat
               </button>
@@ -335,15 +335,15 @@ const AiGymAssistant = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {/* Left: Question & response */}
           <div className="md:col-span-2">
-            <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 shadow-lg">
-              <div className="text-white/90 font-bold mb-3">Your question</div>
+            <div className="bg-white/70 border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-lg">
+              <div className="text-slate-900/90 font-bold mb-3">Your question</div>
               <textarea
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 rows={5}
                 placeholder="Example: Give me a beginner workout plan for weight loss."
-                className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm sm:text-base text-white placeholder:text-white/40 outline-none focus:border-orange transition"
+                className="w-full bg-blue-50/40 border border-slate-200 rounded-xl p-3 text-sm sm:text-base text-slate-900 placeholder:text-slate-900/40 outline-none focus:border-blue-600 transition"
                 disabled={loading}
               />
 
@@ -351,18 +351,18 @@ const AiGymAssistant = () => {
                 <button
                   onClick={handleAsk}
                   disabled={loading || !input.trim()}
-                  className="bg-orange disabled:opacity-60 disabled:cursor-not-allowed text-black font-extrabold px-5 py-2 rounded-xl hover:bg-orange/90 transition"
+                  className="bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-extrabold px-5 py-2 rounded-xl hover:bg-blue-700/90 transition"
                 >
                   {loading ? "Asking..." : "Ask Assistant"}
                 </button>
-                <div className="text-xs text-white/50">
+                <div className="text-xs text-slate-900/50">
                   Replies are restricted to gym/fitness only.
                 </div>
               </div>
 
               <div className="mt-5">
-                <div className="text-xs text-white/50 mb-2">Conversation</div>
-                <div className="bg-black/30 border border-white/10 rounded-xl p-4 text-sm leading-relaxed text-white/90 min-h-[220px] max-h-[360px] overflow-auto">
+                <div className="text-xs text-slate-900/50 mb-2">Conversation</div>
+                <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4 text-sm leading-relaxed text-slate-900/90 min-h-[220px] max-h-[360px] overflow-auto">
                   {chat.map((m) => (
                     <div
                       key={m.id}
@@ -372,8 +372,8 @@ const AiGymAssistant = () => {
                         className={[
                           "max-w-[85%] rounded-2xl px-3 py-2 whitespace-pre-wrap",
                           m.sender === "user"
-                            ? "bg-orange text-black"
-                            : "bg-white/5 text-white border border-white/10",
+                            ? "bg-blue-600 text-white"
+                            : "bg-slate-50 text-slate-900 border border-slate-200",
                         ].join(" ")}
                       >
                         {m.text}
@@ -381,11 +381,11 @@ const AiGymAssistant = () => {
                     </div>
                   ))}
                   {loading ? (
-                    <div className="text-white/60 text-xs mt-2">Assistant is typing...</div>
+                    <div className="text-slate-900/60 text-xs mt-2">Assistant is typing...</div>
                   ) : null}
                   {slotsText ? (
-                    <div className="mt-3 text-white/70">
-                      <div className="font-bold text-orange mb-1">Slots info:</div>
+                    <div className="mt-3 text-slate-900/70">
+                      <div className="font-bold text-blue-600 mb-1">Slots info:</div>
                       <div className="whitespace-pre-wrap">{slotsText}</div>
                     </div>
                   ) : null}
@@ -393,44 +393,44 @@ const AiGymAssistant = () => {
               </div>
 
               {error ? (
-                <div className="mt-4 text-sm text-red-300 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+                <div className="mt-4 text-sm text-red-700 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
                   {error}
                 </div>
               ) : null}
             </div>
 
             {/* What you can ask (moved below conversation) */}
-            <div className="mt-4 bg-gray-900/70 border border-white/10 rounded-2xl p-4 sm:p-6 shadow-lg">
-              <div className="text-white/90 font-bold mb-2">What you can ask</div>
-              <div className="text-white/70 text-sm space-y-2">
+            <div className="mt-4 bg-white/70 border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-lg">
+              <div className="text-slate-900/90 font-bold mb-2">What you can ask</div>
+              <div className="text-slate-900/70 text-sm space-y-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-white font-bold text-xs mb-1">Workout & plans</div>
-                    <div className="text-[12px] text-white/60">
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                    <div className="text-slate-900 font-bold text-xs mb-1">Workout & plans</div>
+                    <div className="text-[12px] text-slate-900/60">
                       “Beginner plan for weight loss”, “2 days/week workout split”
                     </div>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-white font-bold text-xs mb-1">Diet & nutrition</div>
-                    <div className="text-[12px] text-white/60">
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                    <div className="text-slate-900 font-bold text-xs mb-1">Diet & nutrition</div>
+                    <div className="text-[12px] text-slate-900/60">
                       “Meal plan for muscle gain”, “What to eat before/after gym”
                     </div>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-white font-bold text-xs mb-1">BMI / goals</div>
-                    <div className="text-[12px] text-white/60">
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                    <div className="text-slate-900 font-bold text-xs mb-1">BMI / goals</div>
+                    <div className="text-[12px] text-slate-900/60">
                       “Calculate BMI for 70kg and 170cm”, “I want to lose 20kg”
                     </div>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-white font-bold text-xs mb-1">Form & injury prevention</div>
-                    <div className="text-[12px] text-white/60">
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                    <div className="text-slate-900 font-bold text-xs mb-1">Form & injury prevention</div>
+                    <div className="text-[12px] text-slate-900/60">
                       “Squat form guide”, “My knee hurts when squatting”
                     </div>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:col-span-2">
-                    <div className="text-white font-bold text-xs mb-1">Bookings</div>
-                    <div className="text-[12px] text-white/60">
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 sm:col-span-2">
+                    <div className="text-slate-900 font-bold text-xs mb-1">Bookings</div>
+                    <div className="text-[12px] text-slate-900/60">
                       “Show available slots”, “Book slot &lt;id&gt;”, “Cancel slot &lt;id&gt;”
                     </div>
                   </div>
@@ -447,7 +447,7 @@ const AiGymAssistant = () => {
                     key={ex}
                     onClick={() => handleQuickPrompt(ex)}
                     disabled={loading}
-                    className="px-3 py-2 rounded-full bg-orange/10 border border-orange/30 text-orange text-xs font-bold hover:bg-orange/15 transition"
+                    className="px-3 py-2 rounded-full bg-blue-600/10 border border-blue-600/30 text-blue-600 text-xs font-bold hover:bg-blue-700/15 transition"
                     title="Click to send"
                   >
                     {ex}
@@ -460,15 +460,15 @@ const AiGymAssistant = () => {
           {/* Right: Quick prompts & tips */}
           <div className="md:col-span-1">
             <div className="space-y-4">
-              <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 shadow-lg">
-                <div className="text-white/90 font-bold mb-3">Quick Prompts</div>
+              <div className="bg-white/70 border border-slate-200 rounded-2xl p-4 shadow-lg">
+                <div className="text-slate-900/90 font-bold mb-3">Quick Prompts</div>
                 <div className="space-y-2">
                   {QUICK_PROMPTS.map((p) => (
                     <button
                       key={p}
                       onClick={() => handleQuickPrompt(p)}
                       disabled={loading}
-                      className="w-full text-left px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition text-xs sm:text-sm"
+                      className="w-full text-left px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 transition text-xs sm:text-sm"
                     >
                       {p}
                     </button>
@@ -476,35 +476,35 @@ const AiGymAssistant = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 shadow-lg">
+              <div className="bg-white/70 border border-slate-200 rounded-2xl p-4 shadow-lg">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="text-white/90 font-bold">History</div>
+                  <div className="text-slate-900/90 font-bold">History</div>
                   <button
                     onClick={loadHistorySessions}
                     disabled={historyLoading}
-                    className="text-xs font-bold text-orange hover:text-orange/80 disabled:opacity-60"
+                    className="text-xs font-bold text-blue-600 hover:text-blue-600/80 disabled:opacity-60"
                   >
                     Refresh
                   </button>
                 </div>
                 {historyError ? (
-                  <div className="text-xs text-red-300">{historyError}</div>
+                  <div className="text-xs text-red-700">{historyError}</div>
                 ) : historyLoading ? (
-                  <div className="text-xs text-white/60">Loading history...</div>
+                  <div className="text-xs text-slate-900/60">Loading history...</div>
                 ) : historySessions.length === 0 ? (
-                  <div className="text-xs text-white/60">No previous chats yet.</div>
+                  <div className="text-xs text-slate-900/60">No previous chats yet.</div>
                 ) : (
                   <div className="space-y-2 max-h-[180px] overflow-auto pr-1">
                     {historySessions.map((s) => (
                       <button
                         key={s.sessionId}
                         onClick={() => openHistorySession(s.sessionId)}
-                        className="w-full text-left px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                        className="w-full text-left px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 transition"
                       >
-                        <div className="text-xs text-white font-bold truncate">
+                        <div className="text-xs text-slate-900 font-bold truncate">
                           {s.lastUserMessage ? s.lastUserMessage : "Chat session"}
                         </div>
-                        <div className="text-[11px] text-white/50 mt-0.5">
+                        <div className="text-[11px] text-slate-900/50 mt-0.5">
                           {s.goal ? `Goal: ${s.goal} • ` : ""}
                           {s.lastAt ? new Date(s.lastAt).toLocaleString() : ""}
                         </div>
@@ -514,18 +514,18 @@ const AiGymAssistant = () => {
                 )}
               </div>
 
-              <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 shadow-lg">
-                <div className="text-white/90 font-bold mb-2">Tips</div>
-                <ul className="list-disc pl-5 text-white/70 text-sm space-y-2">
+              <div className="bg-white/70 border border-slate-200 rounded-2xl p-4 shadow-lg">
+                <div className="text-slate-900/90 font-bold mb-2">Tips</div>
+                <ul className="list-disc pl-5 text-slate-900/70 text-sm space-y-2">
                   <li>Mention your goal (fat loss, muscle gain, or stamina).</li>
                   <li>Add your level (beginner/intermediate/advanced).</li>
                   <li>Ask specific questions for better answers.</li>
                 </ul>
               </div>
 
-              <div className="bg-gray-900/70 border border-white/10 rounded-2xl p-4 shadow-lg">
-                <div className="text-white/90 font-bold mb-2">Safety Reminder</div>
-                <div className="text-white/70 text-sm leading-relaxed">
+              <div className="bg-white/70 border border-slate-200 rounded-2xl p-4 shadow-lg">
+                <div className="text-slate-900/90 font-bold mb-2">Safety Reminder</div>
+                <div className="text-slate-900/70 text-sm leading-relaxed">
                   Follow proper form, avoid sudden heavy loading, and consult professionals for medical conditions.
                 </div>
               </div>
@@ -537,7 +537,7 @@ const AiGymAssistant = () => {
       {/* Floating icon button (bottom-right) */}
       <button
         onClick={handleFloatButton}
-        className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-orange text-black shadow-2xl hover:bg-orange/90 transition flex items-center justify-center"
+        className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-blue-600 text-white shadow-2xl hover:bg-blue-700/90 transition flex items-center justify-center"
         aria-label="Focus chatbot input"
       >
         <FloatingAiIcon />
@@ -547,4 +547,5 @@ const AiGymAssistant = () => {
 };
 
 export default AiGymAssistant;
+
 

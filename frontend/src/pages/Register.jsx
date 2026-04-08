@@ -49,32 +49,32 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-24 pb-12 flex items-center justify-center min-h-screen">
         <div className="w-full max-w-md mx-auto px-4">
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl shadow-orange/20 p-8">
-        <h2 className="text-2xl font-bold text-center mb-6 text-white">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl shadow-blue-600/20 p-8">
+        <h2 className="text-2xl font-bold text-center mb-6 text-slate-900">
           Register
         </h2>
         {success && (
-          <p className="text-green-400 text-center mt-4">{success}</p>
+          <p className="text-green-700 text-center mt-4">{success}</p>
         )}
-        {error && <p className="text-red-400 text-center mt-4">{error}</p>}
+        {error && <p className="text-red-700 text-center mt-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-1 font-medium text-white">Name</label>
+            <label className="block mb-1 font-medium text-slate-900">Name</label>
             <input
               type="text"
-              className="w-full border border-white/20 rounded-lg px-4 py-2 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+              className="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-900 placeholder-slate-500/50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoComplete="name"
@@ -82,10 +82,10 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium text-white">Email</label>
+            <label className="block mb-1 font-medium text-slate-900">Email</label>
             <input
               type="email"
-              className="w-full border border-white/20 rounded-lg px-4 py-2 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+              className="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-900 placeholder-slate-500/50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -93,12 +93,12 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium text-white">
+            <label className="block mb-1 font-medium text-slate-900">
               Password
             </label>
             <input
               type="password"
-              className="w-full border border-white/20 rounded-lg px-4 py-2 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+              className="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-900 placeholder-slate-500/50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
@@ -107,17 +107,17 @@ const Register = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-orange hover:bg-orange/90 text-white font-bold py-2 rounded-lg shadow-lg shadow-orange/20 transition disabled:opacity-60"
+            className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 rounded-lg shadow-lg shadow-blue-600/20 transition disabled:opacity-60"
             disabled={loading}
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
         <div className="mt-4 text-center">
-          <span className="text-white">Already have an account? </span>
+          <span className="text-slate-900">Already have an account? </span>
           <Link
             to="/login"
-            className="text-orange-400 hover:underline font-medium"
+            className="text-blue-500 hover:underline font-medium"
           >
             Login
           </Link>
@@ -130,3 +130,6 @@ const Register = () => {
 };
 
 export default Register;
+
+
+

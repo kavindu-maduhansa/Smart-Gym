@@ -100,26 +100,26 @@ const Users = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Add User Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-all"></div>
+          <div className="absolute inset-0 bg-blue-50/75 backdrop-blur-sm transition-all"></div>
           <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-md w-full p-8 overflow-hidden">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl max-w-md w-full p-8 overflow-hidden">
               {/* Header */}
-              <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-white">Add New User</h3>
+              <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-slate-900">Add New User</h3>
                 <button
-                  className="text-white/60 hover:text-white text-2xl font-bold transition"
+                  className="text-slate-900/60 hover:text-slate-900 text-2xl font-bold transition"
                   onClick={() => {
                     setShowAddModal(false);
                     setAddForm({ name: "", email: "", password: "", role: "student" });
@@ -159,11 +159,11 @@ const Users = () => {
                 }}
                 className="flex flex-col gap-4 w-full"
               >
-                <label className="text-gray-300 font-semibold text-sm">
+                <label className="text-slate-700 font-semibold text-sm">
                   Name
                   <input
                     type="text"
-                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                     value={addForm.name}
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, name: e.target.value }))
@@ -171,11 +171,11 @@ const Users = () => {
                     required
                   />
                 </label>
-                <label className="text-gray-300 font-semibold text-sm">
+                <label className="text-slate-700 font-semibold text-sm">
                   Email
                   <input
                     type="email"
-                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                     value={addForm.email}
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, email: e.target.value }))
@@ -183,11 +183,11 @@ const Users = () => {
                     required
                   />
                 </label>
-                <label className="text-gray-300 font-semibold text-sm">
+                <label className="text-slate-700 font-semibold text-sm">
                   Password
                   <input
                     type="password"
-                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                     value={addForm.password}
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, password: e.target.value }))
@@ -196,10 +196,10 @@ const Users = () => {
                     required
                   />
                 </label>
-                <label className="text-gray-300 font-semibold text-sm">
+                <label className="text-slate-700 font-semibold text-sm">
                   Role
                   <select
-                    className="mt-2 w-full rounded-lg px-4 py-2 bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition"
+                    className="mt-2 w-full rounded-lg px-4 py-2 bg-slate-100 border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
                     value={addForm.role}
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, role: e.target.value }))
@@ -214,7 +214,7 @@ const Users = () => {
                 <button
                   type="submit"
                   disabled={addingUser}
-                  className="mt-4 bg-orange hover:bg-orange/90 disabled:bg-orange/50 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
+                  className="mt-4 bg-blue-600 hover:bg-blue-700/90 disabled:bg-blue-600/50 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300"
                 >
                   {addingUser ? "Creating..." : "Create User"}
                 </button>
@@ -230,16 +230,16 @@ const Users = () => {
           {/* Header */}
           <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-2">
                 User Management
               </h1>
-              <p className="text-gray-400 text-base sm:text-lg">
+              <p className="text-slate-500 text-base sm:text-lg">
                 View, edit, and manage all system users
               </p>
             </div>
             <button
               onClick={() => setShowAddModal(true)}
-              className="bg-orange hover:bg-orange/90 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
+              className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
             >
               + Add User
             </button>
@@ -247,7 +247,7 @@ const Users = () => {
 
           {/* Notification */}
           {notification && (
-            <div className="mb-6 bg-orange/90 text-white p-4 rounded-lg shadow-lg flex items-center text-sm sm:text-base">
+            <div className="mb-6 bg-blue-600/90 text-slate-900 p-4 rounded-lg shadow-lg flex items-center text-sm sm:text-base">
               <svg
                 className="w-5 h-5 mr-3 flex-shrink-0"
                 fill="currentColor"
@@ -264,105 +264,101 @@ const Users = () => {
           )}
 
           {/* Content */}
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
             {loading ? (
               <div className="p-12 text-center">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
-                <p className="text-gray-300 mt-4 text-sm sm:text-base">Loading users...</p>
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                <p className="text-slate-700 mt-4 text-sm sm:text-base">Loading users...</p>
               </div>
             ) : error ? (
               <div className="p-12 text-center">
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg inline-block text-sm sm:text-base">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg inline-block text-sm sm:text-base">
                   {error}
                 </div>
               </div>
             ) : users.length === 0 ? (
-              <div className="p-12 text-center text-gray-400 text-sm sm:text-base">
+              <div className="p-12 text-center text-slate-500 text-sm sm:text-base">
                 No users found.
               </div>
             ) : (
               <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-gradient-to-r from-gray-800/90 to-gray-700/80 backdrop-blur-md sticky top-0 z-10">
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                    <tr className="bg-gray-200/80 sticky top-0 z-10 border-b-2 border-gray-300">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Name
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Role
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Membership Type
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Membership Expiry
                       </th>
-                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-center text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-gray-300/50">
                     {users.map((user, index) => {
                       const status = getMembershipStatus(user.membershipExpiry);
                       return (
                         <tr
                           key={user._id}
-                          className={`${
-                            index % 2 === 0 
-                              ? 'bg-gradient-to-r from-gray-800/40 to-gray-700/30' 
-                              : 'bg-gradient-to-r from-gray-800/20 to-gray-700/15'
-                          } hover:from-gray-700/50 hover:to-gray-600/40 transition-all duration-200`}
+                          className="bg-white hover:bg-gray-50 transition-colors duration-150"
                         >
-                          <td className="px-6 py-4 whitespace-nowrap text-white text-sm font-medium">
+                          <td className="px-6 py-4 whitespace-nowrap text-slate-900 text-sm font-medium">
                             {user.name}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-300 text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-slate-700 text-sm">
                             {user.email}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                              user.role === 'admin' 
-                                ? 'bg-blue-600/80 text-white' 
+                              user.role === 'admin'
+                                ? 'bg-blue-600/80 text-slate-900'
                                 : user.role === 'trainer'
-                                ? 'bg-blue-500/80 text-white'
-                                : 'bg-blue-400/80 text-white'
+                                ? 'bg-blue-500/80 text-slate-900'
+                                : 'bg-blue-400/80 text-slate-900'
                             }`}>
                               {user.role}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-slate-800 text-sm capitalize">
                             {user.membershipType || "None"}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-200 text-sm">
+                          <td className="px-6 py-4 whitespace-nowrap text-slate-800 text-sm">
                             {formatDate(user.membershipExpiry)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span
-                              className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                              className={`px-3 py-1 text-xs font-semibold rounded-lg ${
                                 status === "Active"
-                                  ? "bg-green-500/80 text-white"
+                                  ? "bg-green-200/50 text-green-700"
                                   : status === "Expired"
-                                    ? "bg-red-500/80 text-white"
-                                    : "bg-gray-500/80 text-white"
+                                    ? "bg-red-200/50 text-red-700"
+                                    : "bg-gray-200/50 text-slate-700"
                               }`}
                             >
                               {status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-center">
-                            <div className="flex items-center justify-center gap-2">
+                          <td className="px-6 py-4 whitespace-nowrap text-left">
+                            <div className="flex gap-2">
                               <button
                                 onClick={() =>
                                   navigate(`/admin/users/${user._id}`)
                                 }
-                                className="bg-blue-600/80 border border-blue-500/50 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                               >
                                 View
                               </button>
@@ -370,13 +366,13 @@ const Users = () => {
                                 onClick={() =>
                                   navigate(`/admin/users/edit/${user._id}`)
                                 }
-                                className="bg-orange/80 border border-orange/50 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                               >
                                 Edit
                               </button>
                               <button
                                 onClick={() => handleDelete(user._id, user.name)}
-                                className="bg-red-600/80 border border-red-500/50 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300"
+                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-xs font-semibold transition-all duration-300"
                               >
                                 Delete
                               </button>
@@ -395,7 +391,7 @@ const Users = () => {
           <div className="mt-8 text-center">
             <button
               onClick={() => navigate("/admin-dashboard")}
-              className="backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-6 sm:px-8 py-3 rounded-lg transition-all duration-300 inline-flex items-center text-sm sm:text-base"
+              className="backdrop-blur-md bg-slate-100 border border-slate-300 hover:bg-white/15 hover:border-blue-600/50 text-slate-900 font-bold px-6 sm:px-8 py-3 rounded-lg transition-all duration-300 inline-flex items-center text-sm sm:text-base"
             >
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -420,3 +416,7 @@ const Users = () => {
 };
 
 export default Users;
+
+
+
+

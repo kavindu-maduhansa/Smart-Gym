@@ -6,15 +6,16 @@ export default {
       colors: {
         black: "#000000",
         orange: {
-          DEFAULT: "#ff7f11",
-          dark: "#ff6600",
+          DEFAULT: "#F97316",
+          dark: "#EA580C",
+          light: "#FFEDD5",
         },
         blue: {
-          DEFAULT: "#0074d9",
-          light: "#1e90ff",
-          dark: "#00244d",
+          DEFAULT: "#3B82F6",
+          light: "#DBEAFE",
+          dark: "#2563EB",
         },
-        white: "#ffffff",
+        white: "#FFFFFF",
       },
     },
   },

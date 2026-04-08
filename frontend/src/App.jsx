@@ -16,6 +16,7 @@ import RenewMembership from "./pages/RenewMembership";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/MyOrders";
+import MyPlans from "./pages/MyPlans";
 import AdminOrderManagement from "./pages/AdminOrderManagement";
 
 // Admin Pages
@@ -47,7 +48,7 @@ import TrainerStudents from "./pages/TrainerStudents";
 import TrainerWorkoutPlans from "./pages/TrainerWorkoutPlans";
 import TrainerMealPlans from "./pages/TrainerMealPlans";
 import TrainerPlansHub from "./pages/TrainerPlansHub";
-import Leaderboard from "./pages/Leaderboard";
+
 import Schedules from "./pages/Schedules";
 import AiGymAssistant from "./pages/AiGymAssistant";
 import DisplayInventorysUser from "./pages/disply_inventorys _user";
@@ -170,6 +171,14 @@ function App() {
           }
         />
         <Route
+          path="/my-plans"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <MyPlans />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/users"
           element={
             <ProtectedRoute requiredRole="admin">
@@ -265,6 +274,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminOrderManagement />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/trainer-dashboard"
@@ -332,7 +349,7 @@ function App() {
         />
         {/* Removed /student/available route for cleanup */}
       <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><TrainerBooking /></ProtectedRoute>} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route

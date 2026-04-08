@@ -107,22 +107,22 @@ const Membership = () => {
   const daysRemaining = getDaysRemaining();
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 p-6 sm:p-8">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white text-center">
+            <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 p-6 sm:p-8">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 text-center">
                 Membership Details
               </h2>
             </div>
@@ -131,27 +131,27 @@ const Membership = () => {
             <div className="p-6 sm:p-8">
               {loading ? (
                 <div className="text-center">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange"></div>
-                  <p className="text-gray-300 mt-4">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                  <p className="text-slate-700 mt-4">
                     Loading membership details...
                   </p>
                 </div>
               ) : error && !showModal ? (
-                <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-4 rounded-lg text-center">
+                <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-4 rounded-lg text-center">
                   {error}
                 </div>
               ) : user ? (
                 <div className="space-y-6">
                   {/* Success Message */}
                   {successMessage && (
-                    <div className="bg-green-600/20 border border-green-500/50 text-green-200 p-4 rounded-lg text-center text-sm sm:text-base">
+                    <div className="bg-green-600/20 border border-green-500/50 text-green-800 p-4 rounded-lg text-center text-sm sm:text-base">
                       {successMessage}
                     </div>
                   )}
 
                   {/* Expired Warning */}
                   {isExpired && (
-                    <div className="bg-red-600/20 border border-red-500/30 text-red-200 p-6 rounded-xl">
+                    <div className="bg-red-600/20 border border-red-500/30 text-red-800 p-6 rounded-xl">
                       <div className="flex items-start">
                         <svg
                           className="w-6 h-6 sm:w-8 sm:h-8 mr-3 sm:mr-4 flex-shrink-0 mt-1"
@@ -168,7 +168,7 @@ const Membership = () => {
                           <h3 className="text-lg sm:text-xl font-bold mb-2">
                             Your membership has expired!
                           </h3>
-                          <p className="text-red-100 text-sm sm:text-base">
+                          <p className="text-red-800 text-sm sm:text-base">
                             Please renew your membership to continue enjoying our
                             services and facilities.
                           </p>
@@ -207,21 +207,21 @@ const Membership = () => {
                   )}
 
                   {/* Membership Card */}
-                  <div className="backdrop-blur-md bg-gradient-to-br from-orange/30 to-orange/10 border border-orange/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                  <div className="backdrop-blur-md bg-gradient-to-br from-blue-600/30 to-blue-600/10 border border-blue-600/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                       <div>
-                        <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
                           {user.name}
                         </h3>
-                        <p className="text-orange-200 text-sm sm:text-base">
+                        <p className="text-blue-800 text-sm sm:text-base">
                           Member ID: {user._id?.slice(-8).toUpperCase()}
                         </p>
                       </div>
                       <div
                         className={`px-4 py-2 rounded-full font-bold text-sm sm:text-base flex-shrink-0 ${
                           isExpired
-                            ? "bg-red-600/30 border border-red-500/50 text-red-200"
-                            : "bg-green-600/30 border border-green-500/50 text-green-200"
+                            ? "bg-red-600/30 border border-red-500/50 text-red-800"
+                            : "bg-green-600/30 border border-green-500/50 text-green-800"
                         }`}
                       >
                         {membershipStatus}
@@ -229,29 +229,29 @@ const Membership = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-lg p-4">
-                        <p className="text-gray-300 text-xs sm:text-sm mb-2">
+                      <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-lg p-4">
+                        <p className="text-slate-700 text-xs sm:text-sm mb-2">
                           Plan Type
                         </p>
-                        <p className="text-white text-lg sm:text-xl font-bold">
+                        <p className="text-slate-900 text-lg sm:text-xl font-bold capitalize">
                           {user.membershipType || "None"}
                         </p>
                       </div>
-                      <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-lg p-4">
-                        <p className="text-gray-300 text-xs sm:text-sm mb-2">
+                      <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-lg p-4">
+                        <p className="text-slate-700 text-xs sm:text-sm mb-2">
                           Expiry Date
                         </p>
-                        <p className="text-white text-lg sm:text-xl font-bold">
+                        <p className="text-slate-900 text-lg sm:text-xl font-bold">
                           {formatDate(user.membershipExpiry)}
                         </p>
                       </div>
-                      <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-lg p-4">
-                        <p className="text-gray-300 text-xs sm:text-sm mb-2">
+                      <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-lg p-4">
+                        <p className="text-slate-700 text-xs sm:text-sm mb-2">
                           Days Remaining
                         </p>
                         <p
                           className={`text-lg sm:text-xl font-bold ${
-                            isExpired ? "text-red-400" : "text-orange"
+                            isExpired ? "text-red-700" : "text-blue-600"
                           }`}
                         >
                           {isExpired ? "0" : daysRemaining}
@@ -261,10 +261,10 @@ const Membership = () => {
                   </div>
 
                   {/* Benefits Section */}
-                  <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center">
+                  <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-xl p-6">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 flex items-center">
                       <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-orange flex-shrink-0"
+                        className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 flex-shrink-0"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -278,10 +278,10 @@ const Membership = () => {
                       </svg>
                       Membership Benefits
                     </h3>
-                    <ul className="space-y-3 text-gray-300 text-sm sm:text-base">
+                    <ul className="space-y-3 text-slate-700 text-sm sm:text-base">
                       <li className="flex items-start">
                         <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-orange mt-1 flex-shrink-0"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-blue-600 mt-1 flex-shrink-0"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -295,7 +295,7 @@ const Membership = () => {
                       </li>
                       <li className="flex items-start">
                         <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-orange mt-1 flex-shrink-0"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-blue-600 mt-1 flex-shrink-0"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -309,7 +309,7 @@ const Membership = () => {
                       </li>
                       <li className="flex items-start">
                         <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-orange mt-1 flex-shrink-0"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-blue-600 mt-1 flex-shrink-0"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -323,7 +323,7 @@ const Membership = () => {
                       </li>
                       <li className="flex items-start">
                         <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-orange mt-1 flex-shrink-0"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-blue-600 mt-1 flex-shrink-0"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -337,7 +337,7 @@ const Membership = () => {
                       </li>
                       <li className="flex items-start">
                         <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-orange mt-1 flex-shrink-0"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-blue-600 mt-1 flex-shrink-0"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -356,7 +356,7 @@ const Membership = () => {
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
                     <button
                       onClick={() => setShowModal(true)}
-                      className="flex-1 bg-orange hover:bg-orange/90 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
                     >
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -375,7 +375,7 @@ const Membership = () => {
                     </button>
                     <button
                       onClick={() => navigate("/student-dashboard")}
-                      className="flex-1 backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 hover:border-orange/50 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                      className="flex-1 backdrop-blur-md bg-slate-100 border border-slate-300 hover:bg-white/15 hover:border-blue-600/50 text-slate-900 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
                     >
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -400,11 +400,11 @@ const Membership = () => {
 
           {/* Package Selection Modal */}
           {showModal && (
-            <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden">
+            <div className="fixed inset-0 bg-blue-50/75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden">
                 {/* Modal Header */}
-                <div className="backdrop-blur-md bg-gradient-to-r from-orange/20 to-orange/10 border-b border-orange/30 p-6 sm:p-8">
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white text-center">
+                <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 p-6 sm:p-8">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 text-center">
                     Select Membership Package
                   </h3>
                 </div>
@@ -412,7 +412,7 @@ const Membership = () => {
                 {/* Modal Content */}
                 <div className="p-6 sm:p-8">
                   {error && (
-                    <div className="bg-red-600/20 border border-red-500/50 text-red-200 p-3 sm:p-4 rounded-lg mb-4 text-xs sm:text-sm">
+                    <div className="bg-red-600/20 border border-red-500/50 text-red-800 p-3 sm:p-4 rounded-lg mb-4 text-xs sm:text-sm">
                       {error}
                     </div>
                   )}
@@ -423,18 +423,18 @@ const Membership = () => {
                       onClick={() => setSelectedPackage("monthly")}
                       className={`p-6 rounded-xl border-2 transition-all ${
                         selectedPackage === "monthly"
-                          ? "border-orange/50 bg-orange/20"
-                          : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+                          ? "border-blue-600/50 bg-blue-600/20"
+                          : "border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-slate-100"
                       }`}
                     >
                       <div className="text-center">
-                        <h4 className="text-lg sm:text-xl font-bold text-white mb-2">
+                        <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                           Monthly
                         </h4>
-                        <p className="text-2xl sm:text-3xl font-bold text-orange mb-2">
+                        <p className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">
                           30 Days
                         </p>
-                        <p className="text-gray-300 text-xs sm:text-sm">
+                        <p className="text-slate-700 text-xs sm:text-sm">
                           Perfect for short-term goals
                         </p>
                       </div>
@@ -445,18 +445,18 @@ const Membership = () => {
                       onClick={() => setSelectedPackage("quarterly")}
                       className={`p-6 rounded-xl border-2 transition-all ${
                         selectedPackage === "quarterly"
-                          ? "border-orange/50 bg-orange/20"
-                          : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+                          ? "border-blue-600/50 bg-blue-600/20"
+                          : "border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-slate-100"
                       }`}
                     >
                       <div className="text-center">
-                        <h4 className="text-lg sm:text-xl font-bold text-white mb-2">
+                        <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                           Quarterly
                         </h4>
-                        <p className="text-2xl sm:text-3xl font-bold text-orange mb-2">
+                        <p className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">
                           90 Days
                         </p>
-                        <p className="text-gray-300 text-xs sm:text-sm">
+                        <p className="text-slate-700 text-xs sm:text-sm">
                           Great for consistent training
                         </p>
                       </div>
@@ -467,18 +467,18 @@ const Membership = () => {
                       onClick={() => setSelectedPackage("annual")}
                       className={`p-6 rounded-xl border-2 transition-all ${
                         selectedPackage === "annual"
-                          ? "border-orange/50 bg-orange/20"
-                          : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+                          ? "border-blue-600/50 bg-blue-600/20"
+                          : "border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-slate-100"
                       }`}
                     >
                       <div className="text-center">
-                        <h4 className="text-lg sm:text-xl font-bold text-white mb-2">
+                        <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                           Annual
                         </h4>
-                        <p className="text-2xl sm:text-3xl font-bold text-orange mb-2">
+                        <p className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">
                           365 Days
                         </p>
-                        <p className="text-gray-300 text-xs sm:text-sm">
+                        <p className="text-slate-700 text-xs sm:text-sm">
                           Best value for committed members
                         </p>
                       </div>
@@ -493,7 +493,7 @@ const Membership = () => {
                         setSelectedPackage("");
                         setError("");
                       }}
-                      className="flex-1 backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/15 text-white font-bold px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                      className="flex-1 backdrop-blur-md bg-slate-100 border border-slate-300 hover:bg-white/15 text-slate-900 font-bold px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base"
                     >
                       Cancel
                     </button>
@@ -502,8 +502,8 @@ const Membership = () => {
                       disabled={!selectedPackage || requestLoading}
                       className={`flex-1 font-bold px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base ${
                         !selectedPackage || requestLoading
-                          ? "bg-gray-600/50 cursor-not-allowed text-gray-400"
-                          : "bg-orange hover:bg-orange/90 text-white"
+                          ? "bg-gray-600/50 cursor-not-allowed text-slate-500"
+                          : "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
                       }`}
                     >
                       {requestLoading ? "Submitting..." : "Submit Request"}
@@ -520,3 +520,6 @@ const Membership = () => {
 };
 
 export default Membership;
+
+
+

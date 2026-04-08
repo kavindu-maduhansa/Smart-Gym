@@ -94,28 +94,28 @@ const Cart = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-gray-400">Loading cart...</p>
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 flex items-center justify-center">
+        <p className="text-slate-500">Loading cart...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage:
-              "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)",
+              "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)",
             backgroundSize: "50px 50px",
           }}
         ></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div
-          className="absolute bottom-20 right-10 w-72 h-72 bg-orange-500 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
+          className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
@@ -124,11 +124,11 @@ const Cart = () => {
       <div className="relative z-10 pt-32 pb-20">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="backdrop-blur-md bg-gradient-to-br from-orange-500/20 to-orange-500/10 border border-orange-500/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
+          <div className="backdrop-blur-md bg-gradient-to-br from-blue-600-500/20 to-blue-600-500/10 border border-blue-600/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <svg
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-orange-500 mr-3 sm:mr-4"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 mr-3 sm:mr-4"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -140,32 +140,32 @@ const Cart = () => {
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">Shopping Cart</h1>
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">Shopping Cart</h1>
               </div>
               <button
                 onClick={() => navigate("/supplement-store")}
-                className="bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-lg font-semibold transition"
+                className="bg-slate-200 hover:bg-white/30 text-slate-900 px-6 py-2 rounded-lg font-semibold transition"
               >
                 Continue Shopping
               </button>
             </div>
-            <p className="text-gray-300 text-base sm:text-lg">
+            <p className="text-slate-700 text-base sm:text-lg">
               Review your selected supplements and proceed to checkout
             </p>
           </div>
 
           {/* Message */}
           {message && (
-            <div className="mb-6 p-4 bg-orange-500/20 border border-orange-500/50 rounded-lg text-orange-200">
+            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-lg text-blue-800">
               {message}
             </div>
           )}
 
           {/* Cart Items */}
           {!cart || cart.items.length === 0 ? (
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-12 text-center">
+            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-xl p-12 text-center">
               <svg
-                className="w-16 h-16 text-gray-500 mx-auto mb-4"
+                className="w-16 h-16 text-slate-600 mx-auto mb-4"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -177,10 +177,10 @@ const Cart = () => {
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                 />
               </svg>
-              <p className="text-gray-400 text-lg mb-4">Your cart is empty</p>
+              <p className="text-slate-700 text-lg mb-4">Your cart is empty</p>
               <button
                 onClick={() => navigate("/supplement-store")}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition"
+                className="bg-blue-600 hover:bg-blue-700 text-slate-900 px-6 py-2 rounded-lg font-semibold transition"
               >
                 Start Shopping
               </button>
@@ -189,16 +189,16 @@ const Cart = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Items List */}
               <div className="lg:col-span-2">
-                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl overflow-hidden">
-                  <div className="p-6 bg-gradient-to-r from-white/10 to-white/5 border-b border-white/10">
-                    <h2 className="text-xl font-bold text-white">Items ({cart.items.length})</h2>
+                <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-xl overflow-hidden">
+                  <div className="p-6 bg-gradient-to-r from-white/10 to-white/5 border-b border-slate-200">
+                    <h2 className="text-xl font-bold text-slate-900">Items ({cart.items.length})</h2>
                   </div>
 
                   <div className="divide-y divide-white/10">
                     {cart.items.map((item) => (
                       <div
                         key={item.supplementId._id}
-                        className="p-6 flex items-center gap-4 hover:bg-white/5 transition"
+                        className="p-6 flex items-center gap-4 hover:bg-slate-50 transition"
                       >
                         {item.supplementId.image && (
                           <img
@@ -208,11 +208,11 @@ const Cart = () => {
                           />
                         )}
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-white mb-1">
+                          <h3 className="text-lg font-semibold text-slate-900 mb-1">
                             {item.supplementId.name}
                           </h3>
-                          <p className="text-sm text-gray-400">
-                            ${item.price.toFixed(2)} each
+                          <p className="text-sm text-slate-500">
+                            Rs. {item.price.toFixed(2)} each
                           </p>
                         </div>
 
@@ -224,11 +224,11 @@ const Cart = () => {
                                 item.quantity - 1
                               )
                             }
-                            className="bg-white/20 hover:bg-white/30 text-white w-8 h-8 rounded transition"
+                            className="bg-slate-200 hover:bg-white/30 text-slate-900 w-8 h-8 rounded transition"
                           >
                             −
                           </button>
-                          <span className="w-8 text-center text-white font-semibold">
+                          <span className="w-8 text-center text-slate-900 font-semibold">
                             {item.quantity}
                           </span>
                           <button
@@ -238,19 +238,19 @@ const Cart = () => {
                                 item.quantity + 1
                               )
                             }
-                            className="bg-white/20 hover:bg-white/30 text-white w-8 h-8 rounded transition"
+                            className="bg-slate-200 hover:bg-white/30 text-slate-900 w-8 h-8 rounded transition"
                           >
                             +
                           </button>
                         </div>
 
                         <div className="min-w-max">
-                          <p className="text-lg font-bold text-orange-400 mb-2">
-                            ${(item.price * item.quantity).toFixed(2)}
+                          <p className="text-lg font-bold text-blue-500 mb-2">
+                            Rs. {(item.price * item.quantity).toFixed(2)}
                           </p>
                           <button
                             onClick={() => handleRemoveItem(item.supplementId._id)}
-                            className="bg-red-600/50 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition"
+                            className="bg-red-600/50 hover:bg-red-600 text-slate-900 px-3 py-1 rounded text-sm transition"
                           >
                             Remove
                           </button>
@@ -259,10 +259,10 @@ const Cart = () => {
                     ))}
                   </div>
 
-                  <div className="p-6 bg-gradient-to-r from-white/10 to-white/5 border-t border-white/10">
+                  <div className="p-6 bg-gradient-to-r from-white/10 to-white/5 border-t border-slate-200">
                     <button
                       onClick={handleClearCart}
-                      className="bg-red-600/50 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-semibold transition"
+                      className="bg-red-600/50 hover:bg-red-600 text-slate-900 px-6 py-2 rounded-lg font-semibold transition"
                     >
                       Clear Cart
                     </button>
@@ -272,31 +272,28 @@ const Cart = () => {
 
               {/* Summary */}
               <div className="lg:col-span-1">
-                <div className="backdrop-blur-md bg-gradient-to-br from-orange-500/20 to-orange-500/10 border border-orange-500/30 rounded-xl p-6 sticky top-32">
-                  <h2 className="text-xl font-bold text-white mb-6">Order Summary</h2>
+                <div className="backdrop-blur-md bg-gradient-to-br from-blue-600-500/20 to-blue-600-500/10 border border-blue-600/30 rounded-xl p-6 sticky top-32">
+                  <h2 className="text-xl font-bold text-slate-900 mb-6">Order Summary</h2>
 
                   <div className="space-y-4 mb-6">
-                    <div className="flex justify-between text-gray-300">
+                    <div className="flex justify-between text-slate-700">
                       <span>Subtotal:</span>
-                      <span>${cart.totalPrice.toFixed(2)}</span>
+                      <span>Rs. {cart.totalPrice.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-gray-300">
+                    <div className="flex justify-between text-slate-700 items-center">
                       <span>Shipping:</span>
-                      <span>Free</span>
+                      <span className="text-xs text-slate-500">Calculated at checkout</span>
                     </div>
-                    <div className="flex justify-between text-gray-300">
-                      <span>Tax:</span>
-                      <span>${(cart.totalPrice * 0.1).toFixed(2)}</span>
-                    </div>
-                    <div className="border-t border-white/20 pt-4 flex justify-between text-lg font-bold text-orange-400">
+
+                    <div className="border-t border-slate-300 pt-4 flex justify-between text-lg font-bold text-blue-500">
                       <span>Total:</span>
-                      <span>${(cart.totalPrice + cart.totalPrice * 0.1).toFixed(2)}</span>
+                      <span>Rs. {(cart.totalPrice).toFixed(2)}</span>
                     </div>
                   </div>
 
                   <button
                     onClick={handleCheckout}
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-slate-900 px-6 py-3 rounded-lg font-semibold transition"
                   >
                     Proceed to Checkout
                   </button>
@@ -311,3 +308,7 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
+
+
