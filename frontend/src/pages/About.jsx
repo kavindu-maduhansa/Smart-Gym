@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+﻿import { useNavigate } from "react-router-dom";
 import { FaDumbbell, FaUsers, FaClock } from "react-icons/fa";
 
 const About = () => {
@@ -294,7 +294,7 @@ const About = () => {
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="px-8 py-3 bg-blue-600 text-slate-900 font-bold rounded-lg hover:bg-blue-700/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-600/50"
+                className="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-600/50"
               >
                 Create Account
               </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -356,7 +356,7 @@ const Membership = () => {
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
                     <button
                       onClick={() => setShowModal(true)}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
                     >
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -503,7 +503,7 @@ const Membership = () => {
                       className={`flex-1 font-bold px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base ${
                         !selectedPackage || requestLoading
                           ? "bg-gray-600/50 cursor-not-allowed text-slate-500"
-                          : "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
                       }`}
                     >
                       {requestLoading ? "Submitting..." : "Submit Request"}

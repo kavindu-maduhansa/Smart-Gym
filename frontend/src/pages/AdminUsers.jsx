@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const AdminUsers = () => {
@@ -171,7 +171,7 @@ const AdminUsers = () => {
                 </label>
                 <button
                   type="submit"
-                  className="mt-4 bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300"
+                  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
                 >
                   Save Changes
                 </button>
@@ -267,7 +267,7 @@ const AdminUsers = () => {
                   {profileUser.isBlocked ? "Unblock" : "Block"}
                 </button>
                 <button
-                  className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-all duration-300"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-300"
                   onClick={() => {
                     setUpdateUser(profileUser);
                     setUpdateForm({
@@ -468,7 +468,7 @@ const AdminUsers = () => {
                 <button
                   type="submit"
                   disabled={addingUser}
-                  className="mt-4 bg-blue-600 hover:bg-blue-700/90 disabled:bg-blue-600/50 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300"
+                  className="mt-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
                 >
                   {addingUser ? "Creating..." : "Create User"}
                 </button>
@@ -490,7 +490,7 @@ const AdminUsers = () => {
                 </h2>
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
                 >
                   + Add User
                 </button>
@@ -549,7 +549,7 @@ const AdminUsers = () => {
                         <td className="px-6 py-4 text-sm whitespace-nowrap capitalize">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                             user.role === 'admin' 
-                              ? 'bg-blue-600/80 text-slate-900' 
+                              ? 'bg-blue-600/80 text-white' 
                               : user.role === 'trainer'
                               ? 'bg-blue-500/80 text-slate-900'
                               : 'bg-blue-400/80 text-slate-900'
@@ -567,7 +567,7 @@ const AdminUsers = () => {
                         <td className="px-6 py-4 text-center">
                           <div className="flex gap-2 justify-center">
                             <button
-                              className="bg-blue-600/80 hover:bg-blue-600 text-slate-900 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-blue-500/50"
+                              className="bg-blue-600/80 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-blue-500/50"
                               onClick={() => {
                                 setProfileUser(user);
                                 setShowProfileModal(true);
@@ -576,7 +576,7 @@ const AdminUsers = () => {
                               View
                             </button>
                             <button
-                              className="bg-blue-600/80 hover:bg-blue-700 text-slate-900 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-blue-600/50"
+                              className="bg-blue-600/80 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 border border-blue-600/50"
                               onClick={() => {
                                 setUpdateUser(user);
                                 setUpdateForm({
@@ -640,7 +640,7 @@ const AdminUsers = () => {
 
       {/* Notification */}
       {notification && (
-        <div className="fixed top-28 left-1/2 transform -translate-x-1/2 bg-blue-600/90 text-slate-900 px-6 py-3 rounded-lg shadow-2xl z-50 text-sm sm:text-base font-semibold animate-fade-in">
+        <div className="fixed top-28 left-1/2 transform -translate-x-1/2 bg-blue-600/90 text-white px-6 py-3 rounded-lg shadow-2xl z-50 text-sm sm:text-base font-semibold animate-fade-in">
           {notification}
         </div>
       )}

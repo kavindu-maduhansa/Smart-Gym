@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+﻿import { Link, useNavigate } from "react-router-dom";
 import { FaCalendarAlt, FaBox, FaShoppingCart } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -297,7 +297,7 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
               <Link
                 to="/register"
-                className="px-8 sm:px-10 py-3 sm:py-4 bg-blue-600 text-slate-900 font-bold rounded-lg hover:bg-blue-700/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-600/50 text-base sm:text-lg"
+                className="px-8 sm:px-10 py-3 sm:py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-600/50 text-base sm:text-lg"
               >
                 Get Started Now
               </Link>

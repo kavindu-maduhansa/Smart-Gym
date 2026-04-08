@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const AdminRenewRequests = () => {
@@ -132,7 +132,7 @@ const AdminRenewRequests = () => {
     const styles = {
       monthly: "bg-blue-500 text-slate-900",
       quarterly: "bg-purple-500 text-slate-900",
-      annual: "bg-blue-600 text-slate-900",
+      annual: "bg-blue-600 text-white",
     };
 
     const labels = {

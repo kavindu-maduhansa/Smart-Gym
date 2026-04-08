@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+﻿import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -278,7 +278,7 @@ const TrainerAvailability = () => {
                       disabled={isExpired || bookingId === s._id}
                       className={`w-full font-bold py-3.5 rounded-xl transition-all uppercase text-xs tracking-wider relative z-10 ${isExpired
                         ? 'bg-slate-50 text-gray-700 cursor-not-allowed border border-white/5 mt-auto'
-                        : 'bg-blue-600 text-slate-900 hover:bg-blue-700/90 shadow-lg shadow-blue-600/20 active:scale-[0.96] mt-auto'
+                        : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-[0.96] mt-auto'
                         }`}
                     >
                       {isExpired ? "Expired" : (bookingId === s._id ? "Processing..." : "Book Now")}
@@ -1004,7 +1004,7 @@ const SlotAvailability = () => {
                     type="button"
                     disabled={bookingKey === `${s.scheduleId}-${s.slotId}`}
                     onClick={() => handleBookSlot(s.scheduleId, s.slotId)}
-                    className="mt-3 w-full bg-blue-600 text-slate-900 font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-3 w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {bookingKey === `${s.scheduleId}-${s.slotId}` ? "Booking…" : "Book slot"}
                   </button>
@@ -1036,13 +1036,13 @@ const Schedules = () => {
         )}
         <div className="flex justify-center mb-8">
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 border ${tab === "trainer" ? "bg-blue-600 text-black border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 border ${tab === "trainer" ? "bg-blue-600 text-white border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
             onClick={() => setTab("trainer")}
           >
             Trainer Availability
           </button>
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 border ${tab === "slot" ? "bg-blue-600 text-black border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 border ${tab === "slot" ? "bg-blue-600 text-white border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
             onClick={() => setTab("slot")}
           >
             Slot Availability

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
                 <div
                   key={card.label}
                   onClick={() => navigate(card.route)}
-                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-blue-600/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-600/20 cursor-pointer"
+                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8 hover:bg-white hover:border-blue-400 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-600/15 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >
                   <div className="relative z-10">
                     <div className="flex items-start gap-4 sm:gap-6">
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
                         <p className="text-xs sm:text-sm text-slate-700 mb-4 group-hover:text-slate-800 transition-colors">
                           {card.description}
                         </p>
-                        <button className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm">
                           Open
                         </button>
                       </div>
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
                 { label: "Scheduled Classes", value: stats.scheduledClasses, icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
                 { label: "Equipment Items", value: stats.equipmentItems, icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
               ].map((stat, idx) => (
-                <div key={idx} className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-4 sm:p-6 hover:bg-white/15 transition-all">
+                <div key={idx} className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-4 sm:p-6 transition-all hover:border-blue-300 hover:bg-white hover:shadow-md">
                   <div className="flex items-center gap-3 sm:gap-4 mb-4">
                     <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-blue-600/20 rounded-lg">
                       <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

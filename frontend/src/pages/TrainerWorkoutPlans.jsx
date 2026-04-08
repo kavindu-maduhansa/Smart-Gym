@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTrash, FaDownload, FaUserPlus, FaDumbbell, FaBookOpen, FaEdit } from "react-icons/fa";
 
@@ -186,7 +186,7 @@ const TrainerWorkoutPlans = () => {
                 <div className="flex gap-4 mb-8 border-b border-slate-200 pb-4 print:hidden">
                     <button
                         onClick={() => setActiveTab("library")}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all text-sm tracking-wider ${activeTab === "library" ? "bg-blue-600 text-slate-900" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all text-sm tracking-wider ${activeTab === "library" ? "bg-blue-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
                             }`}
                     >
                         <FaBookOpen /> Library
@@ -196,7 +196,7 @@ const TrainerWorkoutPlans = () => {
                             setNewPlan({ title: "", difficulty: "Beginner", exercises: [{ name: "", sets: "", reps: "" }] });
                             setActiveTab("creator");
                         }}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all text-sm tracking-wider ${activeTab === "creator" ? "bg-blue-600 text-slate-900" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all text-sm tracking-wider ${activeTab === "creator" ? "bg-blue-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
                             }`}
                     >
                         <FaDumbbell /> Plan Creator
@@ -250,7 +250,7 @@ const TrainerWorkoutPlans = () => {
                                         </button>
                                         <button
                                             onClick={() => handleOpenAssignModal(plan)}
-                                            className="flex-1 bg-blue-600 hover:bg-blue-700/90 text-slate-900 py-3 rounded-xl font-bold transition-all text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
+                                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold transition-all text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
                                         >
                                             <FaUserPlus /> Send
                                         </button>
@@ -357,7 +357,7 @@ const TrainerWorkoutPlans = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
                             >
                                 {loading ? (newPlan._id ? "Updating..." : "Publishing...") : (newPlan._id ? "Update" : "Publish")}
                             </button>

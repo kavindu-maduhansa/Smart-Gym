@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -124,7 +124,7 @@ const MyOrders = () => {
               <p className="text-slate-700 text-lg mb-6">You haven't placed any orders yet.</p>
               <button
                 onClick={() => navigate("/supplement-store")}
-                className="bg-blue-600 hover:bg-blue-700 text-slate-900 px-8 py-3 rounded-xl font-bold transition shadow-lg shadow-blue-600/20"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition shadow-lg shadow-blue-600/20"
               >
                 Go to Store
               </button>

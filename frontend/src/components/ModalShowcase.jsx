@@ -27,7 +27,7 @@ export const BasicModalExample = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-blue-600 rounded text-slate-900">
+      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-blue-600 rounded text-white">
         Open Modal
       </button>
 
@@ -72,7 +72,7 @@ export const ItemDetailsModalExample = () => {
 
   return (
     <>
-      <button onClick={handleOpenDetails} className="px-4 py-2 bg-blue-600 rounded text-slate-900">
+      <button onClick={handleOpenDetails} className="px-4 py-2 bg-blue-600 rounded text-white">
         View Item Details
       </button>
 

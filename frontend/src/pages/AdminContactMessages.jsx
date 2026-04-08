@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../services/apiClient";
 
@@ -262,7 +262,7 @@ const AdminContactMessages = () => {
                 type="button"
                 onClick={() => runBulkStatusUpdate("new", "seen")}
                 disabled={runningBulk}
-                className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm disabled:opacity-60"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm disabled:opacity-60"
               >
                 Mark all new as seen
               </button>
@@ -329,7 +329,7 @@ const AdminContactMessages = () => {
                       <button
                         type="button"
                         onClick={() => handleView(item)}
-                        className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm"
                       >
                         View
                       </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -82,7 +82,7 @@ function ChatMessage({ sender, text }) {
       <div
         className={[
           "max-w-[90%] rounded-2xl px-3 py-2 text-xs sm:text-sm whitespace-pre-wrap",
-          isUser ? "bg-blue-600 text-slate-900" : "bg-blue-50 text-slate-900 border border-blue-200",
+          isUser ? "bg-blue-600 text-white" : "bg-blue-50 text-slate-900 border border-blue-200",
         ].join(" ")}
       >
         {text}
@@ -228,7 +228,7 @@ export default function ChatWidget() {
       {!open && (
         <button
           onClick={() => navigate("/ai-gym-assistant")}
-          className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-blue-600 text-slate-900 font-black shadow-2xl hover:bg-blue-700 transition flex items-center justify-center border border-blue-400"
+          className="fixed bottom-5 right-5 z-[100] w-14 h-14 rounded-full bg-blue-600 text-white font-black shadow-2xl hover:bg-blue-700 transition flex items-center justify-center border border-blue-400"
           aria-label="Open AI assistant"
         >
           <IconChat />
@@ -244,12 +244,12 @@ export default function ChatWidget() {
               <div className="px-4 py-3 flex items-center justify-between">
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-9 h-9 rounded-xl bg-blue-500 border border-blue-400 text-slate-900 flex items-center justify-center text-lg font-bold"
+                  className="w-9 h-9 rounded-xl bg-blue-500/90 border border-white/30 text-white flex items-center justify-center text-lg font-bold hover:bg-blue-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-600"
                   aria-label="Close"
                 >
                   ×
                 </button>
-                <div className="text-slate-900 font-extrabold tracking-wide text-lg sm:text-xl">
+                <div className="text-white font-extrabold tracking-wide text-lg sm:text-xl drop-shadow-sm">
                   AI GYM ASSISTANT
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-blue-500 border border-blue-400 flex items-center justify-center">
@@ -266,9 +266,9 @@ export default function ChatWidget() {
                     <div>
                       <div className="text-slate-600 text-sm font-bold">Good Afternoon</div>
                       <div className="text-slate-900 text-lg font-extrabold">Smart Gym Member</div>
-                      <div className="mt-2 text-slate-500 text-xs">
+                      <p className="mt-2 text-sm leading-relaxed text-slate-700">
                         Ask for workouts, diet, supplements, equipment usage, and booking guidance.
-                      </div>
+                      </p>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <div className="px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-slate-900 font-extrabold text-sm">
@@ -276,7 +276,7 @@ export default function ChatWidget() {
                       </div>
                       <button
                         onClick={() => inputRef.current?.focus?.()}
-                        className="px-5 py-3 rounded-2xl bg-blue-600 text-slate-900 font-extrabold hover:bg-blue-700 transition"
+                        className="px-5 py-3 rounded-2xl bg-blue-600 text-white font-extrabold hover:bg-blue-700 transition"
                       >
                         RECHARGE
                       </button>
@@ -427,25 +427,35 @@ export default function ChatWidget() {
                       void send(text);
                     }}
                   >
-                    <div className="flex gap-2">
-                      <input
+                    <div className="flex gap-2 items-end">
+                      <textarea
                         ref={inputRef}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key !== "Enter" || e.shiftKey) return;
+                          e.preventDefault();
+                          if (typing || !input.trim()) return;
+                          const text = input;
+                          setInput("");
+                          void send(text);
+                        }}
+                        rows={2}
                         placeholder="Ask about workouts, diet, supplements, equipment, or bookings..."
-                        className="flex-1 bg-blue-50/40 border border-slate-200 rounded-2xl px-3 py-2 text-sm text-slate-900 placeholder:text-slate-900/40 focus:outline-none focus:border-blue-600 transition"
+                        className="flex-1 min-h-[44px] max-h-32 resize-y bg-blue-50/40 border border-slate-200 rounded-2xl px-3 py-2 text-sm text-slate-900 placeholder:text-slate-900/40 focus:outline-none focus:border-blue-600 transition"
                       />
                       <button
                         type="submit"
-                        disabled={typing}
-                        className="w-12 rounded-2xl bg-blue-600 hover:bg-blue-700/90 text-white font-extrabold transition disabled:opacity-60"
+                        disabled={typing || !input.trim()}
+                        className="w-12 h-11 shrink-0 rounded-2xl bg-blue-600 hover:bg-blue-700/90 text-white font-extrabold transition disabled:opacity-60 self-end"
                         aria-label="Send"
                       >
                         →
                       </button>
                     </div>
-                    <div className="text-slate-900/40 text-[10px] mt-2">
-                      Replies are limited to gym topics only.
+                    <div className="text-slate-900/40 text-[10px] mt-2 flex flex-col gap-0.5">
+                      <span>Enter to send · Shift+Enter for a new line.</span>
+                      <span>Replies are limited to gym topics only.</span>
                     </div>
                   </form>
                 </div>

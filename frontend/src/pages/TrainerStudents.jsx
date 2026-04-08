@@ -246,7 +246,7 @@ const TrainerStudents = () => {
                         onClick={() => setCurrentPage(i + 1)}
                         className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
                           currentPage === i + 1
-                          ? 'bg-blue-600 border-blue-600 text-slate-900 shadow-[0_0_10px_rgba(59,130,246,0.3)]'
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'
                           : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900'
                         }`}
                       >

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import apiClient from "../services/apiClient";
@@ -389,7 +389,7 @@ const Contact = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/")}
-                  className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
                 >
                   Back to Home
                 </button>

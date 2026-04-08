@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -29,10 +29,8 @@ const Register = () => {
           password,
         },
       );
-      // Auto-login the user after registration
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
-        // Dispatch a custom event to notify Navbar
         window.dispatchEvent(new Event("tokenChanged"));
       }
       setSuccess("Registration successful! Redirecting to home page...");
@@ -49,87 +47,109 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
-      {/* Animated Background */}
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden flex items-center justify-center">
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
+        <div
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        ></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div
+          className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 pt-24 pb-12 flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-md mx-auto px-4">
-          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl shadow-blue-600/20 p-8">
-        <h2 className="text-2xl font-bold text-center mb-6 text-slate-900">
-          Register
-        </h2>
-        {success && (
-          <p className="text-green-700 text-center mt-4">{success}</p>
-        )}
-        {error && <p className="text-red-700 text-center mt-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block mb-1 font-medium text-slate-900">Name</label>
-            <input
-              type="text"
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-900 placeholder-slate-500/50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoComplete="name"
-              disabled={loading}
-            />
+      <div className="relative z-10 w-full max-w-md mx-auto px-4 py-24">
+        <div className="overflow-hidden rounded-2xl border border-slate-300 bg-slate-100 shadow-2xl shadow-blue-600/10 backdrop-blur-md">
+          <div className="border-b border-blue-600/30 bg-gradient-to-r from-blue-600/20 to-blue-600/10 p-6 sm:p-8">
+            <h1 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">Create an account</h1>
+            <p className="mt-2 text-center text-sm text-slate-600">Join Smart Gym and manage your fitness journey</p>
           </div>
-          <div>
-            <label className="block mb-1 font-medium text-slate-900">Email</label>
-            <input
-              type="email"
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-900 placeholder-slate-500/50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              disabled={loading}
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium text-slate-900">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-900 placeholder-slate-500/50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              disabled={loading}
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 rounded-lg shadow-lg shadow-blue-600/20 transition disabled:opacity-60"
-            disabled={loading}
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-        <div className="mt-4 text-center">
-          <span className="text-slate-900">Already have an account? </span>
-          <Link
-            to="/login"
-            className="text-blue-500 hover:underline font-medium"
-          >
-            Login
-          </Link>
+
+          <div className="p-6 sm:p-8">
+            {success ? (
+              <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900" role="status">
+                {success}
+              </div>
+            ) : null}
+            {error ? (
+              <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+                {error}
+              </div>
+            ) : null}
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label htmlFor="reg-name" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Name
+                </label>
+                <input
+                  id="reg-name"
+                  type="text"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:opacity-60"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  disabled={loading}
+                  placeholder="Your full name"
+                />
+              </div>
+              <div>
+                <label htmlFor="reg-email" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Email
+                </label>
+                <input
+                  id="reg-email"
+                  type="email"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:opacity-60"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  disabled={loading}
+                  placeholder="name@example.com"
+                />
+              </div>
+              <div>
+                <label htmlFor="reg-password" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Password
+                </label>
+                <input
+                  id="reg-password"
+                  type="password"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:opacity-60"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                  disabled={loading}
+                  placeholder="Choose a secure password"
+                />
+              </div>
+              <button
+                type="submit"
+                className="ui-btn-primary w-full"
+                disabled={loading}
+              >
+                {loading ? "Registering…" : "Register"}
+              </button>
+            </form>
+
+            <p className="mt-6 text-center text-sm text-slate-600">
+              Already have an account?{" "}
+              <Link to="/login" className="font-bold text-blue-600 hover:text-blue-700 hover:underline">
+                Log in
+              </Link>
+            </p>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
 
 export default Register;
-
-
-

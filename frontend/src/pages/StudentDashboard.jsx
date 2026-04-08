@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -128,7 +128,7 @@ const StudentDashboard = () => {
                   <p className="text-sm sm:text-base text-slate-800 mb-4">
                     Please renew your membership to continue enjoying our services.
                   </p>
-                  <button onClick={() => navigate("/membership")} className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 py-2 rounded-lg transition-all text-sm sm:text-base">
+                  <button onClick={() => navigate("/membership")} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-lg transition-all text-sm sm:text-base">
                     REQUEST RENEWAL NOW
                   </button>
                 </div>

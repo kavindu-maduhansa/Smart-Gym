@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+﻿import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 
 const API = "http://localhost:5000/api/gym-schedules";
@@ -711,7 +711,7 @@ const ScheduleManagement = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-blue-600 text-black font-bold px-6 py-2 rounded-lg hover:bg-blue-700/90 disabled:opacity-50"
+                  className="bg-blue-600 text-white font-bold px-6 py-2 rounded-lg hover:bg-blue-700/90 disabled:opacity-50"
                 >
                   {saving ? "Saving…" : editId ? "Update schedule" : "Generate slots"}
                 </button>
@@ -748,7 +748,7 @@ const ScheduleManagement = () => {
                   onClick={() => setShowPastSchedules((v) => !v)}
                   className={`px-3 py-2 rounded-lg font-bold text-sm border transition-colors ${
                     showPastSchedules
-                      ? "bg-blue-600 text-black border-blue-600/50"
+                      ? "bg-blue-600 text-white border-blue-600/50"
                       : "bg-blue-50/30 text-slate-800 border-slate-200 hover:bg-blue-50/40"
                   }`}
                 >
@@ -841,7 +841,7 @@ const ScheduleManagement = () => {
                     onClick={() => setAnalyticsDays(d)}
                     className={`px-3 py-2 rounded-lg font-bold text-sm border transition-all ${
                       analyticsDays === d
-                        ? "bg-blue-600 text-black border-blue-600/50"
+                        ? "bg-blue-600 text-white border-blue-600/50"
                         : "bg-blue-50/20 text-slate-700 border-slate-200 hover:bg-blue-50/30"
                     }`}
                   >
@@ -1012,7 +1012,7 @@ const ScheduleManagement = () => {
                         type="button"
                         disabled={slotActionKey === `bulk-cap-${slotModal.scheduleId}`}
                         onClick={bulkApplyCapacity}
-                        className="px-3 py-2 rounded bg-blue-600 text-black font-bold hover:bg-blue-700/90 disabled:opacity-60"
+                        className="px-3 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700/90 disabled:opacity-60"
                       >
                         Set cap (all)
                       </button>
@@ -1096,7 +1096,7 @@ const ScheduleManagement = () => {
                                 type="button"
                                 disabled={slotActionKey === `cap-${slotModal.scheduleId}-${s._id}`}
                                 onClick={() => adminSetSlotCapacity(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-blue-600 text-black font-bold hover:bg-blue-700/90 disabled:opacity-60"
+                                className="px-3 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700/90 disabled:opacity-60"
                               >
                                 Set cap
                               </button>

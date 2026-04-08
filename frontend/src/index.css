@@ -4,13 +4,53 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
-body {
-  font-family: 'Inter', sans-serif;
-  color: #1E293B;
-  background-color: #EFF6FF;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #1E293B;
+    background-color: #EFF6FF;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background-color: rgba(59, 130, 246, 0.25);
+    color: #0f172a;
+  }
+  :where(a, button, input, textarea, select, summary):focus {
+    outline: none;
+  }
+  :where(a, button, input, textarea, select, summary):focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .ui-card {
+    @apply rounded-2xl border border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm transition-shadow duration-200 hover:shadow-md;
+  }
+  .ui-btn-primary {
+    @apply inline-flex min-h-[44px] items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+  }
+  .ui-btn-ghost {
+    @apply inline-flex min-h-[44px] items-center justify-center rounded-lg border-2 border-blue-600 bg-white px-5 py-2.5 text-sm font-bold text-blue-600 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  }
 }
 
 /* React DatePicker Dark Theme Overrides */

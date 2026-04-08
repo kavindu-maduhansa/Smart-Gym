@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -67,64 +67,59 @@ const Login = () => {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-md mx-auto px-4">
-        <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 p-6 sm:p-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 text-center">
-              Login
-            </h2>
+        <div className="overflow-hidden rounded-2xl border border-slate-300 bg-slate-100 shadow-2xl shadow-blue-600/10 backdrop-blur-md">
+          <div className="border-b border-blue-600/30 bg-gradient-to-r from-blue-600/20 to-blue-600/10 p-6 sm:p-8">
+            <h1 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">Welcome back</h1>
+            <p className="mt-2 text-center text-sm text-slate-600">Sign in to continue to your dashboard</p>
           </div>
 
-          {/* Content */}
           <div className="p-6 sm:p-8">
-            {error && (
-              <div className="p-3 sm:p-4 mb-4 text-xs sm:text-sm text-red-800 bg-red-600/20 border border-red-500/50 rounded-lg">
+            {error ? (
+              <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
                 {error}
               </div>
-            )}
-            <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
+            ) : null}
+            <form className="space-y-5" onSubmit={handleSubmit}>
               <div>
-                <label className="block mb-2 font-semibold text-slate-700 text-sm">Email</label>
+                <label htmlFor="login-email" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Email
+                </label>
                 <input
+                  id="login-email"
                   type="email"
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2 sm:py-3 bg-slate-100 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
-                  placeholder="Enter your email"
+                  placeholder="name@example.com"
                 />
               </div>
               <div>
-                <label className="block mb-2 font-semibold text-slate-700 text-sm">
+                <label htmlFor="login-password" className="mb-2 block text-sm font-semibold text-slate-700">
                   Password
                 </label>
                 <input
+                  id="login-password"
                   type="password"
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2 sm:py-3 bg-slate-100 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  placeholder="Enter your password"
+                  placeholder="Your password"
                 />
               </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 sm:py-3 rounded-lg transition-all duration-300 text-sm sm:text-base"
-              >
+              <button type="submit" className="ui-btn-primary w-full">
                 Login
               </button>
             </form>
-            <div className="mt-6 text-center">
-              <span className="text-slate-700 text-sm">Don't have an account? </span>
-              <Link
-                to="/register"
-                className="text-blue-600 hover:text-blue-600/90 font-bold text-sm"
-              >
+            <p className="mt-6 text-center text-sm text-slate-600">
+              Don&apos;t have an account?{" "}
+              <Link to="/register" className="font-bold text-blue-600 hover:text-blue-700 hover:underline">
                 Register
               </Link>
-            </div>
+            </p>
           </div>
         </div>
       </div>

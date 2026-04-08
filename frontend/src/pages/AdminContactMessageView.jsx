@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../services/apiClient";
 
@@ -182,7 +182,7 @@ const AdminContactMessageView = () => {
                       type="button"
                       onClick={handleSaveReply}
                       disabled={savingReply}
-                      className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm disabled:opacity-60"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm disabled:opacity-60"
                     >
                       {savingReply ? "Saving..." : "Save Reply"}
                     </button>
@@ -191,7 +191,7 @@ const AdminContactMessageView = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/admin/contact-messages")}
-                  className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm"
                 >
                   Back to Admin Messages
                 </button>
