@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import gymBg from "../assets/gym-bg.jpg";
 
 const modalAnimationStyles = `
   @keyframes fadeIn {
@@ -30,6 +29,8 @@ function ManageInventory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const navigate = useNavigate();
+  const PAGE_BG = "#F2F2F2";
+  const BORDER = "#E6E6E6";
 
   // Edit form state
   const [formData, setFormData] = useState({
@@ -207,13 +208,8 @@ function ManageInventory() {
 
   return (
     <div
-      className="min-h-screen text-slate-900 flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
-      style={{
-        backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(20, 24, 36, 0.7) 100%), url('${gymBg}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      className="min-h-screen text-slate-900 flex flex-col"
+      style={{ backgroundColor: PAGE_BG }}
     >
       <style>{`
         @keyframes slideOutLeft {
@@ -325,14 +321,15 @@ function ManageInventory() {
 
       <div className={`relative z-10 flex flex-col min-h-screen ${isTransitioning ? "transitioning-out" : ""}`}>
         {/* ================= HEADER ================= */}
-        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#DBEAFE]/95 via-[#DBEAFE]/90 to-[#BFDBFE]/90 backdrop-blur-xl border-b border-blue-600/30 shadow-xl">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600-400 to-blue-600-500 bg-clip-text text-transparent">
+        <header className="flex justify-between items-center px-8 py-5 bg-white border-b shadow-sm" style={{ borderColor: BORDER }}>
+          <h1 className="text-2xl font-bold text-blue-700">
             ⚙️ Manage Inventory
           </h1>
 
           <button
             onClick={handleNavigation}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600-500/30 hover:to-blue-600/30 px-6 py-2 rounded-lg font-semibold border border-blue-500/20 transition duration-300 transform hover:scale-105"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold border transition duration-300 transform hover:scale-105"
+            style={{ borderColor: "#1D4ED8" }}
           >
             ← Back
           </button>
@@ -349,7 +346,7 @@ function ManageInventory() {
                   placeholder="🔎 Search items..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-lg bg-blue-600/20 text-slate-900 border-2 border-blue-500/50 focus:border-blue-600 focus:outline-none transition duration-300 backdrop-blur-md placeholder-slate-400-200/60 text-sm font-medium hover:bg-blue-600/25 hover:border-blue-500/70"
+                    className="w-full px-4 py-2.5 rounded-lg bg-white text-slate-900 border-2 border-blue-200 focus:border-blue-500 focus:outline-none transition duration-300 placeholder-slate-400 text-sm font-medium"
                 />
 
                 {searchTerm && (
@@ -375,7 +372,7 @@ function ManageInventory() {
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* ================= ITEMS LIST ================= */}
                 <div className="lg:col-span-2">
-                  <h2 className="text-xl font-bold text-orange-400 mb-4">
+                  <h2 className="text-xl font-bold text-blue-700 mb-4">
                     Items ({filteredItems.length})
                   </h2>
                   <div className="space-y-5 max-h-[calc(100vh-280px)] overflow-y-auto pr-3">
@@ -385,7 +382,7 @@ function ManageInventory() {
                         className={`item-card p-8 rounded-2xl backdrop-blur-md cursor-pointer transition duration-300 transform ${
                           editingId === item._id
                             ? "bg-gradient-to-br from-blue-500/15 to-blue-600/15 border-2 border-blue-400 shadow-lg shadow-blue-500/20"
-                            : "bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 border-2 border-slate-300/50 hover:border-gray-500 hover:shadow-lg hover:shadow-gray-400/10"
+                            : "bg-white border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg"
                         }`}
                         style={{ animationDelay: `${idx * 0.1}s` }}
                         onClick={() => handleEdit(item)}
@@ -404,7 +401,7 @@ function ManageInventory() {
                           <div className="flex-1 min-w-0">
                             <h3 className="font-bold text-2xl truncate">{item.itemName}</h3>
                             <div className="flex gap-3 mt-3">
-                              <span className="px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-sm font-bold">
+                              <span className="px-3 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm font-bold">
                                 {item.category}
                               </span>
                               <span className={`px-3 py-1.5 rounded-full bg-gradient-to-r ${getConditionColor(item.condition)} border text-sm font-bold`}>
@@ -448,14 +445,14 @@ function ManageInventory() {
                 {/* ================= EDIT FORM ================= */}
                 <div className="lg:col-span-2">
                   {editingId ? (
-                    <div className={`bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-blue-600/50 shadow-xl sticky top-8 ${isFormAnimating ? 'form-enter' : 'form-exit'}`}
+                    <div className={`bg-white p-6 rounded-2xl border-2 border-blue-200 shadow-xl sticky top-8 ${isFormAnimating ? 'form-enter' : 'form-exit'}`}
                       onAnimationEnd={() => {
                         if (!editingId) {
                           setIsFormAnimating(false);
                         }
                       }}
                     >
-                      <h2 className="text-xl font-bold text-blue-500 mb-4">✏️ Edit Item</h2>
+                      <h2 className="text-xl font-bold text-blue-700 mb-4">✏️ Edit Item</h2>
 
                       <div className="space-y-4 max-h-[calc(100vh-280px)] overflow-y-auto">
                         {/* Item Name */}
@@ -603,7 +600,7 @@ function ManageInventory() {
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-gray-500/20 shadow-xl text-center sticky top-8">
+                    <div className="bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-xl text-center sticky top-8">
                       <p className="text-slate-500 text-sm">👈 Click on an item to edit it</p>
                     </div>
                   )}

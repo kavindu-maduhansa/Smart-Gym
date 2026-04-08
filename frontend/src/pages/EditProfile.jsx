@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -195,7 +195,7 @@ const EditProfile = () => {
                     <button
                       type="submit"
                       disabled={updating}
-                      className={`flex-1 bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base ${
+                      className={`flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 flex items-center justify-center text-sm sm:text-base ${
                         updating ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >

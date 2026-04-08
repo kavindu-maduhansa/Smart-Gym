@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -214,7 +214,7 @@ const Users = () => {
                 <button
                   type="submit"
                   disabled={addingUser}
-                  className="mt-4 bg-blue-600 hover:bg-blue-700/90 disabled:bg-blue-600/50 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300"
+                  className="mt-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
                 >
                   {addingUser ? "Creating..." : "Create User"}
                 </button>
@@ -239,7 +239,7 @@ const Users = () => {
             </div>
             <button
               onClick={() => setShowAddModal(true)}
-              className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 whitespace-nowrap"
             >
               + Add User
             </button>
@@ -247,7 +247,7 @@ const Users = () => {
 
           {/* Notification */}
           {notification && (
-            <div className="mb-6 bg-blue-600/90 text-slate-900 p-4 rounded-lg shadow-lg flex items-center text-sm sm:text-base">
+            <div className="mb-6 bg-blue-600/90 text-white p-4 rounded-lg shadow-lg flex items-center text-sm sm:text-base">
               <svg
                 className="w-5 h-5 mr-3 flex-shrink-0"
                 fill="currentColor"
@@ -325,7 +325,7 @@ const Users = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
                               user.role === 'admin'
-                                ? 'bg-blue-600/80 text-slate-900'
+                                ? 'bg-blue-600/80 text-white'
                                 : user.role === 'trainer'
                                 ? 'bg-blue-500/80 text-slate-900'
                                 : 'bg-blue-400/80 text-slate-900'

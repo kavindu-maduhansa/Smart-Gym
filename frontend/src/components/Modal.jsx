@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 
 const Modal = ({ isOpen, title, children, onClose, actionButtons = [] }) => {
   if (!isOpen) return null;
@@ -39,9 +39,9 @@ const Modal = ({ isOpen, title, children, onClose, actionButtons = [] }) => {
                   onClick={btn.onClick}
                   className={`px-6 py-2 rounded-lg font-semibold transition ${
                     btn.variant === "primary"
-                      ? "bg-blue-600 hover:bg-blue-700 text-slate-900"
+                      ? "bg-blue-600 hover:bg-blue-700 text-white"
                       : btn.variant === "danger"
-                      ? "bg-red-600 hover:bg-red-700 text-slate-900"
+                      ? "bg-red-600 hover:bg-red-700 text-white"
                       : "bg-slate-200 hover:bg-slate-300 text-slate-700"
                   }`}
                 >

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -285,7 +285,7 @@ const AdminRenewMembership = () => {
                             className={`w-full py-3 px-4 rounded-lg font-bold transition-all duration-200 text-sm sm:text-base ${
                               renewing && selectedPlan === plan.id
                                 ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
+                                : "bg-blue-600 hover:bg-blue-700 text-white"
                             }`}
                           >
                             {renewing && selectedPlan === plan.id ? (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -259,8 +259,8 @@ const RenewMembership = () => {
                             renewing && selectedPlan === plan.id
                               ? "bg-gray-600/50 cursor-not-allowed text-slate-500"
                               : plan.popular
-                                ? "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
-                                : "bg-blue-600 hover:bg-blue-700/90 text-slate-900"
+                                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                                : "bg-blue-600 hover:bg-blue-700 text-white"
                           }`}
                         >
                           {renewing && selectedPlan === plan.id ? (

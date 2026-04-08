@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -180,7 +180,7 @@ const Cart = () => {
               <p className="text-slate-700 text-lg mb-4">Your cart is empty</p>
               <button
                 onClick={() => navigate("/supplement-store")}
-                className="bg-blue-600 hover:bg-blue-700 text-slate-900 px-6 py-2 rounded-lg font-semibold transition"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition"
               >
                 Start Shopping
               </button>
@@ -293,7 +293,7 @@ const Cart = () => {
 
                   <button
                     onClick={handleCheckout}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-slate-900 px-6 py-3 rounded-lg font-semibold transition"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
                   >
                     Proceed to Checkout
                   </button>

@@ -297,19 +297,19 @@ const AiGymAssistant = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Page header */}
-        <div className="mb-6 bg-gradient-to-r from-blue-600/30 via-black to-blue-50 border border-blue-600/20 rounded-2xl p-4 sm:p-5 shadow-lg">
+        <div className="mb-6 rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50 via-white to-blue-100/80 p-4 shadow-lg sm:p-5">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-                <span className="text-blue-600 font-black">AI</span>
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-blue-200 bg-blue-100">
+                <span className="font-black text-blue-700">AI</span>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-blue-600">
+                <div className="text-xl font-extrabold text-blue-700 sm:text-2xl">
                   AI Gym Assistant
                 </div>
-                <div className="text-xs sm:text-sm text-slate-900/70 mt-1">
+                <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-700 sm:text-base">
                   Ask about workouts, diet plans, meals, equipment usage, recovery, and booking guidance.
-                </div>
+                </p>
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-2">
@@ -341,13 +341,19 @@ const AiGymAssistant = () => {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key !== "Enter" || e.shiftKey) return;
+                  e.preventDefault();
+                  if (loading || !input.trim()) return;
+                  void handleAsk();
+                }}
                 rows={5}
                 placeholder="Example: Give me a beginner workout plan for weight loss."
                 className="w-full bg-blue-50/40 border border-slate-200 rounded-xl p-3 text-sm sm:text-base text-slate-900 placeholder:text-slate-900/40 outline-none focus:border-blue-600 transition"
                 disabled={loading}
               />
 
-              <div className="flex items-center gap-3 mt-3">
+              <div className="mt-3 flex flex-wrap items-center gap-3">
                 <button
                   onClick={handleAsk}
                   disabled={loading || !input.trim()}
@@ -356,7 +362,8 @@ const AiGymAssistant = () => {
                   {loading ? "Asking..." : "Ask Assistant"}
                 </button>
                 <div className="text-xs text-slate-900/50">
-                  Replies are restricted to gym/fitness only.
+                  <span className="block">Press Enter to send · Shift+Enter for a new line.</span>
+                  <span className="block">Replies are restricted to gym/fitness only.</span>
                 </div>
               </div>
 

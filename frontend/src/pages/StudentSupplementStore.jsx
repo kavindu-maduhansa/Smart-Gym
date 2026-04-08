@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -112,7 +112,7 @@ const StudentSupplementStore = () => {
                 </button>
                 <button
                   onClick={() => navigate("/cart")}
-                  className="bg-blue-600 hover:bg-blue-700 text-slate-900 px-6 py-2 rounded-lg font-semibold transition shadow-lg shadow-blue-600/20"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-lg shadow-blue-600/20"
                 >
                   🛒 View Cart
                 </button>
@@ -138,7 +138,7 @@ const StudentSupplementStore = () => {
                 onClick={() => setFilteredCategory(category)}
                 className={`px-4 py-2 rounded-lg font-semibold transition ${
                   filteredCategory === category
-                    ? "bg-blue-600 text-slate-900"
+                    ? "bg-blue-600 text-white"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
@@ -207,7 +207,7 @@ const StudentSupplementStore = () => {
                       className={`w-full py-2 rounded-lg font-semibold transition ${
                         supplement.quantity === 0
                           ? "bg-gray-600 text-slate-500 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700 text-slate-900"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
                       }`}
                     >
                       {supplement.quantity === 0 ? "Out of Stock" : "Add to Cart"}

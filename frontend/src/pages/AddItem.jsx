@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import gymBg from "../assets/gym-bg.jpg";
 
 const modalAnimationStyles = `
   @keyframes fadeIn {
@@ -39,6 +38,8 @@ function AddItem() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isExiting, setIsExiting] = useState(false);
   const [errors, setErrors] = useState({});
+  const PAGE_BG = "#F2F2F2";
+  const BORDER = "#E6E6E6";
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -170,13 +171,8 @@ function AddItem() {
 
   return (
     <div
-      className="min-h-screen text-slate-900 flex flex-col bg-cover bg-center bg-no-repeat bg-fixed"
-      style={{
-        backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(20, 24, 36, 0.7) 100%), url('${gymBg}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
+      className="min-h-screen text-slate-900 flex flex-col"
+      style={{ backgroundColor: PAGE_BG }}
     >
       <style>{modalAnimationStyles}</style>
       <style>{`
@@ -223,14 +219,15 @@ function AddItem() {
 
       <div className={`relative z-10 flex flex-col min-h-screen ${isTransitioning ? 'transitioning-out' : ''}`}>
         {/* ================= HEADER ================= */}
-        <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-[#DBEAFE]/95 via-[#DBEAFE]/90 to-[#BFDBFE]/90 backdrop-blur-xl border-b border-blue-600/30 shadow-xl">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600-400 to-blue-600-500 bg-clip-text text-transparent">
+        <header className="flex justify-between items-center px-8 py-5 bg-white border-b shadow-sm" style={{ borderColor: BORDER }}>
+          <h1 className="text-2xl font-bold text-blue-700">
             ➕ Add New Machine
           </h1>
 
           <button
             onClick={handleNavigation}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600-500/30 hover:to-blue-600/30 px-6 py-2 rounded-lg font-semibold border border-blue-500/20 transition duration-300 transform hover:scale-105"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold border transition duration-300 transform hover:scale-105"
+            style={{ borderColor: "#1D4ED8" }}
           >
             ← Back
           </button>
@@ -268,8 +265,8 @@ function AddItem() {
         <main className="flex-1 p-8 flex items-center justify-center">
           {/* FORM CONTAINER */}
           <div className="w-full max-w-3xl">
-            <div className="bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-8 rounded-2xl border border-blue-500/30 shadow-xl">
-              <h2 className="text-3xl font-bold text-blue-500 mb-2">Add New Inventory Item</h2>
+            <div className="bg-white p-8 rounded-2xl border shadow-xl" style={{ borderColor: BORDER }}>
+              <h2 className="text-3xl font-bold text-blue-700 mb-2">Add New Inventory Item</h2>
               <p className="text-slate-500 mb-8">Fill in all the details below</p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -368,7 +365,7 @@ function AddItem() {
                 </div>
 
                 {/* ROW 6: Image Upload */}
-                <div className="bg-slate-100/50 border-2 border-dashed border-blue-500/30 rounded-lg p-6 text-center hover:border-blue-500/60 transition">
+                <div className="bg-slate-50 border-2 border-dashed rounded-lg p-6 text-center transition" style={{ borderColor: "#93C5FD" }}>
                   <label className="block text-sm font-semibold text-slate-800 mb-3">Upload Image</label>
                   <input
                     type="file"
@@ -387,7 +384,7 @@ function AddItem() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600-500 to-blue-600 hover:from-blue-600-400 hover:to-blue-600-500 text-slate-900 font-bold text-lg shadow-lg hover:shadow-blue-600/50 transition duration-300 transform hover:scale-105 disabled:opacity-50"
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-lg shadow-lg transition duration-300 transform hover:scale-105 disabled:opacity-50"
                 >
                   {isLoading ? "⏳ Adding..." : "✨ Add Item"}
                 </button>

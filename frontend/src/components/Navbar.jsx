@@ -1,12 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+﻿import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+const linkClass =
+  "rounded-md px-2 py-2 text-base font-medium text-slate-900 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Function to check and set role from token
     const checkRole = () => {
       const token = localStorage.getItem("token");
       if (token) {
@@ -21,7 +24,6 @@ const Navbar = () => {
       }
     };
     checkRole();
-    // Listen for storage changes (other tabs) and custom tokenChanged event (same tab)
     window.addEventListener("storage", checkRole);
     window.addEventListener("tokenChanged", checkRole);
     return () => {
@@ -33,103 +35,117 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setRole(null);
+    setMenuOpen(false);
     navigate("/login");
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-lg py-4 px-8 border-b border-slate-200">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <div
-          className="text-2xl font-bold text-blue-600 cursor-pointer"
-          onClick={() => navigate("/")}
+    <nav
+      className="fixed top-0 left-0 z-50 w-full border-b border-slate-200 bg-white/90 py-3 shadow-md backdrop-blur-md sm:px-4 lg:px-8"
+      aria-label="Main navigation"
+    >
+      <div className="container mx-auto flex flex-wrap items-center justify-between gap-2 px-2 sm:px-0">
+        <Link
+          to="/"
+          className="text-lg font-bold text-blue-600 sm:text-xl lg:text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md"
+          onClick={closeMenu}
         >
           Gym Management System
-        </div>
-        {/* Menu */}
-        <div className="flex space-x-8 text-lg font-medium items-center">
-          {/* Main navigation links */}
-          <Link
-            to="/"
-            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
-          >
+        </Link>
+
+        <button
+          type="button"
+          className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-800 lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+          {menuOpen ? (
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+
+        <div
+          id="primary-navigation"
+          className={`${menuOpen ? "flex" : "hidden"} w-full flex-col gap-1 border-t border-slate-200 pt-4 pb-2 lg:flex lg:w-auto lg:flex-row lg:items-center lg:gap-6 lg:border-0 lg:pb-0 lg:pt-0`}
+        >
+          <Link to="/" className={linkClass} onClick={closeMenu}>
             Home
           </Link>
-          <Link
-            to="/about"
-            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
-          >
+          <Link to="/about" className={linkClass} onClick={closeMenu}>
             About
           </Link>
-
-          <Link
-            to="/contact"
-            className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
-          >
+          <Link to="/contact" className={linkClass} onClick={closeMenu}>
             Contact
           </Link>
-          {/* Auth/User links */}
+
           {!role && (
             <>
               <Link
                 to="/login"
-                className="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-blue-600 hover:bg-blue-700 hover:text-white transition-all duration-200"
-                style={{ boxShadow: "0 4px 16px 0 rgba(59,130,246,0.15)" }}
+                className="ui-btn-primary justify-center text-center lg:min-h-0 lg:py-2"
+                onClick={closeMenu}
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg shadow-lg border-2 border-blue-600 hover:bg-blue-700 hover:text-white transition-all duration-200"
-                style={{ boxShadow: "0 4px 16px 0 rgba(59,130,246,0.15)" }}
+                className="ui-btn-ghost justify-center text-center lg:min-h-0 lg:py-2"
+                onClick={closeMenu}
               >
                 Register
               </Link>
             </>
           )}
+
           {role === "admin" && (
             <>
-              <Link
-                to="/admin-dashboard"
-                className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
-              >
+              <Link to="/admin-dashboard" className={linkClass} onClick={closeMenu}>
                 Dashboard
               </Link>
               <button
+                type="button"
                 onClick={handleLogout}
-                className="bg-blue-600 text-slate-900 px-4 py-2 rounded hover:bg-blue-700-dark transition-colors duration-200 font-semibold"
+                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0"
               >
                 Logout
               </button>
             </>
           )}
+
           {role === "student" && (
             <>
-              <Link
-                to="/student-dashboard"
-                className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
-              >
+              <Link to="/student-dashboard" className={linkClass} onClick={closeMenu}>
                 Dashboard
               </Link>
               <button
+                type="button"
                 onClick={handleLogout}
-                className="bg-blue-600 text-slate-900 px-4 py-2 rounded hover:bg-blue-700-dark transition-colors duration-200 font-semibold"
+                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0"
               >
                 Logout
               </button>
             </>
           )}
+
           {role === "trainer" && (
             <>
-              <Link
-                to="/trainer-dashboard"
-                className="text-slate-900 hover:text-blue-600 transition-colors duration-200"
-              >
+              <Link to="/trainer-dashboard" className={linkClass} onClick={closeMenu}>
                 Dashboard
               </Link>
               <button
+                type="button"
                 onClick={handleLogout}
-                className="bg-blue-600 text-slate-900 px-4 py-2 rounded hover:bg-blue-700-dark transition-colors duration-200 font-semibold"
+                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0"
               >
                 Logout
               </button>
@@ -142,4 +158,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

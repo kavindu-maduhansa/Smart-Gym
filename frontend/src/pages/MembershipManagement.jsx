@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -212,7 +212,7 @@ const MembershipManagement = () => {
     const styles = {
       monthly: "bg-blue-500 text-slate-900",
       quarterly: "bg-purple-500 text-slate-900",
-      annual: "bg-blue-600 text-slate-900",
+      annual: "bg-blue-600 text-white",
     };
 
     const labels = {
@@ -296,7 +296,7 @@ const MembershipManagement = () => {
               onClick={() => setFilter("all")}
               className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
                 filter === "all"
-                  ? "bg-blue-600 text-slate-900"
+                  ? "bg-blue-600 text-white"
                   : "bg-slate-100 border border-slate-300 text-slate-700 hover:bg-slate-200"
               }`}
             >

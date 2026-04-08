@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+﻿import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import apiClient from "../services/apiClient";
 import DatePicker from "react-datepicker";
@@ -104,6 +104,8 @@ const TrainerBooking = () => {
   const [slotBookings, setSlotBookings] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [slotFilterDate, setSlotFilterDate] = useState(null);
+  /** Slot tab: "all" | "ongoing" | "upcoming" | "finished" | "past" (calendar before today) */
+  const [slotLiveFilter, setSlotLiveFilter] = useState("all");
   const [editSlotModal, setEditSlotModal] = useState({ open: false, row: null });
   const [viewSlotModal, setViewSlotModal] = useState({ open: false, row: null });
   const [cancelledSlotNotifs, setCancelledSlotNotifs] = useState([]);
@@ -449,13 +451,13 @@ const TrainerBooking = () => {
 
         <div className="flex justify-center mb-8">
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ${tab === "trainer" ? "bg-blue-600 text-black" : "bg-white text-slate-900 hover:bg-slate-100"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ${tab === "trainer" ? "bg-blue-600 text-white" : "bg-white text-slate-900 hover:bg-slate-100"}`}
             onClick={() => setTab("trainer")}
           >
             Trainer Booking
           </button>
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 ${tab === "slot" ? "bg-blue-600 text-black" : "bg-white text-slate-900 hover:bg-slate-100"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 ${tab === "slot" ? "bg-blue-600 text-white" : "bg-white text-slate-900 hover:bg-slate-100"}`}
             onClick={() => setTab("slot")}
           >
             Slot Booking
@@ -569,7 +571,7 @@ const TrainerBooking = () => {
                                     </button>
                                   ) : (
                                     <button
-                                      className="bg-blue-600 text-slate-900 px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700/90 transition-all text-xs tracking-wider shadow-lg shadow-blue-600/20 active:scale-95"
+                                      className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700/90 transition-all text-xs tracking-wider shadow-lg shadow-blue-600/20 active:scale-95"
                                       onClick={() => openFeedback(b)}
                                     >
                                       Give Feedback
@@ -665,25 +667,53 @@ const TrainerBooking = () => {
                 </li>
               </ul>
             )}
-            <div className="flex flex-wrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200">
-              <span className="text-slate-500 font-bold uppercase text-sm tracking-wider">Filter:</span>
-              <div className="relative">
+            <div className="mb-6 flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row lg:flex-wrap lg:items-end lg:gap-4">
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-xs">
+                <label htmlFor="slot-booking-date-filter" className="text-sm font-semibold text-slate-700">
+                  Filter by date
+                </label>
                 <DatePicker
+                  id="slot-booking-date-filter"
                   selected={slotFilterDate}
                   onChange={(d) => setSlotFilterDate(d)}
-                  className="bg-black border border-slate-300 p-2 rounded text-slate-900 focus:outline-none focus:border-blue-600 min-w-[150px]"
-                  placeholderText="By date…"
+                  className="min-h-[44px] w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  placeholderText="Choose a day (optional)"
                   dateFormat="yyyy-MM-dd"
                   isClearable
+                  aria-describedby="slot-filter-hint"
                 />
               </div>
-              {slotFilterDate && (
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-xs">
+                <label htmlFor="slot-booking-status-filter" className="text-sm font-semibold text-slate-700">
+                  Filter by status
+                </label>
+                <select
+                  id="slot-booking-status-filter"
+                  value={slotLiveFilter}
+                  onChange={(e) => setSlotLiveFilter(e.target.value)}
+                  className="min-h-[44px] w-full cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  aria-describedby="slot-filter-hint"
+                >
+                  <option value="all">All statuses</option>
+                  <option value="ongoing">Ongoing (in progress now)</option>
+                  <option value="upcoming">Upcoming (not started)</option>
+                  <option value="finished">Finished (ended or past)</option>
+                  <option value="past">Past date (before today)</option>
+                </select>
+              </div>
+              <p id="slot-filter-hint" className="w-full text-xs text-slate-500 lg:basis-full lg:order-last">
+                Combine date and status to narrow the list. Use &quot;All statuses&quot; and no date to see everything.
+              </p>
+              {(slotFilterDate || slotLiveFilter !== "all") && (
                 <button
                   type="button"
-                  onClick={() => setSlotFilterDate(null)}
-                  className="bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded font-bold hover:bg-slate-100 text-sm"
+                  onClick={() => {
+                    setSlotFilterDate(null);
+                    setSlotLiveFilter("all");
+                  }}
+                  className="min-h-[44px] shrink-0 rounded-lg border border-slate-300 bg-slate-50 px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >
-                  Clear
+                  Clear filters
                 </button>
               )}
             </div>
@@ -692,18 +722,27 @@ const TrainerBooking = () => {
               <p className="text-center text-slate-600 py-10">Loading gym slot bookings…</p>
             ) : (
               (() => {
-                const filtered = sortGymSlotBookingsByLiveStatus(
-                  slotBookings.filter((b) =>
-                    slotFilterDate ? b.date === format(slotFilterDate, "yyyy-MM-dd") : true,
-                  ),
+                const byDate = slotBookings.filter((b) =>
+                  slotFilterDate ? b.date === format(slotFilterDate, "yyyy-MM-dd") : true,
                 );
+                const byStatus = byDate.filter((b) => {
+                  if (slotLiveFilter === "all") return true;
+                  const live = getGymSlotLiveStatus(b.date, b.startTime, b.endTime);
+                  const past = isPastScheduleDate(b.date);
+                  if (slotLiveFilter === "ongoing") return live === "ONGOING";
+                  if (slotLiveFilter === "upcoming") return live === "UPCOMING";
+                  if (slotLiveFilter === "finished") return live === "FINISHED";
+                  if (slotLiveFilter === "past") return past;
+                  return true;
+                });
+                const filtered = sortGymSlotBookingsByLiveStatus(byStatus);
                 if (filtered.length === 0) {
                   return (
                     <div className="text-center py-10 px-4 bg-blue-50/40 rounded-xl border border-slate-200">
                       <p className="text-slate-600 italic">
                         {slotBookings.length === 0
                           ? "You have not booked any gym slots yet."
-                          : "No bookings match this date."}
+                          : "No bookings match your filters. Try another date or status."}
                       </p>
                     </div>
                   );
@@ -725,17 +764,17 @@ const TrainerBooking = () => {
                       return (
                         <div
                           key={`${b.scheduleId}-${b.slotId}`}
-                          className={`flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-6 rounded-xl border transition-all ${
+                          className={`flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-5 sm:p-6 rounded-2xl border shadow-sm transition-all ${
                             past
-                              ? "bg-blue-50/20 border-white/5 opacity-70"
-                              : "bg-slate-50 border-slate-200 hover:bg-slate-100"
+                              ? "bg-slate-50 border-slate-200"
+                              : "bg-white border-slate-200 hover:border-blue-200 hover:shadow-md"
                           }`}
                         >
                           <div>
-                            <h3 className="text-xl font-bold text-blue-600">
+                            <h3 className="text-2xl font-bold text-blue-700 tracking-tight">
                               {b.startTime} – {b.endTime}
                             </h3>
-                            <p className="text-slate-500 text-sm mt-1">
+                            <p className="text-slate-600 text-sm mt-1 font-medium">
                               {b.date}
                               {b.dayLabel ? ` · ${b.dayLabel}` : ""}
                             </p>
@@ -743,36 +782,38 @@ const TrainerBooking = () => {
                               {(() => {
                                 const cls =
                                   live === "ONGOING"
-                                    ? "bg-blue-600/20 text-blue-600"
+                                    ? "bg-blue-100 text-blue-700 border border-blue-200"
                                     : live === "FINISHED"
-                                      ? "bg-slate-100 text-slate-500"
-                                      : "bg-green-500/15 text-green-700";
+                                      ? "bg-slate-100 text-slate-600 border border-slate-200"
+                                      : "bg-green-100 text-green-700 border border-green-200";
                                 return (
-                                  <span className={`font-bold uppercase text-xs px-2 py-1 rounded ${cls}`}>
+                                  <span className={`font-bold uppercase text-xs px-2.5 py-1 rounded-md ${cls}`}>
                                     {live}
                                   </span>
                                 );
                               })()}
                             </div>
                             {!past && live === "UPCOMING" && minsUntil < changeDeadlineMin ? (
-                              <p className="text-amber-300/90 text-xs mt-2">
+                              <p className="text-amber-700 bg-amber-50 border border-amber-200 inline-block rounded px-2 py-1 text-xs mt-2">
                                 Edit/Delete closes {changeDeadlineMin} minutes before start.
                               </p>
                             ) : null}
                             {b.bookedAt && (
-                              <p className="text-slate-600 text-xs mt-1">
+                              <p className="text-slate-500 text-xs mt-2">
                                 Booked {format(new Date(b.bookedAt), "yyyy-MM-dd HH:mm")}
                               </p>
                             )}
                             {past && (
-                              <p className="text-slate-600 text-xs mt-2 uppercase tracking-wide">Past date</p>
+                              <p className="text-slate-600 bg-slate-100 border border-slate-200 inline-block rounded px-2 py-1 text-xs mt-2 uppercase tracking-wide">
+                                Past date
+                              </p>
                             )}
                           </div>
                           <div className="flex flex-wrap gap-2 shrink-0">
                             <button
                               type="button"
                               onClick={() => setViewSlotModal({ open: true, row: b })}
-                              className="bg-slate-100 border border-white/25 text-slate-900 font-bold px-4 py-2 rounded hover:bg-white/15"
+                              className="min-w-[88px] bg-blue-50 border border-blue-200 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-100"
                             >
                               View
                             </button>
@@ -782,7 +823,7 @@ const TrainerBooking = () => {
                                   type="button"
                                   disabled={actionBusy}
                                   onClick={() => openEditSlot(b)}
-                                  className="bg-blue-600/90 text-black font-bold px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                                  className="min-w-[88px] bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
                                 >
                                   Edit
                                 </button>
@@ -795,7 +836,7 @@ const TrainerBooking = () => {
                                     text: 'Are you sure you want to release this gym slot booking?',
                                     onConfirm: () => deleteSlotBooking(b)
                                   })}
-                                  className="bg-red-500/20 text-red-700 border border-red-500/40 font-bold px-4 py-2 rounded hover:bg-red-500/30 disabled:opacity-50"
+                                  className="min-w-[88px] bg-red-50 text-red-700 border border-red-200 font-semibold px-4 py-2 rounded-lg hover:bg-red-100 disabled:opacity-50"
                                 >
                                   {slotActionKey === `del-${b.scheduleId}-${b.slotId}` ? "…" : "Delete"}
                                 </button>
@@ -930,7 +971,7 @@ const TrainerBooking = () => {
                   </p>
                   <label className="block text-slate-900 text-sm font-semibold mb-2">New slot</label>
                   <select
-                    className="w-full bg-black border border-slate-300 text-slate-900 rounded p-2 mb-2"
+                    className="mb-2 w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
                     value={moveTarget}
                     onChange={(e) => setMoveTarget(e.target.value)}
                   >
@@ -942,13 +983,13 @@ const TrainerBooking = () => {
                     ))}
                   </select>
                   {moveOptions.length === 0 && (
-                    <p className="text-amber-400/90 text-sm mb-4">No other open slots right now.</p>
+                    <p className="mb-4 text-sm text-amber-800">No other open slots right now.</p>
                   )}
                   <button
                     type="button"
                     disabled={!moveTarget || slotActionKey === `move-${editSlotModal.row.scheduleId}-${editSlotModal.row.slotId}`}
                     onClick={submitMoveSlot}
-                    className="w-full bg-blue-600 text-black font-bold py-2 rounded hover:bg-blue-700/90 disabled:opacity-50"
+                    className="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 disabled:opacity-50"
                   >
                     {slotActionKey === `move-${editSlotModal.row.scheduleId}-${editSlotModal.row.slotId}`
                       ? "Saving…"
@@ -1017,7 +1058,7 @@ const TrainerBooking = () => {
               </div>
 
               <button
-                className="w-full bg-blue-600 text-slate-900 font-bold py-3.5 rounded-xl hover:bg-blue-700/90 disabled:opacity-50 transition-all uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-[0.98]"
+                className="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:bg-blue-700/90 disabled:opacity-50 transition-all uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-[0.98]"
                 onClick={submitFeedback}
                 disabled={submitting || feedbackForm.rating === 0}
               >

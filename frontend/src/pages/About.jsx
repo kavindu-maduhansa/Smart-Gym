@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+﻿import { useNavigate } from "react-router-dom";
 import { FaDumbbell, FaUsers, FaClock } from "react-icons/fa";
 
 const About = () => {
@@ -117,23 +117,26 @@ const About = () => {
         ></div>
       </div>
 
-      <div className="relative z-10 pt-32 pb-20">
+      <div className="relative z-10 pt-32 pb-24">
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
-              <span className="text-slate-900">Smart Gym Management System</span>
+            <p className="hero-eyebrow mb-6">Built for real gyms</p>
+            <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight text-slate-900">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                Smart Gym
+              </span>{" "}
+              <span className="text-slate-900">Management System</span>
             </h1>
-            <p className="text-lg sm:text-xl text-slate-700 leading-relaxed">
-              Smart Gym Management System was created to make daily gym operations
-              clear and organized. Our goal is simple: help gyms spend less time
-              managing processes and more time supporting member results.
+            <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
+              We exist to make daily gym operations clear and calm. Spend less time juggling
+              paperwork and more time helping members succeed.
             </p>
           </div>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10 max-w-5xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">Who We Are</h2>
+          <div className="marketing-panel mx-auto max-w-5xl p-8 sm:p-10 md:p-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-slate-900">Who we are</h2>
             <p className="text-slate-700 text-base sm:text-lg leading-relaxed mb-4">
               We are a team focused on improving how modern gyms run. This
               platform brings together member management, scheduling, and key
@@ -150,16 +153,16 @@ const About = () => {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
-            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-              <p className="text-slate-700 leading-relaxed">
+            <div className="marketing-panel p-8 border-blue-100/80 bg-gradient-to-br from-white to-blue-50/30">
+              <h2 className="text-3xl font-bold mb-4 text-slate-900">Our mission</h2>
+              <p className="text-slate-600 leading-relaxed">
                 To help gyms run smoother by turning complex processes into simple,
                 clear, and connected digital workflows.
               </p>
             </div>
-            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
-              <p className="text-slate-700 leading-relaxed">
+            <div className="marketing-panel p-8 border-blue-100/80 bg-gradient-to-br from-white to-blue-50/30">
+              <h2 className="text-3xl font-bold mb-4 text-slate-900">Our vision</h2>
+              <p className="text-slate-600 leading-relaxed">
                 To become a trusted system that supports modern fitness centers in
                 delivering better member experiences every day.
               </p>
@@ -168,15 +171,17 @@ const About = () => {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10 max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-5">What This Platform Covers</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="marketing-panel mx-auto max-w-6xl p-8 sm:p-10 md:p-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-slate-900">What this platform covers</h2>
+            <p className="text-slate-600 mb-8 max-w-2xl">A single place for the workflows your team repeats every week.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               {highlights.map((item) => (
                 <div
                   key={item}
-                  className="border border-slate-200 rounded-xl px-5 py-4 bg-blue-50/20"
+                  className="flex gap-3 rounded-xl border border-blue-100 bg-blue-50/40 px-4 py-4 sm:px-5 transition hover:border-blue-200 hover:bg-blue-50/70"
                 >
-                  <p className="text-slate-800">{item}</p>
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" aria-hidden />
+                  <p className="text-slate-800 leading-relaxed">{item}</p>
                 </div>
               ))}
             </div>
@@ -184,8 +189,9 @@ const About = () => {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold">What We Value</h2>
+          <div className="section-intro mb-10 sm:mb-12">
+            <p className="section-kicker mb-2">Principles</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">What we value</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {values.map((value) => {
@@ -193,16 +199,13 @@ const About = () => {
               return (
                 <div
                   key={value.id}
-                  className="group relative backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8 hover:bg-white/15 hover:border-blue-600/50 transition-all duration-300 transform hover:scale-105"
+                  className="marketing-panel p-6 sm:p-8 transition hover:border-blue-200"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/0 group-hover:from-blue-600/10 group-hover:to-blue-600/5 rounded-2xl transition-all duration-300"></div>
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-center w-14 h-14 bg-blue-600/20 rounded-xl mb-5 group-hover:bg-blue-700/30 transition-colors duration-300">
-                      <Icon className="text-blue-600 text-2xl" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3">{value.title}</h3>
-                    <p className="text-slate-700">{value.description}</p>
+                  <div className="flex items-center justify-center w-14 h-14 bg-blue-600/15 rounded-xl mb-5">
+                    <Icon className="text-blue-600 text-2xl" />
                   </div>
+                  <h3 className="text-2xl font-bold mb-3 text-slate-900">{value.title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{value.description}</p>
                 </div>
               );
             })}
@@ -210,100 +213,104 @@ const About = () => {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold">Our Journey</h2>
+          <div className="section-intro mb-10 sm:mb-12">
+            <p className="section-kicker mb-2">Timeline</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Our journey</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {milestones.map((milestone) => (
               <div
                 key={milestone.id}
-                className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8"
+                className="marketing-panel p-6 sm:p-8 border-t-4 border-t-blue-500"
               >
                 <p className="text-blue-600 font-bold text-lg mb-2">{milestone.year}</p>
-                <h3 className="text-2xl font-bold mb-3">{milestone.title}</h3>
-                <p className="text-slate-700">{milestone.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-slate-900">{milestone.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{milestone.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold">Built for Every Gym Role</h2>
+          <div className="section-intro mb-10 sm:mb-12">
+            <p className="section-kicker mb-2">Roles</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Built for every gym role</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {teamRoles.map((item) => (
               <div
                 key={item.id}
-                className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8"
+                className="marketing-panel p-6 sm:p-8"
               >
-                <h3 className="text-2xl font-bold text-blue-600 mb-3">{item.role}</h3>
-                <p className="text-slate-700">{item.text}</p>
+                <h3 className="text-xl font-bold text-blue-600 mb-3">{item.role}</h3>
+                <p className="text-slate-600 leading-relaxed">{item.text}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold">Why Gyms Choose Us</h2>
+          <div className="section-intro mb-10">
+            <p className="section-kicker mb-2">Trust</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Why gyms choose us</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Easy</h3>
-              <p className="text-slate-700">Simple workflows for daily operations</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Fast</h3>
-              <p className="text-slate-700">Quick access to key gym tasks</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">Reliable</h3>
-              <p className="text-slate-700">Consistent support for members and staff</p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
+            {[
+              { t: "Easy", d: "Simple workflows for daily operations" },
+              { t: "Fast", d: "Quick access to key gym tasks" },
+              { t: "Reliable", d: "Consistent support for members and staff" },
+            ].map((x) => (
+              <div
+                key={x.t}
+                className="rounded-2xl border border-slate-200/90 bg-white/80 px-6 py-8 text-center shadow-sm backdrop-blur-sm transition hover:border-blue-200 hover:shadow-md"
+              >
+                <h3 className="text-3xl font-bold text-blue-600 mb-2 sm:text-4xl">{x.t}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{x.d}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold">Frequently Asked Questions</h2>
+          <div className="section-intro mb-10">
+            <p className="section-kicker mb-2">FAQ</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Frequently asked questions</h2>
           </div>
-          <div className="max-w-5xl mx-auto space-y-5">
+          <div className="max-w-5xl mx-auto space-y-4">
             {faqs.map((faq) => (
               <div
                 key={faq.id}
-                className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-6 sm:p-8"
+                className="marketing-panel p-6 sm:p-8"
               >
-                <h3 className="text-xl sm:text-2xl font-bold mb-2">{faq.question}</h3>
-                <p className="text-slate-700">{faq.answer}</p>
+                <h3 className="text-lg sm:text-xl font-bold mb-2 text-slate-900">{faq.question}</h3>
+                <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/10 to-blue-600/5 border border-blue-600/30 rounded-3xl p-8 sm:p-12 text-center max-w-5xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Explore the Platform
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <div className="marketing-panel mx-auto max-w-5xl overflow-hidden border-blue-200/60 bg-gradient-to-br from-blue-600/8 via-white to-blue-50/40 p-8 text-center sm:p-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-slate-900">
+              Explore the platform
             </h2>
-            <p className="text-slate-700 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
-              Take a look around and see how Smart Gym Management System supports
-              trainers, staff, and members in one connected workflow.
+            <p className="text-slate-600 text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+              See how Smart Gym supports trainers, staff, and members in one connected workflow.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="px-8 py-3 bg-blue-600 text-slate-900 font-bold rounded-lg hover:bg-blue-700/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-600/50"
+                className="ui-btn-primary px-8 justify-center"
               >
-                Create Account
+                Create account
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/")}
-                className="px-8 py-3 border-2 border-blue-600 text-blue-600 font-bold rounded-lg hover:bg-blue-700/10 transition-all duration-300 transform hover:scale-105"
+                className="ui-btn-ghost px-8 justify-center"
               >
-                Back to Home
+                Back to home
               </button>
             </div>
           </div>

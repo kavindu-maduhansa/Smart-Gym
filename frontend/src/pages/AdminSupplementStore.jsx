@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
@@ -168,7 +168,7 @@ const AdminSupplementStore = () => {
               </div>
               <button
                 onClick={() => setShowModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-slate-900 px-6 py-2 rounded-lg font-semibold transition"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition"
               >
                 Add Supplement
               </button>
@@ -230,7 +230,7 @@ const AdminSupplementStore = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEditSupplement(supplement)}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-slate-900 px-4 py-2 rounded transition text-sm font-semibold"
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition text-sm font-semibold"
                       >
                         Edit
                       </button>
@@ -337,7 +337,7 @@ const AdminSupplementStore = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-slate-900 px-4 py-2 rounded-lg font-semibold transition"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold transition"
                 >
                   {loading ? "Saving..." : "Save"}
                 </button>

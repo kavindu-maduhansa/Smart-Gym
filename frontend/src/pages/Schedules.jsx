@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+﻿import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -278,7 +278,7 @@ const TrainerAvailability = () => {
                       disabled={isExpired || bookingId === s._id}
                       className={`w-full font-bold py-3.5 rounded-xl transition-all uppercase text-xs tracking-wider relative z-10 ${isExpired
                         ? 'bg-slate-50 text-gray-700 cursor-not-allowed border border-white/5 mt-auto'
-                        : 'bg-blue-600 text-slate-900 hover:bg-blue-700/90 shadow-lg shadow-blue-600/20 active:scale-[0.96] mt-auto'
+                        : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-[0.96] mt-auto'
                         }`}
                     >
                       {isExpired ? "Expired" : (bookingId === s._id ? "Processing..." : "Book Now")}
@@ -620,7 +620,7 @@ const SlotAvailability = () => {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {selectedDayStr && (
-            <span className="text-xs px-3 py-2 rounded-full bg-black border border-slate-300 text-slate-800 font-semibold">
+            <span className="text-xs px-3 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-semibold">
               Selected day: <span className="text-slate-900">{selectedDayStr}</span>
             </span>
           )}
@@ -755,7 +755,7 @@ const SlotAvailability = () => {
               <button
                 type="button"
                 onClick={() => setCalendarMonth((m) => addMonthsLocal(m, -1))}
-                className="px-3 py-2 rounded bg-black border border-slate-300 text-slate-900 font-bold hover:bg-blue-50/80"
+                className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-blue-700 font-bold hover:bg-blue-50"
               >
                 ←
               </button>
@@ -765,7 +765,7 @@ const SlotAvailability = () => {
               <button
                 type="button"
                 onClick={() => setCalendarMonth((m) => addMonthsLocal(m, 1))}
-                className="px-3 py-2 rounded bg-black border border-slate-300 text-slate-900 font-bold hover:bg-blue-50/80"
+                className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-blue-700 font-bold hover:bg-blue-50"
               >
                 →
               </button>
@@ -805,7 +805,7 @@ const SlotAvailability = () => {
         <button
           type="button"
           onClick={clearFilters}
-          className="bg-blue-600 text-slate-900 px-4 py-2 rounded font-bold hover:bg-blue-700/90 transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors"
         >
           Clear filters
         </button>
@@ -815,19 +815,19 @@ const SlotAvailability = () => {
           type="date"
           value={fromDate}
           onChange={(e) => setFromDate(e.target.value)}
-          className="bg-black border border-slate-300 rounded px-3 py-2 text-slate-900"
+          className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
           placeholder="From"
         />
         <input
           type="date"
           value={toDate}
           onChange={(e) => setToDate(e.target.value)}
-          className="bg-black border border-slate-300 rounded px-3 py-2 text-slate-900"
+          className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
         />
         <DatePicker
           selected={filterDate}
           onChange={(d) => setFilterDate(d)}
-          className="bg-black border border-slate-300 rounded px-3 py-2 text-slate-900 w-auto"
+          className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 w-auto focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
           placeholderText="Exact day"
           dateFormat="yyyy-MM-dd"
           isClearable
@@ -929,7 +929,7 @@ const SlotAvailability = () => {
           <button
             type="button"
             onClick={() => setViewMode("calendar")}
-            className="bg-black border border-slate-300 text-slate-900 px-4 py-2 rounded font-bold hover:bg-blue-50/80 transition-colors"
+            className="bg-white border border-slate-300 text-blue-700 px-4 py-2 rounded-lg font-bold hover:bg-blue-50 transition-colors"
           >
             Back to calendar
           </button>
@@ -1004,7 +1004,7 @@ const SlotAvailability = () => {
                     type="button"
                     disabled={bookingKey === `${s.scheduleId}-${s.slotId}`}
                     onClick={() => handleBookSlot(s.scheduleId, s.slotId)}
-                    className="mt-3 w-full bg-blue-600 text-slate-900 font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-3 w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {bookingKey === `${s.scheduleId}-${s.slotId}` ? "Booking…" : "Book slot"}
                   </button>
@@ -1036,13 +1036,13 @@ const Schedules = () => {
         )}
         <div className="flex justify-center mb-8">
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 border ${tab === "trainer" ? "bg-blue-600 text-black border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 border ${tab === "trainer" ? "bg-blue-600 text-white border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
             onClick={() => setTab("trainer")}
           >
             Trainer Availability
           </button>
           <button
-            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 border ${tab === "slot" ? "bg-blue-600 text-black border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
+            className={`px-6 py-2 rounded-t-lg font-bold text-lg transition-colors duration-200 ml-2 border ${tab === "slot" ? "bg-blue-600 text-white border-blue-600/50" : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15 hover:border-blue-600/50"}`}
             onClick={() => setTab("slot")}
           >
             Slot Availability
