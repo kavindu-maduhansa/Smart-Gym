@@ -725,17 +725,17 @@ const TrainerBooking = () => {
                       return (
                         <div
                           key={`${b.scheduleId}-${b.slotId}`}
-                          className={`flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-6 rounded-xl border transition-all ${
+                          className={`flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-5 sm:p-6 rounded-2xl border shadow-sm transition-all ${
                             past
-                              ? "bg-blue-50/20 border-white/5 opacity-70"
-                              : "bg-slate-50 border-slate-200 hover:bg-slate-100"
+                              ? "bg-slate-50 border-slate-200"
+                              : "bg-white border-slate-200 hover:border-blue-200 hover:shadow-md"
                           }`}
                         >
                           <div>
-                            <h3 className="text-xl font-bold text-blue-600">
+                            <h3 className="text-2xl font-bold text-blue-700 tracking-tight">
                               {b.startTime} – {b.endTime}
                             </h3>
-                            <p className="text-slate-500 text-sm mt-1">
+                            <p className="text-slate-600 text-sm mt-1 font-medium">
                               {b.date}
                               {b.dayLabel ? ` · ${b.dayLabel}` : ""}
                             </p>
@@ -743,36 +743,38 @@ const TrainerBooking = () => {
                               {(() => {
                                 const cls =
                                   live === "ONGOING"
-                                    ? "bg-blue-600/20 text-blue-600"
+                                    ? "bg-blue-100 text-blue-700 border border-blue-200"
                                     : live === "FINISHED"
-                                      ? "bg-slate-100 text-slate-500"
-                                      : "bg-green-500/15 text-green-700";
+                                      ? "bg-slate-100 text-slate-600 border border-slate-200"
+                                      : "bg-green-100 text-green-700 border border-green-200";
                                 return (
-                                  <span className={`font-bold uppercase text-xs px-2 py-1 rounded ${cls}`}>
+                                  <span className={`font-bold uppercase text-xs px-2.5 py-1 rounded-md ${cls}`}>
                                     {live}
                                   </span>
                                 );
                               })()}
                             </div>
                             {!past && live === "UPCOMING" && minsUntil < changeDeadlineMin ? (
-                              <p className="text-amber-300/90 text-xs mt-2">
+                              <p className="text-amber-700 bg-amber-50 border border-amber-200 inline-block rounded px-2 py-1 text-xs mt-2">
                                 Edit/Delete closes {changeDeadlineMin} minutes before start.
                               </p>
                             ) : null}
                             {b.bookedAt && (
-                              <p className="text-slate-600 text-xs mt-1">
+                              <p className="text-slate-500 text-xs mt-2">
                                 Booked {format(new Date(b.bookedAt), "yyyy-MM-dd HH:mm")}
                               </p>
                             )}
                             {past && (
-                              <p className="text-slate-600 text-xs mt-2 uppercase tracking-wide">Past date</p>
+                              <p className="text-slate-600 bg-slate-100 border border-slate-200 inline-block rounded px-2 py-1 text-xs mt-2 uppercase tracking-wide">
+                                Past date
+                              </p>
                             )}
                           </div>
                           <div className="flex flex-wrap gap-2 shrink-0">
                             <button
                               type="button"
                               onClick={() => setViewSlotModal({ open: true, row: b })}
-                              className="bg-slate-100 border border-white/25 text-slate-900 font-bold px-4 py-2 rounded hover:bg-white/15"
+                              className="min-w-[88px] bg-blue-50 border border-blue-200 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-100"
                             >
                               View
                             </button>
@@ -782,7 +784,7 @@ const TrainerBooking = () => {
                                   type="button"
                                   disabled={actionBusy}
                                   onClick={() => openEditSlot(b)}
-                                  className="bg-blue-600/90 text-black font-bold px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                                  className="min-w-[88px] bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
                                 >
                                   Edit
                                 </button>
@@ -795,7 +797,7 @@ const TrainerBooking = () => {
                                     text: 'Are you sure you want to release this gym slot booking?',
                                     onConfirm: () => deleteSlotBooking(b)
                                   })}
-                                  className="bg-red-500/20 text-red-700 border border-red-500/40 font-bold px-4 py-2 rounded hover:bg-red-500/30 disabled:opacity-50"
+                                  className="min-w-[88px] bg-red-50 text-red-700 border border-red-200 font-semibold px-4 py-2 rounded-lg hover:bg-red-100 disabled:opacity-50"
                                 >
                                   {slotActionKey === `del-${b.scheduleId}-${b.slotId}` ? "…" : "Delete"}
                                 </button>

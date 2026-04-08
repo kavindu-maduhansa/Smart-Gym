@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const COLORS = {
+  pageBg: "#F2F2F2",
+  cardBg: "#FFFFFF",
+  cardSoft: "#EEF4FF",
+  line: "#E6E6E6",
+  text: "#1F2937",
+  textMuted: "#6B7280",
+  primary: "#2563EB",
+  primaryDark: "#1D4ED8",
+};
+
 const modalAnimationStyles = `
   @keyframes fadeIn {
     from {
@@ -162,11 +173,11 @@ const DisplayInventorysUser = () => {
 
   const getStatusBadgeColor = (status) => {
     const colors = {
-      pending: { bg: "bg-yellow-500/20", border: "border-yellow-400/30", text: "text-yellow-300", icon: "⏳" },
-      approved: { bg: "bg-green-500/20", border: "border-green-400/30", text: "text-green-300", icon: "✅" },
-      declined: { bg: "bg-red-500/20", border: "border-red-400/30", text: "text-red-300", icon: "❌" },
-      completed: { bg: "bg-blue-500/20", border: "border-blue-400/30", text: "text-blue-300", icon: "🎉" },
-      cancelled: { bg: "bg-gray-500/20", border: "border-gray-400/30", text: "text-gray-300", icon: "🚫" },
+      pending: { bg: "bg-yellow-100", border: "border-yellow-300", text: "text-yellow-800", icon: "⏳" },
+      approved: { bg: "bg-green-100", border: "border-green-300", text: "text-green-800", icon: "✅" },
+      declined: { bg: "bg-red-100", border: "border-red-300", text: "text-red-800", icon: "❌" },
+      completed: { bg: "bg-blue-100", border: "border-blue-300", text: "text-blue-800", icon: "🎉" },
+      cancelled: { bg: "bg-gray-100", border: "border-gray-300", text: "text-gray-700", icon: "🚫" },
     };
     return colors[status] || colors.pending;
   };
@@ -198,31 +209,31 @@ const DisplayInventorysUser = () => {
 
   const getConditionBadge = (condition) => {
     const badges = {
-      New: { bg: "bg-green-500/20", border: "border-green-400/30", text: "text-green-300", icon: "🆕" },
-      Good: { bg: "bg-blue-500/20", border: "border-blue-400/30", text: "text-blue-300", icon: "✅" },
-      Maintenance: { bg: "bg-yellow-500/20", border: "border-yellow-400/30", text: "text-yellow-300", icon: "🔧" },
-      Damaged: { bg: "bg-red-500/20", border: "border-red-400/30", text: "text-red-300", icon: "⚠️" },
+      New: { bg: "bg-green-100", border: "border-green-300", text: "text-green-800", icon: "🆕" },
+      Good: { bg: "bg-blue-100", border: "border-blue-300", text: "text-blue-800", icon: "✅" },
+      Maintenance: { bg: "bg-yellow-100", border: "border-yellow-300", text: "text-yellow-800", icon: "🔧" },
+      Damaged: { bg: "bg-red-100", border: "border-red-300", text: "text-red-800", icon: "⚠️" },
     };
     return badges[condition] || badges.Good;
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen overflow-hidden" style={{ backgroundColor: COLORS.pageBg, color: COLORS.text }}>
       <style>{modalAnimationStyles}</style>
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f2f2f2] via-[#f8faff] to-[#eaf1ff]"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage:
-              "linear-gradient(90deg, rgba(255,127,17,0.1) 1px, transparent 1px), linear-gradient(rgba(255,127,17,0.1) 1px, transparent 1px)",
+              "linear-gradient(90deg, rgba(37,99,235,0.08) 1px, transparent 1px), linear-gradient(rgba(37,99,235,0.08) 1px, transparent 1px)",
             backgroundSize: "50px 50px",
           }}
         ></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div
-          className="absolute bottom-20 right-10 w-72 h-72 bg-orange rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
+          className="absolute bottom-20 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
@@ -231,11 +242,11 @@ const DisplayInventorysUser = () => {
       <div className="relative z-10 pt-32 pb-20">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}
-          <div className="backdrop-blur-md bg-gradient-to-br from-orange/20 to-orange/10 border border-orange/30 rounded-2xl shadow-2xl p-6 sm:p-8 mb-12">
+          <div className="backdrop-blur-md bg-white border border-[#E6E6E6] rounded-2xl shadow-xl p-6 sm:p-8 mb-12">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <svg
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-orange mr-3 sm:mr-4"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 mr-3 sm:mr-4"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -248,17 +259,17 @@ const DisplayInventorysUser = () => {
                   />
                 </svg>
                 <div>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                  <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
                     Gym Equipment & Resources
                   </h1>
-                  <p className="text-gray-300 text-base sm:text-lg mt-2">
+                  <p className="text-gray-600 text-base sm:text-lg mt-2">
                     Browse available gym equipment in Good or New condition
                   </p>
                 </div>
               </div>
               <button
                 onClick={fetchUserBookings}
-                className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 whitespace-nowrap"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg whitespace-nowrap"
               >
                 📅 My Bookings
               </button>
@@ -274,12 +285,12 @@ const DisplayInventorysUser = () => {
                 placeholder="🔎 Search equipment..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-orange/30 text-white placeholder-gray-400 focus:border-orange focus:outline-none transition duration-300"
+                className="w-full px-4 py-3 rounded-xl bg-white border-2 border-blue-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:outline-none transition duration-300"
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-orange hover:text-orange/80"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-500"
                 >
                   ✕
                 </button>
@@ -289,23 +300,23 @@ const DisplayInventorysUser = () => {
             {/* Category Filter */}
             <div className="flex flex-wrap gap-3">
               {categories.map((cat) => {
-                let bgColor = "from-orange/30 to-orange/20 border-orange/40 text-orange-300";
-                let selectedBg = "from-orange to-orange/80 text-white";
+                let bgColor = "from-blue-100 to-blue-50 border-blue-200 text-blue-700";
+                let selectedBg = "from-blue-500 to-blue-600 text-white";
                 
                 if (cat === "Cardio") {
-                  bgColor = "from-red-500/30 to-red-600/20 border-red-500/40 text-red-300";
+                  bgColor = "from-red-100 to-red-50 border-red-200 text-red-700";
                   selectedBg = "from-red-500 to-red-600 text-white";
                 } else if (cat === "Strength") {
-                  bgColor = "from-blue-500/30 to-blue-600/20 border-blue-500/40 text-blue-300";
+                  bgColor = "from-indigo-100 to-indigo-50 border-indigo-200 text-indigo-700";
                   selectedBg = "from-blue-500 to-blue-600 text-white";
                 } else if (cat === "Accessories") {
-                  bgColor = "from-green-500/30 to-green-600/20 border-green-500/40 text-green-300";
+                  bgColor = "from-emerald-100 to-emerald-50 border-emerald-200 text-emerald-700";
                   selectedBg = "from-green-500 to-green-600 text-white";
                 } else if (cat === "Yoga") {
-                  bgColor = "from-purple-500/30 to-purple-600/20 border-purple-500/40 text-purple-300";
+                  bgColor = "from-purple-100 to-purple-50 border-purple-200 text-purple-700";
                   selectedBg = "from-purple-500 to-purple-600 text-white";
                 } else if (cat === "Weights") {
-                  bgColor = "from-yellow-500/30 to-yellow-600/20 border-yellow-500/40 text-yellow-300";
+                  bgColor = "from-amber-100 to-amber-50 border-amber-200 text-amber-700";
                   selectedBg = "from-yellow-500 to-yellow-600 text-white";
                 }
                 
@@ -331,7 +342,7 @@ const DisplayInventorysUser = () => {
             <div className="flex items-center justify-center py-20">
               <div className="text-center">
                 <div className="inline-block animate-spin mb-4">
-                  <svg className="w-12 h-12 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -340,33 +351,33 @@ const DisplayInventorysUser = () => {
                     />
                   </svg>
                 </div>
-                <p className="text-gray-300">Loading equipment...</p>
+                <p className="text-gray-600">Loading equipment...</p>
               </div>
             </div>
           ) : error ? (
-            <div className="backdrop-blur-md bg-red-500/20 border border-red-400/30 rounded-2xl p-12 text-center">
-              <svg className="w-12 h-12 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="backdrop-blur-md bg-red-50 border border-red-200 rounded-2xl p-12 text-center">
+              <svg className="w-12 h-12 text-red-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-red-300 font-semibold">{error}</p>
+              <p className="text-red-700 font-semibold">{error}</p>
               <button
                 onClick={fetchInventories}
-                className="mt-4 px-4 py-2 bg-orange hover:bg-orange/90 text-white rounded-lg transition"
+                className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
               >
                 Try Again
               </button>
             </div>
           ) : filteredInventories.length === 0 ? (
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-12 text-center">
-              <svg className="w-12 h-12 text-orange mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="backdrop-blur-md bg-white border border-[#E6E6E6] rounded-2xl p-12 text-center">
+              <svg className="w-12 h-12 text-blue-500 mx-auto mb-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <p className="text-gray-300 text-lg font-semibold">No equipment found</p>
-              <p className="text-gray-400 mt-2">Try adjusting your search or filter</p>
+              <p className="text-gray-700 text-lg font-semibold">No equipment found</p>
+              <p className="text-gray-500 mt-2">Try adjusting your search or filter</p>
             </div>
           ) : (
             <>
@@ -377,10 +388,10 @@ const DisplayInventorysUser = () => {
                   return (
                     <div
                       key={item._id}
-                      className="backdrop-blur-md bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl overflow-hidden hover:border-orange/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange/20"
+                      className="backdrop-blur-md bg-white border border-[#E6E6E6] rounded-xl overflow-hidden hover:border-blue-300 transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                     >
                       {/* Image */}
-                      <div className="h-40 w-full bg-gray-700/30 overflow-hidden rounded-t-xl">
+                      <div className="h-40 w-full bg-gray-100 overflow-hidden rounded-t-xl">
                         {item.image ? (
                           <img
                             src={`http://localhost:5000/uploads/${item.image}`}
@@ -388,7 +399,7 @@ const DisplayInventorysUser = () => {
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                           />
                         ) : (
-                          <div className="flex items-center justify-center h-full bg-gray-600/20">
+                          <div className="flex items-center justify-center h-full bg-gray-100">
                             <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path
                                 strokeLinecap="round"
@@ -402,10 +413,10 @@ const DisplayInventorysUser = () => {
 
                       {/* Content */}
                       <div className="p-4">
-                        <h3 className="font-bold text-white text-lg truncate mb-2">{item.itemName}</h3>
+                        <h3 className="font-bold text-gray-900 text-lg truncate mb-2">{item.itemName}</h3>
 
                         {/* Category */}
-                        <span className="inline-block px-3 py-1 bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-semibold rounded-full mb-3">
+                        <span className="inline-block px-3 py-1 bg-blue-100 border border-blue-200 text-blue-700 text-xs font-semibold rounded-full mb-3">
                           {item.category}
                         </span>
 
@@ -415,10 +426,10 @@ const DisplayInventorysUser = () => {
                         </div>
 
                         {/* Details */}
-                        <div className="space-y-2 text-sm text-gray-300 border-t border-white/10 pt-3 mt-3">
+                        <div className="space-y-2 text-sm text-gray-600 border-t border-gray-200 pt-3 mt-3">
                           <div className="flex justify-between">
                             <span>Available:</span>
-                            <span className="font-semibold text-orange">{item.quantity} units</span>
+                            <span className="font-semibold text-blue-700">{item.quantity} units</span>
                           </div>
                           {item.supplier && (
                             <div className="flex justify-between">
@@ -430,8 +441,8 @@ const DisplayInventorysUser = () => {
 
                         {/* Special Details */}
                         {item.specialDetails && (
-                          <div className="mt-3 p-2 bg-white/5 rounded border border-white/10">
-                            <p className="text-xs text-gray-400 line-clamp-2">{item.specialDetails}</p>
+                          <div className="mt-3 p-2 bg-gray-50 rounded border border-gray-200">
+                            <p className="text-xs text-gray-500 line-clamp-2">{item.specialDetails}</p>
                           </div>
                         )}
 
@@ -442,7 +453,7 @@ const DisplayInventorysUser = () => {
                               setSelectedItem(item);
                               openBookingForm();
                             }}
-                            className="w-full px-2 py-1.5 bg-gradient-to-r from-orange to-orange/80 hover:from-orange/90 hover:to-orange/70 text-white font-medium text-sm rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-orange/50">
+                            className="w-full px-2 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
                             📅 Book Equipment
                           </button>
                         </div>
@@ -453,9 +464,9 @@ const DisplayInventorysUser = () => {
               </div>
 
               {/* Summary */}
-              <div className="backdrop-blur-md bg-gradient-to-r from-orange/10 to-orange/5 border border-orange/30 rounded-2xl p-6 text-center">
-                <p className="text-gray-300">
-                  Found <span className="font-bold text-orange">{filteredInventories.length}</span> available equipment
+              <div className="backdrop-blur-md bg-white border border-[#E6E6E6] rounded-2xl p-6 text-center">
+                <p className="text-gray-700">
+                  Found <span className="font-bold text-blue-700">{filteredInventories.length}</span> available equipment
                 </p>
               </div>
             </>
@@ -467,19 +478,19 @@ const DisplayInventorysUser = () => {
 
       {/* MY BOOKINGS MODAL */}
       {showMyBookings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 modal-fade-in">
-          <div className="backdrop-blur-md bg-gradient-to-br from-white/15 to-white/5 border border-white/30 rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl modal-pop-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 modal-fade-in">
+          <div className="backdrop-blur-md bg-white border border-gray-200 rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl modal-pop-in">
             {/* Close Button */}
-            <div className="sticky top-0 flex justify-between items-center p-6 bg-gradient-to-r from-black/30 to-transparent border-b border-white/10">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="sticky top-0 flex justify-between items-center p-6 bg-white border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 My Bookings
               </h2>
               <button
                 onClick={() => setShowMyBookings(false)}
-                className="text-gray-300 hover:text-orange text-2xl font-bold transition"
+                className="text-gray-500 hover:text-blue-600 text-2xl font-bold transition"
               >
                 ✕
               </button>
@@ -489,11 +500,11 @@ const DisplayInventorysUser = () => {
             <div className="p-6">
               {userBookingsLoading ? (
                 <div className="flex items-center justify-center py-12">
-                  <p className="text-gray-400">⏳ Loading your bookings...</p>
+                  <p className="text-gray-600">⏳ Loading your bookings...</p>
                 </div>
               ) : userBookings.length === 0 ? (
                 <div className="flex items-center justify-center py-12">
-                  <p className="text-gray-400 text-center">
+                  <p className="text-gray-600 text-center">
                     <span className="text-2xl mb-2 block">📭</span>
                     You haven't made any bookings yet
                   </p>
@@ -503,11 +514,11 @@ const DisplayInventorysUser = () => {
                   {userBookings.map((booking) => {
                     const statusColor = getStatusBadgeColor(booking.status);
                     return (
-                      <div key={booking._id} className="bg-gray-800/50 border border-orange/20 rounded-lg p-4 hover:border-orange/50 transition">
+                      <div key={booking._id} className="bg-gray-50 border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition">
                         <div className="flex justify-between items-start mb-3">
                           <div>
-                            <h3 className="text-lg font-bold text-white">{booking.itemName}</h3>
-                            <p className="text-sm text-gray-400">Booking ID: {booking._id.slice(-8)}</p>
+                            <h3 className="text-lg font-bold text-gray-900">{booking.itemName}</h3>
+                            <p className="text-sm text-gray-500">Booking ID: {booking._id.slice(-8)}</p>
                           </div>
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColor.bg} border ${statusColor.border} ${statusColor.text}`}>
                             {statusColor.icon} {booking.status}
@@ -516,26 +527,26 @@ const DisplayInventorysUser = () => {
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
                           <div>
-                            <p className="text-gray-400">Quantity</p>
-                            <p className="font-semibold text-white">{booking.quantity} units</p>
+                            <p className="text-gray-500">Quantity</p>
+                            <p className="font-semibold text-gray-900">{booking.quantity} units</p>
                           </div>
                           <div>
-                            <p className="text-gray-400">Start Date</p>
-                            <p className="font-semibold text-white">{new Date(booking.requestedStartDate).toLocaleDateString()}</p>
+                            <p className="text-gray-500">Start Date</p>
+                            <p className="font-semibold text-gray-900">{new Date(booking.requestedStartDate).toLocaleDateString()}</p>
                           </div>
                           <div>
-                            <p className="text-gray-400">End Date</p>
-                            <p className="font-semibold text-white">{new Date(booking.requestedEndDate).toLocaleDateString()}</p>
+                            <p className="text-gray-500">End Date</p>
+                            <p className="font-semibold text-gray-900">{new Date(booking.requestedEndDate).toLocaleDateString()}</p>
                           </div>
                           <div>
-                            <p className="text-gray-400">Purpose</p>
-                            <p className="font-semibold text-white line-clamp-1">{booking.purpose}</p>
+                            <p className="text-gray-500">Purpose</p>
+                            <p className="font-semibold text-gray-900 line-clamp-1">{booking.purpose}</p>
                           </div>
                         </div>
 
                         {booking.adminNotes && (
-                          <div className="bg-blue-500/10 border border-blue-500/20 rounded p-3 mb-3">
-                            <p className="text-sm text-blue-300"><strong>✉️ Admin Notes:</strong> {booking.adminNotes}</p>
+                          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-3">
+                            <p className="text-sm text-blue-700"><strong>✉️ Admin Notes:</strong> {booking.adminNotes}</p>
                           </div>
                         )}
 
@@ -562,14 +573,14 @@ const DisplayInventorysUser = () => {
 
       {/* BOOKING FORM MODAL */}
       {showBookingForm && selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 modal-fade-in">
-          <div className="backdrop-blur-md bg-gradient-to-br from-white/15 to-white/5 border border-white/30 rounded-2xl max-w-md w-full shadow-2xl modal-pop-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 modal-fade-in">
+          <div className="backdrop-blur-md bg-white border border-gray-200 rounded-2xl max-w-md w-full shadow-2xl modal-pop-in">
             {/* Close Button */}
-            <div className="flex justify-between items-center p-6 border-b border-white/10">
-              <h2 className="text-2xl font-bold text-orange">Book Equipment</h2>
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-blue-700">Book Equipment</h2>
               <button
                 onClick={closeBookingForm}
-                className="text-gray-300 hover:text-orange text-2xl font-bold transition"
+                className="text-gray-500 hover:text-blue-600 text-2xl font-bold transition"
               >
                 ✕
               </button>
@@ -578,14 +589,14 @@ const DisplayInventorysUser = () => {
             {/* Form Content */}
             <div className="p-6 space-y-4">
               {/* Item Info */}
-              <div className="p-3 bg-orange/10 border border-orange/30 rounded-lg">
-                <p className="text-sm text-gray-400">Item:</p>
-                <p className="text-lg font-bold text-white">{selectedItem.itemName}</p>
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-gray-500">Item:</p>
+                <p className="text-lg font-bold text-gray-900">{selectedItem.itemName}</p>
               </div>
 
               {/* Quantity */}
               <div>
-                <label className="block text-sm text-gray-300 mb-2">Quantity</label>
+                <label className="block text-sm text-gray-700 mb-2">Quantity</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="number"
@@ -593,62 +604,62 @@ const DisplayInventorysUser = () => {
                     max={selectedItem.quantity}
                     value={bookingFormData.quantity}
                     onChange={(e) => handleBookingChange("quantity", e.target.value)}
-                    className="flex-1 px-3 py-2 bg-white/10 border border-orange/30 text-white rounded-lg focus:border-orange focus:outline-none"
+                    className="flex-1 px-3 py-2 bg-white border border-blue-200 text-gray-900 rounded-lg focus:border-blue-500 focus:outline-none"
                   />
-                  <span className="text-sm text-gray-400">Max: {selectedItem.quantity}</span>
+                  <span className="text-sm text-gray-500">Max: {selectedItem.quantity}</span>
                 </div>
               </div>
 
               {/* Purpose */}
               <div>
-                <label className="block text-sm text-gray-300 mb-2">Purpose of Booking</label>
+                <label className="block text-sm text-gray-700 mb-2">Purpose of Booking</label>
                 <textarea
                   value={bookingFormData.purpose}
                   onChange={(e) => handleBookingChange("purpose", e.target.value)}
                   placeholder="Explain why you need this equipment..."
-                  className="w-full px-3 py-2 h-20 bg-white/10 border border-orange/30 text-white rounded-lg focus:border-orange focus:outline-none resize-none placeholder-gray-500"
+                  className="w-full px-3 py-2 h-20 bg-white border border-blue-200 text-gray-900 rounded-lg focus:border-blue-500 focus:outline-none resize-none placeholder-gray-400"
                 />
               </div>
 
               {/* Start Date and Time */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm text-gray-300 mb-2">Start Date</label>
+                  <label className="block text-sm text-gray-700 mb-2">Start Date</label>
                   <input
                     type="date"
                     value={bookingFormData.startDate}
                     onChange={(e) => handleBookingChange("startDate", e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-orange/30 text-white rounded-lg focus:border-orange focus:outline-none"
+                    className="w-full px-3 py-2 bg-white border border-blue-200 text-gray-900 rounded-lg focus:border-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-300 mb-2">Start Time</label>
+                  <label className="block text-sm text-gray-700 mb-2">Start Time</label>
                   <input
                     type="time"
                     value={bookingFormData.startTime}
                     onChange={(e) => handleBookingChange("startTime", e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-orange/30 text-white rounded-lg focus:border-orange focus:outline-none"
+                    className="w-full px-3 py-2 bg-white border border-blue-200 text-gray-900 rounded-lg focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* End Time Only */}
               <div>
-                <label className="block text-sm text-gray-300 mb-2">End Time (Same Day)</label>
+                <label className="block text-sm text-gray-700 mb-2">End Time (Same Day)</label>
                 <input
                   type="time"
                   value={bookingFormData.endTime}
                   onChange={(e) => handleBookingChange("endTime", e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-orange/30 text-white rounded-lg focus:border-orange focus:outline-none"
+                  className="w-full px-3 py-2 bg-white border border-blue-200 text-gray-900 rounded-lg focus:border-blue-500 focus:outline-none"
                 />
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-white/10">
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
                   onClick={handleSubmitBooking}
                   disabled={bookingLoading}
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-orange to-orange/80 hover:from-orange/90 hover:to-orange/70 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all duration-300"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all duration-300"
                 >
                   {bookingLoading ? "Submitting..." : "Submit Booking"}
                 </button>

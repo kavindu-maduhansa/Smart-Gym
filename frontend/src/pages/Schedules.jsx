@@ -620,7 +620,7 @@ const SlotAvailability = () => {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {selectedDayStr && (
-            <span className="text-xs px-3 py-2 rounded-full bg-black border border-slate-300 text-slate-800 font-semibold">
+            <span className="text-xs px-3 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-semibold">
               Selected day: <span className="text-slate-900">{selectedDayStr}</span>
             </span>
           )}
@@ -755,7 +755,7 @@ const SlotAvailability = () => {
               <button
                 type="button"
                 onClick={() => setCalendarMonth((m) => addMonthsLocal(m, -1))}
-                className="px-3 py-2 rounded bg-black border border-slate-300 text-slate-900 font-bold hover:bg-blue-50/80"
+                className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-blue-700 font-bold hover:bg-blue-50"
               >
                 ←
               </button>
@@ -765,7 +765,7 @@ const SlotAvailability = () => {
               <button
                 type="button"
                 onClick={() => setCalendarMonth((m) => addMonthsLocal(m, 1))}
-                className="px-3 py-2 rounded bg-black border border-slate-300 text-slate-900 font-bold hover:bg-blue-50/80"
+                className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-blue-700 font-bold hover:bg-blue-50"
               >
                 →
               </button>
@@ -805,7 +805,7 @@ const SlotAvailability = () => {
         <button
           type="button"
           onClick={clearFilters}
-          className="bg-blue-600 text-slate-900 px-4 py-2 rounded font-bold hover:bg-blue-700/90 transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors"
         >
           Clear filters
         </button>
@@ -815,19 +815,19 @@ const SlotAvailability = () => {
           type="date"
           value={fromDate}
           onChange={(e) => setFromDate(e.target.value)}
-          className="bg-black border border-slate-300 rounded px-3 py-2 text-slate-900"
+          className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
           placeholder="From"
         />
         <input
           type="date"
           value={toDate}
           onChange={(e) => setToDate(e.target.value)}
-          className="bg-black border border-slate-300 rounded px-3 py-2 text-slate-900"
+          className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
         />
         <DatePicker
           selected={filterDate}
           onChange={(d) => setFilterDate(d)}
-          className="bg-black border border-slate-300 rounded px-3 py-2 text-slate-900 w-auto"
+          className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 w-auto focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
           placeholderText="Exact day"
           dateFormat="yyyy-MM-dd"
           isClearable
@@ -929,7 +929,7 @@ const SlotAvailability = () => {
           <button
             type="button"
             onClick={() => setViewMode("calendar")}
-            className="bg-black border border-slate-300 text-slate-900 px-4 py-2 rounded font-bold hover:bg-blue-50/80 transition-colors"
+            className="bg-white border border-slate-300 text-blue-700 px-4 py-2 rounded-lg font-bold hover:bg-blue-50 transition-colors"
           >
             Back to calendar
           </button>

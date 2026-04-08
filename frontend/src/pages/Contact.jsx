@@ -256,64 +256,76 @@ const Contact = () => {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8 sm:p-10">
+            <div className="backdrop-blur-md bg-white border border-slate-200 rounded-2xl p-8 sm:p-10 shadow-sm">
               <h2 className="text-3xl sm:text-4xl font-bold mb-6">Send an Inquiry</h2>
-              <div className="space-y-5">
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  onBlur={handleFieldBlur}
-                  placeholder="Your name"
-                  maxLength={60}
-                  aria-invalid={Boolean(errors.name)}
-                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 ${
-                    errors.name ? "border-red-400" : "border-slate-300"
-                  }`}
-                />
+              <div className="space-y-4">
+                <label className="block">
+                  <span className="block text-sm font-semibold text-slate-700 mb-2">Your name</span>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    onBlur={handleFieldBlur}
+                    placeholder="Enter your full name"
+                    maxLength={60}
+                    aria-invalid={Boolean(errors.name)}
+                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 ${
+                      errors.name ? "border-red-400" : "border-slate-300"
+                    }`}
+                  />
+                </label>
                 {errors.name ? <p className="text-sm text-red-700 -mt-3">{errors.name}</p> : null}
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={handleFieldBlur}
-                  placeholder="Your email"
-                  maxLength={120}
-                  aria-invalid={Boolean(errors.email)}
-                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 ${
-                    errors.email ? "border-red-400" : "border-slate-300"
-                  }`}
-                />
+                <label className="block">
+                  <span className="block text-sm font-semibold text-slate-700 mb-2">Your email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    onBlur={handleFieldBlur}
+                    placeholder="name@example.com"
+                    maxLength={120}
+                    aria-invalid={Boolean(errors.email)}
+                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 ${
+                      errors.email ? "border-red-400" : "border-slate-300"
+                    }`}
+                  />
+                </label>
                 {errors.email ? <p className="text-sm text-red-700 -mt-3">{errors.email}</p> : null}
-                <input
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleInputChange}
-                  onBlur={handleFieldBlur}
-                  placeholder="Subject"
-                  maxLength={120}
-                  aria-invalid={Boolean(errors.subject)}
-                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 ${
-                    errors.subject ? "border-red-400" : "border-slate-300"
-                  }`}
-                />
+                <label className="block">
+                  <span className="block text-sm font-semibold text-slate-700 mb-2">Subject</span>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    onBlur={handleFieldBlur}
+                    placeholder="What can we help you with?"
+                    maxLength={120}
+                    aria-invalid={Boolean(errors.subject)}
+                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 ${
+                      errors.subject ? "border-red-400" : "border-slate-300"
+                    }`}
+                  />
+                </label>
                 {errors.subject ? <p className="text-sm text-red-700 -mt-3">{errors.subject}</p> : null}
-                <textarea
-                  rows="5"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  onBlur={handleFieldBlur}
-                  placeholder="Write your message"
-                  maxLength={1000}
-                  aria-invalid={Boolean(errors.message)}
-                  className={`w-full px-4 py-3 rounded-lg bg-blue-50/40 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 resize-none ${
-                    errors.message ? "border-red-400" : "border-slate-300"
-                  }`}
-                ></textarea>
+                <label className="block">
+                  <span className="block text-sm font-semibold text-slate-700 mb-2">Message</span>
+                  <textarea
+                    rows="6"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    onBlur={handleFieldBlur}
+                    placeholder="Write your message here..."
+                    maxLength={1000}
+                    aria-invalid={Boolean(errors.message)}
+                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 resize-none ${
+                      errors.message ? "border-red-400" : "border-slate-300"
+                    }`}
+                  ></textarea>
+                </label>
                 <div className="flex items-center justify-between -mt-3">
                   {errors.message ? <p className="text-sm text-red-700">{errors.message}</p> : <span />}
                   <p className="text-xs text-slate-500">{formData.message.length}/1000</p>
@@ -332,7 +344,7 @@ const Contact = () => {
                     type="button"
                     onClick={handleSendMessage}
                     disabled={sending}
-                    className="bg-blue-600 hover:bg-blue-700/90 text-slate-900 font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 sm:px-8 py-2.5 rounded-lg transition-all duration-300 text-sm sm:text-base disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {sending ? "Sending..." : "Send Message"}
                   </button>
