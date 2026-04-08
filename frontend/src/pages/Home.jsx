@@ -71,7 +71,7 @@ const Home = () => {
       icon: FaBox,
       title: "Inventories",
       description: "Manage gym equipment and resources effectively.",
-      route: "/inventory-management",
+      route: "/disply-inventorys-user",
     },
   ];
 

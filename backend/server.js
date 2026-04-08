@@ -23,7 +23,7 @@ import contactRoutes from "./routes/contactRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import planRoutes from "./routes/planRoutes.js";
 import gymScheduleRoutes from "./routes/gymScheduleRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 
 const app = express();
 
@@ -92,7 +92,7 @@ app.use('/api/feedback', feedbackRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/gym-schedules", gymScheduleRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Smart Gym chatbot + booking integration endpoints:
 // POST /chat, GET /get-slots, POST /book-slot, POST /cancel-slot

@@ -3,6 +3,25 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import gymBg from "../assets/gym-bg.jpg";
 
+const modalAnimationStyles = `
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes popIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .modal-fade-in { animation: fadeIn 0.3s ease-out; }
+  .modal-pop-in { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+`;
+
 function ManageInventory() {
   const [items, setItems] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -286,6 +305,22 @@ function ManageInventory() {
         .item-card {
           animation: fadeInUp 0.6s ease-out forwards;
         }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes popIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+        .modal-fade-in { animation: fadeIn 0.3s ease-out; }
+        .modal-pop-in { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
       `}</style>
 
       <div className={`relative z-10 flex flex-col min-h-screen ${isTransitioning ? "transitioning-out" : ""}`}>
@@ -337,10 +372,10 @@ function ManageInventory() {
                 <p className="text-slate-700 text-lg">📭 No items found</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* ================= ITEMS LIST ================= */}
-                <div className="lg:col-span-3">
-                  <h2 className="text-xl font-bold text-blue-500 mb-4">
+                <div className="lg:col-span-2">
+                  <h2 className="text-xl font-bold text-orange-400 mb-4">
                     Items ({filteredItems.length})
                   </h2>
                   <div className="space-y-5 max-h-[calc(100vh-280px)] overflow-y-auto pr-3">
@@ -411,7 +446,7 @@ function ManageInventory() {
                 </div>
 
                 {/* ================= EDIT FORM ================= */}
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-2">
                   {editingId ? (
                     <div className={`bg-gradient-to-br from-[#BFDBFE]/85 to-[#DBEAFE]/85 backdrop-blur-md p-6 rounded-2xl border-2 border-blue-600/50 shadow-xl sticky top-8 ${isFormAnimating ? 'form-enter' : 'form-exit'}`}
                       onAnimationEnd={() => {
