@@ -68,10 +68,10 @@ const AdminOrderManagement = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
@@ -118,7 +118,7 @@ const AdminOrderManagement = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full bg-blue-50/40 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-blue-600 transition"
+                  className="w-full rounded-xl border border-slate-300 bg-blue-50/40 px-4 py-3 text-slate-900 transition focus:border-blue-600 focus:outline-none dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100"
                 >
                   <option value="All">All Status</option>
                   <option value="Processing">Processing</option>
@@ -132,7 +132,7 @@ const AdminOrderManagement = () => {
                 <select
                   value={methodFilter}
                   onChange={(e) => setMethodFilter(e.target.value)}
-                  className="w-full bg-blue-50/40 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-blue-600 transition"
+                  className="w-full rounded-xl border border-slate-300 bg-blue-50/40 px-4 py-3 text-slate-900 transition focus:border-blue-600 focus:outline-none dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100"
                 >
                   <option value="All">All Methods</option>
                   <option value="Home Delivery">Home Delivery</option>
@@ -143,11 +143,11 @@ const AdminOrderManagement = () => {
           </div>
 
           {/* Orders Table */}
-          <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-2xl">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-2xl backdrop-blur-md dark:border-slate-600 dark:bg-slate-900/95">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="bg-slate-100 text-slate-500 uppercase text-xs tracking-widest font-bold border-b border-slate-200">
+                  <tr className="border-b border-slate-200 bg-slate-100 text-xs font-bold uppercase tracking-widest text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100">
                     <th className="px-4 py-3">Order ID</th>
                     <th className="px-4 py-3">Customer</th>
                     <th className="px-4 py-3">Date</th>
@@ -158,12 +158,15 @@ const AdminOrderManagement = () => {
                     <th className="px-4 py-3">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-200/80 dark:divide-slate-700">
                   {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
                       <React.Fragment key={order._id}>
-                        <tr className="hover:bg-slate-50 transition group cursor-pointer" onClick={() => toggleRow(order._id)}>
-                          <td className="px-4 py-3 font-mono text-sm text-slate-500 group-hover:text-slate-900">
+                        <tr
+                          className="group cursor-pointer bg-white/80 transition hover:bg-slate-50 dark:bg-slate-950/30 dark:hover:bg-slate-800/50"
+                          onClick={() => toggleRow(order._id)}
+                        >
+                          <td className="px-4 py-3 font-mono text-sm text-slate-500 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-slate-100">
                             <div className="flex items-center gap-2">
                               <svg className={`w-3 h-3 transition-transform ${expandedRows[order._id] ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" />
@@ -172,36 +175,47 @@ const AdminOrderManagement = () => {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="font-semibold text-slate-900">{order.user?.name || 'Unknown'}</p>
-                            <p className="text-xs text-slate-600">{order.user?.email || 'N/A'}</p>
+                            <p className="font-semibold text-slate-900 dark:text-slate-50">{order.user?.name || "Unknown"}</p>
+                            <p className="text-xs text-slate-600 dark:text-slate-400">{order.user?.email || "N/A"}</p>
                           </td>
-                          <td className="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">
+                          <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
                             {new Date(order.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap inline-block shadow-sm border ${order.deliveryMethod === 'Pickup at Counter' ? 'bg-purple-100/80 text-purple-700 border-purple-200' : 'bg-blue-100/80 text-blue-700 border-blue-200'}`}>
+                            <span
+                              className={`inline-block whitespace-nowrap rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm ${
+                                order.deliveryMethod === "Pickup at Counter"
+                                  ? "border-purple-200 bg-purple-100/80 text-purple-800 dark:border-purple-500/40 dark:bg-purple-950/60 dark:text-purple-100"
+                                  : "border-blue-200 bg-blue-100/80 text-blue-800 dark:border-blue-500/40 dark:bg-sky-950/55 dark:text-sky-100"
+                              }`}
+                            >
                               {order.deliveryMethod}
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="text-xs bg-slate-100 px-2 py-1 rounded text-slate-700">
+                            <span className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200">
                               {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
                             </span>
                           </td>
-                          <td className="px-4 py-3 font-black text-slate-900 whitespace-nowrap">
+                          <td className="whitespace-nowrap px-4 py-3 font-black text-slate-900 dark:text-slate-50">
                             Rs. {order.totalAmount.toFixed(2)}
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap shadow-sm border ${order.status === 'Delivered' ? 'bg-green-100/80 text-green-700 border-green-200' :
-                              order.status === 'Processing' ? 'bg-amber-100/80 text-amber-700 border-amber-200' :
-                                'bg-blue-100/80 text-blue-700 border-blue-200'
-                              }`}>
+                            <span
+                              className={`whitespace-nowrap rounded-full border px-3 py-1 text-xs font-bold shadow-sm ${
+                                order.status === "Delivered"
+                                  ? "border-green-200 bg-green-100/80 text-green-800 dark:border-emerald-500/35 dark:bg-emerald-950/55 dark:text-emerald-100"
+                                  : order.status === "Processing"
+                                    ? "border-amber-200 bg-amber-100/80 text-amber-900 dark:border-amber-500/35 dark:bg-amber-950/50 dark:text-amber-100"
+                                    : "border-blue-200 bg-blue-100/80 text-blue-800 dark:border-blue-500/35 dark:bg-sky-950/50 dark:text-sky-100"
+                              }`}
+                            >
                               {order.status}
                             </span>
                           </td>
                           <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                             <select
-                              className="bg-white border border-slate-200 shadow-sm rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer whitespace-nowrap"
+                              className="cursor-pointer whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
                               value={order.status}
                               onChange={(e) => handleUpdateStatus(order._id, e.target.value)}
                             >
@@ -213,40 +227,47 @@ const AdminOrderManagement = () => {
                           </td>
                         </tr>
                         {expandedRows[order._id] && (
-                          <tr className="bg-slate-50 border-l-2 border-blue-600 animate-in fade-in slide-in-from-top-2 duration-200">
+                          <tr className="animate-in fade-in slide-in-from-top-2 border-l-2 border-blue-600 bg-slate-50 duration-200 dark:bg-slate-900/90">
                             <td colSpan="8" className="px-12 py-6">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
-                                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-4">Product Details</h4>
+                                  <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+                                    Product Details
+                                  </h4>
                                   <div className="space-y-3">
                                     {order.items.map((item, idx) => (
-                                      <div key={idx} className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-white/5">
+                                      <div
+                                        key={idx}
+                                        className="flex items-center justify-between rounded-lg border border-slate-200/80 bg-slate-50 p-3 dark:border-slate-600 dark:bg-slate-800/80"
+                                      >
                                         <div>
-                                          <p className="text-sm font-semibold text-slate-900">{item.name}</p>
-                                          <p className="text-xs text-slate-500">Rs. {item.price.toFixed(2)} each</p>
+                                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.name}</p>
+                                          <p className="text-xs text-slate-500 dark:text-slate-400">Rs. {item.price.toFixed(2)} each</p>
                                         </div>
                                         <div className="text-right">
-                                          <p className="text-sm font-bold text-blue-500">Qty: {item.quantity}</p>
-                                          <p className="text-xs text-slate-900">Rs. {(item.price * item.quantity).toFixed(2)}</p>
+                                          <p className="text-sm font-bold text-blue-500 dark:text-blue-400">Qty: {item.quantity}</p>
+                                          <p className="text-xs text-slate-900 dark:text-slate-200">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                                         </div>
                                       </div>
                                     ))}
                                   </div>
                                 </div>
-                                <div className="bg-blue-50/40 p-6 rounded-2xl border border-white/5">
-                                  <h4 className="text-xs font-bold text-slate-600 uppercase tracking-widest mb-4">Order Summary</h4>
+                                <div className="rounded-2xl border border-slate-200/80 bg-blue-50/40 p-6 dark:border-slate-600 dark:bg-slate-800/70">
+                                  <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">
+                                    Order Summary
+                                  </h4>
                                   <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
-                                      <span className="text-slate-500">Payment Status</span>
-                                      <span className="text-green-700 font-bold uppercase text-xs">{order.paymentStatus}</span>
+                                      <span className="text-slate-500 dark:text-slate-400">Payment Status</span>
+                                      <span className="text-xs font-bold uppercase text-green-700 dark:text-emerald-300">{order.paymentStatus}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="text-slate-500">Delivery Identifier</span>
-                                      <span className="text-slate-700 font-mono text-xs">{order._id.substring(4)}</span>
+                                      <span className="text-slate-500 dark:text-slate-400">Delivery Identifier</span>
+                                      <span className="font-mono text-xs text-slate-700 dark:text-slate-300">{order._id.substring(4)}</span>
                                     </div>
-                                    <div className="pt-4 border-t border-slate-200 flex justify-between items-baseline">
-                                      <span className="text-slate-900 font-bold">Total Amount</span>
-                                      <span className="text-blue-600 text-xl font-black">Rs. {order.totalAmount.toFixed(2)}</span>
+                                    <div className="flex items-baseline justify-between border-t border-slate-200 pt-4 dark:border-slate-600">
+                                      <span className="font-bold text-slate-900 dark:text-slate-100">Total Amount</span>
+                                      <span className="text-xl font-black text-blue-600 dark:text-blue-400">Rs. {order.totalAmount.toFixed(2)}</span>
                                     </div>
                                   </div>
                                 </div>

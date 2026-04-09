@@ -99,9 +99,9 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{
@@ -151,18 +151,18 @@ const About = () => {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
-            <div className="marketing-panel p-8 border-blue-100/80 bg-gradient-to-br from-white to-blue-50/30">
-              <h2 className="text-3xl font-bold mb-4 text-slate-900">Our mission</h2>
-              <p className="text-slate-600 leading-relaxed">
+        <section className="container mx-auto mb-16 px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
+            <div className="marketing-panel border-blue-100/80 bg-gradient-to-br from-white to-blue-50/30 p-8 dark:border-blue-500/25 dark:from-slate-900 dark:via-slate-800/95 dark:to-slate-950 dark:shadow-lg dark:shadow-slate-950/30">
+              <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-slate-50">Our mission</h2>
+              <p className="leading-relaxed text-slate-600 dark:text-slate-300">
                 To help gyms run smoother by turning complex processes into simple,
                 clear, and connected digital workflows.
               </p>
             </div>
-            <div className="marketing-panel p-8 border-blue-100/80 bg-gradient-to-br from-white to-blue-50/30">
-              <h2 className="text-3xl font-bold mb-4 text-slate-900">Our vision</h2>
-              <p className="text-slate-600 leading-relaxed">
+            <div className="marketing-panel border-blue-100/80 bg-gradient-to-br from-white to-blue-50/30 p-8 dark:border-blue-500/25 dark:from-slate-900 dark:via-slate-800/95 dark:to-slate-950 dark:shadow-lg dark:shadow-slate-950/30">
+              <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-slate-50">Our vision</h2>
+              <p className="leading-relaxed text-slate-600 dark:text-slate-300">
                 To become a trusted system that supports modern fitness centers in
                 delivering better member experiences every day.
               </p>
@@ -290,11 +290,11 @@ const About = () => {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="marketing-panel mx-auto max-w-5xl overflow-hidden border-blue-200/60 bg-gradient-to-br from-blue-600/8 via-white to-blue-50/40 p-8 text-center sm:p-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-slate-900">
+          <div className="marketing-panel mx-auto max-w-5xl overflow-hidden border-blue-200/60 bg-gradient-to-br from-blue-600/8 via-white to-blue-50/40 p-8 text-center sm:p-12 dark:border-blue-500/25 dark:from-slate-900 dark:via-slate-800 dark:to-slate-950 dark:shadow-xl dark:shadow-slate-950/40">
+            <h2 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl dark:text-slate-50">
               Explore the platform
             </h2>
-            <p className="text-slate-600 text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg dark:text-slate-300">
               See how Smart Gym supports trainers, staff, and members in one connected workflow.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">

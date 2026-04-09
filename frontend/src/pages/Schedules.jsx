@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -1023,7 +1023,7 @@ const Schedules = () => {
   const isStudentView = payload?.role === "student";
   const [tab, setTab] = useState("trainer");
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative">
+    <div className="page-bg-base pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
       <div className="max-w-6xl mx-auto backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl p-8">
         <h1 className="text-4xl font-bold text-blue-600 mb-8 text-center">

@@ -1,8 +1,43 @@
 ﻿import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useTheme } from "../contexts/ThemeContext.jsx";
 
 const linkClass =
-  "rounded-md px-2 py-2 text-base font-medium text-slate-900 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+  "rounded-md px-2 py-2 text-base font-medium text-slate-900 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-100 dark:hover:text-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-900";
+
+function ThemeToggleButton({ className = "" }) {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className={`inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-800 shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-amber-200 dark:hover:bg-slate-700 dark:focus-visible:ring-blue-400 ${className}`}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Light mode" : "Dark mode"}
+    >
+      {isDark ? (
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+        </svg>
+      ) : (
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -43,40 +78,43 @@ const Navbar = () => {
 
   return (
     <nav
-      className="fixed top-0 left-0 z-50 w-full border-b border-slate-200 bg-white/90 py-3 shadow-md backdrop-blur-md sm:px-4 lg:px-8"
+      className="fixed top-0 left-0 z-50 w-full border-b border-slate-200 bg-white/90 py-3 shadow-md backdrop-blur-md transition-colors dark:border-slate-700 dark:bg-slate-900/90 sm:px-4 lg:px-8"
       aria-label="Main navigation"
     >
       <div className="container mx-auto flex flex-wrap items-center justify-between gap-2 px-2 sm:px-0">
         <Link
           to="/"
-          className="text-lg font-bold text-blue-600 sm:text-xl lg:text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md"
+          className="order-1 text-lg font-bold text-blue-600 sm:text-xl lg:text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md dark:text-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-900"
           onClick={closeMenu}
         >
           Gym Management System
         </Link>
 
-        <button
-          type="button"
-          className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-800 lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-          aria-expanded={menuOpen}
-          aria-controls="primary-navigation"
-          onClick={() => setMenuOpen((o) => !o)}
-        >
-          <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
-          {menuOpen ? (
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+        <div className="order-2 flex items-center gap-2 lg:hidden">
+          <ThemeToggleButton />
+          <button
+            type="button"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+            {menuOpen ? (
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
 
         <div
           id="primary-navigation"
-          className={`${menuOpen ? "flex" : "hidden"} w-full flex-col gap-1 border-t border-slate-200 pt-4 pb-2 lg:flex lg:w-auto lg:flex-row lg:items-center lg:gap-6 lg:border-0 lg:pb-0 lg:pt-0`}
+          className={`${menuOpen ? "flex" : "hidden"} order-3 w-full flex-col gap-1 border-t border-slate-200 pt-4 pb-2 dark:border-slate-700 lg:order-2 lg:flex lg:w-auto lg:flex-1 lg:flex-row lg:justify-end lg:items-center lg:gap-4 lg:border-0 lg:pb-0 lg:pt-0 xl:gap-6`}
         >
           <Link to="/" className={linkClass} onClick={closeMenu}>
             Home
@@ -115,7 +153,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0"
+                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0 dark:focus-visible:ring-offset-slate-900"
               >
                 Logout
               </button>
@@ -130,7 +168,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0"
+                className="rounded-lg bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] lg:min-h-0 dark:focus-visible:ring-offset-slate-900"
               >
                 Logout
               </button>
@@ -151,6 +189,10 @@ const Navbar = () => {
               </button>
             </>
           )}
+        </div>
+
+        <div className="order-4 hidden lg:flex lg:items-center lg:pl-2">
+          <ThemeToggleButton />
         </div>
       </div>
     </nav>

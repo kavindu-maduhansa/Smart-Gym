@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -62,10 +62,10 @@ const StudentSupplementStore = () => {
       : supplements.filter((s) => s.category === filteredCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{

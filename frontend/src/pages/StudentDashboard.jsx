@@ -55,7 +55,7 @@ const StudentDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 pt-24 flex items-center justify-center px-4">
+      <div className="page-bg-base pt-24 flex items-center justify-center px-4">
         <div className="marketing-panel w-full max-w-md p-10 text-center">
           <div
             className="mx-auto mb-4 h-11 w-11 rounded-full border-2 border-blue-600 border-t-transparent animate-spin"
@@ -70,7 +70,7 @@ const StudentDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 pt-24 flex items-center justify-center px-4">
+      <div className="page-bg-base pt-24 flex items-center justify-center px-4">
         <div className="marketing-panel w-full max-w-lg border-red-200 bg-red-50/50 p-8 text-center">
           <p className="text-red-800 font-semibold text-lg">Something went wrong</p>
           <p className="mt-2 text-sm text-red-900/80">{error}</p>
@@ -90,10 +90,10 @@ const StudentDashboard = () => {
   const isExpired = membershipStatus === "Expired";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)", backgroundSize: "50px 50px" }}></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: "2s" }}></div>
@@ -157,56 +157,124 @@ const StudentDashboard = () => {
           )}
 
           <div className="mb-4">
-            <h2 className="text-2xl font-bold text-slate-900">Shortcuts</h2>
-            <p className="mt-1 text-sm text-slate-600">Jump to the tools you use most.</p>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Shortcuts</h2>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">Jump to the tools you use most.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12">
+          <div className="mb-12 grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               { icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z", title: "My Profile", desc: "View personal information", link: "/profile" },
               { icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z", title: "Membership", desc: "View membership details", link: "/membership" },
               { icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2", title: "My Plans", desc: "View training & meal plans", link: "/my-plans" },
               { icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", title: "My Bookings", desc: "View your bookings", link: "/my-bookings" },
-              { icon: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z", title: "Settings", desc: "Edit profile & account", link: "/edit-profile" }
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                role="button"
-                tabIndex={0}
-                onClick={() => navigate(item.link)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    navigate(item.link);
+              { icon: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z", title: "My settings", desc: "Account & sign-in details", link: "/my-settings" }
+            ].map((item, idx) => {
+              const isSettings = item.link === "/my-settings";
+              return (
+                <div
+                  key={idx}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(item.link)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      navigate(item.link);
+                    }
+                  }}
+                  aria-label={isSettings ? "Open my settings for your account" : `${item.title}: ${item.desc}`}
+                  className={
+                    isSettings
+                      ? "group cursor-pointer rounded-2xl border-2 border-blue-200/90 bg-gradient-to-br from-white to-blue-50/50 p-5 shadow-md shadow-blue-600/10 outline-none transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-600/15 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-blue-500/35 dark:from-slate-900 dark:to-slate-800/95 dark:shadow-slate-950/50 dark:hover:border-blue-400/60 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950 sm:p-6"
+                      : "group tile-interactive p-5 sm:p-6"
                   }
-                }}
-                className="group tile-interactive p-5 sm:p-6"
-              >
-                <div className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-blue-600/15 rounded-xl mb-4 group-hover:bg-blue-600/25 transition-colors">
-                  <svg className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                  </svg>
+                >
+                  {isSettings ? (
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-600/15 transition-colors group-hover:bg-blue-600/25 dark:bg-blue-500/15 dark:group-hover:bg-blue-500/25">
+                          <svg
+                            className="h-7 w-7 text-blue-600 dark:text-blue-400"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d={item.icon}
+                            />
+                          </svg>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 sm:text-xl">
+                            {item.title}
+                          </h3>
+                          <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                            {item.desc}
+                          </p>
+                          <p className="mt-2 text-xs leading-snug text-slate-500 dark:text-slate-400">
+                            Review your member details and update your name or email.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-end gap-2 border-t border-slate-200/90 pt-3 text-blue-600 dark:border-slate-600 dark:text-blue-400 sm:border-t-0 sm:pt-0">
+                        <span className="text-sm font-bold tracking-wide">Open</span>
+                        <svg
+                          className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-0.5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600/15 transition-colors group-hover:bg-blue-600/25 sm:h-14 sm:w-14">
+                        <svg
+                          className="h-6 w-6 text-blue-600 dark:text-blue-400 sm:h-7 sm:w-7"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
+                        </svg>
+                      </div>
+                      <h3 className="mb-1 text-lg font-bold text-slate-900 dark:text-slate-50 sm:text-xl">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 sm:text-sm">
+                        {item.desc}
+                      </p>
+                    </>
+                  )}
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1">{item.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="marketing-panel p-6 sm:p-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Account details</h2>
-            <p className="text-sm text-slate-600 mb-6">A quick snapshot of your Smart Gym profile.</p>
+            <h2 className="mb-2 text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-50">Account details</h2>
+            <p className="mb-6 text-sm text-slate-600 dark:text-slate-300">A quick snapshot of your Smart Gym profile.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="rounded-xl border border-slate-200/90 bg-blue-50/40 p-4 transition hover:border-blue-200 hover:bg-white">
-                <p className="text-slate-500 text-xs sm:text-sm mb-2">Account type</p>
-                <p className="text-slate-900 text-lg sm:text-xl font-bold capitalize">{user?.role}</p>
+              <div className="rounded-xl border border-slate-200/90 bg-blue-50/40 p-4 transition hover:border-blue-200 hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:hover:border-blue-500/40 dark:hover:bg-slate-800">
+                <p className="mb-2 text-xs text-slate-500 sm:text-sm dark:text-slate-400">Account type</p>
+                <p className="text-lg font-bold capitalize text-slate-900 sm:text-xl dark:text-slate-50">{user?.role}</p>
               </div>
-              <div className="rounded-xl border border-slate-200/90 bg-blue-50/40 p-4 transition hover:border-blue-200 hover:bg-white">
-                <p className="text-slate-500 text-xs sm:text-sm mb-2">Email</p>
-                <p className="text-slate-900 text-lg sm:text-xl font-bold truncate">{user?.email}</p>
+              <div className="rounded-xl border border-slate-200/90 bg-blue-50/40 p-4 transition hover:border-blue-200 hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:hover:border-blue-500/40 dark:hover:bg-slate-800">
+                <p className="mb-2 text-xs text-slate-500 sm:text-sm dark:text-slate-400">Email</p>
+                <p className="truncate text-lg font-bold text-slate-900 sm:text-xl dark:text-slate-50">{user?.email}</p>
               </div>
-              <div className="rounded-xl border border-slate-200/90 bg-blue-50/40 p-4 transition hover:border-blue-200 hover:bg-white">
-                <p className="text-slate-500 text-xs sm:text-sm mb-2">Member since</p>
-                <p className="text-slate-900 text-lg sm:text-xl font-bold">
+              <div className="rounded-xl border border-slate-200/90 bg-blue-50/40 p-4 transition hover:border-blue-200 hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:hover:border-blue-500/40 dark:hover:bg-slate-800">
+                <p className="mb-2 text-xs text-slate-500 sm:text-sm dark:text-slate-400">Member since</p>
+                <p className="text-lg font-bold text-slate-900 sm:text-xl dark:text-slate-50">
                   {formatDate(user?.createdAt)}
                 </p>
               </div>

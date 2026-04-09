@@ -165,7 +165,7 @@ const Checkout = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 flex items-center justify-center">
+      <div className="page-bg-base flex items-center justify-center">
         <p className="text-slate-500">Loading checkout...</p>
       </div>
     );
@@ -175,10 +175,10 @@ const Checkout = () => {
   const total = cart.totalPrice + shippingCost;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{

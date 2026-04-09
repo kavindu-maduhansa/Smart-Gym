@@ -89,7 +89,7 @@ const TrainerStudents = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
+      <div className="page-bg-base flex items-center justify-center">
         <div className="text-blue-600 text-2xl animate-pulse font-bold uppercase tracking-widest">
           Loading...
         </div>
@@ -98,7 +98,7 @@ const TrainerStudents = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 relative overflow-hidden pt-24 pb-20 px-6">
+    <div className="page-bg-base relative overflow-hidden pt-24 pb-20 px-6">
       {/* Background Elements */}
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
 

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -14,7 +14,8 @@ import Leaderboard from "./pages/Leaderboard";
 // STUDENT
 import Profile from "./pages/Profile";
 import StudentDashboard from "./pages/StudentDashboard";
-import EditProfile from "./pages/EditProfile";
+import SiteSettings from "./pages/SiteSettings";
+import EditAccount from "./pages/EditAccount";
 import Membership from "./pages/Membership";
 import RenewMembership from "./pages/RenewMembership";
 import StudentSupplementStore from "./pages/StudentSupplementStore";
@@ -69,7 +70,10 @@ function App() {
         {/* ================= STUDENT ================= */}
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/student-dashboard" element={<ProtectedRoute requiredRole="student"><StudentDashboard /></ProtectedRoute>} />
-        <Route path="/edit-profile" element={<ProtectedRoute requiredRole="student"><EditProfile /></ProtectedRoute>} />
+        <Route path="/edit-profile" element={<Navigate to="/my-settings" replace />} />
+        <Route path="/site-settings" element={<Navigate to="/my-settings" replace />} />
+        <Route path="/my-settings" element={<ProtectedRoute requiredRole="student"><SiteSettings /></ProtectedRoute>} />
+        <Route path="/edit-account" element={<ProtectedRoute requiredRole="student"><EditAccount /></ProtectedRoute>} />
         <Route path="/membership" element={<ProtectedRoute requiredRole="student"><Membership /></ProtectedRoute>} />
         <Route path="/renew-membership" element={<ProtectedRoute requiredRole="student"><RenewMembership /></ProtectedRoute>} />
         <Route path="/supplement-store" element={<ProtectedRoute><StudentSupplementStore /></ProtectedRoute>} />

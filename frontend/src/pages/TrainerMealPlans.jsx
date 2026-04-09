@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTrash, FaDownload, FaUserPlus, FaUtensils, FaLeaf, FaEdit } from "react-icons/fa";
 
@@ -160,7 +160,7 @@ const TrainerMealPlans = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-6 relative print:p-0">
+        <div className="page-bg-base pt-24 px-6 relative print:p-0">
             {/* Background Effects */}
             <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10 print:hidden"></div>
 

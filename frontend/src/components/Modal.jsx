@@ -7,42 +7,42 @@ const Modal = ({ isOpen, title, children, onClose, actionButtons = [] }) => {
     <>
       {/* BACKDROP */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm z-40 transition-opacity duration-300"
+        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm transition-opacity duration-300 dark:bg-black/50"
         onClick={onClose}
       />
 
       {/* MODAL CONTAINER */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100 opacity-100">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="max-h-[90vh] w-full max-w-2xl scale-100 transform overflow-y-auto rounded-2xl border border-slate-200 bg-white opacity-100 shadow-2xl transition-all duration-300 dark:border-slate-600 dark:bg-slate-900">
           {/* HEADER */}
-          <div className="sticky top-0 bg-gradient-to-r from-white to-blue-50 border-b border-slate-200 p-6 flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-blue-600">{title}</h2>
+          <div className="sticky top-0 flex items-center justify-between border-b border-slate-200 bg-gradient-to-r from-white to-blue-50 p-6 dark:border-slate-600 dark:from-slate-900 dark:to-slate-800">
+            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400">{title}</h2>
             <button
               onClick={onClose}
-              className="text-slate-500 hover:text-blue-600 transition text-2xl leading-none"
+              className="text-2xl leading-none text-slate-500 transition hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
             >
               ✕
             </button>
           </div>
 
           {/* CONTENT */}
-          <div className="p-6 text-slate-700">
+          <div className="p-6 text-slate-700 dark:text-slate-300">
             {children}
           </div>
 
           {/* FOOTER - ACTION BUTTONS */}
           {actionButtons.length > 0 && (
-            <div className="border-t border-slate-200 p-6 bg-slate-50 flex gap-3 justify-end rounded-b-2xl">
+            <div className="flex gap-3 justify-end rounded-b-2xl border-t border-slate-200 bg-slate-50 p-6 dark:border-slate-600 dark:bg-slate-800/90">
               {actionButtons.map((btn, idx) => (
                 <button
                   key={idx}
                   onClick={btn.onClick}
-                  className={`px-6 py-2 rounded-lg font-semibold transition ${
+                  className={`rounded-lg px-6 py-2 font-semibold transition ${
                     btn.variant === "primary"
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
                       : btn.variant === "danger"
-                      ? "bg-red-600 hover:bg-red-700 text-white"
-                      : "bg-slate-200 hover:bg-slate-300 text-slate-700"
+                      ? "bg-red-600 text-white hover:bg-red-700"
+                      : "bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                   }`}
                 >
                   {btn.label}

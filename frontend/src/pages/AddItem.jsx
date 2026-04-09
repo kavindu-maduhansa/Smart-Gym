@@ -38,7 +38,6 @@ function AddItem() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isExiting, setIsExiting] = useState(false);
   const [errors, setErrors] = useState({});
-  const PAGE_BG = "#F2F2F2";
   const BORDER = "#E6E6E6";
 
   const handleImageChange = (e) => {
@@ -170,10 +169,7 @@ function AddItem() {
   };
 
   return (
-    <div
-      className="min-h-screen text-slate-900 flex flex-col"
-      style={{ backgroundColor: PAGE_BG }}
-    >
+    <div className="surface-app">
       <style>{modalAnimationStyles}</style>
       <style>{`
         @keyframes slideOutLeft {

@@ -52,7 +52,7 @@ const Leaderboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
+      <div className="page-bg-base flex items-center justify-center">
         <div className="text-blue-600 text-2xl animate-pulse font-bold uppercase tracking-widest">
           Loading...
         </div>
@@ -61,7 +61,7 @@ const Leaderboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 pt-24 px-4 md:px-10 pb-20">
+    <div className="page-bg-base pt-24 px-4 md:px-10 pb-20">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">

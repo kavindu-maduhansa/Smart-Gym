@@ -185,9 +185,9 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 text-slate-900 overflow-hidden">
+    <div className="page-bg-base overflow-hidden">
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
+        <div className="absolute inset-0 ambient-gradient"></div>
         <div
           className="absolute inset-0 opacity-5"
           style={{
@@ -221,11 +221,11 @@ const Contact = () => {
               ].map((s) => (
                 <div
                   key={s.l}
-                  className="rounded-2xl border border-slate-200/90 bg-white/85 px-5 py-5 shadow-md backdrop-blur-sm"
+                  className="rounded-2xl border border-slate-200/90 bg-white/85 px-5 py-5 shadow-md backdrop-blur-sm dark:border-slate-600 dark:bg-slate-800/95 dark:shadow-lg dark:shadow-slate-950/30"
                 >
-                  <h3 className="text-2xl font-bold text-blue-600 sm:text-3xl">{s.n}</h3>
-                  <p className="mt-1 font-semibold text-slate-900">{s.l}</p>
-                  <p className="mt-1 text-xs text-slate-600">{s.d}</p>
+                  <h3 className="text-2xl font-bold text-blue-600 sm:text-3xl dark:text-blue-400">{s.n}</h3>
+                  <p className="mt-1 font-semibold text-slate-900 dark:text-slate-50">{s.l}</p>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">{s.d}</p>
                 </div>
               ))}
             </div>
@@ -255,12 +255,14 @@ const Contact = () => {
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="marketing-panel p-8 sm:p-10 border-blue-100/80 bg-gradient-to-br from-white to-blue-50/20">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-slate-900">Send an inquiry</h2>
-              <p className="text-slate-600 text-sm mb-8">Fields marked with validation will highlight if something needs attention.</p>
+            <div className="marketing-panel border-blue-100/80 bg-gradient-to-br from-white to-blue-50/20 p-8 sm:p-10 dark:border-blue-500/20 dark:from-slate-900 dark:to-slate-900/95">
+              <h2 className="mb-2 text-3xl font-bold text-slate-900 sm:text-4xl dark:text-slate-50">Send an inquiry</h2>
+              <p className="mb-8 text-sm text-slate-600 dark:text-slate-300">
+                Fields marked with validation will highlight if something needs attention.
+              </p>
               <div className="space-y-4">
                 <label className="block">
-                  <span className="block text-sm font-semibold text-slate-700 mb-2">Your name</span>
+                  <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Your name</span>
                   <input
                     type="text"
                     name="name"
@@ -270,14 +272,14 @@ const Contact = () => {
                     placeholder="Enter your full name"
                     maxLength={60}
                     aria-invalid={Boolean(errors.name)}
-                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 ${
+                    className={`w-full rounded-lg border bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-blue-500/35 ${
                       errors.name ? "border-red-400" : "border-slate-300"
                     }`}
                   />
                 </label>
                 {errors.name ? <p className="text-sm text-red-700 -mt-3">{errors.name}</p> : null}
                 <label className="block">
-                  <span className="block text-sm font-semibold text-slate-700 mb-2">Your email</span>
+                  <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Your email</span>
                   <input
                     type="email"
                     name="email"
@@ -287,14 +289,14 @@ const Contact = () => {
                     placeholder="name@example.com"
                     maxLength={120}
                     aria-invalid={Boolean(errors.email)}
-                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 ${
+                    className={`w-full rounded-lg border bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-blue-500/35 ${
                       errors.email ? "border-red-400" : "border-slate-300"
                     }`}
                   />
                 </label>
                 {errors.email ? <p className="text-sm text-red-700 -mt-3">{errors.email}</p> : null}
                 <label className="block">
-                  <span className="block text-sm font-semibold text-slate-700 mb-2">Subject</span>
+                  <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Subject</span>
                   <input
                     type="text"
                     name="subject"
@@ -304,14 +306,14 @@ const Contact = () => {
                     placeholder="What can we help you with?"
                     maxLength={120}
                     aria-invalid={Boolean(errors.subject)}
-                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 ${
+                    className={`w-full rounded-lg border bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-blue-500/35 ${
                       errors.subject ? "border-red-400" : "border-slate-300"
                     }`}
                   />
                 </label>
                 {errors.subject ? <p className="text-sm text-red-700 -mt-3">{errors.subject}</p> : null}
                 <label className="block">
-                  <span className="block text-sm font-semibold text-slate-700 mb-2">Message</span>
+                  <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Message</span>
                   <textarea
                     rows="6"
                     name="message"
@@ -321,14 +323,14 @@ const Contact = () => {
                     placeholder="Write your message here..."
                     maxLength={1000}
                     aria-invalid={Boolean(errors.message)}
-                    className={`w-full px-4 py-3 rounded-lg border bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 resize-none ${
+                    className={`w-full resize-none rounded-lg border bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-blue-500/35 ${
                       errors.message ? "border-red-400" : "border-slate-300"
                     }`}
                   ></textarea>
                 </label>
                 <div className="flex items-center justify-between -mt-3">
                   {errors.message ? <p className="text-sm text-red-700">{errors.message}</p> : <span />}
-                  <p className="text-xs text-slate-500">{formData.message.length}/1000</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{formData.message.length}/1000</p>
                 </div>
                 {feedback.text && (
                   <p
@@ -363,26 +365,26 @@ const Contact = () => {
 
             <div className="space-y-8">
               <div className="marketing-panel p-8 sm:p-10">
-                <div className="flex items-center gap-3 mb-5">
-                  <FaClock className="text-blue-600 text-2xl" />
-                  <h2 className="text-2xl font-bold text-slate-900">Opening hours</h2>
+                <div className="mb-5 flex items-center gap-3">
+                  <FaClock className="text-2xl text-blue-600 dark:text-blue-400" />
+                  <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Opening hours</h2>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-0 rounded-xl border border-slate-200/90 bg-slate-50/90 p-4 dark:border-slate-600 dark:bg-slate-800/90">
                   {hours.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between border-b border-slate-200 pb-3"
+                      className="flex items-center justify-between border-b border-slate-200/80 py-3 last:border-b-0 dark:border-slate-600/80"
                     >
-                      <p className="text-slate-700">{item.day}</p>
-                      <p className="text-slate-900 font-semibold">{item.time}</p>
+                      <p className="text-slate-700 dark:text-slate-200">{item.day}</p>
+                      <p className="font-semibold text-slate-900 dark:text-slate-50">{item.time}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="marketing-panel border-blue-100/80 bg-gradient-to-br from-blue-600/5 to-white p-8 sm:p-10">
-                <h2 className="text-2xl font-bold mb-3 text-slate-900">Need help fast?</h2>
-                <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+              <div className="marketing-panel border-blue-100/80 bg-gradient-to-br from-blue-600/5 to-white p-8 sm:p-10 dark:border-blue-500/20 dark:from-slate-900 dark:to-slate-900/95">
+                <h2 className="mb-3 text-2xl font-bold text-slate-900 dark:text-slate-50">Need help fast?</h2>
+                <p className="mb-6 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   For urgent membership or account issues, call us during opening hours for the quickest response.
                 </p>
                 <button
