@@ -138,12 +138,12 @@ const Checkout = () => {
           shippingDetails:
             deliveryMethod === "Home Delivery"
               ? {
-                  fullName: formData.fullName,
-                  address: formData.address,
-                  city: formData.city,
-                  postalCode: formData.postalCode,
-                  country: formData.country,
-                }
+                fullName: formData.fullName,
+                address: formData.address,
+                city: formData.city,
+                postalCode: formData.postalCode,
+                country: formData.country,
+              }
               : undefined,
         },
         {
@@ -215,11 +215,10 @@ const Checkout = () => {
                     <button
                       type="button"
                       onClick={() => setDeliveryMethod("Home Delivery")}
-                      className={`p-4 rounded-xl border transition flex flex-col items-center gap-2 ${
-                        deliveryMethod === "Home Delivery"
+                      className={`p-4 rounded-xl border transition flex flex-col items-center gap-2 ${deliveryMethod === "Home Delivery"
                           ? "bg-blue-600/20 border-blue-600 text-blue-500"
                           : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"
-                      }`}
+                        }`}
                     >
                       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -229,11 +228,10 @@ const Checkout = () => {
                     <button
                       type="button"
                       onClick={() => setDeliveryMethod("Pickup at Counter")}
-                      className={`p-4 rounded-xl border transition flex flex-col items-center gap-2 ${
-                        deliveryMethod === "Pickup at Counter"
+                      className={`p-4 rounded-xl border transition flex flex-col items-center gap-2 ${deliveryMethod === "Pickup at Counter"
                           ? "bg-blue-600/20 border-blue-600 text-blue-500"
                           : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"
-                      }`}
+                        }`}
                     >
                       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -321,7 +319,7 @@ const Checkout = () => {
                     )}
                     {deliveryMethod === "Pickup at Counter" && (
                       <div className="md:col-span-2 bg-blue-600/10 border border-blue-600/30 rounded-xl p-6 text-center">
-                        <p className="text-blue-500 font-bold mb-2 uppercase tracking-wide">Ready for Pickup</p>
+                        <p className="text-blue-500 font-bold mb-2 tracking-wide">Ready for Pickup</p>
                         <p className="text-sm text-slate-500 italic">Please collect your items at the Smart Gym main counter after successful payment.</p>
                       </div>
                     )}
@@ -402,7 +400,7 @@ const Checkout = () => {
                   <button
                     type="submit"
                     disabled={processing}
-                    className="flex-[2] bg-gradient-to-r from-blue-600-500 to-blue-600 hover:from-blue-600 hover:to-blue-600-700 text-slate-900 font-bold py-4 rounded-xl transition shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
+                    className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed tracking-wider"
                   >
                     {processing ? "Processing..." : `Pay Rs. ${total.toFixed(2)}`}
                   </button>
@@ -410,10 +408,9 @@ const Checkout = () => {
               </form>
             </div>
 
-            {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="backdrop-blur-md bg-gradient-to-br from-blue-600-500/20 to-blue-600-500/10 border border-blue-600/30 rounded-2xl p-6 sticky top-32 shadow-2xl">
-                <h2 className="text-xl font-bold text-slate-900 mb-6 uppercase tracking-tight">Order Summary</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-6 tracking-tight">Order Summary</h2>
 
                 <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                   {cart.items.map((item) => (
@@ -442,7 +439,7 @@ const Checkout = () => {
                   <div className="flex justify-between text-slate-500 text-sm items-center">
                     <span>Shipping</span>
                     {shippingCost === 0 ? (
-                      <span className="text-green-700 font-semibold uppercase text-[10px] bg-green-400/10 px-2 py-0.5 rounded tracking-tighter">Free</span>
+                      <span className="text-green-700 font-semibold text-[10px] bg-green-400/10 px-2 py-0.5 rounded tracking-tighter">Free</span>
                     ) : (
                       <span className="text-slate-900 font-semibold">Rs. {shippingCost.toFixed(2)}</span>
                     )}
@@ -452,7 +449,7 @@ const Checkout = () => {
                     <span className="text-slate-900 font-bold text-lg">Total</span>
                     <div className="text-right">
                       <span className="text-blue-600 text-2xl font-black">Rs. {total.toFixed(2)}</span>
-                      <p className="text-[10px] text-slate-600 uppercase tracking-widest leading-none">All taxes included</p>
+                      <p className="text-[10px] text-slate-600 tracking-widest leading-none">All taxes included</p>
                     </div>
                   </div>
                 </div>
@@ -473,17 +470,17 @@ const Checkout = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">Order Confirmed!</h2>
+              <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">Order Confirmed!</h2>
               <p className="text-slate-500 mb-6">Thank you for your purchase. Your premium supplements are being prepared.</p>
 
               <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-8">
-                <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Order Identifier</p>
+                <p className="text-xs text-slate-600 tracking-widest mb-1">Order Identifier</p>
                 <p className="text-xl font-mono font-bold text-blue-600">{generatedOrderId}</p>
               </div>
 
               <button
                 onClick={() => navigate("/supplement-store")}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition shadow-xl shadow-blue-600/20 uppercase tracking-widest"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition shadow-xl shadow-blue-600/20 tracking-widest"
               >
                 Confirm & Return to Store
               </button>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTrash, FaDownload, FaUserPlus, FaUtensils, FaLeaf, FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const TrainerMealPlans = () => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("library");
     const [students, setStudents] = useState([]);
     const [plans, setPlans] = useState([]);
@@ -105,7 +107,7 @@ const TrainerMealPlans = () => {
 
             setNewPlan({ title: "", macros: { p: "", c: "" }, meals: [{ name: "Breakfast", detail: "" }, { name: "Lunch", detail: "" }, { name: "Dinner", detail: "" }] });
             setActiveTab("library");
-            setToastMsg({ type: "success", text: isEdit ? "Meal plan updated successfully!" : "Meal plan published successfully!" });
+            setToastMsg({ type: "success", text: isEdit ? "Meal plan updated successfully." : "Meal plan published successfully." });
             setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
         } catch (err) {
             console.error("Publish failed", err);
@@ -126,7 +128,7 @@ const TrainerMealPlans = () => {
             });
             setPlans(plans.filter(p => p._id !== id));
             setDeleteConfirm(null);
-            setToastMsg({ type: "success", text: "Meal plan deleted successfully" });
+            setToastMsg({ type: "success", text: "Meal plan deleted successfully." });
             setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
         } catch (err) {
             console.error("Delete failed", err);
@@ -150,7 +152,7 @@ const TrainerMealPlans = () => {
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setToastMsg({ type: "success", text: `Successfully assigned ${selectedPlan.title} to student!` });
+            setToastMsg({ type: "success", text: `Successfully assigned ${selectedPlan.title} to student.` });
             setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
             setShowAssignModal(false);
         } catch (err) {
@@ -162,21 +164,21 @@ const TrainerMealPlans = () => {
     return (
         <div className="page-bg-base pt-24 px-6 relative print:p-0">
             {/* Background Effects */}
-            <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10 print:hidden"></div>
+            <div className="fixed inset-0 ambient-gradient -z-10 print:hidden"></div>
 
-            {/* Global Toast Notification */}
-            {toastMsg.text && (
-                <div className={`fixed top-24 left-1/2 -translate-x-1/2 z-[100] text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 print:hidden ${toastMsg.type === "success" ? "bg-green-500" : "bg-red-500"}`}>
-                    {toastMsg.type === "success" ? (
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                    ) : (
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
-                    )}
-                    <span className="font-bold text-sm tracking-wide">{toastMsg.text}</span>
-                </div>
-            )}
+
 
             <div className="max-w-6xl mx-auto">
+                {/* Back Button */}
+                <div className="flex justify-end mb-6 print:hidden">
+                    <button
+                        onClick={() => navigate("/trainer/manage-plans")}
+                        className="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-600/20 active:scale-95 text-sm"
+                    >
+                        Back
+                    </button>
+                </div>
+
                 {/* Header Information */}
                 <header className="mb-10 print:hidden">
                     <h2 className="text-4xl font-black text-blue-600 tracking-tight">Meal Plans</h2>
@@ -479,7 +481,7 @@ const TrainerMealPlans = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">Delete Plan?</h3>
                         <p className="text-slate-500 mb-8 text-sm">Are you sure you want to delete <span className="font-bold text-slate-900">"{deleteConfirm.title}"</span>? This action cannot be undone.</p>
-                        
+
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setDeleteConfirm(null)}
@@ -501,11 +503,10 @@ const TrainerMealPlans = () => {
             {/* Premium Toast Notification */}
             {toastMsg.text && (
                 <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[2000] animate-in slide-in-from-top-8 duration-300">
-                    <div className={`px-8 py-4 rounded-full shadow-2xl font-black tracking-widest uppercase text-xs flex items-center gap-3 backdrop-blur-md ${
-                        toastMsg.type === "success" 
-                            ? "bg-green-500 text-slate-900 border border-green-400/50" 
-                            : "bg-red-500 text-white border border-red-400/50"
-                    }`}>
+                    <div className={`px-8 py-4 rounded-full shadow-2xl font-black tracking-widest text-xs flex items-center gap-3 backdrop-blur-md ${toastMsg.type === "success"
+                        ? "bg-green-500 text-slate-900 border border-green-400/50"
+                        : "bg-red-500 text-white border border-red-400/50"
+                        }`}>
                         {toastMsg.text}
                     </div>
                 </div>

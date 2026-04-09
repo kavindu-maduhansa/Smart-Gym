@@ -36,7 +36,6 @@ const TrainerDashboard = () => {
 
   return (
     <div className="page-bg-base relative overflow-hidden">
-      {/* Team Background Theme - Glassmorphism style */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 ambient-gradient"></div>
         <div
@@ -53,15 +52,14 @@ const TrainerDashboard = () => {
 
       <div className="relative z-10 container mx-auto px-4 pb-24 pt-32 sm:px-6 lg:px-8">
         <header className="dashboard-hero mb-10 sm:mb-14">
-          <p className="section-kicker mb-2">Trainer workspace</p>
+          <p className="section-kicker mb-2">Trainer Workspace</p>
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-              Trainer
+              Trainer Dashboard
             </span>{" "}
-            dashboard
           </h1>
           <p className="mt-4 max-w-2xl text-base text-slate-600 sm:text-lg leading-relaxed">
-            Schedules, students, and plans—open a card below to get to work. Tab to each link, then Enter to open.
+            Schedules, students, and plans open a card below to get to work. Tab to each link, then Enter to open.
           </p>
         </header>
 

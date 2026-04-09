@@ -141,17 +141,17 @@ const MyOrders = () => {
                   <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-blue-600-500/10 to-transparent flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap gap-8">
                       <div>
-                        <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Order Placed</p>
+                        <p className="text-xs text-slate-600 tracking-widest mb-1">Order Placed</p>
                         <p className="text-sm font-semibold">{new Date(order.createdAt).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Total Amount</p>
+                        <p className="text-xs text-slate-600 tracking-widest mb-1">Total Amount</p>
                         <p className="text-sm font-bold text-blue-500">Rs. {order.totalAmount.toFixed(2)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Delivery Method</p>
+                        <p className="text-xs text-slate-600 tracking-widest mb-1">Delivery Method</p>
                         <p className="text-sm font-semibold">
-                          <span className={`px-2 py-0.5 rounded text-[10px] uppercase ${order.deliveryMethod === 'Pickup at Counter' ? 'bg-blue-600/20 text-blue-500' : 'bg-blue-500/20 text-blue-400'}`}>
+                          <span className={`px-2 py-0.5 rounded text-[10px] ${order.deliveryMethod === 'Pickup at Counter' ? 'bg-blue-600/20 text-blue-500' : 'bg-blue-500/20 text-blue-400'}`}>
                             {order.deliveryMethod}
                           </span>
                         </p>
@@ -159,7 +159,7 @@ const MyOrders = () => {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="text-xs text-slate-600 uppercase tracking-widest mb-1">Order Identifier</p>
+                        <p className="text-xs text-slate-600 tracking-widest mb-1">Order Identifier</p>
                         <p className="text-sm font-mono text-slate-700">{order._id}</p>
                       </div>
                       <svg className={`w-5 h-5 text-slate-600 transition-transform ${expandedOrders[order._id] ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,7 +172,7 @@ const MyOrders = () => {
                   <div className={`p-6 bg-blue-50/20 ${expandedOrders[order._id] ? 'block' : 'hidden'}`}>
                     <div className="space-y-6">
                       <div className="space-y-4">
-                        <p className="text-xs font-bold text-blue-600 uppercase tracking-widest">Ordered Items</p>
+                        <p className="text-xs font-bold text-blue-600 tracking-widest">Ordered Items</p>
                         {order.items.map((item, index) => (
                           <div key={index} className="flex items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl border border-white/5">
                             <div className="flex items-center gap-4">
@@ -212,17 +212,17 @@ const MyOrders = () => {
                   {!expandedOrders[order._id] && (
                     <div className="px-6 py-2 bg-slate-50 text-[10px] text-slate-600 flex gap-4">
                       <span>Items: {order.items.length}</span>
-                      <span>Status: <span className="text-blue-500 uppercase font-bold">{order.status}</span></span>
+                      <span>Status: <span className="text-blue-500 font-bold">{order.status}</span></span>
                     </div>
                   )}
 
                   {/* Order Footer */}
                   <div className="p-4 bg-blue-600/5 border-t border-white/5 flex justify-between items-center px-6">
                     <span className="text-xs text-slate-600">
-                      Payment Status: <span className="text-green-700 font-bold uppercase tracking-tighter">Paid</span>
+                      Payment Status: <span className="text-green-700 font-bold tracking-tighter">Paid</span>
                     </span>
                     <span className="text-xs text-slate-600">
-                      Shipping Status: <span className="text-blue-500 font-bold uppercase tracking-tighter">{order.deliveryMethod === 'Pickup at Counter' ? 'Ready for Pickup' : 'Processing'}</span>
+                      Shipping Status: <span className="text-blue-500 font-bold tracking-tighter">{order.deliveryMethod === 'Pickup at Counter' ? 'Ready for Pickup' : 'Processing'}</span>
                     </span>
                   </div>
                 </div>

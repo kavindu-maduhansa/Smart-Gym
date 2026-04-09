@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaUser, FaComments, FaCheckCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const TrainerStudents = () => {
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -99,10 +101,19 @@ const TrainerStudents = () => {
 
   return (
     <div className="page-bg-base relative overflow-hidden pt-24 pb-20 px-6">
-      {/* Background Elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
+      <div className="fixed inset-0 ambient-gradient -z-10"></div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
+        {/* Back to Dashboard Button */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => navigate("/trainer-dashboard")}
+            className="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-600/20 active:scale-95 text-sm"
+          >
+            Back to dashboard
+          </button>
+        </div>
+
         <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <div>
@@ -125,7 +136,7 @@ const TrainerStudents = () => {
             placeholder="Search by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-600"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium placeholder:text-slate-600 shadow-sm"
           />
           <div className="relative w-full custom-dropdown">
             <button
@@ -137,7 +148,7 @@ const TrainerStudents = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            
+
             {isWeekOpen && (
               <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                 {Object.entries(weekLabels).map(([key, label]) => (
@@ -158,7 +169,7 @@ const TrainerStudents = () => {
         </div>
 
         {/* Data Table */}
-        <div className="mt-4 overflow-hidden rounded-3xl border border-slate-200 backdrop-blur-md bg-slate-50 shadow-2xl">
+        <div className="mt-4 overflow-hidden rounded-3xl border border-slate-200 backdrop-blur-md bg-white shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -171,7 +182,7 @@ const TrainerStudents = () => {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {currentItems.map((student) => (
-                  <tr key={student.id} className="hover:bg-slate-50 transition-all group">
+                  <tr key={student.id} className="bg-white hover:bg-slate-50 transition-all group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center text-xs text-blue-600 font-bold border border-blue-600/30">
@@ -199,7 +210,7 @@ const TrainerStudents = () => {
                             style={{ width: `${Math.min(((student.progress || 0) / 4) * 100, 100)}%` }}
                           ></div>
                         </div>
-                        <span className="text-[8px] text-gray-600 font-bold uppercase tracking-widest">Monthly Target</span>
+                        <span className="text-[10px] text-gray-600 font-bold tracking-widest">Monthly Target</span>
                       </div>
                     </td>
                     <td className="px-6 py-5 min-w-[200px]">
@@ -244,11 +255,10 @@ const TrainerStudents = () => {
                       <button
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
-                          currentPage === i + 1
+                        className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${currentPage === i + 1
                           ? 'bg-blue-600 border-blue-600 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'
                           : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900'
-                        }`}
+                          }`}
                       >
                         {i + 1}
                       </button>
