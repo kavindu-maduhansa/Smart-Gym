@@ -46,56 +46,96 @@ function BarChart2({ peak, low }) {
   );
 }
 
-function LineChart({ points }) {
-  const width = 520;
-  const height = 180;
-  const pad = 28;
-  const n = Array.isArray(points) ? points.length : 0;
-  if (n === 0) return <div className="text-slate-500 text-sm">No data</div>;
+const PIE_SLICE_COLORS = [
+  "#3b82f6",
+  "#f97316",
+  "#22c55e",
+  "#a855f7",
+  "#ec4899",
+  "#14b8a6",
+  "#eab308",
+  "#64748b",
+];
 
-  const xs = points.map((_, i) => (n === 1 ? pad : pad + (i * (width - pad * 2)) / (n - 1)));
-  const ys = points.map((p) => {
-    const pct = clamp(p.utilizationPct || 0, 0, 100);
-    return pad + (100 - pct) * ((height - pad * 2) / 100);
+/** Wedge from center (cx,cy) with radius r, angles in radians, -π/2 = top. */
+function pieWedgePath(cx, cy, r, startRad, endRad) {
+  const x1 = cx + r * Math.cos(startRad);
+  const y1 = cy + r * Math.sin(startRad);
+  const x2 = cx + r * Math.cos(endRad);
+  const y2 = cy + r * Math.sin(endRad);
+  const largeArc = endRad - startRad > Math.PI ? 1 : 0;
+  return `M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
+}
+
+/**
+ * Daily rows from analytics: each slice = that day’s share of bookings (or of capacity if no bookings).
+ */
+function DailyUsagePieChart({ points }) {
+  const list = Array.isArray(points) ? points : [];
+  if (list.length === 0) return <div className="text-slate-500 text-sm">No data</div>;
+
+  const bookedSum = list.reduce((a, p) => a + (Number(p.bookedSeats) || 0), 0);
+  const capSum = list.reduce((a, p) => a + (Number(p.capacitySeats) || 0), 0);
+  const useBooked = bookedSum > 0;
+  const total = useBooked ? bookedSum : capSum;
+  if (total <= 0) return <div className="text-slate-500 text-sm">No capacity data for this range.</div>;
+
+  const size = 220;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 88;
+
+  let acc = 0;
+  const slices = list.map((p, i) => {
+    const raw = useBooked ? Number(p.bookedSeats) || 0 : Number(p.capacitySeats) || 0;
+    const portion = raw / total;
+    const startRad = acc * 2 * Math.PI - Math.PI / 2;
+    acc += portion;
+    const endRad = acc * 2 * Math.PI - Math.PI / 2;
+    const sharePct = Math.round(portion * 1000) / 10;
+    return {
+      key: `${p.date}-${i}`,
+      date: p.date,
+      path: pieWedgePath(cx, cy, r, startRad, endRad),
+      color: PIE_SLICE_COLORS[i % PIE_SLICE_COLORS.length],
+      utilizationPct: p.utilizationPct ?? 0,
+      sharePct,
+      mode: useBooked ? "booked" : "capacity",
+    };
   });
 
-  const d = xs
-    .map((x, i) => `${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${ys[i].toFixed(2)}`)
-    .join(" ");
-
   return (
-    <div className="w-full overflow-auto">
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-[180px]">
-        <defs>
-          <linearGradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#fb7185" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#f97316" stopOpacity="0.2" />
-          </linearGradient>
-        </defs>
-        <g>
-          {[0, 25, 50, 75, 100].map((v) => {
-            const y = pad + (100 - v) * ((height - pad * 2) / 100);
-            return (
-              <g key={v}>
-                <line x1={pad} x2={width - pad} y1={y} y2={y} stroke="rgba(255,255,255,0.08)" />
-                <text x={pad - 8} y={y + 4} fontSize="10" fill="rgba(255,255,255,0.45)" textAnchor="end">
-                  {v}
-                </text>
-              </g>
-            );
-          })}
-        </g>
-        <path d={d} fill="none" stroke="url(#lineGrad)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        {xs.map((x, i) => (
-          <g key={i}>
-            <circle cx={x} cy={ys[i]} r="4.5" fill="#fb923c" stroke="rgba(0,0,0,0.4)" strokeWidth="2" />
-          </g>
-        ))}
-      </svg>
-      <div className="flex justify-between text-xs text-slate-600 px-2 -mt-2">
-        <span>{points[0].date}</span>
-        <span>{points[n - 1].date}</span>
+    <div className="w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4">
+        <svg viewBox={`0 0 ${size} ${size}`} className="mx-auto h-[220px] w-[220px] shrink-0">
+          {slices.map((s) => (
+            <path
+              key={s.key}
+              d={s.path}
+              fill={s.color}
+              stroke="rgba(255,255,255,0.85)"
+              strokeWidth="1.5"
+              className="transition-opacity hover:opacity-90"
+            />
+          ))}
+        </svg>
+        <ul className="min-w-0 flex-1 space-y-1.5 text-xs sm:text-sm">
+          {slices.map((s) => (
+            <li key={`leg-${s.key}`} className="flex items-center gap-2 text-slate-700">
+              <span className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ backgroundColor: s.color }} />
+              <span className="font-mono font-semibold text-slate-900">{s.date}</span>
+              <span className="text-slate-500">
+                {s.utilizationPct}% util · {s.sharePct}% of {s.mode === "booked" ? "bookings" : "capacity"}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
+      <p className="mt-3 text-xs text-slate-500">
+        {useBooked
+          ? "Slice size = share of total bookings across these days."
+          : "No bookings in range — slice size = share of scheduled capacity by day."}
+      </p>
     </div>
   );
 }
@@ -279,6 +319,14 @@ const ScheduleManagement = () => {
     e.preventDefault();
     setMsg("");
 
+    if (editId) {
+      const existing = items.find((x) => String(x._id) === String(editId));
+      if (existing && isDateBeforeToday(existing.date)) {
+        setMsg("Past schedules cannot be edited.");
+        return;
+      }
+    }
+
     const dateVal = form.date && form.date.trim() ? form.date.trim() : "";
 
     const payload = {
@@ -292,7 +340,7 @@ const ScheduleManagement = () => {
       { ...form, date: dateVal },
       {
         dateResolved: dateVal,
-        allowPastDate: Boolean(editId),
+        allowPastDate: false,
         editingId: editId,
         existingSchedules: items,
       },
@@ -323,6 +371,10 @@ const ScheduleManagement = () => {
   };
 
   const onEdit = (row) => {
+    if (isDateBeforeToday(row.date)) {
+      setMsg("Past schedules cannot be edited.");
+      return;
+    }
     setEditId(row._id);
     setForm({
       date: row.date,
@@ -335,6 +387,11 @@ const ScheduleManagement = () => {
   };
 
   const onDelete = async (id) => {
+    const row = items.find((x) => String(x._id) === String(id));
+    if (row && isDateBeforeToday(row.date)) {
+      setMsg("Past schedules cannot be deleted.");
+      return;
+    }
     if (!window.confirm("Remove this schedule and all its slots?")) return;
     setMsg("");
     try {
@@ -486,6 +543,11 @@ const ScheduleManagement = () => {
     /fail|Could not|not |cannot|Invalid|required|must |already|duplicate|blocked/i.test(msg) ||
     msg.includes("403");
 
+  const slotModalIsPast = useMemo(
+    () => Boolean(slotModal?.date && isDateBeforeToday(slotModal.date)),
+    [slotModal],
+  );
+
   const filteredSchedules = useMemo(() => {
     const q = String(scheduleQuery || "").trim().toLowerCase();
     const list = Array.isArray(items) ? items : [];
@@ -497,7 +559,12 @@ const ScheduleManagement = () => {
         const label = String(row.dayLabel || "").toLowerCase();
         return String(row.date).toLowerCase().includes(q) || label.includes(q);
       })
-      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      .sort((a, b) => {
+        const aPast = isDateBeforeToday(a.date);
+        const bPast = isDateBeforeToday(b.date);
+        if (aPast !== bPast) return aPast ? 1 : -1; // today & upcoming first, past at bottom
+        return String(a.date).localeCompare(String(b.date));
+      });
   }, [items, scheduleQuery, showPastSchedules]);
 
   const summarizeScheduleSlots = (row) => {
@@ -733,7 +800,8 @@ const ScheduleManagement = () => {
               <div>
                 <h2 className="text-xl font-bold text-blue-600">Existing schedules</h2>
                 <p className="text-sm text-slate-500 mt-1">
-                  Search by date or label. Use “Manage slots” to close/open slots and adjust capacity.
+                  Search by date or label. Past days are view-only (slots and schedule cannot be changed).
+                  Use “Manage slots” on today or future dates to close/open slots and adjust capacity.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 items-center">
@@ -764,6 +832,7 @@ const ScheduleManagement = () => {
               <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2">
                 {filteredSchedules.map((row) => {
                   const sum = summarizeScheduleSlots(row);
+                  const scheduleIsPast = isDateBeforeToday(row.date);
                   return (
                     <div
                       key={row._id}
@@ -794,28 +863,36 @@ const ScheduleManagement = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                           <button
                             type="button"
                             onClick={() => openSlotsModal(row)}
                             className="text-sm bg-slate-100 text-slate-900 px-3 py-1 rounded border border-slate-300 font-semibold hover:bg-white/15"
                           >
-                            Manage slots
+                            {scheduleIsPast ? "View slots" : "Manage slots"}
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => onEdit(row)}
-                            className="text-sm bg-blue-600/20 text-blue-600 px-3 py-1 rounded border border-blue-600/40 font-semibold"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => onDelete(row._id)}
-                            className="text-sm bg-red-500/20 text-red-700 px-3 py-1 rounded border border-red-500/40 font-semibold"
-                          >
-                            Delete
-                          </button>
+                          {!scheduleIsPast ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => onEdit(row)}
+                                className="text-sm bg-blue-600/20 text-blue-600 px-3 py-1 rounded border border-blue-600/40 font-semibold"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => onDelete(row._id)}
+                                className="text-sm bg-red-500/20 text-red-700 px-3 py-1 rounded border border-red-500/40 font-semibold"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          ) : (
+                            <span className="text-xs text-slate-500 font-semibold self-center px-1">
+                              Past — view only
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -888,8 +965,8 @@ const ScheduleManagement = () => {
                     <BarChart2 peak={analytics.peak} low={analytics.low} />
                   </div>
                   <div className="bg-blue-50/30 border border-slate-200 rounded-xl p-4">
-                    <div className="text-slate-500 font-bold mb-3">Line chart (Daily usage)</div>
-                    <LineChart points={analytics.daily || []} />
+                    <div className="text-slate-500 font-bold mb-3">Pie chart (Daily usage)</div>
+                    <DailyUsagePieChart points={analytics.daily || []} />
                   </div>
                 </div>
 
@@ -955,11 +1032,18 @@ const ScheduleManagement = () => {
                 <div className="sticky top-0 z-10 px-5 sm:px-6 pt-5 sm:pt-6 pb-4 bg-white/95 border-b border-slate-200">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <div className="text-blue-600 font-bold text-xl">Manage slots</div>
+                      <div className="text-blue-600 font-bold text-xl">
+                        {slotModalIsPast ? "View slots" : "Manage slots"}
+                      </div>
                       <div className="text-slate-700 text-sm mt-1">
                         {slotModal.date}
                         {slotModal.dayLabel ? ` · ${slotModal.dayLabel}` : ""}
                       </div>
+                      {slotModalIsPast ? (
+                        <p className="text-xs text-slate-500 mt-2 font-semibold">
+                          This day is in the past — slots are read-only.
+                        </p>
+                      ) : null}
                     </div>
                     <button
                       type="button"
@@ -981,43 +1065,45 @@ const ScheduleManagement = () => {
                     placeholder="Search time (e.g. 10:00)"
                     className="w-full md:w-60 bg-blue-50/50 border border-slate-300 rounded px-3 py-2 text-slate-900 placeholder-slate-400"
                   />
-                  <div className="flex flex-wrap gap-2 items-center">
-                    <button
-                      type="button"
-                      disabled={slotActionKey === `bulk-close-${slotModal.scheduleId}`}
-                      onClick={bulkCloseAll}
-                      className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-800 font-bold hover:bg-red-500/20 disabled:opacity-60"
-                    >
-                      Close all
-                    </button>
-                    <button
-                      type="button"
-                      disabled={slotActionKey === `bulk-open-${slotModal.scheduleId}`}
-                      onClick={bulkOpenAll}
-                      className="px-3 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15 disabled:opacity-60"
-                    >
-                      Open all
-                    </button>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        min={1}
-                        max={10}
-                        step={1}
-                        value={bulkCap}
-                        onChange={(e) => setBulkCap(e.target.value)}
-                        className="w-28 bg-blue-50/50 border border-slate-300 rounded px-2 py-2 text-slate-900"
-                      />
+                  {!slotModalIsPast ? (
+                    <div className="flex flex-wrap gap-2 items-center">
                       <button
                         type="button"
-                        disabled={slotActionKey === `bulk-cap-${slotModal.scheduleId}`}
-                        onClick={bulkApplyCapacity}
-                        className="px-3 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700/90 disabled:opacity-60"
+                        disabled={slotActionKey === `bulk-close-${slotModal.scheduleId}`}
+                        onClick={bulkCloseAll}
+                        className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-800 font-bold hover:bg-red-500/20 disabled:opacity-60"
                       >
-                        Set cap (all)
+                        Close all
                       </button>
+                      <button
+                        type="button"
+                        disabled={slotActionKey === `bulk-open-${slotModal.scheduleId}`}
+                        onClick={bulkOpenAll}
+                        className="px-3 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15 disabled:opacity-60"
+                      >
+                        Open all
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min={1}
+                          max={10}
+                          step={1}
+                          value={bulkCap}
+                          onChange={(e) => setBulkCap(e.target.value)}
+                          className="w-28 bg-blue-50/50 border border-slate-300 rounded px-2 py-2 text-slate-900"
+                        />
+                        <button
+                          type="button"
+                          disabled={slotActionKey === `bulk-cap-${slotModal.scheduleId}`}
+                          onClick={bulkApplyCapacity}
+                          className="px-3 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700/90 disabled:opacity-60"
+                        >
+                          Set cap (all)
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                 </div>
 
                 <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
@@ -1059,53 +1145,57 @@ const ScheduleManagement = () => {
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap gap-2 items-center">
-                            {isClosed ? (
-                              <button
-                                type="button"
-                                disabled={slotActionKey === `open-${slotModal.scheduleId}-${s._id}`}
-                                onClick={() => adminOpenSlot(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15 disabled:opacity-60"
-                              >
-                                Reopen
-                              </button>
-                            ) : (
-                              <button
-                                type="button"
-                                disabled={slotActionKey === `close-${slotModal.scheduleId}-${s._id}`}
-                                onClick={() => adminCloseSlot(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-800 font-bold hover:bg-red-500/20 disabled:opacity-60"
-                              >
-                                Close slot
-                              </button>
-                            )}
+                          {!slotModalIsPast ? (
+                            <div className="flex flex-wrap gap-2 items-center">
+                              {isClosed ? (
+                                <button
+                                  type="button"
+                                  disabled={slotActionKey === `open-${slotModal.scheduleId}-${s._id}`}
+                                  onClick={() => adminOpenSlot(slotModal.scheduleId, s._id)}
+                                  className="px-3 py-2 rounded bg-slate-100 border border-slate-300 text-slate-900 font-bold hover:bg-white/15 disabled:opacity-60"
+                                >
+                                  Reopen
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  disabled={slotActionKey === `close-${slotModal.scheduleId}-${s._id}`}
+                                  onClick={() => adminCloseSlot(slotModal.scheduleId, s._id)}
+                                  className="px-3 py-2 rounded bg-red-500/15 border border-red-500/30 text-red-800 font-bold hover:bg-red-500/20 disabled:opacity-60"
+                                >
+                                  Close slot
+                                </button>
+                              )}
 
-                            <div className="flex items-center gap-2">
-                              <input
-                                type="number"
-                                min={booked}
-                                max={10}
-                                step={1}
-                                value={slotCapEdits[String(s._id)] ?? ""}
-                                onChange={(e) =>
-                                  setSlotCapEdits((m) => ({ ...m, [String(s._id)]: e.target.value }))
-                                }
-                                className="w-28 bg-blue-50/50 border border-slate-300 rounded px-2 py-2 text-slate-900"
-                              />
-                              <button
-                                type="button"
-                                disabled={slotActionKey === `cap-${slotModal.scheduleId}-${s._id}`}
-                                onClick={() => adminSetSlotCapacity(slotModal.scheduleId, s._id)}
-                                className="px-3 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700/90 disabled:opacity-60"
-                              >
-                                Set cap
-                              </button>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="number"
+                                  min={booked}
+                                  max={10}
+                                  step={1}
+                                  value={slotCapEdits[String(s._id)] ?? ""}
+                                  onChange={(e) =>
+                                    setSlotCapEdits((m) => ({ ...m, [String(s._id)]: e.target.value }))
+                                  }
+                                  className="w-28 bg-blue-50/50 border border-slate-300 rounded px-2 py-2 text-slate-900"
+                                />
+                                <button
+                                  type="button"
+                                  disabled={slotActionKey === `cap-${slotModal.scheduleId}-${s._id}`}
+                                  onClick={() => adminSetSlotCapacity(slotModal.scheduleId, s._id)}
+                                  className="px-3 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700/90 disabled:opacity-60"
+                                >
+                                  Set cap
+                                </button>
+                              </div>
                             </div>
+                          ) : null}
+                        </div>
+                        {!slotModalIsPast ? (
+                          <div className="text-xs text-slate-600 mt-2">
+                            Capacity can’t be reduced below current bookings.
                           </div>
-                        </div>
-                        <div className="text-xs text-slate-600 mt-2">
-                          Capacity can’t be reduced below current bookings.
-                        </div>
+                        ) : null}
                       </div>
                     );
                   })}

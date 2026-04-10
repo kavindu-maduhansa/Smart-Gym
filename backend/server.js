@@ -80,6 +80,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Uploaded inventory (and other) images — required for <img src="/uploads/..."> from the frontend
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 // User registration and related routes
 app.use("/api/users", userRoutes);
 app.use("/api/trainer", trainerRoutes);

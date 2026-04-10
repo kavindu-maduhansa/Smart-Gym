@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { uploadImageSrc } from "../utils/uploadImageSrc.js";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const modalAnimationStyles = `
   @keyframes fadeIn {
@@ -35,7 +38,7 @@ function DisplayAllInventory() {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/inventory");
+      const res = await axios.get(`${API_URL}/api/inventory`);
       setItems(res.data.data);
     } catch (err) {
       console.error(err);
@@ -224,23 +227,25 @@ function DisplayAllInventory() {
                     {/* ANIMATED BACKGROUND GLOW */}
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:via-blue-500/10 group-hover:to-blue-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500 blur-xl -z-10"></div>
 
-                    {/* IMAGE SECTION */}
-                    {item.image && (
-                      <div className="relative mb-6 overflow-hidden rounded-2xl h-60 w-full bg-gray-800">
+                    {/* IMAGE SECTION — placeholder when no file; requires backend /uploads static (see server.js) */}
+                    <div className="relative mb-6 h-60 w-full overflow-hidden rounded-2xl bg-gray-100">
+                      {item.image ? (
                         <img
-                          src={`http://localhost:5000/uploads/${item.image}`}
+                          src={uploadImageSrc(item.image)}
                           alt={item.itemName}
-                          className="w-full h-full object-cover group-hover:scale-125 transition duration-500"
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-125"
                         />
-                        {/* GRADIENT OVERLAY */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-blue-50/60 via-transparent to-blue-50/20 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-
-                        {/* CONDITION BADGE ON IMAGE */}
-                        <div className={`absolute top-3 right-3 px-4 py-2 rounded-full bg-gradient-to-r ${getConditionColor(item.condition)} border backdrop-blur-md font-bold text-sm`}>
-                          {getConditionIcon(item.condition)} {item.condition}
+                      ) : (
+                        <div className="flex h-full items-center justify-center bg-slate-100 text-5xl text-slate-400" aria-hidden>
+                          📦
                         </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-blue-50/60 via-transparent to-blue-50/20 opacity-0 transition duration-500 group-hover:opacity-100" />
+
+                      <div className={`absolute top-3 right-3 rounded-full border bg-gradient-to-r px-4 py-2 text-sm font-bold backdrop-blur-md ${getConditionColor(item.condition)}`}>
+                        {getConditionIcon(item.condition)} {item.condition}
                       </div>
-                    )}
+                    </div>
 
                     {/* ITEM NAME - HIGHLIGHTED */}
                     <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600-400 group-hover:to-blue-600-500 group-hover:bg-clip-text transition duration-300">

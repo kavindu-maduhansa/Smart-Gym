@@ -1119,6 +1119,9 @@ export async function adminCloseGymSlot(req, res) {
 
     const schedule = await GymSchedule.findById(scheduleId);
     if (!schedule) return res.status(404).json({ message: "Schedule not found." });
+    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+      return res.status(400).json({ message: "Past schedules are read-only." });
+    }
 
     const slot = schedule.slots.id(slotId);
     if (!slot) return res.status(404).json({ message: "Slot not found." });
@@ -1147,6 +1150,9 @@ export async function adminOpenGymSlot(req, res) {
 
     const schedule = await GymSchedule.findById(scheduleId);
     if (!schedule) return res.status(404).json({ message: "Schedule not found." });
+    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+      return res.status(400).json({ message: "Past schedules are read-only." });
+    }
 
     const slot = schedule.slots.id(slotId);
     if (!slot) return res.status(404).json({ message: "Slot not found." });
@@ -1183,6 +1189,9 @@ export async function adminSetGymSlotCapacity(req, res) {
 
     const schedule = await GymSchedule.findById(scheduleId);
     if (!schedule) return res.status(404).json({ message: "Schedule not found." });
+    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+      return res.status(400).json({ message: "Past schedules are read-only." });
+    }
 
     const slot = schedule.slots.id(slotId);
     if (!slot) return res.status(404).json({ message: "Slot not found." });
@@ -1696,6 +1705,9 @@ export async function updateGymSchedule(req, res) {
     if (!schedule) {
       return res.status(404).json({ message: "Schedule not found." });
     }
+    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+      return res.status(400).json({ message: "Past schedules cannot be edited." });
+    }
 
     const booked = schedule.slots.some((s) => (s.bookedCount || 0) > 0);
     if (booked) {
@@ -1770,6 +1782,9 @@ export async function deleteGymSchedule(req, res) {
     const schedule = await GymSchedule.findById(id);
     if (!schedule) {
       return res.status(404).json({ message: "Schedule not found." });
+    }
+    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+      return res.status(400).json({ message: "Past schedules cannot be deleted." });
     }
     await GymSchedule.deleteOne({ _id: id });
     return res.json({ message: "Schedule removed." });
