@@ -65,9 +65,9 @@ const TrainerAvailability = () => {
   }, []);
 
   const statusLabels = {
-    all: "ALL STATUS",
-    available: "AVAILABLE",
-    closed: "CLOSED"
+    all: "All Status",
+    available: "Available",
+    closed: "Closed"
   };
 
   const handleBook = async (id) => {
@@ -189,7 +189,7 @@ const TrainerAvailability = () => {
         <div className="relative shrink-0 custom-status-dropdown">
           <button
             onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
-            className="flex items-center justify-between border border-slate-200 bg-white p-2 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600/50 transition-all min-w-[130px] text-[10px] font-bold uppercase tracking-widest cursor-pointer shadow-sm"
+            className="flex items-center justify-between border border-slate-200 bg-white p-2 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600/50 transition-all min-w-[130px] text-[10px] font-bold tracking-widest cursor-pointer shadow-sm"
           >
             {statusLabels[statusFilter]}
             <svg className={`w-3 h-3 text-slate-500 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
@@ -201,7 +201,7 @@ const TrainerAvailability = () => {
                 <div
                   key={opt}
                   onClick={() => { setStatusFilter(opt); setIsStatusDropdownOpen(false); }}
-                  className={`px-4 py-2 text-[10px] font-bold tracking-widest uppercase cursor-pointer transition-colors flex items-center justify-between ${statusFilter === opt ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-blue-50/50 hover:text-blue-600'}`}
+                  className={`px-4 py-2 text-[10px] font-bold tracking-widest cursor-pointer transition-colors flex items-center justify-between ${statusFilter === opt ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-blue-50/50 hover:text-blue-600'}`}
                 >
                   {statusLabels[opt]}
                   {statusFilter === opt && <svg className="w-3 h-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
@@ -214,7 +214,7 @@ const TrainerAvailability = () => {
         {(filterTitle || filterTrainer || filterDate || statusFilter !== "all") && (
           <button
             onClick={() => { setFilterTitle(""); setFilterTrainer(""); setFilterDate(null); setStatusFilter("all"); }}
-            className="bg-slate-50 border border-slate-200 text-slate-500 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 hover:text-slate-900 transition-all text-[10px] uppercase tracking-widest ml-auto shrink-0"
+            className="bg-slate-50 border border-slate-200 text-slate-500 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 hover:text-slate-900 transition-all text-[10px] tracking-widest ml-auto shrink-0"
           >
             Clear All
           </button>
@@ -223,7 +223,7 @@ const TrainerAvailability = () => {
 
       {loading ? (
         <div className="text-center py-20 bg-blue-50/40 rounded-2xl border border-white/5 mx-auto max-w-md">
-          <div className="text-blue-600 animate-pulse font-bold tracking-[0.3em] uppercase text-sm mb-2">Syncing Schedules</div>
+          <div className="text-blue-600 animate-pulse font-bold tracking-[0.3em] text-sm mb-2">Syncing Schedules</div>
           <div className="h-0.5 w-full bg-slate-50 overflow-hidden">
              <div className="h-full bg-blue-600 w-1/2 animate-[shimmer_2s_infinite]"></div>
           </div>
@@ -242,6 +242,7 @@ const TrainerAvailability = () => {
               const sessionDateTime = new Date(`${s.date}T${s.time || "00:00"}`);
               const now = new Date();
               const isExpired = sessionDateTime < now;
+              const isLocked = !isExpired && (sessionDateTime - now) < (60 * 60 * 1000);
 
               return (
                 <div key={s._id} className={`p-5 border rounded-2xl bg-blue-50/40 backdrop-blur-sm transition-all group relative overflow-hidden ${isExpired ? 'border-white/5 opacity-60 grayscale-[0.8]' : 'border-slate-200 hover:border-blue-600/40 hover:bg-slate-50 shadow-xl hover:shadow-blue-600/5'}`}>
@@ -252,8 +253,8 @@ const TrainerAvailability = () => {
                       <h3 className={`text-xl font-bold transition-colors ${isExpired ? 'text-slate-600' : 'text-slate-900 group-hover:text-blue-600'}`}>{s.title}</h3>
                       <div className="text-[11px] text-slate-600 font-semibold mt-1 tracking-wide">Session Plan</div>
                     </div>
-                    <span className={`text-[10px] px-3 py-1.5 rounded-lg border uppercase font-bold tracking-wider leading-none ${isExpired ? 'bg-red-500/5 text-red-500 border-red-500/10' : 'bg-green-500/5 text-green-700 border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]'}`}>
-                      {isExpired ? "Closed" : "Available"}
+                    <span className={`text-[10px] px-3 py-1.5 rounded-lg border font-bold tracking-wider leading-none ${isExpired ? 'bg-red-500/5 text-red-500 border-red-500/10' : isLocked ? 'bg-amber-500/5 text-amber-600 border-amber-500/10' : 'bg-green-500/5 text-green-700 border-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.05)]'}`}>
+                      {isExpired ? "Closed" : isLocked ? "Booking Closed" : "Available"}
                     </span>
                   </div>
 
@@ -274,14 +275,14 @@ const TrainerAvailability = () => {
 
                   {isStudent && (
                     <button
-                      onClick={() => !isExpired && handleBook(s._id)}
-                      disabled={isExpired || bookingId === s._id}
-                      className={`w-full font-bold py-3.5 rounded-xl transition-all uppercase text-xs tracking-wider relative z-10 ${isExpired
+                      onClick={() => !isExpired && !isLocked && handleBook(s._id)}
+                      disabled={isExpired || isLocked || bookingId === s._id}
+                      className={`w-full font-bold py-3.5 rounded-xl transition-all text-xs tracking-wider relative z-10 ${isExpired || isLocked
                         ? 'bg-slate-50 text-gray-700 cursor-not-allowed border border-white/5 mt-auto'
                         : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-[0.96] mt-auto'
                         }`}
                     >
-                      {isExpired ? "Expired" : (bookingId === s._id ? "Processing..." : "Book Now")}
+                      {isExpired ? "Expired" : isLocked ? "Too Late to Book" : (bookingId === s._id ? "Processing..." : "Book Now")}
                     </button>
                   )}
                 </div>

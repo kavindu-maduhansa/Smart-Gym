@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaClipboardList, FaUtensils, FaArrowRight } from "react-icons/fa";
 
 const TrainerPlansHub = () => {
+  const navigate = useNavigate();
   const categories = [
     {
       id: "workout",
@@ -31,6 +32,16 @@ const TrainerPlansHub = () => {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto">
+        {/* Back to Dashboard Button */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => navigate("/trainer-dashboard")}
+            className="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-600/20 active:scale-95 text-sm"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+
         <header className="mb-16 text-center">
           <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-white tracking-tighter mb-4 pb-2">
             Manage Plans

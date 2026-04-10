@@ -37,14 +37,13 @@ const TrainerSchedules = () => {
   }, []);
 
   const statusLabels = {
-    All: "All Status", Booked: "Booked", Available: "Available", 
+    All: "All Status", Booked: "Booked", Available: "Available",
     Expired: "Expired", Pending: "Pending Attendance", Attended: "Attended", Absent: "Absent"
   };
   const dateLabels = {
     All: "All Dates", Today: "Today Only", Upcoming: "Upcoming", Past: "Past Sessions"
   };
 
-  // BASE URL - Adjust if your backend port is different
   const API_URL = "http://localhost:5000/api/trainer/schedules";
 
   const fetchSchedules = async () => {
@@ -112,11 +111,11 @@ const TrainerSchedules = () => {
       }
 
       fetchSchedules();
-      setSuccessMsg(editId ? "Session successfully updated!" : "Session successfully created!");
+      setSuccessMsg(editId ? "Session updated successfully." : "Session created successfully.");
       setTimeout(() => setSuccessMsg(""), 3000);
       closeModal();
     } catch (err) {
-      setError(err.response?.data?.message || "Server Error. Ensure you are logged in as a Trainer.");
+      setError(err.response?.data?.message || "Server error. Please ensure you are logged in as a trainer.");
     } finally {
       setLoading(false);
     }
@@ -150,7 +149,7 @@ const TrainerSchedules = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchSchedules(); // Refresh the list
-      setSuccessMsg("Session successfully deleted!");
+      setSuccessMsg("Session deleted successfully.");
       setTimeout(() => setSuccessMsg(""), 3000);
     } catch (err) {
       alert("Failed to delete the session.");
@@ -252,12 +251,17 @@ const TrainerSchedules = () => {
 
   return (
     <div className="page-bg-base pt-24 px-6 relative">
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
-      
+      <div className="fixed inset-0 ambient-gradient -z-10"></div>
+
+      {/* Premium Success Toast */}
       {successMsg && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[60] bg-green-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-          <span className="font-bold text-sm tracking-wide">{successMsg}</span>
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[2000] animate-in slide-in-from-top-8 duration-300">
+          <div className="px-8 py-4 rounded-full shadow-2xl font-black tracking-widest text-xs flex items-center gap-3 backdrop-blur-md bg-green-500 text-slate-900 border border-green-400/50">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+            </svg>
+            {successMsg}
+          </div>
         </div>
       )}
 
@@ -268,7 +272,7 @@ const TrainerSchedules = () => {
               <h2 className="text-3xl font-bold text-blue-600 tracking-tight">My Schedules</h2>
               <p className="text-slate-500 mt-2">Manage your training sessions and track student attendance.</p>
             </div>
-            <button onClick={() => setShowForm(true)} className="mt-4 md:mt-0 bg-blue-600 px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700/80 transition-all shadow-lg shadow-blue-600/20">
+            <button onClick={() => setShowForm(true)} className="mt-4 md:mt-0 bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700/80 transition-all shadow-lg shadow-blue-600/20">
               + Add Session
             </button>
           </div>
@@ -279,9 +283,9 @@ const TrainerSchedules = () => {
           <div className="flex flex-col lg:flex-row items-stretch">
             {/* Hub Header */}
             <div className="lg:w-1/4 p-6 bg-gradient-to-br from-blue-600/20 to-transparent border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col justify-center relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-3xl -mr-16 -mt-16 rounded-full group-hover:bg-blue-700/20 transition-all duration-700"></div>
-               <h3 className="text-xl font-black text-slate-900 leading-tight relative z-10">Monthly<br /><span className="text-blue-600">Performance</span></h3>
-               <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-3xl -mr-16 -mt-16 rounded-full group-hover:bg-blue-700/20 transition-all duration-700"></div>
+              <h3 className="text-xl font-black text-slate-900 leading-tight relative z-10">Monthly<br /><span className="text-blue-600">Performance</span></h3>
+              <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
             </div>
 
             {/* Stats Grid */}
@@ -408,10 +412,10 @@ const TrainerSchedules = () => {
             <div className="relative z-10 flex items-center justify-center w-full h-full">
               <div className="backdrop-blur-md bg-slate-100 border border-slate-300 rounded-2xl shadow-2xl max-w-md w-full p-8">
                 {/* Header */}
-                <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/20 to-blue-600/10 border-b border-blue-600/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-slate-900">{editId ? 'Edit Session' : 'Add New Session'}</h3>
+                <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/40 to-blue-600/20 border-b border-blue-600/30 -mx-8 -mt-8 px-8 py-6 mb-6 flex items-center justify-between">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">{editId ? 'Edit Session' : 'Add New Session'}</h3>
                   <button
-                    className="text-slate-900/60 hover:text-slate-900 text-2xl font-bold transition"
+                    className="text-white/70 hover:text-white text-3xl font-light transition-all duration-200"
                     onClick={closeModal}
                     aria-label="Close"
                   >
@@ -473,7 +477,7 @@ const TrainerSchedules = () => {
           </div>
         )}
 
-        <div className="overflow-hidden rounded-3xl border border-slate-200 backdrop-blur-md bg-slate-50 shadow-2xl">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 backdrop-blur-md bg-white shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -492,7 +496,7 @@ const TrainerSchedules = () => {
                   const isExpired = sessionDateTime < new Date();
 
                   return (
-                    <tr key={s._id} className={`hover:bg-slate-50 transition-all group ${isExpired && !s.bookedBy ? 'opacity-60' : ''}`}>
+                    <tr key={s._id} className={`bg-white hover:bg-slate-50 transition-all group ${isExpired && !s.bookedBy ? 'opacity-60' : ''}`}>
                       <td className="px-6 py-5">
                         <div className={`font-bold transition-colors ${isExpired && !s.bookedBy ? 'text-slate-600' : 'text-slate-900 group-hover:text-blue-600'}`}>
                           {s.title}
@@ -518,8 +522,8 @@ const TrainerSchedules = () => {
                           </div>
                         ) : (
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-widest ${isExpired
-                              ? 'bg-red-500/10 text-red-500/70 border-red-500/20'
-                              : 'bg-green-500/10 text-green-700 border-green-500/20'
+                            ? 'bg-red-500/10 text-red-500/70 border-red-500/20'
+                            : 'bg-green-500/10 text-green-700 border-green-500/20'
                             }`}>
                             {isExpired ? 'Expired' : 'Available'}
                           </span>
@@ -531,7 +535,7 @@ const TrainerSchedules = () => {
                             value={s.attendanceStatus || 'Pending'}
                             onChange={(e) => handleAttendance(s._id, e.target.value)}
                             className={`text-xs font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer transition-colors shadow-sm ${s.attendanceStatus === 'Attended' ? 'text-green-700 bg-green-50 border-green-200 hover:border-green-300' :
-                                s.attendanceStatus === 'Absent' ? 'text-red-700 bg-red-50 border-red-200 hover:border-red-300' : 'text-amber-700 bg-amber-50 border-amber-200 hover:border-amber-300'
+                              s.attendanceStatus === 'Absent' ? 'text-red-700 bg-red-50 border-red-200 hover:border-red-300' : 'text-amber-700 bg-amber-50 border-amber-200 hover:border-amber-300'
                               }`}
                           >
                             <option value="Pending" className="text-amber-700 bg-white">Pending</option>
@@ -586,8 +590,8 @@ const TrainerSchedules = () => {
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
                         className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${currentPage === i + 1
-                            ? 'bg-blue-600 border-blue-600 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'
-                            : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900'
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'
+                          : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900'
                           }`}
                       >
                         {i + 1}
@@ -612,17 +616,30 @@ const TrainerSchedules = () => {
 
         {/* Delete Confirmation Modal */}
         {sessionToDelete && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-blue-900/40 backdrop-blur-sm transition-opacity" onClick={() => setSessionToDelete(null)}></div>
-            <div className="relative z-10 bg-white border border-slate-200 rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center animate-in zoom-in-95 duration-200">
-              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 border-8 border-red-50/50">
-                <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+          <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setSessionToDelete(null)}></div>
+            <div className="relative bg-white border border-slate-200 rounded-2xl w-full max-w-sm p-8 text-center animate-in zoom-in-95 duration-300 shadow-2xl shadow-blue-600/10">
+              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </div>
-              <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Delete Session?</h3>
-              <p className="text-slate-500 mb-8 leading-lax">Are you sure you want to delete <span className="font-bold text-slate-800">"{sessionToDelete.title}"</span>? This action cannot be undone.</p>
-              <div className="flex gap-4 justify-center">
-                <button onClick={() => setSessionToDelete(null)} className="px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors w-full">Cancel</button>
-                <button onClick={confirmDelete} className="px-6 py-3 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 w-full">Delete It</button>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">Delete Session?</h3>
+              <p className="text-slate-500 mb-8 text-sm">Are you sure you want to delete <span className="font-bold text-slate-900">"{sessionToDelete.title}"</span>? This action cannot be undone.</p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setSessionToDelete(null)}
+                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold transition-all text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold transition-all text-sm shadow-lg shadow-red-600/20"
+                >
+                  Delete It
+                </button>
               </div>
             </div>
           </div>

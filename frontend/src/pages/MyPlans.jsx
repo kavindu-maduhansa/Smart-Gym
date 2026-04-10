@@ -1,13 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { FaPlus, FaTrash, FaDownload, FaUserPlus, FaDumbbell, FaBookOpen, FaUtensils, FaUserShield } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+function readJwtPayload() {
+  const t = localStorage.getItem("token");
+  if (!t) return null;
+  try {
+    return JSON.parse(atob(t.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
 
 const MyPlans = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("workout");
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const role = useMemo(() => {
+    const p = readJwtPayload();
+    return String(p?.role || "").toLowerCase();
+  }, []);
+
+  const dashboardPath = useMemo(() => {
+    if (role === "admin") return "/admin-dashboard";
+    if (role === "trainer") return "/trainer-dashboard";
+    return "/student-dashboard";
+  }, [role]);
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -52,6 +75,15 @@ const MyPlans = () => {
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10 print:hidden"></div>
 
       <div className="max-w-6xl mx-auto">
+        <div className="mb-6 print:hidden flex justify-end">
+            <button
+              onClick={() => navigate(dashboardPath)}
+              className="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-600/20 active:scale-95 text-sm"
+            >
+              Back to Dashboard
+            </button>
+        </div>
+
         <header className="mb-10 print:hidden text-center md:text-left">
           <h2 className="text-4xl font-black text-blue-600 tracking-tight">My Training & Nutrition</h2>
           <p className="text-slate-500 mt-2 text-lg italic">Personalized plans assigned by your professional trainer.</p>

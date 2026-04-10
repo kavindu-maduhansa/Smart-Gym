@@ -250,7 +250,7 @@ const Cart = () => {
                           </p>
                           <button
                             onClick={() => handleRemoveItem(item.supplementId._id)}
-                            className="bg-red-600/50 hover:bg-red-600 text-slate-900 px-3 py-1 rounded text-sm transition"
+                            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition font-bold shadow-lg shadow-red-600/20"
                           >
                             Remove
                           </button>
@@ -262,7 +262,7 @@ const Cart = () => {
                   <div className="p-6 bg-gradient-to-r from-white/10 to-white/5 border-t border-slate-200">
                     <button
                       onClick={handleClearCart}
-                      className="bg-red-600/50 hover:bg-red-600 text-slate-900 px-6 py-2 rounded-lg font-semibold transition"
+                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold transition shadow-lg shadow-red-600/20"
                     >
                       Clear Cart
                     </button>
@@ -273,7 +273,7 @@ const Cart = () => {
               {/* Summary */}
               <div className="lg:col-span-1">
                 <div className="backdrop-blur-md bg-gradient-to-br from-blue-600-500/20 to-blue-600-500/10 border border-blue-600/30 rounded-xl p-6 sticky top-32">
-                  <h2 className="text-xl font-bold text-slate-900 mb-6">Order Summary</h2>
+                  <h2 className="text-lg font-bold text-slate-900 mb-6">Order Summary</h2>
 
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between text-slate-700">

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import apiClient from "../services/apiClient";
 import DatePicker from "react-datepicker";
@@ -338,7 +338,7 @@ const TrainerBooking = () => {
       await axios.delete(apiClient.feedback.delete(feedbackId), {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setToastMsg({ type: "success", text: "Feedback deleted successfully!" });
+      setToastMsg({ type: "success", text: "Feedback deleted successfully." });
       setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       fetchMyBookings();
       setViewFeedbackModal({ open: false, feedback: null });
@@ -366,7 +366,7 @@ const TrainerBooking = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setToastMsg({ type: "success", text: "Feedback updated!" });
+        setToastMsg({ type: "success", text: "Feedback updated successfully." });
         setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       } else {
         await axios.post(apiClient.feedback.submit, {
@@ -377,7 +377,7 @@ const TrainerBooking = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setToastMsg({ type: "success", text: "Feedback submitted!" });
+        setToastMsg({ type: "success", text: "Feedback submitted successfully." });
         setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       }
       fetchMyBookings();
@@ -396,7 +396,7 @@ const TrainerBooking = () => {
       await axios.delete(`http://localhost:5000/api/student/cancel/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setToastMsg({ type: "success", text: "Booking cancelled successfully!" });
+      setToastMsg({ type: "success", text: "Booking cancelled successfully." });
       setTimeout(() => setToastMsg({ type: "", text: "" }), 3000);
       fetchMyBookings(); // Refresh the list
     } catch (err) {
@@ -442,7 +442,7 @@ const TrainerBooking = () => {
 
   return (
     <div className="page-bg-base pt-24 px-6 relative">
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>
+      <div className="fixed inset-0 ambient-gradient -z-10"></div>
 
       <div className="max-w-4xl mx-auto backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-8">
         <h2 className="text-4xl font-bold text-blue-600 mb-8 border-b border-blue-600/10 pb-6 text-center tracking-tight">
@@ -499,7 +499,7 @@ const TrainerBooking = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-blue-50/50 border border-slate-200 p-2 rounded-lg text-slate-900 focus:outline-none focus:border-blue-600 transition-all min-w-[130px] text-xs font-bold uppercase tracking-widest cursor-pointer appearance-none pr-8"
+                  className="bg-blue-50/50 border border-slate-200 p-2 rounded-lg text-slate-900 focus:outline-none focus:border-blue-600 transition-all min-w-[130px] text-xs font-bold tracking-widest cursor-pointer appearance-none pr-8"
                 >
                   <option value="all">All Status</option>
                   <option value="upcoming">Upcoming</option>
@@ -512,7 +512,7 @@ const TrainerBooking = () => {
               {(filterDate || statusFilter !== "all" || filterTrainer) && (
                 <button
                   onClick={() => { setFilterDate(null); setStatusFilter("all"); setFilterTrainer(""); }}
-                  className="bg-slate-50 border border-slate-200 text-slate-500 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 hover:text-slate-900 transition-all text-[10px] uppercase tracking-widest ml-auto"
+                  className="bg-slate-50 border border-slate-200 text-slate-500 px-4 py-2 rounded-lg font-bold hover:bg-slate-100 hover:text-slate-900 transition-all text-[10px] tracking-widest ml-auto"
                 >
                   Clear All
                 </button>
@@ -540,6 +540,7 @@ const TrainerBooking = () => {
                           const sessionTime = new Date(`${b.date}T${b.time || "00:00"}`);
                           const now = new Date();
                           const isCompleted = sessionTime < now;
+                          const isLocked = !isCompleted && (sessionTime - now) < (60 * 60 * 1000);
                           const isAttended = b.attendanceStatus === "Attended";
                           const isAbsent = b.attendanceStatus === "Absent";
                           const hasFeedback = feedbackGiven[b._id];
@@ -588,16 +589,24 @@ const TrainerBooking = () => {
                                 Upcoming
                               </span>
                               <button
-                                className="bg-red-500/5 text-red-500 hover:bg-red-500/10 px-4 py-2 rounded-lg font-semibold transition-all text-xs tracking-wider border border-red-500/20 active:scale-95"
-                                onClick={() => setDeleteConfirm({
+                                className={`px-4 py-2 rounded-lg font-semibold transition-all text-xs tracking-wider border active:scale-95 ${isLocked 
+                                  ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed' 
+                                  : 'bg-red-500/5 text-red-500 hover:bg-red-500/10 border-red-500/20'}`}
+                                onClick={() => !isLocked && setDeleteConfirm({
                                   type: 'delete',
                                   title: 'Cancel Booking?',
                                   text: 'Are you sure you want to cancel this session? This will make it available to other students.',
                                   onConfirm: () => handleCancelBooking(b._id)
                                 })}
+                                disabled={isLocked}
                               >
                                 Cancel Booking
                               </button>
+                              {isLocked && (
+                                <span className="text-[10px] text-amber-600 font-bold tracking-tight">
+                                  Cancellation locked (within 1hr)
+                                </span>
+                              )}
                             </div>
                           );
                         })()}
@@ -610,7 +619,7 @@ const TrainerBooking = () => {
                 {totalPages > 1 && (
                   <div className="flex justify-center items-center gap-6 mt-10 pt-6 border-t border-slate-200">
                     <button
-                      className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:border-slate-200 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-2 group"
+                      className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:border-slate-200 transition-all tracking-wider text-xs font-semibold flex items-center gap-2 group"
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                     >
@@ -619,12 +628,12 @@ const TrainerBooking = () => {
 
                     <div className="flex items-center gap-3">
                       <span className="text-blue-600 font-bold text-sm tracking-wider">{currentPage}</span>
-                      <span className="text-gray-600 text-[10px] font-bold uppercase tracking-widest leading-none">of</span>
+                      <span className="text-gray-600 text-[10px] font-bold tracking-widest leading-none">of</span>
                       <span className="text-slate-900 font-bold text-sm tracking-wider">{totalPages}</span>
                     </div>
 
                     <button
-                      className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:border-slate-200 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-2 group"
+                      className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:border-slate-200 transition-all tracking-wider text-xs font-semibold flex items-center gap-2 group"
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                     >
@@ -813,7 +822,7 @@ const TrainerBooking = () => {
                             <button
                               type="button"
                               onClick={() => setViewSlotModal({ open: true, row: b })}
-                              className="min-w-[88px] bg-blue-50 border border-blue-200 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-100"
+                              className="min-w-[88px] bg-blue-50 border border-blue-200 text-blue-700 font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition-all shadow-sm"
                             >
                               View
                             </button>
@@ -823,7 +832,7 @@ const TrainerBooking = () => {
                                   type="button"
                                   disabled={actionBusy}
                                   onClick={() => openEditSlot(b)}
-                                  className="min-w-[88px] bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                                  className="min-w-[88px] bg-blue-600 text-white font-bold px-4 py-2 rounded-xl hover:bg-blue-700 disabled:opacity-50 transition-all shadow-md shadow-blue-600/10"
                                 >
                                   Edit
                                 </button>
@@ -836,7 +845,7 @@ const TrainerBooking = () => {
                                     text: 'Are you sure you want to release this gym slot booking?',
                                     onConfirm: () => deleteSlotBooking(b)
                                   })}
-                                  className="min-w-[88px] bg-red-50 text-red-700 border border-red-200 font-semibold px-4 py-2 rounded-lg hover:bg-red-100 disabled:opacity-50"
+                                  className="min-w-[88px] bg-red-50 text-red-700 border border-red-200 font-bold px-4 py-2 rounded-xl hover:bg-red-100 disabled:opacity-50 transition-all"
                                 >
                                   {slotActionKey === `del-${b.scheduleId}-${b.slotId}` ? "…" : "Delete"}
                                 </button>
@@ -1005,7 +1014,7 @@ const TrainerBooking = () => {
           <button
             type="button"
             onClick={() => navigate(dashboardPath)}
-            className="bg-slate-100 border border-slate-300 text-slate-900 font-bold px-6 py-2 rounded-lg hover:bg-white/15"
+            className="bg-blue-600 text-white font-bold px-8 py-2.5 rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-600/20 active:scale-95"
           >
             Back to dashboard
           </button>
@@ -1137,7 +1146,7 @@ const TrainerBooking = () => {
       {/* Premium Toast Notification */}
       {toastMsg.text && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[2000] animate-in slide-in-from-top-8 duration-300">
-          <div className={`px-8 py-4 rounded-full shadow-2xl font-black tracking-widest uppercase text-xs flex items-center gap-3 backdrop-blur-md ${
+          <div className={`px-8 py-4 rounded-full shadow-2xl font-black tracking-widest text-xs flex items-center gap-3 backdrop-blur-md ${
             toastMsg.type === "success" 
               ? "bg-green-500 text-slate-900 border border-green-400/50" 
               : "bg-red-500 text-white border border-red-400/50"
@@ -1151,36 +1160,30 @@ const TrainerBooking = () => {
       {deleteConfirm && (
         <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setDeleteConfirm(null)}></div>
-          <div className="relative bg-white border border-slate-200 rounded-3xl w-full max-w-sm p-10 text-center animate-in zoom-in-95 duration-300 shadow-2xl shadow-blue-600/10">
-            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-inner ${deleteConfirm.type === 'delete' ? 'bg-red-50' : 'bg-blue-50'}`}>
-              {deleteConfirm.type === 'delete' ? (
-                <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              ) : (
-                <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
+          <div className="relative bg-white border border-slate-200 rounded-2xl w-full max-w-sm p-8 text-center animate-in zoom-in-95 duration-300 shadow-2xl shadow-blue-600/10">
+            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
             </div>
-            <h3 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">{deleteConfirm.title}</h3>
-            <p className="text-slate-500 mb-10 text-sm leading-relaxed">{deleteConfirm.text}</p>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">{deleteConfirm.title}</h3>
+            <p className="text-slate-500 mb-8 text-sm leading-relaxed">{deleteConfirm.text}</p>
             
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 py-4 rounded-2xl font-black transition-all text-xs uppercase tracking-widest border border-slate-200"
+                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold transition-all text-sm"
               >
-                Go Back
+                Cancel
               </button>
               <button
                 onClick={() => {
                   deleteConfirm.onConfirm();
                   setDeleteConfirm(null);
                 }}
-                className={`flex-1 py-4 rounded-2xl font-black transition-all text-xs uppercase tracking-widest shadow-xl text-white ${deleteConfirm.type === 'delete' ? 'bg-red-600 hover:bg-red-700 shadow-red-600/20' : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20'}`}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold transition-all text-sm shadow-lg shadow-red-600/20"
               >
-                Confirm
+                Delete It
               </button>
             </div>
           </div>

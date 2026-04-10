@@ -117,7 +117,7 @@ const Home = () => {
               <span className="text-slate-900">Management System</span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-slate-700 mb-10 leading-relaxed max-w-3xl mx-auto">
-              Manage memberships, schedules, and fitness services in one calm, clear place—built for admins, trainers, and members.
+              Manage memberships, schedules, and fitness services in one calm, clear place-built for admins, trainers, and members.
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
               <Link to="/register" className="ui-btn-primary px-8 text-base shadow-md shadow-blue-600/20">
@@ -162,7 +162,7 @@ const Home = () => {
               Powerful features
             </h2>
             <p className="text-slate-600 text-lg leading-relaxed">
-              Everything you need to run the front desk, the training floor, and member services—without the clutter.
+              Everything you need to run the front desk, the training floor, and member services without the clutter.
             </p>
           </div>
 
@@ -215,7 +215,7 @@ const Home = () => {
               Top <span className="text-blue-600 dark:text-blue-400">trainers</span>
             </h2>
             <p className="mx-auto max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              Celebrating coaches members love—ranked from real feedback and ratings.
+              Celebrating coaches members love ranked from real feedback and ratings.
             </p>
           </div>
 
@@ -252,84 +252,84 @@ const Home = () => {
                 }
 
                 return (
-                <div
-                  key={trainer._id}
-                  className={`flex cursor-pointer flex-col overflow-hidden rounded-2xl border shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl ${cardStyle}`}
-                  onClick={() => handleExpand(trainer)}
-                >
-                  <div className="flex items-center justify-between p-6 md:px-8">
-                    <div className="flex items-center gap-6">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-black ${rankStyle}`}>
-                        {index + 1}
+                  <div
+                    key={trainer._id}
+                    className={`flex cursor-pointer flex-col overflow-hidden rounded-2xl border shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl ${cardStyle}`}
+                    onClick={() => handleExpand(trainer)}
+                  >
+                    <div className="flex items-center justify-between p-6 md:px-8">
+                      <div className="flex items-center gap-6">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-black ${rankStyle}`}>
+                          {index + 1}
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+                            {trainer.userId?.name || "Unknown Trainer"}
+                          </h3>
+                          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{trainer.userId?.email}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-                          {trainer.userId?.name || "Unknown Trainer"}
-                        </h3>
-                        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{trainer.userId?.email}</p>
+                      <div className="flex flex-col items-end">
+                        <div className="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-1.5 rounded-full shadow-md">
+                          <span className="text-lg font-bold">
+                            {trainer.metrics?.avgRating?.toFixed(1) || "0.0"}
+                          </span>
+                          <svg className="w-5 h-5 text-yellow-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-1.5 rounded-full shadow-md">
-                        <span className="text-lg font-bold">
-                          {trainer.metrics?.avgRating?.toFixed(1) || "0.0"}
-                        </span>
-                        <svg className="w-5 h-5 text-yellow-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
 
-                  {expandedTrainer === trainer._id && (
-                    <div className="border-t border-slate-100 bg-slate-50/50 px-6 pb-6 pt-4 dark:border-slate-700 dark:bg-slate-900/50">
-                      <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-400">
-                        Recent Feedback
-                      </h4>
-                      {fetchingFeedback && !feedbacks[trainer._id] ? (
-                        <p className="text-sm font-medium text-blue-600 animate-pulse dark:text-blue-400">
-                          Loading student feedback...
-                        </p>
-                      ) : feedbacks[trainer._id]?.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {feedbacks[trainer._id].map(fb => (
-                            <div
-                              key={fb._id}
-                              className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-slate-600 dark:bg-slate-800/90"
-                            >
-                              <div className="mb-2 flex items-start justify-between">
-                                <span className="truncate pr-2 text-sm font-bold text-slate-900 dark:text-slate-100">
-                                  {fb.studentId?.name || "Student"}
-                                </span>
-                                <div className="flex shrink-0 gap-0.5 text-xs text-yellow-400">
-                                  {[...Array(5)].map((_, i) => (
-                                    <svg
-                                      key={i}
-                                      className={`h-4 w-4 ${i < fb.rating ? "text-yellow-400" : "text-slate-200 dark:text-slate-600"}`}
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                  ))}
-                                </div>
-                              </div>
-                              {fb.comment && (
-                                <p className="text-sm italic text-slate-600 dark:text-slate-300">&quot;{fb.comment}&quot;</p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="rounded-xl border border-slate-200 bg-white p-4 text-center dark:border-slate-600 dark:bg-slate-800/80">
-                          <p className="text-sm font-medium text-slate-500 dark:text-slate-300">
-                            No feedback is available for this trainer yet.
+                    {expandedTrainer === trainer._id && (
+                      <div className="border-t border-slate-100 bg-slate-50/50 px-6 pb-6 pt-4 dark:border-slate-700 dark:bg-slate-900/50">
+                        <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-400">
+                          Recent Feedback
+                        </h4>
+                        {fetchingFeedback && !feedbacks[trainer._id] ? (
+                          <p className="text-sm font-medium text-blue-600 animate-pulse dark:text-blue-400">
+                            Loading student feedback...
                           </p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+                        ) : feedbacks[trainer._id]?.length > 0 ? (
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {feedbacks[trainer._id].map(fb => (
+                              <div
+                                key={fb._id}
+                                className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-slate-600 dark:bg-slate-800/90"
+                              >
+                                <div className="mb-2 flex items-start justify-between">
+                                  <span className="truncate pr-2 text-sm font-bold text-slate-900 dark:text-slate-100">
+                                    {fb.studentId?.name || "Student"}
+                                  </span>
+                                  <div className="flex shrink-0 gap-0.5 text-xs text-yellow-400">
+                                    {[...Array(5)].map((_, i) => (
+                                      <svg
+                                        key={i}
+                                        className={`h-4 w-4 ${i < fb.rating ? "text-yellow-400" : "text-slate-200 dark:text-slate-600"}`}
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                      </svg>
+                                    ))}
+                                  </div>
+                                </div>
+                                {fb.comment && (
+                                  <p className="text-sm italic text-slate-600 dark:text-slate-300">&quot;{fb.comment}&quot;</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="rounded-xl border border-slate-200 bg-white p-4 text-center dark:border-slate-600 dark:bg-slate-800/80">
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-300">
+                              No feedback is available for this trainer yet.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 );
               })
             ) : (
@@ -347,7 +347,7 @@ const Home = () => {
               Ready to streamline your gym?
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-slate-600 sm:mb-10 sm:text-lg md:text-xl dark:text-slate-300">
-              Get your team on one calm dashboard—fewer spreadsheets, clearer days, happier members.
+              Get your team on one calm dashboard-fewer spreadsheets, clearer days, happier members.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Link to="/register" className="ui-btn-primary px-8 text-base justify-center sm:min-w-[200px]">

@@ -35,6 +35,8 @@ const AdminOrderManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [methodFilter, setMethodFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const handleUpdateStatus = async (id, newStatus) => {
     try {
@@ -67,6 +69,16 @@ const AdminOrderManagement = () => {
     return matchesSearch && matchesStatus && matchesMethod;
   });
 
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, methodFilter]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+
   return (
     <div className="page-bg-base overflow-hidden">
       {/* Animated Background */}
@@ -88,7 +100,7 @@ const AdminOrderManagement = () => {
                 </svg>
                 <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">Order Management</h1>
               </div>
-              <button onClick={() => navigate("/admin-dashboard")} className="bg-slate-200 hover:bg-white/30 text-slate-900 px-6 py-2 rounded-lg font-semibold transition border border-slate-200">
+              <button onClick={() => navigate("/admin-dashboard")} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-lg shadow-blue-600/20">
                 Back to Dashboard
               </button>
             </div>
@@ -99,7 +111,7 @@ const AdminOrderManagement = () => {
           <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-8 shadow-xl">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
               <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Search Orders</label>
+                <label className="block text-xs font-bold text-blue-600 tracking-widest mb-2">Search Orders</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -114,7 +126,7 @@ const AdminOrderManagement = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Status</label>
+                <label className="block text-xs font-bold text-blue-600 tracking-widest mb-2">Status</label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
@@ -128,7 +140,7 @@ const AdminOrderManagement = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Method</label>
+                <label className="block text-xs font-bold text-blue-600 tracking-widest mb-2">Method</label>
                 <select
                   value={methodFilter}
                   onChange={(e) => setMethodFilter(e.target.value)}
@@ -147,7 +159,7 @@ const AdminOrderManagement = () => {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-100 text-xs font-bold uppercase tracking-widest text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100">
+                  <tr className="border-b border-slate-200 bg-slate-100 text-xs font-bold tracking-widest text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100">
                     <th className="px-4 py-3">Order ID</th>
                     <th className="px-4 py-3">Customer</th>
                     <th className="px-4 py-3">Date</th>
@@ -159,8 +171,8 @@ const AdminOrderManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200/80 dark:divide-slate-700">
-                  {filteredOrders.length > 0 ? (
-                    filteredOrders.map((order) => (
+                  {currentItems.length > 0 ? (
+                    currentItems.map((order) => (
                       <React.Fragment key={order._id}>
                         <tr
                           className="group cursor-pointer bg-white/80 transition hover:bg-slate-50 dark:bg-slate-950/30 dark:hover:bg-slate-800/50"
@@ -183,7 +195,7 @@ const AdminOrderManagement = () => {
                           </td>
                           <td className="px-4 py-3">
                             <span
-                              className={`inline-block whitespace-nowrap rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm ${
+                              className={`inline-block whitespace-nowrap rounded-full border px-3 py-1 text-[10px] font-bold tracking-wider shadow-sm ${
                                 order.deliveryMethod === "Pickup at Counter"
                                   ? "border-purple-200 bg-purple-100/80 text-purple-800 dark:border-purple-500/40 dark:bg-purple-950/60 dark:text-purple-100"
                                   : "border-blue-200 bg-blue-100/80 text-blue-800 dark:border-blue-500/40 dark:bg-sky-950/55 dark:text-sky-100"
@@ -231,7 +243,7 @@ const AdminOrderManagement = () => {
                             <td colSpan="8" className="px-12 py-6">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
-                                  <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+                                  <h4 className="mb-4 text-xs font-bold tracking-widest text-blue-600 dark:text-blue-400">
                                     Product Details
                                   </h4>
                                   <div className="space-y-3">
@@ -253,13 +265,13 @@ const AdminOrderManagement = () => {
                                   </div>
                                 </div>
                                 <div className="rounded-2xl border border-slate-200/80 bg-blue-50/40 p-6 dark:border-slate-600 dark:bg-slate-800/70">
-                                  <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">
+                                  <h4 className="mb-4 text-xs font-bold tracking-widest text-slate-600 dark:text-slate-300">
                                     Order Summary
                                   </h4>
                                   <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
                                       <span className="text-slate-500 dark:text-slate-400">Payment Status</span>
-                                      <span className="text-xs font-bold uppercase text-green-700 dark:text-emerald-300">{order.paymentStatus}</span>
+                                      <span className="text-xs font-bold text-green-700 dark:text-emerald-300">{order.paymentStatus}</span>
                                     </div>
                                     <div className="flex justify-between">
                                       <span className="text-slate-500 dark:text-slate-400">Delivery Identifier</span>
@@ -284,7 +296,7 @@ const AdminOrderManagement = () => {
                           <svg className="w-16 h-16 text-gray-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                           </svg>
-                          <p className="text-slate-600 text-lg uppercase tracking-widest font-bold">No orders found</p>
+                          <p className="text-slate-600 text-lg tracking-widest font-bold">No orders found</p>
                           <button
                             onClick={() => { setSearchTerm(""); setStatusFilter("All"); setMethodFilter("All"); }}
                             className="mt-4 text-blue-600 hover:text-blue-500 font-bold transition flex items-center gap-2"
@@ -300,6 +312,47 @@ const AdminOrderManagement = () => {
                   )}
                 </tbody>
               </table>
+
+              {/* Pagination Controls */}
+              {filteredOrders.length > 0 && (
+                <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200/60 bg-transparent">
+                  <div className="text-xs text-slate-600 font-medium tracking-tight">
+                    Showing <span className="text-blue-600 font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-blue-600 font-bold">{Math.min(currentPage * itemsPerPage, filteredOrders.length)}</span> of <span className="text-blue-600 font-bold">{filteredOrders.length}</span> orders
+                  </div>
+                  {filteredOrders.length > itemsPerPage && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-900 hover:bg-blue-50 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:bg-white disabled:hover:border-slate-200 transition-all shadow-sm"
+                      >
+                        Previous
+                      </button>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPages }, (_, i) => (
+                          <button
+                            key={i + 1}
+                            onClick={() => setCurrentPage(i + 1)}
+                            className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all ${currentPage === i + 1
+                              ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/30 ring-2 ring-blue-600/20'
+                              : 'bg-white border-slate-200 text-slate-500 hover:border-blue-600/50 hover:text-slate-900 hover:bg-slate-50'
+                              }`}
+                          >
+                            {i + 1}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-900 hover:bg-blue-50 hover:border-blue-600/50 disabled:opacity-30 disabled:hover:bg-white disabled:hover:border-slate-200 transition-all shadow-sm"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
