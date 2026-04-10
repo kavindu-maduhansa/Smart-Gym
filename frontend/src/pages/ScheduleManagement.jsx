@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
+import { useToast } from "../hooks/useToast.js";
+import ToastPopup from "../components/ToastPopup.jsx";
 
 const API = "http://localhost:5000/api/gym-schedules";
 
@@ -8,6 +10,26 @@ const GYM_SLOT_DURATION_MINUTES = 120;
 
 function clamp(num, min, max) {
   return Math.min(max, Math.max(min, num));
+}
+
+function AnalyticsSectionSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse" aria-busy="true" aria-label="Loading analytics">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="h-24 rounded-lg bg-slate-200/70" />
+        <div className="h-24 rounded-lg bg-slate-200/70 md:col-span-2" />
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="h-52 rounded-xl bg-slate-200/70" />
+        <div className="h-52 rounded-xl bg-slate-200/70" />
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="h-40 rounded-xl bg-slate-200/70" />
+        <div className="h-40 rounded-xl bg-slate-200/70" />
+      </div>
+      <div className="h-20 rounded-xl bg-slate-200/70" />
+    </div>
+  );
 }
 
 function BarChart2({ peak, low }) {
@@ -238,9 +260,11 @@ const ScheduleManagement = () => {
   const [showPastSchedules, setShowPastSchedules] = useState(false);
 
   const [analyticsDays, setAnalyticsDays] = useState(7);
-  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsLoading, setAnalyticsLoading] = useState(true);
   const [analytics, setAnalytics] = useState(null);
   const [analyticsError, setAnalyticsError] = useState("");
+
+  const { toast, showToast, hideToast } = useToast();
 
   const previewHours = useMemo(() => {
     const d = form.date?.trim();
@@ -259,11 +283,14 @@ const ScheduleManagement = () => {
       const res = await axios.get(API, authHeader());
       setItems(res.data || []);
     } catch {
-      setMsg("Could not load schedules.");
+      const m =
+        "We couldn't load schedules. Check your connection, make sure you're signed in as admin, then refresh.";
+      setMsg(m);
+      showToast("error", m);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   useEffect(() => {
     load();
@@ -322,7 +349,10 @@ const ScheduleManagement = () => {
     if (editId) {
       const existing = items.find((x) => String(x._id) === String(editId));
       if (existing && isDateBeforeToday(existing.date)) {
-        setMsg("Past schedules cannot be edited.");
+        const m =
+          "That day is in the past. You can view it for records, but schedules can't be edited.";
+        setMsg(m);
+        showToast("error", m);
         return;
       }
     }
@@ -354,17 +384,24 @@ const ScheduleManagement = () => {
     try {
       if (editId) {
         await axios.put(`${API}/${editId}`, payload, authHeader());
-        setMsg("Schedule updated and slots regenerated.");
+        const ok = `Updated ${dateVal}. Time slots were rebuilt with your new settings.`;
+        setMsg(ok);
+        showToast("success", ok);
       } else {
         await axios.post(API, payload, authHeader());
-        setMsg("Schedule saved; slots were generated automatically.");
+        const ok = `Gym slots for ${dateVal} are live. Up to ${payload.capacityPerSlot} people can book each slot.`;
+        setMsg(ok);
+        showToast("success", ok);
       }
       resetForm();
       await load();
       fetchAnalytics();
     } catch (err) {
-      const m = err.response?.data?.message || "Request failed.";
+      const m =
+        err.response?.data?.message ||
+        "Something went wrong while saving. Please try again, or refresh and check your details.";
       setMsg(m);
+      showToast("error", m);
     } finally {
       setSaving(false);
     }
@@ -372,7 +409,10 @@ const ScheduleManagement = () => {
 
   const onEdit = (row) => {
     if (isDateBeforeToday(row.date)) {
-      setMsg("Past schedules cannot be edited.");
+      const m =
+        "That day is in the past. You can view it for records, but schedules can't be edited.";
+      setMsg(m);
+      showToast("error", m);
       return;
     }
     setEditId(row._id);
@@ -389,19 +429,28 @@ const ScheduleManagement = () => {
   const onDelete = async (id) => {
     const row = items.find((x) => String(x._id) === String(id));
     if (row && isDateBeforeToday(row.date)) {
-      setMsg("Past schedules cannot be deleted.");
+      const m =
+        "Past schedules stay in the system for history and reports, so they can't be deleted.";
+      setMsg(m);
+      showToast("error", m);
       return;
     }
     if (!window.confirm("Remove this schedule and all its slots?")) return;
     setMsg("");
     try {
       await axios.delete(`${API}/${id}`, authHeader());
-      setMsg("Removed.");
+      const ok = "Removed. That day's schedule and all its time slots are gone.";
+      setMsg(ok);
+      showToast("success", ok);
       if (editId === id) resetForm();
       await load();
       fetchAnalytics();
     } catch (err) {
-      setMsg(err.response?.data?.message || "Delete failed.");
+      const m =
+        err.response?.data?.message ||
+        "We couldn't delete that schedule. It may still have active bookings—try again or adjust slots first.";
+      setMsg(m);
+      showToast("error", m);
     }
   };
 
@@ -444,7 +493,9 @@ const ScheduleManagement = () => {
     const slots = slotModal.slots || [];
     const cap = Number(bulkCap);
     if (!Number.isFinite(cap) || !Number.isInteger(cap)) {
-      setMsg("Capacity must be a whole number.");
+      const m = "Please enter a whole number for capacity (no decimals).";
+      setMsg(m);
+      showToast("error", m);
       return;
     }
     setSlotActionKey(`bulk-cap-${scheduleId}`);
@@ -456,6 +507,10 @@ const ScheduleManagement = () => {
       }
       await refreshOneScheduleIntoModal(scheduleId);
       fetchAnalytics();
+      showToast(
+        "success",
+        "Capacity updated where we could. Slots that already have more bookings than the new limit were left unchanged.",
+      );
     } finally {
       setSlotActionKey(null);
     }
@@ -472,6 +527,10 @@ const ScheduleManagement = () => {
       }
       await refreshOneScheduleIntoModal(scheduleId);
       fetchAnalytics();
+      showToast(
+        "success",
+        "Done. Every open slot for this day is now closed—no new bookings until you reopen them.",
+      );
     } finally {
       setSlotActionKey(null);
     }
@@ -488,6 +547,10 @@ const ScheduleManagement = () => {
       }
       await refreshOneScheduleIntoModal(scheduleId);
       fetchAnalytics();
+      showToast(
+        "success",
+        "Closed slots are open again. Members can book them if there's space.",
+      );
     } finally {
       setSlotActionKey(null);
     }
@@ -501,6 +564,7 @@ const ScheduleManagement = () => {
       await axios.post(`${API}/${scheduleId}/slots/${slotId}/close`, {}, { headers: { Authorization: `Bearer ${token}` } });
       await refreshOneScheduleIntoModal(scheduleId);
       fetchAnalytics();
+      showToast("success", "This time slot is closed. New bookings are blocked until you reopen it.");
     } finally {
       setSlotActionKey(null);
     }
@@ -514,6 +578,7 @@ const ScheduleManagement = () => {
       await axios.post(`${API}/${scheduleId}/slots/${slotId}/open`, {}, { headers: { Authorization: `Bearer ${token}` } });
       await refreshOneScheduleIntoModal(scheduleId);
       fetchAnalytics();
+      showToast("success", "This time slot is open again for bookings (within capacity).");
     } finally {
       setSlotActionKey(null);
     }
@@ -532,16 +597,22 @@ const ScheduleManagement = () => {
       );
       await refreshOneScheduleIntoModal(scheduleId);
       fetchAnalytics();
+      showToast("success", "Slot capacity saved. Existing bookings are unchanged.");
     } catch (err) {
-      setMsg(err.response?.data?.message || "Could not update slot capacity.");
+      const m =
+        err.response?.data?.message ||
+        "We couldn't update that slot's capacity. Use a number at least as high as current bookings, then try again.";
+      setMsg(m);
+      showToast("error", m);
     } finally {
       setSlotActionKey(null);
     }
   };
 
   const isErrorMsg =
-    /fail|Could not|not |cannot|Invalid|required|must |already|duplicate|blocked/i.test(msg) ||
-    msg.includes("403");
+    /fail|could not|couldn't|not |cannot|can't|invalid|required|must |already|duplicate|blocked|wrong|try again|check your connection|stay in the system|view it for records/i.test(
+      msg,
+    ) || msg.includes("403");
 
   const slotModalIsPast = useMemo(
     () => Boolean(slotModal?.date && isDateBeforeToday(slotModal.date)),
@@ -903,14 +974,21 @@ const ScheduleManagement = () => {
           </div>
 
           <div className="backdrop-blur-md bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-8 mt-8 mb-8">
-            <div className="flex items-start justify-between gap-4 mb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-blue-600">Utilization & Peak Analytics</h2>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-2xl font-bold text-blue-600">Utilization & Peak Analytics</h2>
+                  {analyticsLoading && analytics ? (
+                    <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-600 animate-pulse">
+                      Refreshing…
+                    </span>
+                  ) : null}
+                </div>
                 <p className="text-slate-700 text-sm mt-1">
                   Auto-updates every 30 seconds. Peak detection uses admin-open slots only.
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {[7, 14, 30].map((d) => (
                   <button
                     key={d}
@@ -928,12 +1006,13 @@ const ScheduleManagement = () => {
               </div>
             </div>
 
-            {analyticsLoading && <div className="text-slate-500 text-sm mb-3">Updating charts…</div>}
             {analyticsError && (
               <div className="text-red-700 text-sm mb-3 font-bold border border-red-500/30 bg-red-500/10 rounded-lg p-3">
                 {analyticsError}
               </div>
             )}
+
+            {analyticsLoading && !analytics && !analyticsError ? <AnalyticsSectionSkeleton /> : null}
 
             {analytics && (
               <>
@@ -1216,6 +1295,7 @@ const ScheduleManagement = () => {
           )}
         </div>
       </div>
+      <ToastPopup toast={toast} onDismiss={hideToast} />
     </div>
   );
 };

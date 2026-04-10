@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import { useToast } from "../hooks/useToast.js";
+import ToastPopup from "../components/ToastPopup.jsx";
 
 function readJwtPayload() {
   const t = localStorage.getItem("token");
@@ -49,7 +51,7 @@ const TrainerAvailability = () => {
   const [filterTitle, setFilterTitle] = useState("");
   const [filterTrainer, setFilterTrainer] = useState("");
   const [filterDate, setFilterDate] = useState(null);
-  const [trainerMsg, setTrainerMsg] = useState({ type: "", text: "" });
+  const { toast: trainerToast, showToast: showTrainerToast, hideToast: hideTrainerToast } = useToast();
   const [statusFilter, setStatusFilter] = useState("all");
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
 
@@ -70,22 +72,28 @@ const TrainerAvailability = () => {
     closed: "Closed"
   };
 
-  const handleBook = async (id) => {
-    setTrainerMsg({ type: "", text: "" });
+  const handleBook = async (session) => {
+    const id = session?._id;
+    if (!id) return;
     setBookingId(id);
     try {
       const token = localStorage.getItem("token");
       await axios.put(`${API_URL}/book/${id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setTrainerMsg({ type: "success", text: "Session booked successfully." });
+      const title = session.title?.trim() || "Session";
+      const when = `${session.date} at ${session.time || "—"}`;
+      showTrainerToast("success", `You're booked for “${title}” on ${when}. See you there!`);
       // Refresh the list so the booked session disappears
       const res = await axios.get(`${API_URL}/available`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSchedules(res.data);
     } catch (err) {
-      setTrainerMsg({ type: "error", text: err.response?.data?.message || "Booking failed." });
+      showTrainerToast(
+        "error",
+        friendlyApiMessage(err, "We couldn't book that session. Please try again or pick another time."),
+      );
     } finally {
       setBookingId(null);
     }
@@ -134,17 +142,6 @@ const TrainerAvailability = () => {
   return (
     <div className="mb-8">
       <h2 className="text-xl font-bold text-blue-600 mb-4 tracking-tight text-center sm:text-left">Available Trainer Schedules</h2>
-      {trainerMsg.text && (
-        <div
-          className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold border ${
-            trainerMsg.type === "success"
-              ? "bg-green-500/15 border-green-500/40 text-green-700"
-              : "bg-red-500/15 border-red-500/40 text-red-700"
-          }`}
-        >
-          {trainerMsg.text}
-        </div>
-      )}
       <div className="flex flex-wrap gap-4 mb-6 items-center bg-blue-50/40 p-4 rounded-xl border border-slate-200 min-w-0">
         <span className="text-slate-600 font-semibold text-xs tracking-tight mr-2 shrink-0">Filter By:</span>
 
@@ -275,7 +272,7 @@ const TrainerAvailability = () => {
 
                   {isStudent && (
                     <button
-                      onClick={() => !isExpired && !isLocked && handleBook(s._id)}
+                      onClick={() => !isExpired && !isLocked && handleBook(s)}
                       disabled={isExpired || isLocked || bookingId === s._id}
                       className={`w-full font-bold py-3.5 rounded-xl transition-all text-xs tracking-wider relative z-10 ${isExpired || isLocked
                         ? 'bg-slate-50 text-gray-700 cursor-not-allowed border border-white/5 mt-auto'
@@ -318,11 +315,33 @@ const TrainerAvailability = () => {
           )}
         </>
       )}
+      <ToastPopup toast={trainerToast} onDismiss={hideTrainerToast} />
     </div>
   );
 };
 
 const GYM_SCHEDULES_URL = "http://localhost:5000/api/gym-schedules";
+
+/** Prefer API message when present; otherwise a short, friendly fallback. */
+function friendlyApiMessage(err, fallback) {
+  const m = err?.response?.data?.message;
+  if (typeof m === "string" && m.trim()) return m.trim();
+  return fallback;
+}
+
+function gymSlotBookingLabel(s) {
+  if (!s) return "";
+  const day = s.dayLabel ? `${s.date} (${s.dayLabel})` : s.date;
+  return `${day} · ${s.start}–${s.end}`;
+}
+
+/** Normalize Mongoose user ref (ObjectId string or populated `{ _id }`). */
+function bookingUserId(entry) {
+  const u = entry?.user;
+  if (u == null) return "";
+  if (typeof u === "object" && u._id != null) return String(u._id);
+  return String(u);
+}
 
 function ymdFromLocalDate(d) {
   if (!d || !(d instanceof Date) || Number.isNaN(d.getTime())) return "";
@@ -374,25 +393,42 @@ const SlotAvailability = () => {
   const [viewMode, setViewMode] = useState("calendar"); // calendar | list
   const [calendarMonth, setCalendarMonth] = useState(() => startOfMonthLocal(new Date()));
   const [rulesOpen, setRulesOpen] = useState(false);
-  const [slotMsg, setSlotMsg] = useState({ type: "", text: "" });
+  const { toast: slotToast, showToast: showSlotToast, hideToast: hideSlotToast } = useToast();
+  const reminderAnnouncedRef = useRef(new Set());
+  const [browserNotifyPermission, setBrowserNotifyPermission] = useState(() =>
+    typeof window !== "undefined" && "Notification" in window ? Notification.permission : "unsupported",
+  );
 
   const jwt = typeof localStorage !== "undefined" ? readJwtPayload() : null;
+  // Prefer JWT id (matches Authorization header) over stored userId to avoid stale account after switch.
   const userId =
-    (typeof localStorage !== "undefined" && localStorage.getItem("userId")) ||
-    (jwt?.id ? String(jwt.id) : null);
+    jwt?.id != null && jwt.id !== ""
+      ? String(jwt.id)
+      : typeof localStorage !== "undefined" && localStorage.getItem("userId")
+        ? String(localStorage.getItem("userId"))
+        : null;
   const isStudent =
     (typeof localStorage !== "undefined" && localStorage.getItem("role") === "student") ||
     jwt?.role === "student";
 
-  const loadRows = async () => {
+  const loadRows = useCallback(async () => {
+    if (typeof window === "undefined") return;
     const token = localStorage.getItem("token");
-    const res = await axios.get(GYM_SCHEDULES_URL, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setRows(Array.isArray(res.data) ? res.data : []);
-  };
+    if (!token) {
+      setRows([]);
+      return;
+    }
+    try {
+      const res = await axios.get(GYM_SCHEDULES_URL, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setRows(Array.isArray(res.data) ? res.data : []);
+    } catch {
+      setRows([]);
+    }
+  }, []);
 
-  const loadNotifications = async () => {
+  const loadNotifications = useCallback(async () => {
     if (!isStudent) return;
     const token = localStorage.getItem("token");
     try {
@@ -403,7 +439,7 @@ const SlotAvailability = () => {
     } catch {
       setNotifications([]);
     }
-  };
+  }, [isStudent]);
 
   useEffect(() => {
     axios
@@ -421,8 +457,100 @@ const SlotAvailability = () => {
       loadRows().catch(() => {});
     }, 30000);
     return () => window.clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isStudent, loadNotifications, loadRows]);
+
+  // Refetch schedules when another student logs in on this tab so "your" bookings vs others stay correct.
+  useEffect(() => {
+    const onAuthChange = () => {
+      setBookingKey(null);
+      reminderAnnouncedRef.current = new Set();
+      void loadRows();
+      void loadNotifications();
+    };
+    window.addEventListener("tokenChanged", onAuthChange);
+    window.addEventListener("storage", onAuthChange);
+    return () => {
+      window.removeEventListener("tokenChanged", onAuthChange);
+      window.removeEventListener("storage", onAuthChange);
+    };
+  }, [loadRows, loadNotifications]);
+
+  const sortedNotifications = useMemo(() => {
+    const list = Array.isArray(notifications) ? [...notifications] : [];
+    list.sort((a, b) => {
+      const ar = a.kind === "REMINDER_BEFORE_SESSION" ? 0 : 1;
+      const br = b.kind === "REMINDER_BEFORE_SESSION" ? 0 : 1;
+      if (ar !== br) return ar - br;
+      const tb = new Date(b.createdAt || 0).getTime();
+      const ta = new Date(a.createdAt || 0).getTime();
+      return tb - ta;
+    });
+    return list;
+  }, [notifications]);
+
+  useEffect(() => {
+    if (!isStudent || !sortedNotifications.length) return;
+    const fresh = sortedNotifications.filter(
+      (n) =>
+        n.kind === "REMINDER_BEFORE_SESSION" &&
+        !n.isRead &&
+        !reminderAnnouncedRef.current.has(String(n._id)),
+    );
+    if (!fresh.length) return;
+    for (const n of fresh) reminderAnnouncedRef.current.add(String(n._id));
+
+    if (fresh.length === 1) {
+      showSlotToast("info", fresh[0].message, 9000);
+    } else {
+      showSlotToast(
+        "info",
+        `You have ${fresh.length} gym slot reminders starting soon. Check the reminders above for dates and times.`,
+        9000,
+      );
+    }
+
+    if (
+      typeof window !== "undefined" &&
+      "Notification" in window &&
+      Notification.permission === "granted"
+    ) {
+      for (const n of fresh) {
+        if (!n.message) continue;
+        try {
+          new Notification("Gym booking reminder", {
+            body: n.message,
+            tag: `gym-reminder-${n._id}`,
+          });
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+  }, [isStudent, sortedNotifications, showSlotToast]);
+
+  const requestBrowserReminders = async () => {
+    if (typeof window === "undefined" || !("Notification" in window)) return;
+    const p = await Notification.requestPermission();
+    setBrowserNotifyPermission(p);
+    if (p === "granted") {
+      showSlotToast("success", "Browser reminders on. We'll alert you when a gym slot is coming up.");
+    }
+  };
+
+  const dismissNotification = async (notificationId) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      await axios.put(
+        `${GYM_SCHEDULES_URL}/my-notifications/${notificationId}/read`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      await loadNotifications();
+    } catch {
+      showSlotToast("error", "Couldn't dismiss that notification. Try again.");
+    }
+  };
 
   useEffect(() => {
     const run = async () => {
@@ -437,14 +565,16 @@ const SlotAvailability = () => {
       }
     };
     run();
-  }, []);
+  }, [loadRows]);
 
-  const handleBookSlot = async (scheduleId, slotId) => {
+  const handleBookSlot = async (scheduleId, slotId, detailLabel) => {
     if (!isStudent || !userId) {
-      setSlotMsg({ type: "error", text: "Only student accounts can book gym slots." });
+      showSlotToast(
+        "error",
+        "Gym slots are for students. Sign in with a student account to book.",
+      );
       return;
     }
-    setSlotMsg({ type: "", text: "" });
     const key = `${scheduleId}-${slotId}`;
     setBookingKey(key);
     try {
@@ -454,21 +584,33 @@ const SlotAvailability = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      setSlotMsg({ type: "success", text: "Booked. Your slot is saved." });
+      const label = detailLabel || "Your slot";
+      showSlotToast(
+        "success",
+        `You're in! Your gym slot is saved: ${label}. You can review it anytime on this page.`,
+      );
       await loadRows();
     } catch (e) {
-      setSlotMsg({ type: "error", text: e.response?.data?.message || "Booking failed." });
+      showSlotToast(
+        "error",
+        friendlyApiMessage(
+          e,
+          "We couldn't book that slot. It may be full, closed, or no longer available—try another time.",
+        ),
+      );
     } finally {
       setBookingKey(null);
     }
   };
 
-  const handleJoinWaitlist = async (scheduleId, slotId) => {
+  const handleJoinWaitlist = async (scheduleId, slotId, detailLabel) => {
     if (!isStudent || !userId) {
-      setSlotMsg({ type: "error", text: "Only student accounts can join gym waitlists." });
+      showSlotToast(
+        "error",
+        "The waitlist is for students. Sign in with a student account to join.",
+      );
       return;
     }
-    setSlotMsg({ type: "", text: "" });
     const key = `${scheduleId}-${slotId}`;
     setBookingKey(key);
     try {
@@ -478,13 +620,17 @@ const SlotAvailability = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      setSlotMsg({
-        type: "success",
-        text: "Added to waitlist. You will be auto-promoted when a seat opens.",
-      });
+      const label = detailLabel || "This slot";
+      showSlotToast(
+        "success",
+        `You're on the waitlist for ${label}. If someone cancels, we'll move you up automatically.`,
+      );
       await loadRows();
     } catch (e) {
-      setSlotMsg({ type: "error", text: e.response?.data?.message || "Could not join waitlist." });
+      showSlotToast(
+        "error",
+        friendlyApiMessage(e, "We couldn't add you to the waitlist. Please wait a moment and try again."),
+      );
     } finally {
       setBookingKey(null);
     }
@@ -492,41 +638,45 @@ const SlotAvailability = () => {
 
   const todayStr = format(new Date(), "yyyy-MM-dd");
 
-  const flatSlots = [];
-  for (const sched of rows) {
-    for (const sl of sched.slots || []) {
-      const cap = sl.capacity || 0;
-      const booked = sl.bookedCount || 0;
-      const open = Math.max(0, cap - booked);
-      const waitlist = sl.waitlist || [];
-      const bookings = sl.bookings || [];
-      const iBooked =
-        Boolean(userId) && bookings.some((b) => String(b.user) === String(userId));
-      const iWaitlisted =
-        Boolean(userId) && waitlist.some((w) => String(w.user) === String(userId));
-      const waitlistCount = waitlist.length;
+  const flatSlots = useMemo(() => {
+    const out = [];
+    const nowMs = Date.now();
+    for (const sched of rows) {
+      for (const sl of sched.slots || []) {
+        const cap = sl.capacity || 0;
+        const booked = sl.bookedCount || 0;
+        const open = Math.max(0, cap - booked);
+        const waitlist = sl.waitlist || [];
+        const bookings = sl.bookings || [];
+        const uid = userId ? String(userId) : "";
+        const iBooked = Boolean(uid) && bookings.some((b) => bookingUserId(b) === uid);
+        const iWaitlisted =
+          Boolean(uid) && waitlist.some((w) => bookingUserId(w) === uid);
+        const waitlistCount = waitlist.length;
 
-      const slotStart = new Date(`${sched.date}T${sl.startTime}:00`);
-      const isPast = Number.isFinite(slotStart.getTime()) ? slotStart.getTime() <= Date.now() : false;
-      const isClosed = Boolean(sl.isClosed) || isPast;
-      const status = isClosed ? "CLOSED" : booked >= cap ? "FULL" : "AVAILABLE";
-      flatSlots.push({
-        scheduleId: sched._id,
-        slotId: sl._id,
-        date: sched.date,
-        dayLabel: sched.dayLabel,
-        start: sl.startTime,
-        end: sl.endTime,
-        capacity: cap,
-        booked,
-        open,
-        status,
-        iBooked,
-        iWaitlisted,
-        waitlistCount,
-      });
+        const slotStart = new Date(`${sched.date}T${sl.startTime}:00`);
+        const isPast = Number.isFinite(slotStart.getTime()) ? slotStart.getTime() <= nowMs : false;
+        const isClosed = Boolean(sl.isClosed) || isPast;
+        const status = isClosed ? "CLOSED" : booked >= cap ? "FULL" : "AVAILABLE";
+        out.push({
+          scheduleId: sched._id,
+          slotId: sl._id,
+          date: sched.date,
+          dayLabel: sched.dayLabel,
+          start: sl.startTime,
+          end: sl.endTime,
+          capacity: cap,
+          booked,
+          open,
+          status,
+          iBooked,
+          iWaitlisted,
+          waitlistCount,
+        });
+      }
     }
-  }
+    return out;
+  }, [rows, userId]);
 
   const inRange = (dateStr) => {
     if (fromDate && dateStr < fromDate) return false;
@@ -534,11 +684,13 @@ const SlotAvailability = () => {
     return true;
   };
 
-  const filtered = flatSlots.filter((s) => {
-    if (!inRange(s.date)) return false;
-    if (filterDate && s.date !== format(filterDate, "yyyy-MM-dd")) return false;
-    return true;
-  });
+  const filtered = useMemo(() => {
+    return flatSlots.filter((s) => {
+      if (!inRange(s.date)) return false;
+      if (filterDate && s.date !== format(filterDate, "yyyy-MM-dd")) return false;
+      return true;
+    });
+  }, [flatSlots, fromDate, toDate, filterDate]);
 
   const slotsByDate = useMemo(() => {
     const m = new Map();
@@ -547,7 +699,7 @@ const SlotAvailability = () => {
       m.get(s.date).push(s);
     }
     return m;
-  }, [rows]);
+  }, [flatSlots]);
 
   const daySummary = (dateStr) => {
     const list = slotsByDate.get(dateStr) || [];
@@ -636,20 +788,50 @@ const SlotAvailability = () => {
           )}
         </div>
       </div>
-      {isStudent && notifications.length > 0 && (
-        <div className="mb-4 px-4 py-3 rounded-lg text-sm font-semibold bg-blue-600/20 text-blue-600 border border-blue-600/40">
-          {notifications[0].message}
-        </div>
-      )}
-      {slotMsg.text && (
-        <div
-          className={`mb-4 px-4 py-3 rounded-lg text-sm font-semibold border ${
-            slotMsg.type === "success"
-              ? "bg-green-500/15 border-green-500/40 text-green-700"
-              : "bg-red-500/15 border-red-500/40 text-red-700"
-          }`}
-        >
-          {slotMsg.text}
+      {isStudent && sortedNotifications.length > 0 && (
+        <div className="mb-4 space-y-2" role="status">
+          {sortedNotifications.slice(0, 5).map((n) => (
+            <div
+              key={n._id}
+              className={`flex flex-col gap-2 rounded-lg border px-4 py-3 text-sm font-semibold sm:flex-row sm:items-center sm:justify-between ${
+                n.kind === "REMINDER_BEFORE_SESSION"
+                  ? "border-amber-500/50 bg-amber-500/15 text-amber-950"
+                  : "border-blue-600/40 bg-blue-600/20 text-blue-800"
+              }`}
+            >
+              <span className="min-w-0 leading-snug">
+                {n.kind === "REMINDER_BEFORE_SESSION" ? (
+                  <span className="mr-1 font-extrabold text-amber-900">Reminder · </span>
+                ) : null}
+                {n.message}
+              </span>
+              <button
+                type="button"
+                onClick={() => dismissNotification(n._id)}
+                className="shrink-0 rounded-lg border border-current/30 px-3 py-1.5 text-xs font-bold uppercase tracking-wide hover:bg-white/40"
+              >
+                Dismiss
+              </button>
+            </div>
+          ))}
+          {browserNotifyPermission === "default" ? (
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+              <span>Want an alert on this device when your slot is coming up?</span>
+              <button
+                type="button"
+                onClick={requestBrowserReminders}
+                className="rounded-lg bg-blue-600 px-3 py-1.5 font-bold text-white hover:bg-blue-700"
+              >
+                Turn on browser alerts
+              </button>
+            </div>
+          ) : null}
+          {browserNotifyPermission === "denied" ? (
+            <p className="text-xs text-slate-500">
+              Browser notifications are blocked. You can allow them in your site settings to get desk alerts for gym
+              reminders.
+            </p>
+          ) : null}
         </div>
       )}
       {bookingRules && (
@@ -697,6 +879,14 @@ const SlotAvailability = () => {
                   "no minimum advance window."
                 )}
               </li>
+              {bookingRules.reminderMinutesBeforeSlot > 0 ? (
+                <li>
+                  <span className="text-blue-600 font-bold">Reminders:</span> when a booked slot is within{" "}
+                  <span className="text-slate-900 font-semibold">{bookingRules.reminderMinutesBeforeSlot}</span>{" "}
+                  minutes of starting, you&apos;ll see an in-app reminder here with date and time (and an optional
+                  browser alert if you enable it).
+                </li>
+              ) : null}
             </ul>
           )}
         </div>
@@ -994,7 +1184,7 @@ const SlotAvailability = () => {
                     <button
                       type="button"
                       disabled={bookingKey === `${s.scheduleId}-${s.slotId}`}
-                      onClick={() => handleJoinWaitlist(s.scheduleId, s.slotId)}
+                      onClick={() => handleJoinWaitlist(s.scheduleId, s.slotId, gymSlotBookingLabel(s))}
                       className="mt-3 w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {bookingKey === `${s.scheduleId}-${s.slotId}` ? "Joining…" : "Join waitlist"}
@@ -1004,7 +1194,7 @@ const SlotAvailability = () => {
                   <button
                     type="button"
                     disabled={bookingKey === `${s.scheduleId}-${s.slotId}`}
-                    onClick={() => handleBookSlot(s.scheduleId, s.slotId)}
+                    onClick={() => handleBookSlot(s.scheduleId, s.slotId, gymSlotBookingLabel(s))}
                     className="mt-3 w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {bookingKey === `${s.scheduleId}-${s.slotId}` ? "Booking…" : "Book slot"}
@@ -1015,6 +1205,7 @@ const SlotAvailability = () => {
           ))}
         </div>
       ) : null}
+      <ToastPopup toast={slotToast} onDismiss={hideSlotToast} />
     </div>
   );
 };
