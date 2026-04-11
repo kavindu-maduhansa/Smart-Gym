@@ -37,11 +37,11 @@ const TrainerSchedules = () => {
   }, []);
 
   const statusLabels = {
-    All: "All Status", Booked: "Booked", Available: "Available",
-    Expired: "Expired", Pending: "Pending Attendance", Attended: "Attended", Absent: "Absent"
+    All: "All status", Booked: "Booked", Available: "Available",
+    Expired: "Expired", Pending: "Pending attendance", Attended: "Attended", Absent: "Absent"
   };
   const dateLabels = {
-    All: "All Dates", Today: "Today Only", Upcoming: "Upcoming", Past: "Past Sessions"
+    All: "All dates", Today: "Today only", Upcoming: "Upcoming", Past: "Past sessions"
   };
 
   const API_URL = "http://localhost:5000/api/trainer/schedules";
@@ -285,14 +285,14 @@ const TrainerSchedules = () => {
             <div className="lg:w-1/4 p-6 bg-gradient-to-br from-blue-600/20 to-transparent border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col justify-center relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-3xl -mr-16 -mt-16 rounded-full group-hover:bg-blue-700/20 transition-all duration-700"></div>
               <h3 className="text-xl font-black text-slate-900 leading-tight relative z-10">Monthly<br /><span className="text-blue-600">Performance</span></h3>
-              <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
+              <p className="text-[10px] font-bold text-slate-600 tracking-widest mt-2 relative z-10">{format(now, 'MMMM yyyy')}</p>
             </div>
 
             {/* Stats Grid */}
             <div className="flex-1 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/5">
               {[
                 {
-                  label: "Total Sessions",
+                  label: "Total sessions",
                   value: stats.total,
                   icon: (
                     <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -336,7 +336,7 @@ const TrainerSchedules = () => {
                     </div>
                     <div>
                       <div className="text-2xl font-black text-slate-900 group-hover/stat:text-blue-600 transition-colors tracking-tight">{item.value}</div>
-                      <div className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mt-0.5 whitespace-nowrap">{item.label}</div>
+                      <div className="text-[9px] font-bold text-slate-600 tracking-widest mt-0.5 whitespace-nowrap">{item.label}</div>
                     </div>
                   </div>
                 </div>
@@ -499,7 +499,7 @@ const TrainerSchedules = () => {
                     <tr key={s._id} className={`bg-white hover:bg-slate-50 transition-all group ${isExpired && !s.bookedBy ? 'opacity-60' : ''}`}>
                       <td className="px-6 py-5">
                         <div className={`font-bold transition-colors ${isExpired && !s.bookedBy ? 'text-slate-600' : 'text-slate-900 group-hover:text-blue-600'}`}>
-                          {s.title}
+                          {s.title?.charAt(0).toUpperCase() + s.title?.slice(1)}
                         </div>
                       </td>
                       <td className="px-6 py-5 text-center">
@@ -521,7 +521,7 @@ const TrainerSchedules = () => {
                             </span>
                           </div>
                         ) : (
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-widest ${isExpired
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border tracking-widest ${isExpired
                             ? 'bg-red-500/10 text-red-500/70 border-red-500/20'
                             : 'bg-green-500/10 text-green-700 border-green-500/20'
                             }`}>

@@ -294,7 +294,7 @@ const TrainerAvailability = () => {
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-8 mt-12 pt-8 border-t border-slate-200">
               <button
-                className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-20 disabled:hover:border-slate-200 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-3 group"
+                className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-20 disabled:hover:border-slate-200 transition-all tracking-wider text-xs font-semibold flex items-center gap-3 group"
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
               >
@@ -303,12 +303,12 @@ const TrainerAvailability = () => {
 
               <div className="flex items-center gap-4">
                 <span className="text-blue-600 font-bold text-sm tracking-wider">{currentPage}</span>
-                <span className="text-gray-600 text-[10px] font-bold uppercase tracking-widest leading-none">of</span>
+                <span className="text-gray-600 text-[10px] font-bold tracking-widest leading-none">of</span>
                 <span className="text-slate-900 font-bold text-sm tracking-wider">{totalPages}</span>
               </div>
 
               <button
-                className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-20 disabled:hover:border-slate-200 transition-all uppercase tracking-wider text-xs font-semibold flex items-center gap-3 group"
+                className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-blue-600/50 disabled:opacity-20 disabled:hover:border-slate-200 transition-all tracking-wider text-xs font-semibold flex items-center gap-3 group"
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
               >
@@ -708,19 +708,19 @@ const SlotAvailability = () => {
       )}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-blue-50/40 border border-slate-200 rounded-xl p-4">
-          <div className="text-xs uppercase tracking-wide text-slate-500 font-bold">Total slots</div>
+          <div className="text-xs tracking-wide text-slate-500 font-bold">Total slots</div>
           <div className="text-2xl font-extrabold text-slate-900 mt-1">{loading ? "—" : totalSlots}</div>
         </div>
         <div className="bg-blue-50/40 border border-slate-200 rounded-xl p-4">
-          <div className="text-xs uppercase tracking-wide text-slate-500 font-bold">Open slots</div>
+          <div className="text-xs tracking-wide text-slate-500 font-bold">Open slots</div>
           <div className="text-2xl font-extrabold text-green-700 mt-1">{loading ? "—" : openSpots}</div>
         </div>
         <div className="bg-blue-50/40 border border-slate-200 rounded-xl p-4">
-          <div className="text-xs uppercase tracking-wide text-slate-500 font-bold">Full slots</div>
+          <div className="text-xs tracking-wide text-slate-500 font-bold">Full slots</div>
           <div className="text-2xl font-extrabold text-blue-600 mt-1">{loading ? "—" : fullSlots}</div>
         </div>
         <div className="bg-blue-50/40 border border-slate-200 rounded-xl p-4">
-          <div className="text-xs uppercase tracking-wide text-slate-500 font-bold">Occupancy</div>
+          <div className="text-xs tracking-wide text-slate-500 font-bold">Occupancy</div>
           <div className="text-2xl font-extrabold text-blue-600 mt-1">{loading ? "—" : `${occPct}%`}</div>
         </div>
       </div>
@@ -955,7 +955,7 @@ const SlotAvailability = () => {
                 </h3>
                 <div className="flex flex-col items-end gap-1">
                   <span
-                    className={`text-xs px-2 py-1 rounded font-bold uppercase ${
+                    className={`text-xs px-2 py-1 rounded font-bold ${
                       s.status === "CLOSED"
                         ? "bg-gray-500/20 text-slate-700"
                         : s.status === "FULL"
@@ -963,7 +963,7 @@ const SlotAvailability = () => {
                           : "bg-green-500/15 text-green-700"
                     }`}
                   >
-                    {s.status === "AVAILABLE" ? "Available" : s.status}
+                    {s.status.charAt(0).toUpperCase() + s.status.slice(1).toLowerCase()}
                   </span>
                 </div>
               </div>
