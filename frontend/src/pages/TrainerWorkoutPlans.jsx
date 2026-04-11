@@ -227,7 +227,7 @@ const TrainerWorkoutPlans = () => {
                                             <FaTrash />
                                         </button>
                                     </div>
-                                    <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded w-fit mb-4 ${plan.difficulty === "Beginner" ? "bg-green-500/10 text-green-700" : "bg-blue-600/10 text-blue-600"
+                                    <span className={`text-[10px] font-black tracking-widest px-2 py-1 rounded w-fit mb-4 ${plan.difficulty === "Beginner" ? "bg-green-500/10 text-green-700" : "bg-blue-600/10 text-blue-600"
                                         }`}>
                                         {plan.difficulty}
                                     </span>
@@ -273,7 +273,7 @@ const TrainerWorkoutPlans = () => {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="text-[10px] text-slate-600 font-black uppercase tracking-widest block mb-2">Plan Name</label>
+                                    <label className="text-[10px] text-slate-600 font-black tracking-widest block mb-2">Plan name</label>
                                     <input
                                         required
                                         className="w-full bg-blue-50/40 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium"
@@ -283,7 +283,7 @@ const TrainerWorkoutPlans = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] text-slate-600 font-black uppercase tracking-widest block mb-2">Difficulty</label>
+                                    <label className="text-[10px] text-slate-600 font-black tracking-widest block mb-2">Difficulty</label>
                                     <select
                                         className="w-full bg-blue-50/40 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-blue-600/50 transition-all font-medium"
                                         value={newPlan.difficulty}
@@ -312,7 +312,7 @@ const TrainerWorkoutPlans = () => {
                                 {newPlan.exercises.map((ex, idx) => (
                                     <div key={idx} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end bg-blue-50/20 p-4 rounded-xl border border-white/5">
                                         <div className="md:col-span-6">
-                                            <label className="text-[10px] text-slate-500 mb-1 block">Exercise Name</label>
+                                            <label className="text-[10px] text-slate-500 mb-1 block">Exercise name</label>
                                             <input
                                                 required
                                                 className="w-full bg-blue-50/40 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none border-none outline-none"
@@ -373,31 +373,31 @@ const TrainerWorkoutPlans = () => {
                         {/* Office Header */}
                         <div className="flex justify-between items-start border-b-8 border-black pb-8 mb-12">
                             <div>
-                                <h1 className="text-5xl font-black uppercase tracking-tighter leading-none mb-2 text-blue-600">Workout Plan</h1>
-                                <p className="text-sm font-black uppercase tracking-[0.3em] text-slate-500">Gym Management System</p>
+                                <h1 className="text-5xl font-black tracking-tighter leading-none mb-2 text-blue-600">Workout plan</h1>
+                                <p className="text-sm font-black tracking-[0.3em] text-slate-500">Gym management system</p>
                             </div>
                             <div className="text-right">
-                                <p className="text-lg font-bold uppercase tracking-widest">{selectedPlan.title}</p>
+                                <p className="text-lg font-bold tracking-widest">{selectedPlan.title}</p>
                             </div>
                         </div>
 
                         {/* Document Metadata Grid */}
                         <div className="grid grid-cols-4 gap-0 border-2 border-black mb-12">
                             <div className="border-r-2 border-black p-4">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 block mb-1">Date Issued</label>
+                                <label className="text-[10px] font-black tracking-widest text-slate-600 block mb-1">Date issued</label>
                                 <p className="font-bold text-sm">{new Date().toLocaleDateString()}</p>
                             </div>
                             <div className="border-r-2 border-black p-4">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 block mb-1">Difficulty</label>
-                                <p className="font-bold text-sm uppercase">{selectedPlan.difficulty}</p>
+                                <label className="text-[10px] font-black tracking-widest text-slate-600 block mb-1">Difficulty</label>
+                                <p className="font-bold text-sm">{selectedPlan.difficulty}</p>
                             </div>
                             <div className="border-r-2 border-black p-4">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 block mb-1">Assigned By</label>
+                                <label className="text-[10px] font-black tracking-widest text-slate-600 block mb-1">Assigned by</label>
                                 <p className="font-bold text-sm italic">Smart Gym Official</p>
                             </div>
                             <div className="p-4 bg-gray-50">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 block mb-1">Client Status</label>
-                                <p className="font-black text-sm uppercase tracking-tighter">Verified Member</p>
+                                <label className="text-[10px] font-black tracking-widest text-slate-600 block mb-1">Client status</label>
+                                <p className="font-black text-sm tracking-tighter">Verified member</p>
                             </div>
                         </div>
 
@@ -406,16 +406,16 @@ const TrainerWorkoutPlans = () => {
                             <table className="w-full">
                                 <thead>
                                     <tr className="bg-blue-50 text-slate-900">
-                                        <th className="py-4 px-6 text-left text-xs font-black uppercase tracking-widest">Exercise & Instruction</th>
-                                        <th className="py-4 px-6 text-center text-xs font-black uppercase tracking-widest w-24">Sets</th>
-                                        <th className="py-4 px-6 text-center text-xs font-black uppercase tracking-widest w-32">Reps / Time</th>
+                                        <th className="py-4 px-6 text-left text-xs font-black tracking-widest">Exercise & instruction</th>
+                                        <th className="py-4 px-6 text-center text-xs font-black tracking-widest w-24">Sets</th>
+                                        <th className="py-4 px-6 text-center text-xs font-black tracking-widest w-32">Reps / time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {selectedPlan.exercises.map((ex, i) => (
                                         <tr key={i} className="border-b-2 border-black/10 hover:bg-gray-50 transition-colors">
                                             <td className="py-6 px-6">
-                                                <p className="font-bold text-xl uppercase tracking-tight">{ex.name}</p>
+                                                <p className="font-bold text-xl tracking-tight">{ex.name}</p>
                                             </td>
                                             <td className="py-6 px-6 text-center font-black text-2xl">{ex.sets}</td>
                                             <td className="py-6 px-6 text-center font-black text-2xl">{ex.reps}</td>
@@ -428,7 +428,7 @@ const TrainerWorkoutPlans = () => {
                         {/* Professional Disclaimer / Footer */}
                         <div className="mt-auto grid grid-cols-2 gap-12 pt-12 border-t-2 border-black/5">
                             <div>
-                                <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-4">Quality Assurance Disclosure</h4>
+                                <h4 className="text-[11px] font-black tracking-[0.2em] mb-4">Quality assurance disclosure</h4>
                                 <p className="text-xs text-gray-600 leading-relaxed text-justify">
                                     All training plans contained herein are designed for authorized Smart Gym members.
                                     Users are advised to maintain strict form and procedural safety during all exercises.
@@ -436,10 +436,10 @@ const TrainerWorkoutPlans = () => {
                                     In case of acute discomfort, de-escalate intensity and notify your trainer immediately.
                                 </p>
                             </div>
-                            <div className="flex flex-col items-end justify-between uppercase">
+                            <div className="flex flex-col items-end justify-between">
                                 <div className="text-right border-l-4 border-black pl-6">
-                                    <p className="text-xs font-black text-slate-600 mb-1">Trainer / Publisher</p>
-                                    <p className="text-sm font-bold uppercase">{trainer?.name || "Smart Gym Official"}</p>
+                                    <p className="text-xs font-black text-slate-600 mb-1">Trainer / publisher</p>
+                                    <p className="text-sm font-bold">{trainer?.name || "Smart Gym Official"}</p>
                                     <p className="text-[10px] text-slate-500 lowercase">{trainer?.email}</p>
                                     <p className="text-[10px] text-slate-500 mt-1">Validated: {new Date().getFullYear()}</p>
                                 </div>

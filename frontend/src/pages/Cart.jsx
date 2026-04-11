@@ -273,7 +273,7 @@ const Cart = () => {
               {/* Summary */}
               <div className="lg:col-span-1">
                 <div className="backdrop-blur-md bg-gradient-to-br from-blue-600-500/20 to-blue-600-500/10 border border-blue-600/30 rounded-xl p-6 sticky top-32">
-                  <h2 className="text-lg font-bold text-slate-900 mb-6">Order Summary</h2>
+                  <h2 className="text-xl font-bold text-slate-900 mb-6">Order Summary</h2>
 
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between text-slate-700">
