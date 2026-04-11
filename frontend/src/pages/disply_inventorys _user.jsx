@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { uploadImageSrc } from "../utils/uploadImageSrc.js";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const COLORS = {
   pageBg: "#F2F2F2",
@@ -70,7 +73,7 @@ const DisplayInventorysUser = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get("http://localhost:5000/api/inventory");
+      const response = await axios.get(`${API_URL}/api/inventory`);
       setInventories(response.data.data || []);
     } catch (err) {
       console.error("Error fetching inventories:", err);
@@ -141,7 +144,7 @@ const DisplayInventorysUser = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/bookings/book",
+        `${API_URL}/api/bookings/book`,
         bookingData
       );
 
@@ -160,7 +163,7 @@ const DisplayInventorysUser = () => {
     try {
       setUserBookingsLoading(true);
       const userId = localStorage.getItem("userId") || "user123";
-      const res = await axios.get(`http://localhost:5000/api/bookings/user/${userId}`);
+      const res = await axios.get(`${API_URL}/api/bookings/user/${userId}`);
       setUserBookings(res.data.data || []);
       setShowMyBookings(true);
     } catch (err) {
@@ -394,7 +397,7 @@ const DisplayInventorysUser = () => {
                       <div className="h-40 w-full bg-gray-100 overflow-hidden rounded-t-xl">
                         {item.image ? (
                           <img
-                            src={`http://localhost:5000/uploads/${item.image}`}
+                            src={uploadImageSrc(item.image)}
                             alt={item.itemName}
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                           />

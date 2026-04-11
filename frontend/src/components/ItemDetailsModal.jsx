@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
+import { uploadImageSrc } from "../utils/uploadImageSrc.js";
 
 const ItemDetailsModal = ({ isOpen, item, onClose }) => {
   if (!item) return null;
@@ -41,7 +42,7 @@ const ItemDetailsModal = ({ isOpen, item, onClose }) => {
         <div className="flex flex-col items-center">
           {item.image ? (
             <img
-              src={`http://localhost:5000/uploads/${item.image}`}
+              src={uploadImageSrc(item.image)}
               alt={item.itemName}
               className="w-full h-64 object-cover rounded-xl mb-4 border border-slate-200"
             />

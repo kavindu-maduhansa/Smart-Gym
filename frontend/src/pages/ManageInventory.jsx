@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { uploadImageSrc } from "../utils/uploadImageSrc.js";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const modalAnimationStyles = `
   @keyframes fadeIn {
@@ -51,7 +54,7 @@ function ManageInventory() {
   const fetchItems = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/inventory");
+      const res = await axios.get(`${API_URL}/api/inventory`);
       setItems(res.data.data);
     } catch (err) {
       console.error(err);
@@ -82,7 +85,7 @@ function ManageInventory() {
         ? new Date(item.purchaseDate).toISOString().split("T")[0]
         : "",
       image: null,
-      previewUrl: item.image ? `http://localhost:5000/uploads/${item.image}` : "",
+      previewUrl: item.image ? uploadImageSrc(item.image) : "",
     });
   };
 
@@ -132,7 +135,7 @@ function ManageInventory() {
       if (formData.image) updateData.append("image", formData.image);
 
       await axios.put(
-        `http://localhost:5000/api/inventory/${editingId}`,
+        `${API_URL}/api/inventory/${editingId}`,
         updateData
       );
 
@@ -159,7 +162,7 @@ function ManageInventory() {
   const handleDelete = async (itemId) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/inventory/${itemId}`);
+        await axios.delete(`${API_URL}/api/inventory/${itemId}`);
         alert("✅ Item deleted successfully!");
         fetchItems();
       } catch (err) {
@@ -387,7 +390,7 @@ function ManageInventory() {
                           {/* Image */}
                           {item.image && (
                             <img
-                              src={`http://localhost:5000/uploads/${item.image}`}
+                              src={uploadImageSrc(item.image)}
                               alt={item.itemName}
                               className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
                             />
