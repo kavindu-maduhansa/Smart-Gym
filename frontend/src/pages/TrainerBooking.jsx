@@ -198,14 +198,21 @@ const TrainerBooking = () => {
   }, []);
 
   useEffect(() => {
-    if (tab !== "slot") return;
+    if (tab !== "slot") return undefined;
     fetchSlotBookings();
     fetchCancelledSlotBookings();
+    const onGymNotifs = () => {
+      fetchCancelledSlotBookings();
+    };
+    window.addEventListener("gymNotificationsChanged", onGymNotifs);
     const timer = window.setInterval(() => {
       fetchSlotBookings();
       fetchCancelledSlotBookings();
     }, 30000);
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("gymNotificationsChanged", onGymNotifs);
+    };
   }, [tab, fetchSlotBookings, fetchCancelledSlotBookings]);
 
   const openEditSlot = async (row) => {

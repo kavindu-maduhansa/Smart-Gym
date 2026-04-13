@@ -16,7 +16,9 @@ import {
   cancelGymSlotWaitlist,
   listMyGymSlotWaitlists,
   listMyGymNotifications,
+  countMyGymNotificationsUnread,
   markMyGymNotificationRead,
+  markAllMyGymNotificationsRead,
   adminCloseGymSlot,
   adminOpenGymSlot,
   adminSetGymSlotCapacity,
@@ -38,7 +40,17 @@ router.get(
 router.get("/", authenticateJWT, listGymSchedules);
 router.get("/my-bookings", authenticateJWT, listMyGymSlotBookings);
 router.get("/my-waitlists", authenticateJWT, listMyGymSlotWaitlists);
+router.get(
+  "/my-notifications/unread-count",
+  authenticateJWT,
+  countMyGymNotificationsUnread,
+);
 router.get("/my-notifications", authenticateJWT, listMyGymNotifications);
+router.put(
+  "/my-notifications/read-all",
+  authenticateJWT,
+  markAllMyGymNotificationsRead,
+);
 router.put(
   "/my-notifications/:notificationId/read",
   authenticateJWT,

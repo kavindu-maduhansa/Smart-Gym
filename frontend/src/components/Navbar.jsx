@@ -1,6 +1,7 @@
 ﻿import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTheme } from "../contexts/ThemeContext.jsx";
+import NavbarNotificationBell from "./NavbarNotificationBell.jsx";
 
 const linkClass =
   "rounded-md px-2 py-2 text-base font-medium text-slate-900 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-100 dark:hover:text-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-900";
@@ -84,37 +85,15 @@ const Navbar = () => {
       <div className="container mx-auto flex flex-wrap items-center justify-between gap-2 px-2 sm:px-0">
         <Link
           to="/"
-          className="order-1 text-lg font-bold text-blue-600 sm:text-xl lg:text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md dark:text-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-900"
+          className="order-1 shrink-0 text-lg font-bold text-blue-600 sm:text-xl lg:text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md dark:text-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-900"
           onClick={closeMenu}
         >
           Gym Management System
         </Link>
 
-        <div className="order-2 flex items-center gap-2 lg:hidden">
-          <ThemeToggleButton />
-          <button
-            type="button"
-            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            aria-expanded={menuOpen}
-            aria-controls="primary-navigation"
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
-            {menuOpen ? (
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
-        </div>
-
         <div
           id="primary-navigation"
-          className={`${menuOpen ? "flex" : "hidden"} order-3 w-full flex-col gap-1 border-t border-slate-200 pt-4 pb-2 dark:border-slate-700 lg:order-2 lg:flex lg:w-auto lg:flex-1 lg:flex-row lg:justify-end lg:items-center lg:gap-4 lg:border-0 lg:pb-0 lg:pt-0 xl:gap-6`}
+          className={`${menuOpen ? "flex" : "hidden"} order-3 w-full flex-col gap-1 border-t border-slate-200 pt-4 pb-2 dark:border-slate-700 lg:order-2 lg:flex lg:w-auto lg:min-w-0 lg:flex-1 lg:flex-row lg:justify-end lg:items-center lg:gap-4 lg:border-0 lg:pb-0 lg:pt-0 xl:gap-6`}
         >
           <Link to="/" className={linkClass} onClick={closeMenu}>
             Home
@@ -191,8 +170,28 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="order-4 hidden lg:flex lg:items-center lg:pl-2">
-          <ThemeToggleButton />
+        {/* Theme + mobile menu + notification bell — last in navbar row (far right, past Logout links) */}
+        <div className="order-2 flex shrink-0 items-center gap-2 lg:order-3">
+          <ThemeToggleButton className="order-1" />
+          <button
+            type="button"
+            className="order-2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-800 lg:hidden dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+            {menuOpen ? (
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+          {role === "student" && <NavbarNotificationBell className="order-3" />}
         </div>
       </div>
     </nav>
