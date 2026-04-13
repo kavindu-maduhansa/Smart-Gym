@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -467,11 +468,16 @@ const SlotAvailability = () => {
       void loadRows();
       void loadNotifications();
     };
+    const onGymNotifs = () => {
+      void loadNotifications();
+    };
     window.addEventListener("tokenChanged", onAuthChange);
     window.addEventListener("storage", onAuthChange);
+    window.addEventListener("gymNotificationsChanged", onGymNotifs);
     return () => {
       window.removeEventListener("tokenChanged", onAuthChange);
       window.removeEventListener("storage", onAuthChange);
+      window.removeEventListener("gymNotificationsChanged", onGymNotifs);
     };
   }, [loadRows, loadNotifications]);
 
@@ -546,7 +552,7 @@ const SlotAvailability = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      await loadNotifications();
+      window.dispatchEvent(new Event("gymNotificationsChanged"));
     } catch {
       showSlotToast("error", "Couldn't dismiss that notification. Try again.");
     }
@@ -762,7 +768,10 @@ const SlotAvailability = () => {
   const selectedDayStr = filterDate ? format(filterDate, "yyyy-MM-dd") : "";
 
   return (
-    <div className="rounded-2xl bg-slate-50 border border-slate-200 p-6 sm:p-8 mb-8">
+    <div
+      id="gym-notifications"
+      className="scroll-mt-28 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8 mb-8"
+    >
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
         <div>
           <h2 className="text-4xl font-bold text-blue-600 leading-tight">Gym slot availability</h2>
@@ -1210,9 +1219,27 @@ const SlotAvailability = () => {
 };
 
 const Schedules = () => {
+  const location = useLocation();
   const payload = typeof localStorage !== "undefined" ? readJwtPayload() : null;
   const isStudentView = payload?.role === "student";
-  const [tab, setTab] = useState("trainer");
+  const [tab, setTab] = useState(() => {
+    if (typeof window === "undefined") return "trainer";
+    return window.location.hash.replace(/^#/, "") === "gym-notifications" ? "slot" : "trainer";
+  });
+
+  useEffect(() => {
+    const h = (location.hash || "").replace(/^#/, "");
+    if (h !== "gym-notifications") return;
+    setTab("slot");
+    const t = window.setTimeout(() => {
+      document.getElementById("gym-notifications")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+    return () => window.clearTimeout(t);
+  }, [location.hash, location.pathname]);
+
   return (
     <div className="page-bg-base pt-24 px-6 relative">
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 -z-10"></div>

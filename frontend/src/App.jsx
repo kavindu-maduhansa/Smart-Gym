@@ -51,6 +51,7 @@ import TrainerMealPlans from "./pages/TrainerMealPlans";
 import TrainerPlansHub from "./pages/TrainerPlansHub";
 
 import Schedules from "./pages/Schedules";
+import MyGymNotifications from "./pages/MyGymNotifications";
 import AiGymAssistant from "./pages/AiGymAssistant";
 import DisplayInventorysUser from "./pages/disply_inventorys _user";
 import ChatWidget from "./components/Chatbot/ChatWidget";
@@ -186,6 +187,14 @@ function App() {
           element={
             <ProtectedRoute requiredRole="student">
               <MyPlans />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-notifications"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <MyGymNotifications />
             </ProtectedRoute>
           }
         />

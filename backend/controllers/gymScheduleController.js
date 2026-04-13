@@ -51,6 +51,11 @@ const GYM_REMINDER_MINUTES = Math.max(
 const GYM_BOOKING_CONFIRMED_NOTIFICATION_MESSAGE =
   "Booking confirmed. Please view My Bookings to get your booking details.";
 
+/** Gym notification list/count/mark is for students only (navbar panel + /my-notifications). */
+function roleMayUseGymNotifications(role) {
+  return String(role || "") === "student";
+}
+
 function combineDateAndTimeLocal(yyyyMmDd, hhmm) {
   const [y, M, d] = yyyyMmDd.split("-").map(Number);
   const [h, m] = hhmm.split(":").map(Number);
@@ -549,6 +554,7 @@ export async function createGymSchedule(req, res) {
       createdBy: req.user.id,
     });
     await doc.save();
+
     const populated = await GymSchedule.findById(doc._id).populate(
       "createdBy",
       "name email",
@@ -1431,40 +1437,43 @@ export async function listMyGymSlotBookings(req, res) {
   }
 }
 
+/** Creates REMINDER_BEFORE_SESSION rows for upcoming booked slots (students only). */
+async function syncGymSlotRemindersForStudent(uid) {
+  if (GYM_REMINDER_MINUTES <= 0) return;
+  const now = new Date();
+  const windowEnd = new Date(now.getTime() + GYM_REMINDER_MINUTES * 60000);
+  const fromYmd = formatUtcYmd(now);
+  const toYmd = formatUtcYmd(windowEnd);
+  const schedules = await GymSchedule.find({
+    date: { $gte: fromYmd, $lte: toYmd },
+    "slots.bookings.user": uid,
+  }).lean();
+
+  for (const s of schedules) {
+    for (const sl of s.slots || []) {
+      if (!(sl.bookings || []).some((b) => String(b.user) === String(uid))) continue;
+      const start = combineDateAndTimeLocal(s.date, sl.startTime);
+      if (!Number.isFinite(start.getTime())) continue;
+      if (start.getTime() <= now.getTime()) continue;
+      if (start.getTime() > windowEnd.getTime()) continue;
+      await createGymNotificationOnce(
+        uid,
+        buildGymSlotReminderMessage(s.date, s.dayLabel, sl.startTime, sl.endTime, now.getTime()),
+        { kind: "REMINDER_BEFORE_SESSION", ref: `${String(s._id)}:${String(sl._id)}` },
+      );
+    }
+  }
+}
+
 export async function listMyGymNotifications(req, res) {
   try {
-    if (!req.user || req.user.role !== "student") {
+    if (!req.user || !roleMayUseGymNotifications(req.user.role)) {
       return res.status(403).json({ message: "Only students can view notifications." });
     }
 
     const uid = req.user.id;
 
-    // Reminder before session (generated on-demand; frontend polls /my-notifications).
-    if (GYM_REMINDER_MINUTES > 0) {
-      const now = new Date();
-      const windowEnd = new Date(now.getTime() + GYM_REMINDER_MINUTES * 60000);
-      const fromYmd = formatUtcYmd(now);
-      const toYmd = formatUtcYmd(windowEnd);
-      const schedules = await GymSchedule.find({
-        date: { $gte: fromYmd, $lte: toYmd },
-        "slots.bookings.user": uid,
-      }).lean();
-
-      for (const s of schedules) {
-        for (const sl of s.slots || []) {
-          if (!(sl.bookings || []).some((b) => String(b.user) === String(uid))) continue;
-          const start = combineDateAndTimeLocal(s.date, sl.startTime);
-          if (!Number.isFinite(start.getTime())) continue;
-          if (start.getTime() <= now.getTime()) continue;
-          if (start.getTime() > windowEnd.getTime()) continue;
-          await createGymNotificationOnce(
-            uid,
-            buildGymSlotReminderMessage(s.date, s.dayLabel, sl.startTime, sl.endTime, now.getTime()),
-            { kind: "REMINDER_BEFORE_SESSION", ref: `${String(s._id)}:${String(sl._id)}` },
-          );
-        }
-      }
-    }
+    await syncGymSlotRemindersForStudent(uid);
 
     const includeRead =
       String(req.query.includeRead || "").toLowerCase() === "true" ||
@@ -1482,9 +1491,12 @@ export async function listMyGymNotifications(req, res) {
     if (!includeRead) q.isRead = false;
     if (kinds.length) q.kind = { $in: kinds };
 
+    const limitRaw = parseInt(String(req.query.limit ?? "20"), 10);
+    const limit = Number.isFinite(limitRaw) ? Math.min(100, Math.max(1, limitRaw)) : 20;
+
     const list = await GymNotification.find(q)
       .sort({ createdAt: -1 })
-      .limit(20)
+      .limit(limit)
       .lean();
 
     const enriched = await enrichReminderNotificationsForResponse(list || []);
@@ -1511,9 +1523,25 @@ export async function listMyGymNotifications(req, res) {
   }
 }
 
+export async function countMyGymNotificationsUnread(req, res) {
+  try {
+    if (!req.user || !roleMayUseGymNotifications(req.user.role)) {
+      return res.status(403).json({ message: "Only students can view notification counts." });
+    }
+    const uid = req.user.id;
+    await syncGymSlotRemindersForStudent(uid);
+
+    const unreadCount = await GymNotification.countDocuments({ user: uid, isRead: false });
+    return res.json({ unreadCount });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Could not load notification count." });
+  }
+}
+
 export async function markMyGymNotificationRead(req, res) {
   try {
-    if (!req.user || req.user.role !== "student") {
+    if (!req.user || !roleMayUseGymNotifications(req.user.role)) {
       return res.status(403).json({ message: "Only students can update notifications." });
     }
 
@@ -1527,7 +1555,6 @@ export async function markMyGymNotificationRead(req, res) {
       { $set: { isRead: true, readAt: new Date() } },
       { new: true },
     );
-
     if (!updated) {
       return res.status(404).json({ message: "Notification not found." });
     }
@@ -1536,6 +1563,26 @@ export async function markMyGymNotificationRead(req, res) {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Could not mark as read." });
+  }
+}
+
+export async function markAllMyGymNotificationsRead(req, res) {
+  try {
+    if (!req.user || !roleMayUseGymNotifications(req.user.role)) {
+      return res.status(403).json({ message: "Only students can update notifications." });
+    }
+    const now = new Date();
+    const r = await GymNotification.updateMany(
+      { user: req.user.id, isRead: false },
+      { $set: { isRead: true, readAt: now } },
+    );
+    return res.json({
+      message: "All notifications marked as read.",
+      modifiedCount: r.modifiedCount ?? 0,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Could not mark notifications as read." });
   }
 }
 

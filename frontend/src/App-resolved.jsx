@@ -22,6 +22,7 @@ import StudentSupplementStore from "./pages/StudentSupplementStore";
 import Cart from "./pages/Cart";
 import AiGymAssistant from "./pages/AiGymAssistant";
 import TrainerBooking from "./pages/TrainerBooking";
+import MyGymNotifications from "./pages/MyGymNotifications";
 
 // ADMIN
 import AdminDashboard from "./pages/AdminDashboard";
@@ -80,6 +81,7 @@ function App() {
         <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
         <Route path="/ai-gym-assistant" element={<ProtectedRoute><AiGymAssistant /></ProtectedRoute>} />
         <Route path="/my-bookings" element={<ProtectedRoute requiredRole="student"><TrainerBooking /></ProtectedRoute>} />
+        <Route path="/my-notifications" element={<ProtectedRoute requiredRole="student"><MyGymNotifications /></ProtectedRoute>} />
 
         {/* ================= ADMIN ================= */}
         <Route path="/admin-dashboard" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
