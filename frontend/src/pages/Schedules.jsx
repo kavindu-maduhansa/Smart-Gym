@@ -567,7 +567,7 @@ const SlotAvailability = () => {
     run();
   }, [loadRows]);
 
-  const handleBookSlot = async (scheduleId, slotId, detailLabel) => {
+  const handleBookSlot = async (scheduleId, slotId) => {
     if (!isStudent || !userId) {
       showSlotToast(
         "error",
@@ -579,15 +579,14 @@ const SlotAvailability = () => {
     setBookingKey(key);
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
+      const { data } = await axios.post(
         `${GYM_SCHEDULES_URL}/${scheduleId}/slots/${slotId}/book`,
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      const label = detailLabel || "Your slot";
       showSlotToast(
         "success",
-        `You're in! Your gym slot is saved: ${label}. You can review it anytime on this page.`,
+        "Booking confirmed. Please view My Bookings to get your booking details.",
       );
       await loadRows();
     } catch (e) {
@@ -1194,7 +1193,7 @@ const SlotAvailability = () => {
                   <button
                     type="button"
                     disabled={bookingKey === `${s.scheduleId}-${s.slotId}`}
-                    onClick={() => handleBookSlot(s.scheduleId, s.slotId, gymSlotBookingLabel(s))}
+                    onClick={() => handleBookSlot(s.scheduleId, s.slotId)}
                     className="mt-3 w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {bookingKey === `${s.scheduleId}-${s.slotId}` ? "Booking…" : "Book slot"}

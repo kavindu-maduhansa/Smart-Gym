@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import GymSchedule from "../models/GymSchedule.js";
 import GymNotification from "../models/GymNotification.js";
 import { getOpeningHoursForDate } from "../utils/gymOpeningHours.js";
-import { queueGymBookingEmailForStudent } from "../utils/gymBookingMail.js";
+import { queueGymBookingEmailForStudent, publicBookingEmailInfo } from "../utils/gymBookingMail.js";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 /** Gym floor slots are always generated in this length only. */
@@ -46,6 +46,10 @@ const GYM_REMINDER_MINUTES = Math.max(
   0,
   parseInt(process.env.GYM_REMINDER_MINUTES || "60", 10) || 60,
 );
+
+/** Shown in notifications, booking API message, and normalized when listing past rows. */
+const GYM_BOOKING_CONFIRMED_NOTIFICATION_MESSAGE =
+  "Booking confirmed. Please view My Bookings to get your booking details.";
 
 function combineDateAndTimeLocal(yyyyMmDd, hhmm) {
   const [y, M, d] = yyyyMmDd.split("-").map(Number);
@@ -447,13 +451,54 @@ function validateSchedulePayload(body, { partial } = { partial: false }) {
   return errors;
 }
 
-function dateStringIsBeforeTodayUtc(dateStr) {
+/** Extract YYYY-MM-DD from stored value (handles leading ISO timestamps). */
+function normalizeScheduleDateYmd(raw) {
+  const s = String(raw || "").trim();
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : "";
+}
+
+/**
+ * True if the schedule’s calendar day is strictly before “today”.
+ * Uses the server’s local calendar (Node/OS timezone, override with TZ=… in production).
+ * This matches a typical admin browser in the same timezone; avoids “still editable at 11pm local
+ * but UTC already flipped” confusion from pure UTC comparisons.
+ */
+function scheduleDateIsBeforeToday(dateStr) {
+  const s = normalizeScheduleDateYmd(dateStr);
+  if (!DATE_RE.test(s)) return false;
   const t = new Date();
-  const y = t.getUTCFullYear();
-  const mo = String(t.getUTCMonth() + 1).padStart(2, "0");
-  const d = String(t.getUTCDate()).padStart(2, "0");
+  const y = t.getFullYear();
+  const mo = String(t.getMonth() + 1).padStart(2, "0");
+  const d = String(t.getDate()).padStart(2, "0");
   const today = `${y}-${mo}-${d}`;
-  return dateStr < today;
+  return s < today;
+}
+
+/** True once local wall-clock time is at or past the slot end (same calendar day as the schedule). */
+function isGymSlotEndedForAdmin(scheduleDateRaw, endTime) {
+  const ymd = normalizeScheduleDateYmd(scheduleDateRaw);
+  if (!DATE_RE.test(ymd) || !endTime) return true;
+  const end = combineDateAndTimeLocal(ymd, endTime);
+  if (!Number.isFinite(end.getTime())) return true;
+  return Date.now() >= end.getTime();
+}
+
+/**
+ * Whole-day admin lock: calendar day before today, or today but local time is at/after this schedule’s closing time.
+ */
+function isScheduleAdminFrozen(schedule) {
+  if (scheduleDateIsBeforeToday(schedule.date)) return true;
+  const ymd = normalizeScheduleDateYmd(schedule.date);
+  if (!DATE_RE.test(ymd)) return false;
+  const t = new Date();
+  const todayYmd = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+  if (ymd !== todayYmd) return false;
+  const ct = schedule.closingTime;
+  if (!ct) return false;
+  const end = combineDateAndTimeLocal(ymd, ct);
+  if (!Number.isFinite(end.getTime())) return false;
+  return Date.now() >= end.getTime();
 }
 
 export async function createGymSchedule(req, res) {
@@ -466,7 +511,7 @@ export async function createGymSchedule(req, res) {
     const { dayLabel = "", slotDurationMinutes, capacityPerSlot } = req.body;
     const date = normalizeScheduleDate(req.body.date);
 
-    if (dateStringIsBeforeTodayUtc(date)) {
+    if (scheduleDateIsBeforeToday(date)) {
       return res.status(400).json({ message: "Date cannot be in the past." });
     }
 
@@ -992,7 +1037,7 @@ export async function bookGymSlot(req, res) {
       return res.status(404).json({ message: "Schedule not found." });
     }
 
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Cannot book slots on past dates." });
     }
 
@@ -1034,16 +1079,11 @@ export async function bookGymSlot(req, res) {
 
     await createGymNotificationOnce(
       uid,
-      `Booking confirmed: gym slot ${formatSlotNotification(
-        schedule.date,
-        schedule.dayLabel,
-        slot.startTime,
-        slot.endTime,
-      )}.`,
+      GYM_BOOKING_CONFIRMED_NOTIFICATION_MESSAGE,
       { kind: "BOOKING_CONFIRMED", ref: `${String(schedule._id)}:${String(slot._id)}` },
     );
 
-    void queueGymBookingEmailForStudent(uid, {
+    const emailResult = await queueGymBookingEmailForStudent(uid, {
       date: schedule.date,
       dayLabel: schedule.dayLabel || "",
       startTime: slot.startTime,
@@ -1051,7 +1091,10 @@ export async function bookGymSlot(req, res) {
       variant: "booked",
     });
 
-    return res.status(200).json({ message: "Slot booked successfully." });
+    const payload = { message: GYM_BOOKING_CONFIRMED_NOTIFICATION_MESSAGE };
+    const emailInfo = publicBookingEmailInfo(emailResult);
+    if (emailInfo) payload.bookingEmail = emailInfo;
+    return res.status(200).json(payload);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Could not complete booking." });
@@ -1077,7 +1120,7 @@ export async function joinGymSlotWaitlist(req, res) {
       return res.status(404).json({ message: "Schedule not found." });
     }
 
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Cannot join waitlist on past dates." });
     }
 
@@ -1203,12 +1246,15 @@ export async function adminCloseGymSlot(req, res) {
 
     const schedule = await GymSchedule.findById(scheduleId);
     if (!schedule) return res.status(404).json({ message: "Schedule not found." });
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Past schedules are read-only." });
     }
 
     const slot = schedule.slots.id(slotId);
     if (!slot) return res.status(404).json({ message: "Slot not found." });
+    if (isGymSlotEndedForAdmin(schedule.date, slot.endTime)) {
+      return res.status(400).json({ message: "This time slot has ended; it can no longer be changed." });
+    }
 
     slot.isClosed = true;
     slot.closedAt = new Date();
@@ -1234,12 +1280,15 @@ export async function adminOpenGymSlot(req, res) {
 
     const schedule = await GymSchedule.findById(scheduleId);
     if (!schedule) return res.status(404).json({ message: "Schedule not found." });
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Past schedules are read-only." });
     }
 
     const slot = schedule.slots.id(slotId);
     if (!slot) return res.status(404).json({ message: "Slot not found." });
+    if (isGymSlotEndedForAdmin(schedule.date, slot.endTime)) {
+      return res.status(400).json({ message: "This time slot has ended; it can no longer be changed." });
+    }
 
     slot.isClosed = false;
     slot.closedAt = null;
@@ -1273,12 +1322,15 @@ export async function adminSetGymSlotCapacity(req, res) {
 
     const schedule = await GymSchedule.findById(scheduleId);
     if (!schedule) return res.status(404).json({ message: "Schedule not found." });
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Past schedules are read-only." });
     }
 
     const slot = schedule.slots.id(slotId);
     if (!slot) return res.status(404).json({ message: "Slot not found." });
+    if (isGymSlotEndedForAdmin(schedule.date, slot.endTime)) {
+      return res.status(400).json({ message: "This time slot has ended; it can no longer be changed." });
+    }
 
     const booked = slot.bookedCount || 0;
     if (nextCap < booked) {
@@ -1436,9 +1488,14 @@ export async function listMyGymNotifications(req, res) {
       .lean();
 
     const enriched = await enrichReminderNotificationsForResponse(list || []);
+    const withCanonicalBookingMsg = enriched.map((n) =>
+      n.kind === "BOOKING_CONFIRMED"
+        ? { ...n, message: GYM_BOOKING_CONFIRMED_NOTIFICATION_MESSAGE }
+        : n,
+    );
 
     return res.json(
-      enriched.map((n) => ({
+      withCanonicalBookingMsg.map((n) => ({
         _id: n._id,
         message: n.message,
         type: n.type,
@@ -1499,7 +1556,7 @@ export async function cancelGymSlotBooking(req, res) {
     if (!schedule) {
       return res.status(404).json({ message: "Schedule not found." });
     }
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Cannot cancel a booking on a past date." });
     }
 
@@ -1613,7 +1670,7 @@ export async function moveGymSlotBooking(req, res) {
       if (!schedule) {
         return res.status(404).json({ message: "Schedule not found." });
       }
-      if (dateStringIsBeforeTodayUtc(schedule.date)) {
+      if (scheduleDateIsBeforeToday(schedule.date)) {
         return res.status(400).json({ message: "Cannot change a booking on a past date." });
       }
 
@@ -1684,10 +1741,10 @@ export async function moveGymSlotBooking(req, res) {
     if (!fromSched || !toSched) {
       return res.status(404).json({ message: "Schedule not found." });
     }
-    if (dateStringIsBeforeTodayUtc(fromSched.date)) {
+    if (scheduleDateIsBeforeToday(fromSched.date)) {
       return res.status(400).json({ message: "Cannot change a booking on a past date." });
     }
-    if (dateStringIsBeforeTodayUtc(toSched.date)) {
+    if (scheduleDateIsBeforeToday(toSched.date)) {
       return res.status(400).json({ message: "Cannot move to a past date." });
     }
 
@@ -1782,8 +1839,14 @@ export async function updateGymSchedule(req, res) {
     if (!schedule) {
       return res.status(404).json({ message: "Schedule not found." });
     }
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Past schedules cannot be edited." });
+    }
+    if (isScheduleAdminFrozen(schedule)) {
+      return res.status(400).json({
+        message:
+          "This gym day has ended (after closing time). The schedule is read-only until tomorrow.",
+      });
     }
 
     const booked = schedule.slots.some((s) => (s.bookedCount || 0) > 0);
@@ -1860,8 +1923,14 @@ export async function deleteGymSchedule(req, res) {
     if (!schedule) {
       return res.status(404).json({ message: "Schedule not found." });
     }
-    if (dateStringIsBeforeTodayUtc(schedule.date)) {
+    if (scheduleDateIsBeforeToday(schedule.date)) {
       return res.status(400).json({ message: "Past schedules cannot be deleted." });
+    }
+    if (isScheduleAdminFrozen(schedule)) {
+      return res.status(400).json({
+        message:
+          "This gym day has ended (after closing time). The schedule is read-only until tomorrow.",
+      });
     }
     await GymSchedule.deleteOne({ _id: id });
     return res.json({ message: "Schedule removed." });

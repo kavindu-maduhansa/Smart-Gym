@@ -196,7 +196,7 @@ function validateForm(
     err.date = "Choose a date for this schedule.";
   } else if (!DATE_OK(dateStr)) {
     err.date = "Pick a valid calendar date.";
-  } else if (!allowPastDate && isDateBeforeToday(dateStr)) {
+  } else if (!allowPastDate && isScheduleDateBeforeToday(dateStr)) {
     err.date = "Date cannot be in the past.";
   } else if (
     Array.isArray(existingSchedules) &&
@@ -252,6 +252,8 @@ const ScheduleManagement = () => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   const [slotModal, setSlotModal] = useState(null); // { scheduleId, date, dayLabel, slots: [] }
+  /** Bumps on an interval while the slot modal is open so “ended” slots update without a refresh. */
+  const [slotTimeTick, setSlotTimeTick] = useState(0);
   const [slotActionKey, setSlotActionKey] = useState(null);
   const [slotCapEdits, setSlotCapEdits] = useState({});
   const [slotSearch, setSlotSearch] = useState("");
@@ -263,6 +265,8 @@ const ScheduleManagement = () => {
   const [analyticsLoading, setAnalyticsLoading] = useState(true);
   const [analytics, setAnalytics] = useState(null);
   const [analyticsError, setAnalyticsError] = useState("");
+  /** Re-render schedule rows when “today” crosses closing time (same interval as analytics). */
+  const [scheduleListTick, setScheduleListTick] = useState(0);
 
   const { toast, showToast, hideToast } = useToast();
 
@@ -326,9 +330,16 @@ const ScheduleManagement = () => {
     fetchAnalytics();
     const t = window.setInterval(() => {
       fetchAnalytics();
+      setScheduleListTick((n) => n + 1);
     }, 30000);
     return () => window.clearInterval(t);
   }, [fetchAnalytics]);
+
+  useEffect(() => {
+    if (!slotModal) return undefined;
+    const id = window.setInterval(() => setSlotTimeTick((n) => n + 1), 30000);
+    return () => window.clearInterval(id);
+  }, [slotModal?.scheduleId]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -348,9 +359,16 @@ const ScheduleManagement = () => {
 
     if (editId) {
       const existing = items.find((x) => String(x._id) === String(editId));
-      if (existing && isDateBeforeToday(existing.date)) {
+      if (existing && isScheduleDateBeforeToday(existing.date)) {
         const m =
           "That day is in the past. You can view it for records, but schedules can't be edited.";
+        setMsg(m);
+        showToast("error", m);
+        return;
+      }
+      if (existing && isScheduleGymDayOverForAdmin(existing.date, existing.closingTime)) {
+        const m =
+          "Today's gym hours have ended for that schedule. You can view it but not edit until a new day.";
         setMsg(m);
         showToast("error", m);
         return;
@@ -408,9 +426,16 @@ const ScheduleManagement = () => {
   };
 
   const onEdit = (row) => {
-    if (isDateBeforeToday(row.date)) {
+    if (isScheduleDateBeforeToday(row.date)) {
       const m =
         "That day is in the past. You can view it for records, but schedules can't be edited.";
+      setMsg(m);
+      showToast("error", m);
+      return;
+    }
+    if (isScheduleGymDayOverForAdmin(row.date, row.closingTime)) {
+      const m =
+        "Today's gym hours have ended. You can view this schedule but not edit it until tomorrow.";
       setMsg(m);
       showToast("error", m);
       return;
@@ -428,9 +453,16 @@ const ScheduleManagement = () => {
 
   const onDelete = async (id) => {
     const row = items.find((x) => String(x._id) === String(id));
-    if (row && isDateBeforeToday(row.date)) {
+    if (row && isScheduleDateBeforeToday(row.date)) {
       const m =
         "Past schedules stay in the system for history and reports, so they can't be deleted.";
+      setMsg(m);
+      showToast("error", m);
+      return;
+    }
+    if (row && isScheduleGymDayOverForAdmin(row.date, row.closingTime)) {
+      const m =
+        "Today's gym hours have ended. This schedule is read-only until tomorrow — it can't be deleted now.";
       setMsg(m);
       showToast("error", m);
       return;
@@ -460,6 +492,7 @@ const ScheduleManagement = () => {
       scheduleId: row._id,
       date: row.date,
       dayLabel: row.dayLabel || "",
+      closingTime: row.closingTime || "",
       slots,
     });
     const edits = {};
@@ -489,6 +522,14 @@ const ScheduleManagement = () => {
 
   const bulkApplyCapacity = async () => {
     if (!slotModal?.scheduleId) return;
+    if (
+      slotModal.date &&
+      (isScheduleDateBeforeToday(slotModal.date) ||
+        isScheduleGymDayOverForAdmin(slotModal.date, slotModal.closingTime))
+    ) {
+      showToast("error", "This schedule is read-only. You can view slots but not change them.");
+      return;
+    }
     const scheduleId = slotModal.scheduleId;
     const slots = slotModal.slots || [];
     const cap = Number(bulkCap);
@@ -501,6 +542,7 @@ const ScheduleManagement = () => {
     setSlotActionKey(`bulk-cap-${scheduleId}`);
     try {
       for (const s of slots) {
+        if (isGymSlotEndedByNow(slotModal.date, s.endTime)) continue;
         const booked = Number(s.bookedCount || 0);
         if (cap < booked) continue; // skip impossible
         await adminSetSlotCapacity(scheduleId, s._id);
@@ -518,10 +560,19 @@ const ScheduleManagement = () => {
 
   const bulkCloseAll = async () => {
     if (!slotModal?.scheduleId) return;
+    if (
+      slotModal.date &&
+      (isScheduleDateBeforeToday(slotModal.date) ||
+        isScheduleGymDayOverForAdmin(slotModal.date, slotModal.closingTime))
+    ) {
+      showToast("error", "This schedule is read-only. You can view slots but not change them.");
+      return;
+    }
     const scheduleId = slotModal.scheduleId;
     setSlotActionKey(`bulk-close-${scheduleId}`);
     try {
       for (const s of slotModal.slots || []) {
+        if (isGymSlotEndedByNow(slotModal.date, s.endTime)) continue;
         if (s.isClosed) continue;
         await adminCloseSlot(scheduleId, s._id);
       }
@@ -538,10 +589,19 @@ const ScheduleManagement = () => {
 
   const bulkOpenAll = async () => {
     if (!slotModal?.scheduleId) return;
+    if (
+      slotModal.date &&
+      (isScheduleDateBeforeToday(slotModal.date) ||
+        isScheduleGymDayOverForAdmin(slotModal.date, slotModal.closingTime))
+    ) {
+      showToast("error", "This schedule is read-only. You can view slots but not change them.");
+      return;
+    }
     const scheduleId = slotModal.scheduleId;
     setSlotActionKey(`bulk-open-${scheduleId}`);
     try {
       for (const s of slotModal.slots || []) {
+        if (isGymSlotEndedByNow(slotModal.date, s.endTime)) continue;
         if (!s.isClosed) continue;
         await adminOpenSlot(scheduleId, s._id);
       }
@@ -557,6 +617,20 @@ const ScheduleManagement = () => {
   };
 
   const adminCloseSlot = async (scheduleId, slotId) => {
+    const row = items.find((x) => String(x._id) === String(scheduleId));
+    if (row?.date && isScheduleDateBeforeToday(row.date)) {
+      showToast("error", "Past schedules are read-only.");
+      return;
+    }
+    if (row?.date && isScheduleGymDayOverForAdmin(row.date, row.closingTime)) {
+      showToast("error", "This gym day has ended; the schedule is read-only.");
+      return;
+    }
+    const sl = row?.slots?.find((x) => String(x._id) === String(slotId));
+    if (sl && row?.date && isGymSlotEndedByNow(row.date, sl.endTime)) {
+      showToast("error", "This time slot has ended; it can no longer be changed.");
+      return;
+    }
     const key = `close-${scheduleId}-${slotId}`;
     setSlotActionKey(key);
     try {
@@ -571,6 +645,20 @@ const ScheduleManagement = () => {
   };
 
   const adminOpenSlot = async (scheduleId, slotId) => {
+    const row = items.find((x) => String(x._id) === String(scheduleId));
+    if (row?.date && isScheduleDateBeforeToday(row.date)) {
+      showToast("error", "Past schedules are read-only.");
+      return;
+    }
+    if (row?.date && isScheduleGymDayOverForAdmin(row.date, row.closingTime)) {
+      showToast("error", "This gym day has ended; the schedule is read-only.");
+      return;
+    }
+    const sl = row?.slots?.find((x) => String(x._id) === String(slotId));
+    if (sl && row?.date && isGymSlotEndedByNow(row.date, sl.endTime)) {
+      showToast("error", "This time slot has ended; it can no longer be changed.");
+      return;
+    }
     const key = `open-${scheduleId}-${slotId}`;
     setSlotActionKey(key);
     try {
@@ -585,6 +673,20 @@ const ScheduleManagement = () => {
   };
 
   const adminSetSlotCapacity = async (scheduleId, slotId) => {
+    const row = items.find((x) => String(x._id) === String(scheduleId));
+    if (row?.date && isScheduleDateBeforeToday(row.date)) {
+      showToast("error", "Past schedules are read-only.");
+      return;
+    }
+    if (row?.date && isScheduleGymDayOverForAdmin(row.date, row.closingTime)) {
+      showToast("error", "This gym day has ended; the schedule is read-only.");
+      return;
+    }
+    const sl = row?.slots?.find((x) => String(x._id) === String(slotId));
+    if (sl && row?.date && isGymSlotEndedByNow(row.date, sl.endTime)) {
+      showToast("error", "This time slot has ended; it can no longer be changed.");
+      return;
+    }
     const key = `cap-${scheduleId}-${slotId}`;
     setSlotActionKey(key);
     try {
@@ -615,9 +717,26 @@ const ScheduleManagement = () => {
     ) || msg.includes("403");
 
   const slotModalIsPast = useMemo(
-    () => Boolean(slotModal?.date && isDateBeforeToday(slotModal.date)),
-    [slotModal],
+    () => Boolean(slotModal?.date && isScheduleDateBeforeToday(slotModal.date)),
+    [slotModal?.date],
   );
+
+  const slotModalReadOnly = useMemo(
+    () =>
+      Boolean(
+        slotModal?.date &&
+          (isScheduleDateBeforeToday(slotModal.date) ||
+            isScheduleGymDayOverForAdmin(slotModal.date, slotModal.closingTime)),
+      ),
+    [slotModal?.date, slotModal?.closingTime, slotTimeTick, scheduleListTick],
+  );
+
+  const slotModalAllSlotsEnded = useMemo(() => {
+    if (!slotModal?.date || slotModalReadOnly) return false;
+    const slots = slotModal.slots || [];
+    if (!slots.length) return false;
+    return slots.every((s) => isGymSlotEndedByNow(slotModal.date, s.endTime));
+  }, [slotModal?.date, slotModal?.slots, slotModalReadOnly, slotTimeTick]);
 
   const filteredSchedules = useMemo(() => {
     const q = String(scheduleQuery || "").trim().toLowerCase();
@@ -625,18 +744,18 @@ const ScheduleManagement = () => {
     return list
       .filter((row) => {
         if (!row?.date) return false;
-        if (!showPastSchedules && isDateBeforeToday(row.date)) return false;
+        if (!showPastSchedules && isScheduleDateBeforeToday(row.date)) return false;
         if (!q) return true;
         const label = String(row.dayLabel || "").toLowerCase();
         return String(row.date).toLowerCase().includes(q) || label.includes(q);
       })
       .sort((a, b) => {
-        const aPast = isDateBeforeToday(a.date);
-        const bPast = isDateBeforeToday(b.date);
+        const aPast = isScheduleDateBeforeToday(a.date);
+        const bPast = isScheduleDateBeforeToday(b.date);
         if (aPast !== bPast) return aPast ? 1 : -1; // today & upcoming first, past at bottom
         return String(a.date).localeCompare(String(b.date));
       });
-  }, [items, scheduleQuery, showPastSchedules]);
+  }, [items, scheduleQuery, showPastSchedules, scheduleListTick]);
 
   const summarizeScheduleSlots = (row) => {
     const slots = Array.isArray(row?.slots) ? row.slots : [];
@@ -871,8 +990,11 @@ const ScheduleManagement = () => {
               <div>
                 <h2 className="text-xl font-bold text-blue-600">Existing schedules</h2>
                 <p className="text-sm text-slate-500 mt-1">
-                  Search by date or label. Past days are view-only (slots and schedule cannot be changed).
-                  Use “Manage slots” on today or future dates to close/open slots and adjust capacity.
+                  Search by date or label. Schedules on a <span className="font-semibold text-slate-600">past
+                  calendar day</span> are view-only. For <span className="font-semibold text-slate-600">today</span>,
+                  editing stops after that day’s <span className="font-semibold text-slate-600">closing time</span>{" "}
+                  (same as the hours shown on the card). Future days stay editable. Use “Manage slots” only while
+                  the day is still open for changes.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 items-center">
@@ -900,10 +1022,17 @@ const ScheduleManagement = () => {
             ) : filteredSchedules.length === 0 ? (
               <p className="text-slate-500">Nothing here yet. Add your first block above.</p>
             ) : (
-              <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2">
+              <div
+                className="space-y-4 max-h-[480px] overflow-y-auto pr-2"
+                data-schedule-list-tick={scheduleListTick}
+              >
                 {filteredSchedules.map((row) => {
                   const sum = summarizeScheduleSlots(row);
-                  const scheduleIsPast = isDateBeforeToday(row.date);
+                  const scheduleIsPast = isScheduleDateBeforeToday(row.date);
+                  const scheduleIsToday = scheduleYmdEqualsLocalToday(row.date);
+                  const scheduleDayClosed =
+                    !scheduleIsPast && isScheduleGymDayOverForAdmin(row.date, row.closingTime);
+                  const scheduleReadOnly = scheduleIsPast || scheduleDayClosed;
                   return (
                     <div
                       key={row._id}
@@ -912,8 +1041,18 @@ const ScheduleManagement = () => {
                       <div className="flex flex-wrap justify-between gap-3">
                         <div>
                           <p className="font-bold text-slate-900">
-                            {row.date}
+                            {normalizeScheduleDateYmd(row.date) || row.date}
                             {row.dayLabel ? ` · ${row.dayLabel}` : ""}
+                            {!scheduleIsPast && scheduleIsToday ? (
+                              <span className="ml-2 align-middle text-xs font-bold uppercase tracking-wide text-blue-600">
+                                Today
+                              </span>
+                            ) : null}
+                            {scheduleDayClosed ? (
+                              <span className="ml-2 align-middle text-xs font-bold uppercase tracking-wide text-slate-500">
+                                Day ended
+                              </span>
+                            ) : null}
                           </p>
                           <p className="text-sm text-slate-500">
                             {row.openingTime} – {row.closingTime} · {row.slotDurationMinutes} min slots ·
@@ -938,11 +1077,15 @@ const ScheduleManagement = () => {
                           <button
                             type="button"
                             onClick={() => openSlotsModal(row)}
-                            className="text-sm bg-slate-100 text-slate-900 px-3 py-1 rounded border border-slate-300 font-semibold hover:bg-white/15"
+                            className={`text-sm px-3 py-1 rounded border font-semibold ${
+                              scheduleReadOnly
+                                ? "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                                : "bg-slate-100 text-slate-900 border-slate-300 hover:bg-white/15"
+                            }`}
                           >
-                            {scheduleIsPast ? "View slots" : "Manage slots"}
+                            {scheduleReadOnly ? "View slots" : "Manage slots"}
                           </button>
-                          {!scheduleIsPast ? (
+                          {!scheduleReadOnly ? (
                             <>
                               <button
                                 type="button"
@@ -961,7 +1104,7 @@ const ScheduleManagement = () => {
                             </>
                           ) : (
                             <span className="text-xs text-slate-500 font-semibold self-center px-1">
-                              Past — view only
+                              {scheduleIsPast ? "Past — view only" : "Day ended — view only"}
                             </span>
                           )}
                         </div>
@@ -1106,21 +1249,36 @@ const ScheduleManagement = () => {
           </div>
 
           {slotModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-50/70 px-4">
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-blue-50/70 px-4"
+              data-admin-slot-tick={slotTimeTick}
+              data-schedule-list-tick={scheduleListTick}
+            >
               <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white/95 backdrop-blur-md shadow-2xl">
                 <div className="sticky top-0 z-10 px-5 sm:px-6 pt-5 sm:pt-6 pb-4 bg-white/95 border-b border-slate-200">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="text-blue-600 font-bold text-xl">
-                        {slotModalIsPast ? "View slots" : "Manage slots"}
+                        {slotModalReadOnly || slotModalAllSlotsEnded ? "View slots" : "Manage slots"}
                       </div>
                       <div className="text-slate-700 text-sm mt-1">
                         {slotModal.date}
                         {slotModal.dayLabel ? ` · ${slotModal.dayLabel}` : ""}
                       </div>
-                      {slotModalIsPast ? (
+                      {slotModalReadOnly ? (
+                        slotModalIsPast ? (
+                          <p className="text-xs text-slate-500 mt-2 font-semibold">
+                            This day is in the past — slots are read-only.
+                          </p>
+                        ) : (
+                          <p className="text-xs text-slate-500 mt-2 font-semibold">
+                            This gym day has ended (after {slotModal.closingTime || "closing"}) — view only until
+                            tomorrow.
+                          </p>
+                        )
+                      ) : slotModalAllSlotsEnded ? (
                         <p className="text-xs text-slate-500 mt-2 font-semibold">
-                          This day is in the past — slots are read-only.
+                          Every time window for this day has ended — you can review slots but not change them.
                         </p>
                       ) : null}
                     </div>
@@ -1144,7 +1302,7 @@ const ScheduleManagement = () => {
                     placeholder="Search time (e.g. 10:00)"
                     className="w-full md:w-60 bg-blue-50/50 border border-slate-300 rounded px-3 py-2 text-slate-900 placeholder-slate-400"
                   />
-                  {!slotModalIsPast ? (
+                  {!slotModalReadOnly && !slotModalAllSlotsEnded ? (
                     <div className="flex flex-wrap gap-2 items-center">
                       <button
                         type="button"
@@ -1199,6 +1357,7 @@ const ScheduleManagement = () => {
                     const booked = Number(s.bookedCount || 0);
                     const cap = Number(s.capacity || 0);
                     const isClosed = Boolean(s.isClosed);
+                    const slotEnded = isGymSlotEndedByNow(slotModal.date, s.endTime);
                     return (
                       <div
                         key={String(s._id)}
@@ -1221,10 +1380,15 @@ const ScheduleManagement = () => {
                                   OPEN
                                 </span>
                               )}
+                              {slotEnded ? (
+                                <span className="ml-2 text-xs px-2 py-1 rounded bg-slate-200/80 text-slate-700 border border-slate-300 font-bold">
+                                  ENDED
+                                </span>
+                              ) : null}
                             </div>
                           </div>
 
-                          {!slotModalIsPast ? (
+                          {!slotModalReadOnly && !slotEnded ? (
                             <div className="flex flex-wrap gap-2 items-center">
                               {isClosed ? (
                                 <button
@@ -1268,9 +1432,13 @@ const ScheduleManagement = () => {
                                 </button>
                               </div>
                             </div>
+                          ) : !slotModalReadOnly && slotEnded ? (
+                            <div className="text-xs font-semibold text-slate-500 self-center">
+                              This window has ended — view only.
+                            </div>
                           ) : null}
                         </div>
-                        {!slotModalIsPast ? (
+                        {!slotModalReadOnly && !slotEnded ? (
                           <div className="text-xs text-slate-600 mt-2">
                             Capacity can’t be reduced below current bookings.
                           </div>
@@ -1306,12 +1474,61 @@ function DATE_OK(s) {
   return !Number.isNaN(d.getTime());
 }
 
-function isDateBeforeToday(yyyyMmDd) {
-  const [y, m, d] = yyyyMmDd.split("-").map(Number);
-  const picked = new Date(y, m - 1, d);
-  const startToday = new Date();
-  startToday.setHours(0, 0, 0, 0);
-  return picked < startToday;
+/** Leading YYYY-MM-DD (handles values that start with an ISO timestamp). */
+function normalizeScheduleDateYmd(raw) {
+  const s = String(raw || "").trim();
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : "";
+}
+
+function combineScheduleDateAndTimeLocal(yyyyMmDdRaw, hhmm) {
+  const ymd = normalizeScheduleDateYmd(yyyyMmDdRaw);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return new Date(NaN);
+  const [y, M, d] = ymd.split("-").map(Number);
+  const parts = String(hhmm || "").split(":");
+  const h = Number(parts[0]);
+  const m = Number(parts[1] ?? 0);
+  if (!Number.isFinite(y) || !Number.isFinite(M) || !Number.isFinite(d)) return new Date(NaN);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return new Date(NaN);
+  return new Date(y, M - 1, d, h, m, 0, 0);
+}
+
+/** Matches backend admin rule when device timezone matches the server (set TZ in production). */
+function isGymSlotEndedByNow(scheduleDateRaw, endTime) {
+  const end = combineScheduleDateAndTimeLocal(scheduleDateRaw, endTime);
+  if (!Number.isFinite(end.getTime())) return true;
+  return Date.now() >= end.getTime();
+}
+
+/** Today’s row is locked after the schedule’s closing time (e.g. 20:00); past calendar days stay locked all day. */
+function isScheduleGymDayOverForAdmin(scheduleDateRaw, closingTime) {
+  if (isScheduleDateBeforeToday(scheduleDateRaw)) return true;
+  if (!scheduleYmdEqualsLocalToday(scheduleDateRaw)) return false;
+  const ymd = normalizeScheduleDateYmd(scheduleDateRaw);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return false;
+  const end = combineScheduleDateAndTimeLocal(ymd, closingTime);
+  if (!Number.isFinite(end.getTime())) return false;
+  return Date.now() >= end.getTime();
+}
+
+function localCalendarTodayYmd() {
+  const t = new Date();
+  const y = t.getFullYear();
+  const mo = String(t.getMonth() + 1).padStart(2, "0");
+  const d = String(t.getDate()).padStart(2, "0");
+  return `${y}-${mo}-${d}`;
+}
+
+/** Same rule as backend `scheduleDateIsBeforeToday` when server TZ matches this device. */
+function isScheduleDateBeforeToday(dateStr) {
+  const s = normalizeScheduleDateYmd(dateStr);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  return s < localCalendarTodayYmd();
+}
+
+function scheduleYmdEqualsLocalToday(dateStr) {
+  const s = normalizeScheduleDateYmd(dateStr);
+  return Boolean(s && s === localCalendarTodayYmd());
 }
 
 export default ScheduleManagement;
