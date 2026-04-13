@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import GymSchedule from "../models/GymSchedule.js";
 import GymNotification from "../models/GymNotification.js";
 import { getOpeningHoursForDate } from "../utils/gymOpeningHours.js";
+import { queueGymBookingEmailForStudent } from "../utils/gymBookingMail.js";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 /** Gym floor slots are always generated in this length only. */
@@ -35,6 +36,15 @@ const GYM_MIN_GAP_MINUTES = Math.max(
 const GYM_CHANGE_DEADLINE_MINUTES = Math.max(
   0,
   parseInt(process.env.GYM_CHANGE_DEADLINE_MINUTES || "60", 10) || 60,
+);
+
+/**
+ * When a booked gym slot starts within this many minutes, a REMINDER_BEFORE_SESSION
+ * notification is created (deduped per slot). Default 60 = one hour before.
+ */
+const GYM_REMINDER_MINUTES = Math.max(
+  0,
+  parseInt(process.env.GYM_REMINDER_MINUTES || "60", 10) || 60,
 );
 
 function combineDateAndTimeLocal(yyyyMmDd, hhmm) {
@@ -195,6 +205,64 @@ function formatSlotNotification(scheduleDate, dayLabel, startTime, endTime) {
   return `${scheduleDate}${dayPart} · ${startTime}–${endTime}`;
 }
 
+/** User-facing reminder body; nowMs updates on each API poll so “minutes until” stays fresh. */
+function buildGymSlotReminderMessage(scheduleDate, dayLabel, startTime, endTime, nowMs = Date.now()) {
+  const start = combineDateAndTimeLocal(scheduleDate, startTime);
+  if (!Number.isFinite(start.getTime())) {
+    return `Gym booking reminder — ${formatSlotNotification(scheduleDate, dayLabel, startTime, endTime)}.`;
+  }
+  const startMs = start.getTime();
+  const detail = formatSlotNotification(scheduleDate, dayLabel, startTime, endTime);
+  if (nowMs >= startMs) {
+    return `Your gym slot (${detail}) has started or is underway. Have a great session!`;
+  }
+  const minsUntil = Math.max(1, Math.round((startMs - nowMs) / 60000));
+  let timing;
+  if (minsUntil >= 120) {
+    const h = Math.round(minsUntil / 60);
+    timing = `in about ${h} hour${h === 1 ? "" : "s"}`;
+  } else if (minsUntil === 1) {
+    timing = "in about 1 minute";
+  } else {
+    timing = `in about ${minsUntil} minutes`;
+  }
+  return `Gym booking reminder: starts ${timing}. ${detail}. Use Smart Schedules if you need to change or cancel.`;
+}
+
+async function enrichReminderNotificationsForResponse(notifications) {
+  const now = Date.now();
+  const need = (notifications || []).filter(
+    (n) =>
+      n.kind === "REMINDER_BEFORE_SESSION" &&
+      typeof n.ref === "string" &&
+      n.ref.includes(":"),
+  );
+  const scheduleIds = [
+    ...new Set(
+      need
+        .map((n) => n.ref.split(":")[0])
+        .filter((id) => mongoose.Types.ObjectId.isValid(id)),
+    ),
+  ];
+  if (!scheduleIds.length) return notifications || [];
+
+  const schedules = await GymSchedule.find({ _id: { $in: scheduleIds } }).lean();
+  const byId = new Map(schedules.map((s) => [String(s._id), s]));
+
+  return (notifications || []).map((n) => {
+    if (n.kind !== "REMINDER_BEFORE_SESSION" || !n.ref?.includes(":")) return n;
+    const [sid, slotId] = n.ref.split(":");
+    const s = byId.get(String(sid));
+    if (!s) return n;
+    const sl = (s.slots || []).find((x) => String(x._id) === String(slotId));
+    if (!sl) return n;
+    return {
+      ...n,
+      message: buildGymSlotReminderMessage(s.date, s.dayLabel, sl.startTime, sl.endTime, now),
+    };
+  });
+}
+
 async function autoPromoteWaitlist(schedule, slot) {
   // If not available, nothing to do.
   if (slot.bookedCount >= slot.capacity) return;
@@ -250,6 +318,13 @@ async function autoPromoteWaitlist(schedule, slot) {
       )}.`,
       { kind: "WAITLIST_PROMOTED", ref: `${String(schedule._id)}:${String(slot._id)}` },
     );
+    void queueGymBookingEmailForStudent(candidateId, {
+      date: schedule.date,
+      dayLabel: schedule.dayLabel || "",
+      startTime: slot.startTime,
+      endTime: slot.endTime,
+      variant: "promoted",
+    });
     break; // one seat freed per cancellation/move (but we keep loop safe if multiple)
   }
 }
@@ -453,6 +528,7 @@ export function getGymBookingRules(req, res) {
     deadlineHoursBeforeSlot: GYM_BOOKING_DEADLINE_HOURS,
     minGapMinutes: GYM_MIN_GAP_MINUTES,
     changeDeadlineMinutes: GYM_CHANGE_DEADLINE_MINUTES,
+    reminderMinutesBeforeSlot: GYM_REMINDER_MINUTES,
     noDoubleBooking: true,
     message:
       "No overlapping gym slots; daily limit per student; minimum gap between same-day slots; bookings must be before the deadline if enabled.",
@@ -967,6 +1043,14 @@ export async function bookGymSlot(req, res) {
       { kind: "BOOKING_CONFIRMED", ref: `${String(schedule._id)}:${String(slot._id)}` },
     );
 
+    void queueGymBookingEmailForStudent(uid, {
+      date: schedule.date,
+      dayLabel: schedule.dayLabel || "",
+      startTime: slot.startTime,
+      endTime: slot.endTime,
+      variant: "booked",
+    });
+
     return res.status(200).json({ message: "Slot booked successfully." });
   } catch (err) {
     console.error(err);
@@ -1303,14 +1387,10 @@ export async function listMyGymNotifications(req, res) {
 
     const uid = req.user.id;
 
-    // Reminder before session (generated on-demand; frontend already polls).
-    const reminderMinutes = Math.max(
-      0,
-      parseInt(process.env.GYM_REMINDER_MINUTES || "120", 10) || 120,
-    );
-    if (reminderMinutes > 0) {
+    // Reminder before session (generated on-demand; frontend polls /my-notifications).
+    if (GYM_REMINDER_MINUTES > 0) {
       const now = new Date();
-      const windowEnd = new Date(now.getTime() + reminderMinutes * 60000);
+      const windowEnd = new Date(now.getTime() + GYM_REMINDER_MINUTES * 60000);
       const fromYmd = formatUtcYmd(now);
       const toYmd = formatUtcYmd(windowEnd);
       const schedules = await GymSchedule.find({
@@ -1327,12 +1407,7 @@ export async function listMyGymNotifications(req, res) {
           if (start.getTime() > windowEnd.getTime()) continue;
           await createGymNotificationOnce(
             uid,
-            `Reminder: your gym slot starts soon — ${formatSlotNotification(
-              s.date,
-              s.dayLabel,
-              sl.startTime,
-              sl.endTime,
-            )}.`,
+            buildGymSlotReminderMessage(s.date, s.dayLabel, sl.startTime, sl.endTime, now.getTime()),
             { kind: "REMINDER_BEFORE_SESSION", ref: `${String(s._id)}:${String(sl._id)}` },
           );
         }
@@ -1360,8 +1435,10 @@ export async function listMyGymNotifications(req, res) {
       .limit(20)
       .lean();
 
+    const enriched = await enrichReminderNotificationsForResponse(list || []);
+
     return res.json(
-      (list || []).map((n) => ({
+      enriched.map((n) => ({
         _id: n._id,
         message: n.message,
         type: n.type,
