@@ -60,14 +60,19 @@ const Register = () => {
         },
       );
       if (response.data && response.data.token) {
+        const userData = response.data.user;
+        if (!userData || !userData._id) {
+          setError("Registration failed: invalid server response. Please try again.");
+          setLoading(false);
+          return;
+        }
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("role", response.data.user?.role ?? "student");
-        localStorage.setItem("userId", String(response.data.user?._id ?? ""));
+        localStorage.setItem("role", userData.role ?? "student");
+        localStorage.setItem("userId", String(userData._id));
         window.dispatchEvent(new Event("tokenChanged"));
+        setSuccess("Registration successful! Redirecting to your dashboard...");
+        setTimeout(() => navigate(getDashboardPath(userData.role ?? "student")), 1500);
       }
-      setSuccess("Registration successful! Redirecting to your dashboard...");
-      const role = response.data.user?.role ?? "student";
-      setTimeout(() => navigate(getDashboardPath(role)), 1500);
     } catch (err) {
       setError(
         err.response && err.response.data && err.response.data.message
@@ -120,7 +125,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label htmlFor="reg-name" className="mb-2 block text-sm font-semibold text-slate-700">
-                  Full Name
+                  Name
                 </label>
                 <input
                   id="reg-name"
